@@ -43,9 +43,10 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0 auto;
   max-width: 1200px;
   height: 100%;
+  margin: 0 auto;
+  padding: 0 16px;
 `;
 
 const Title = styled.div`
@@ -56,11 +57,11 @@ const Title = styled.div`
 
 const LogoWrapper = styled.div`
   display: inline-block;
-  border: 1px solid #fff;
   width: 24px;
   height: 24px;
-  background-color: #fff;
+  border: 1px solid #fff;
   border-radius: 5px;
+  background-color: #fff;
 `;
 
 const Logo = styled.img`
