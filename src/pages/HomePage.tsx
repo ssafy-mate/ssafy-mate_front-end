@@ -142,21 +142,40 @@ const SwiperCard = styled.div`
   justify-content: space-between;
   width: 100%;
   max-width: 1000px;
+  box-sizing: border-box;
   padding: 58px 40px 24px;
   color: #fff;
+
+  @media screen and (max-width: 760px) {
+    flex-direction: column;
+    justify-content: space-around;
+    height: 480px;
+  }
 `;
 
 const CardInformation = styled.div`
   margin-right: 24px;
   padding: 48px 0;
+
+  @media screen and (max-width: 760px) {
+    padding: 12px 0 0 0;
+  }
 `;
 
 const CardImgWrapper = styled.div`
   height: 280px;
+
+  @media screen and (max-width: 760px) {
+    height: 220px;
+  }
 `;
 
 const CardImg = styled.img`
   height: 280px;
+
+  @media screen and (max-width: 760px) {
+    height: 220px;
+  }
 `;
 
 const CardSubHead = styled.h5`
@@ -172,6 +191,10 @@ const CardHead = styled.h4`
   font-weight: 500;
   line-height: 1.6;
   text-align: left;
+
+  @media screen and (max-width: 760px) {
+    margin-bottom: 16px;
+  }
 `;
 
 const ProjectDescription = styled.div`
@@ -188,15 +211,19 @@ const LinkContainer = styled.div`
   max-width: 1200px;
   margin: 40px auto;
   padding: 0 16px;
+
+  @media screen and (max-width: 780px) {
+    flex-direction: column;
+  }
 `;
 
 const LinkCard = styled.a`
   width: 320px;
-  height: 360px;
-  margin: 0 auto 12px;
+  margin: 0 auto 24px;
   padding: 24px 16px;
   border: none;
   border-radius: 6px;
+  box-sizing: border-box;
   box-shadow: 4px 12px 30px 6px rgb(0 0 0 / 10%);
   color: #fff;
   cursor: pointer;
@@ -216,12 +243,24 @@ const LinkCard = styled.a`
   &:nth-of-type(3) {
     background-color: #385a7b;
   }
+
+  @media screen and (max-width: 780px) {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-around;
+    width: 100%;
+  }
 `;
 
 const LinkCardImg = styled.img`
   display: block;
   width: 240px;
   margin: 0 auto 36px;
+
+  @media screen and (max-width: 780px) {
+    margin: 0 0 0 12px;
+    width: 160px;
+  }
 `;
 
 const LinkCardTitle = styled.p`
@@ -229,6 +268,11 @@ const LinkCardTitle = styled.p`
   font-size: 24px;
   font-weight: 500;
   line-height: 1.6;
+
+  @media screen and (max-width: 780px) {
+    padding-left: 0;
+    margin: auto 0;
+  }
 `;
 
 const swiper = css`
