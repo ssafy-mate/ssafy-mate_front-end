@@ -91,6 +91,7 @@ const reset = css`
     font: inherit;
     vertical-align: baseline;
   }
+  /* HTML5 display-role reset for older browsers */
   article,
   aside,
   details,
@@ -105,7 +106,6 @@ const reset = css`
     display: block;
   }
   body {
-    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
     line-height: 1;
   }
   ol,
@@ -126,6 +126,13 @@ const reset = css`
   table {
     border-collapse: collapse;
     border-spacing: 0;
+  }
+  input:focus {
+    outline: none;
+  }
+  a {
+    color: inherit;
+    text-decoration: none;
   }
 `;
 
