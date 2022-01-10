@@ -72,6 +72,7 @@ const Logo = styled.img`
 
 const LogoName = styled.span`
   margin-left: 6px;
+  padding-top: 4px;
   font-size: 22px;
   font-weight: 700;
   color: #fff;
