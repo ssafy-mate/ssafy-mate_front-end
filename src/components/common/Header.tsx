@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -6,7 +6,13 @@ import { Link } from 'react-router-dom';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import NotificationsIcon from '@mui/icons-material/Notifications';
+import ArticleIcon from '@mui/icons-material/Article';
+
 const Header: React.FC = () => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   return (
     <Container>
       <Wrapper>
@@ -16,14 +22,38 @@ const Header: React.FC = () => {
           </LogoWrapper>
           <LogoName>SSAFY MATE</LogoName>
         </Link>
-        <AuthContainer>
-          <Link to="/users/sign_in" css={signInLink}>
-            로그인
-          </Link>
-          <Link to="/users/sign_up" css={signUpLink}>
-            회원가입
-          </Link>
-        </AuthContainer>
+        {!isLoggedIn ? (
+          <AuthContainer>
+            <AuthItem>
+              <Link to="/users/sign_in" css={signInLink}>
+                로그인
+              </Link>
+            </AuthItem>
+            <AuthItem>
+              <Link to="/users/sign_up" css={signUpLink}>
+                회원가입
+              </Link>
+            </AuthItem>
+          </AuthContainer>
+        ) : (
+          <AccountContainer>
+            <AccountItem>
+              <Link to="#">
+                <ArticleIcon css={accountLinkIcon} />
+              </Link>
+            </AccountItem>
+            <AccountItem>
+              <Link to="#">
+                <NotificationsIcon css={accountLinkIcon} />
+              </Link>
+            </AccountItem>
+            <AccountItem>
+              <Link to="#">
+                <AccountBoxIcon css={accountLinkIcon} />
+              </Link>
+            </AccountItem>
+          </AccountContainer>
+        )}
       </Wrapper>
     </Container>
   );
@@ -72,7 +102,25 @@ const LogoName = styled.span`
   color: #fff;
 `;
 
-const AuthContainer = styled.div``;
+const AuthContainer = styled.ul`
+  display: flex;
+`;
+
+const AuthItem = styled.li`
+  margin-left: 16px;
+`;
+
+const AccountContainer = styled.ul`
+  display: flex;
+`;
+
+const AccountItem = styled.li`
+  margin-left: 16px;
+
+  &:first-of-type {
+    margin-left: 0;
+  }
+`;
 
 const signInLink = css`
   font-size: 16px;
@@ -93,11 +141,20 @@ const brand = css`
 `;
 
 const signUpLink = css`
-  margin-left: 12px;
   font-size: 16px;
   font-weight: 500;
   color: #b2c0cc;
   text-decoration: none;
+  transition: color 0.08s ease-in-out;
+
+  &:hover {
+    color: #fff;
+  }
+`;
+
+const accountLinkIcon = css`
+  font-size: 27px;
+  color: #b2c0cc;
   transition: color 0.08s ease-in-out;
 
   &:hover {
