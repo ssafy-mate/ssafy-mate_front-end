@@ -10,17 +10,17 @@ const Header: React.FC = () => {
   return (
     <Container>
       <Wrapper>
-        <Title>
+        <Link to="/" css={brand}>
           <LogoWrapper>
             <Logo src="/images/ssafy-mate_logo.png" alt="SSAFY MATE" />
           </LogoWrapper>
           <LogoName>SSAFY MATE</LogoName>
-        </Title>
+        </Link>
         <AuthContainer>
-          <Link to="/sign_in" css={signInLink}>
+          <Link to="/users/sign_in" css={signInLink}>
             로그인
           </Link>
-          <Link to="/sign_in" css={signUpLink}>
+          <Link to="/users/sign_up" css={signUpLink}>
             회원가입
           </Link>
         </AuthContainer>
@@ -47,12 +47,6 @@ const Wrapper = styled.div`
   height: 100%;
   margin: 0 auto;
   padding: 0 16px;
-`;
-
-const Title = styled.div`
-  display: flex;
-  align-items: center;
-  height: inherit;
 `;
 
 const LogoWrapper = styled.div`
@@ -90,6 +84,12 @@ const signInLink = css`
   &:hover {
     color: #fff;
   }
+`;
+
+const brand = css`
+  display: flex;
+  align-items: center;
+  height: inherit;
 `;
 
 const signUpLink = css`
