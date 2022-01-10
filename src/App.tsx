@@ -5,6 +5,9 @@ import { ConnectedRouter as Router } from 'connected-react-router';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import history from './history';
 
+import { Global } from '@emotion/react';
+import reset from './styles/reset';
+
 import ErrorPage from './pages/ErrorPage';
 import HomePage from './pages/HomePage';
 import SignInPage from './pages/SignInPage';
@@ -14,6 +17,7 @@ import NotFoundPage from './pages/NotFoundPage';
 const App: React.FC = () => {
   return (
     <ErrorBoundary FallbackComponent={ErrorPage}>
+      <Global styles={reset} />
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={HomePage} />
