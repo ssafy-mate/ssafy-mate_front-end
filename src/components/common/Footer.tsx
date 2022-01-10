@@ -110,6 +110,11 @@ const Wrapper = styled.div`
 const FooterMenuGroup = styled.div`
   display: flex;
   margin-bottom: 48px;
+
+  @media screen and (max-width: 760px) {
+    flex-direction: column;
+    margin-bottom: 36px;
+  }
 `;
 
 const FooterAddress = styled.address`
@@ -132,6 +137,10 @@ const FooterOthers = styled.div`
 
 const MenuList = styled.ul`
   margin-right: 40px;
+
+  @media screen and (max-width: 760px) {
+    margin-bottom: 18px;
+  }
 `;
 
 const MenuItem = styled.li`
@@ -144,6 +153,12 @@ const MenuItem = styled.li`
     margin-bottom: 16px;
     font-weight: 600;
     color: #44576c;
+  }
+
+  @media screen and (max-width: 760px) {
+    &:nth-of-type(1) {
+      margin-bottom: 8px;
+    }
   }
 `;
 
