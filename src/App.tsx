@@ -7,6 +7,7 @@ import history from './history';
 
 import { Global } from '@emotion/react';
 import reset from './styles/reset';
+import 'swiper/css/bundle';
 
 import ErrorPage from './pages/ErrorPage';
 import HomePage from './pages/HomePage';
@@ -21,8 +22,8 @@ const App: React.FC = () => {
       <BrowserRouter>
         <Switch>
           <Route exact path="/" component={HomePage} />
-          <Route path="/sign_in" component={SignInPage} />
-          <Route path="/sign_up" component={SignUpPage} />
+          <Route path="/users/sign_in" component={SignInPage} />
+          <Route path="/users/sign_up" component={SignUpPage} />
           <Route component={NotFoundPage} />
         </Switch>
       </BrowserRouter>
