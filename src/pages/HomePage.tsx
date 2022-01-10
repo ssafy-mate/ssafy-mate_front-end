@@ -1,7 +1,17 @@
 import React from 'react';
 
+import styled from '@emotion/styled';
+
+import Header from '../components/common/Header';
+
+const Container = styled.div``;
+
 const HomePage: React.FC = () => {
-  return <div>홈 페이지</div>;
+  return (
+    <Container>
+      <Header />
+    </Container>
+  );
 };
 
 export default HomePage;
