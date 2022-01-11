@@ -12,7 +12,7 @@ import Footer from '../components/common/Footer';
 
 const HomePage: React.FC = () => {
   return (
-    <Container>
+    <>
       <Header />
       <SwiperContainer />
       <LinkContainer>
@@ -54,19 +54,18 @@ const HomePage: React.FC = () => {
         </LinkCard>
       </LinkContainer>
       <Footer />
-    </Container>
+    </>
   );
 };
 
-const Container = styled.div``;
-
-const LinkContainer = styled.div`
+const LinkContainer = styled.main`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   max-width: 1200px;
   margin: 40px auto;
   padding: 0 16px;
+  box-sizing: border-box;
 
   @media screen and (max-width: 780px) {
     flex-direction: column;
