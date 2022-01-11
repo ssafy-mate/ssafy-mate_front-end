@@ -105,6 +105,7 @@ const Wrapper = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 48px 16px;
+  box-sizing: border-box;
 `;
 
 const FooterMenuGroup = styled.div`
