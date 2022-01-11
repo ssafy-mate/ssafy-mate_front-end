@@ -133,6 +133,10 @@ const FooterAddress = styled.address`
 const FooterOthers = styled.div`
   display: flex;
   justify-content: space-between;
+
+  @media screen and (max-width: 480px) {
+    flex-direction: column;
+  }
 `;
 
 const MenuList = styled.ul`
@@ -165,6 +169,10 @@ const MenuItem = styled.li`
 const SubMenuList = styled.ul`
   display: flex;
   align-items: center;
+
+  @media screen and (max-width: 480px) {
+    margin-bottom: 24px;
+  }
 `;
 
 const SubMenuItem = styled.li`
