@@ -2,6 +2,10 @@ import React from 'react';
 
 import styled from '@emotion/styled';
 
+import WebIcon from '@mui/icons-material/Web';
+import StorageIcon from '@mui/icons-material/Storage';
+import GroupsIcon from '@mui/icons-material/Groups';
+
 const Announcement: React.FC = () => {
   return (
     <Container>
@@ -18,7 +22,7 @@ const Announcement: React.FC = () => {
         <TeamItem>
           <ItemHeader>
             <ItemImg
-              src="/images/projects/sample-team_logo.png"
+              src="/images/projects/sample-team_logo1.png"
               alt="샘플 팀 로고"
             />
           </ItemHeader>
@@ -29,54 +33,131 @@ const Announcement: React.FC = () => {
             <TeamName>
               데스파시토 <TeamCampus>(서울)</TeamCampus>
             </TeamName>
+            <TeamStatusList>
+              <TeamStatusItem>
+                <WebIcon />
+                <Job>Front-end</Job> 1 / 3
+              </TeamStatusItem>
+              <TeamStatusItem>
+                <StorageIcon />
+                <Job>Back-end</Job> 2 / 3
+              </TeamStatusItem>
+              <TeamStatusItem>
+                <GroupsIcon />
+                <Job>Total</Job> 3 / 6
+              </TeamStatusItem>
+            </TeamStatusList>
+            <TechStackList>
+              <TeckStackItem>React</TeckStackItem>
+              <TeckStackItem>Redux</TeckStackItem>
+              <TeckStackItem>Spring Boot</TeckStackItem>
+              <TeckStackItem>MySQL</TeckStackItem>
+            </TechStackList>
+          </ItemBody>
+        </TeamItem>
+        <TeamItem className="full">
+          <ItemHeader>
+            <ItemImg
+              src="/images/projects/sample-team_logo2.png"
+              alt="샘플 팀 로고"
+            />
+          </ItemHeader>
+          <ItemBody>
+            <TeamTitle>워라벨을 지향하는 팀원들을 모집합니다.</TeamTitle>
+            <TeamName>
+              워라벨 <TeamCampus>(서울)</TeamCampus>
+            </TeamName>
+            <TeamStatusList>
+              <TeamStatusItem>
+                <WebIcon />
+                <Job>Front-end</Job> 3 / 3
+              </TeamStatusItem>
+              <TeamStatusItem>
+                <StorageIcon />
+                <Job>Back-end</Job> 3 / 3
+              </TeamStatusItem>
+              <TeamStatusItem>
+                <GroupsIcon />
+                <Job>Total</Job> 6 / 6
+              </TeamStatusItem>
+            </TeamStatusList>
+            <TechStackList>
+              <TeckStackItem>Vue.js</TeckStackItem>
+              <TeckStackItem>Vuex</TeckStackItem>
+              <TeckStackItem>django</TeckStackItem>
+              <TeckStackItem>MySQL</TeckStackItem>
+            </TechStackList>
           </ItemBody>
         </TeamItem>
         <TeamItem>
           <ItemHeader>
             <ItemImg
-              src="/images/projects/sample-team_logo.png"
+              src="/images/projects/sample-team_logo3.png"
               alt="샘플 팀 로고"
             />
           </ItemHeader>
           <ItemBody>
-            <TeamTitle>
-              실제 운영할 서비스 개발을 도전할 분들을 모집합니다.
-            </TeamTitle>
+            <TeamTitle>재밌게 팀 프로젝트 진행하실 분 모집합니다.</TeamTitle>
             <TeamName>
-              데스파시토 <TeamCampus>(서울)</TeamCampus>
+              문어와 친구들 <TeamCampus>(서울)</TeamCampus>
             </TeamName>
+            <TeamStatusList>
+              <TeamStatusItem>
+                <WebIcon />
+                <Job>Front-end</Job> 2 / 3
+              </TeamStatusItem>
+              <TeamStatusItem>
+                <StorageIcon />
+                <Job>Back-end</Job> 2 / 3
+              </TeamStatusItem>
+              <TeamStatusItem>
+                <GroupsIcon />
+                <Job>Total</Job> 4 / 6
+              </TeamStatusItem>
+            </TeamStatusList>
+            <TechStackList>
+              <TeckStackItem>React</TeckStackItem>
+              <TeckStackItem>Recoil</TeckStackItem>
+              <TeckStackItem>Spring Boot</TeckStackItem>
+              <TeckStackItem>MongoDB</TeckStackItem>
+              <TeckStackItem>Docker</TeckStackItem>
+            </TechStackList>
           </ItemBody>
         </TeamItem>
         <TeamItem>
           <ItemHeader>
             <ItemImg
-              src="/images/projects/sample-team_logo.png"
+              src="/images/projects/sample-team_logo4.png"
               alt="샘플 팀 로고"
             />
           </ItemHeader>
           <ItemBody>
-            <TeamTitle>
-              실제 운영할 서비스 개발을 도전할 분들을 모집합니다.
-            </TeamTitle>
+            <TeamTitle>최우수상에 도전하실 분들을 모집합니다.</TeamTitle>
             <TeamName>
-              데스파시토 <TeamCampus>(서울)</TeamCampus>
+              크로켓 <TeamCampus>(서울)</TeamCampus>
             </TeamName>
-          </ItemBody>
-        </TeamItem>
-        <TeamItem>
-          <ItemHeader>
-            <ItemImg
-              src="/images/projects/sample-team_logo.png"
-              alt="샘플 팀 로고"
-            />
-          </ItemHeader>
-          <ItemBody>
-            <TeamTitle>
-              실제 운영할 서비스 개발을 도전할 분들을 모집합니다.
-            </TeamTitle>
-            <TeamName>
-              데스파시토 <TeamCampus>(서울)</TeamCampus>
-            </TeamName>
+            <TeamStatusList>
+              <TeamStatusItem>
+                <WebIcon />
+                <Job>Front-end</Job> 3 / 3
+              </TeamStatusItem>
+              <TeamStatusItem>
+                <StorageIcon />
+                <Job>Back-end</Job> 2 / 3
+              </TeamStatusItem>
+              <TeamStatusItem>
+                <GroupsIcon />
+                <Job>Total</Job> 5 / 6
+              </TeamStatusItem>
+            </TeamStatusList>
+            <TechStackList>
+              <TeckStackItem>React</TeckStackItem>
+              <TeckStackItem>Redux</TeckStackItem>
+              <TeckStackItem>Emotion</TeckStackItem>
+              <TeckStackItem>Spring Boot</TeckStackItem>
+              <TeckStackItem>MySQL</TeckStackItem>
+              <TeckStackItem>Docker</TeckStackItem>
+            </TechStackList>
           </ItemBody>
         </TeamItem>
       </TeamList>
@@ -126,21 +207,43 @@ const FilterSelect = styled.select`
 const TeamList = styled.ul`
   display: flex;
   flex-wrap: wrap;
+
+  @media (max-width: 1015px) {
+    flex-direction: column;
+  }
 `;
 
 const TeamItem = styled.li`
   display: flex;
-  width: 100%;
+  width: calc(50% - 0.5rem);
   max-width: 576px;
   margin-bottom: 16px;
   padding: 24px;
-
   border: 1px solid #d7e2eb;
   border-radius: 4px;
   box-sizing: border-box;
+  transition: all 0.08s ease-in-out;
+  cursor: pointer;
 
+  &:hover {
+    border: 1px solid #3396f4;
+  }
   &:nth-child(even) {
     margin-left: 16px;
+  }
+
+  @media (max-width: 1015px) {
+    width: 100%;
+    max-width: 100%;
+
+    &:nth-child(even) {
+      margin-left: 0;
+    }
+  }
+
+  &.full {
+    background-color: #f3f3f3;
+    filter: grayscale(80%);
   }
 `;
 
@@ -155,6 +258,7 @@ const ItemImg = styled.img`
   width: 72px;
   height: 72px;
   border-radius: 4px;
+  object-fit: contain;
 `;
 
 const ItemBody = styled.div``;
@@ -170,14 +274,66 @@ const TeamTitle = styled.h5`
 const TeamCampus = styled.span``;
 
 const TeamName = styled.h6`
+  margin-bottom: 4px;
   font-size: 14px;
   color: #98a8b9;
 `;
 
-const TeamTackStackList = styled.ul``;
+const TeamStatusList = styled.ul`
+  display: flex;
+  margin-bottom: 6px;
+`;
 
-const TackStackItem = styled.li``;
+const TeamStatusItem = styled.li`
+  font-size: 14px;
+  color: #98a8b9;
+  line-height: 1.5;
 
-const TeamStatus = styled.div``;
+  svg {
+    margin-right: 2px;
+    padding-bottom: 2px;
+    font-size: 18px;
+    line-height: 1.5;
+    vertical-align: middle;
+  }
+
+  &:not(:last-of-type) {
+    &:after {
+      content: '';
+      display: inline-block;
+      width: 1px;
+      height: 10px;
+      margin: 0 8px;
+      background-color: #98a8b9;
+    }
+  }
+`;
+
+const Job = styled.span`
+  @media (max-width: 526px) {
+    display: none;
+  }
+`;
+
+const TechStackList = styled.ul`
+  display: flex;
+`;
+
+const TeckStackItem = styled.li`
+  display: inline-block;
+  margin-right: 0.25rem;
+  padding: 0.1875rem 0.5rem;
+  border-radius: 0.25rem;
+  background-color: #e9ecf3;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #44576c;
+  vertical-align: top;
+
+  &:last-of-type {
+    margin-right: 0;
+  }
+`;
 
 export default Announcement;
