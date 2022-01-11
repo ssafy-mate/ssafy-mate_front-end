@@ -106,6 +106,7 @@ const reset = css`
     display: block;
   }
   body {
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
     line-height: 1;
   }
   ol,
