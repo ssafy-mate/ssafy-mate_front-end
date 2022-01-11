@@ -82,13 +82,6 @@ const NavItem = styled.li`
   }
 `;
 
-// const Section = styled.section`
-//   max-width: 1200px;
-//   margin: 0 auto 24px;
-//   padding: 0 16px;
-//   box-sizing: border-box;
-// `;
-
 const navLink = css`
   display: flex;
   flex-direction: column;
