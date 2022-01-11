@@ -67,7 +67,7 @@ const LinkContainer = styled.main`
   padding: 0 16px;
   box-sizing: border-box;
 
-  @media screen and (max-width: 780px) {
+  @media (max-width: 780px) {
     flex-direction: column;
   }
 `;
@@ -99,7 +99,7 @@ const LinkCard = styled.div`
     background-color: #385a7b;
   }
 
-  @media screen and (max-width: 780px) {
+  @media (max-width: 780px) {
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-around;
@@ -112,11 +112,11 @@ const LinkCardImg = styled.img`
   width: 240px;
   margin: 0 auto 36px;
 
-  @media screen and (max-width: 780px) {
+  @media (max-width: 780px) {
     margin: 0 0 0 12px;
     width: 140px;
   }
-  @media screen and (max-width: 420px) {
+  @media (max-width: 420px) {
     width: 100px;
   }
 `;
@@ -127,17 +127,17 @@ const LinkCardTitle = styled.p`
   font-weight: 500;
   line-height: 1.6;
 
-  @media screen and (max-width: 780px) {
+  @media (max-width: 780px) {
     padding-left: 0;
     margin: auto 0;
   }
-  @media screen and (max-width: 420px) {
+  @media (max-width: 420px) {
     font-size: 20px;
   }
 `;
 
 const linkCardWrapper = css`
-  @media screen and (max-width: 780px) {
+  @media (max-width: 780px) {
     display: flex;
     flex-direction: row-reverse;
     justify-content: space-around;

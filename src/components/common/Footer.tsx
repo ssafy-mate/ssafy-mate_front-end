@@ -112,7 +112,7 @@ const FooterMenuGroup = styled.div`
   display: flex;
   margin-bottom: 48px;
 
-  @media screen and (max-width: 760px) {
+  @media (max-width: 760px) {
     flex-direction: column;
     margin-bottom: 36px;
   }
@@ -135,7 +135,7 @@ const FooterOthers = styled.div`
   display: flex;
   justify-content: space-between;
 
-  @media screen and (max-width: 480px) {
+  @media (max-width: 480px) {
     flex-direction: column;
   }
 `;
@@ -143,7 +143,7 @@ const FooterOthers = styled.div`
 const MenuList = styled.ul`
   margin-right: 40px;
 
-  @media screen and (max-width: 760px) {
+  @media (max-width: 760px) {
     margin-bottom: 18px;
   }
 `;
@@ -160,7 +160,7 @@ const MenuItem = styled.li`
     color: #44576c;
   }
 
-  @media screen and (max-width: 760px) {
+  @media (max-width: 760px) {
     &:nth-of-type(1) {
       margin-bottom: 8px;
     }
@@ -171,7 +171,7 @@ const SubMenuList = styled.ul`
   display: flex;
   align-items: center;
 
-  @media screen and (max-width: 480px) {
+  @media (max-width: 480px) {
     margin-bottom: 24px;
   }
 `;

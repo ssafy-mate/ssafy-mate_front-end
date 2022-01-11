@@ -67,7 +67,7 @@ const FilterList = styled.div`
   justify-content: space-between;
   margin-bottom: 8px;
 
-  @media screen and (max-width: 540px) {
+  @media (max-width: 540px) {
     margin-bottom: 0px;
     flex-direction: column;
     align-items: center;
@@ -80,13 +80,18 @@ const FilterSelect = styled.select`
   height: 42px;
   padding: 0 14px;
   border: 1px solid #d7e2eb;
-  border-radius: 6px;
+  border-radius: 4px;
   box-sizing: border-box;
+  background-position: calc(100% - 0.8rem) 49%;
+  background-size: 0.625rem 0.3125rem;
   background-color: #fbfbfd;
+  background-image: url(/images/assets/toggle-black.png);
+  background-repeat: no-repeat;
   font-size: 16px;
   font-weight: 500;
   line-height: 1.6;
   color: #263747;
+  appearance: none;
   transition: color 0.08s ease-in-out, background-color 0.08s ease-in-out,
     border-color 0.08s ease-in-out, box-shadow 0.08s ease-in-out;
   cursor: pointer;
@@ -104,7 +109,7 @@ const FilterSelect = styled.select`
     margin: 0 12px;
   }
 
-  @media screen and (max-width: 540px) {
+  @media (max-width: 540px) {
     max-width: 540px;
     height: 38px;
     margin-bottom: 8px;
@@ -122,7 +127,7 @@ const FilterInput = styled.input`
   height: 42px;
   padding: 0 14px;
   border: 1px solid #d7e2eb;
-  border-radius: 6px;
+  border-radius: 4px;
   box-sizing: border-box;
   background-color: #fbfbfd;
   font-size: 16px;
@@ -146,7 +151,7 @@ const FilterInput = styled.input`
     margin: 0 12px;
   }
 
-  @media screen and (max-width: 540px) {
+  @media (max-width: 540px) {
     max-width: 540px;
     height: 38px;
     margin-bottom: 8px;
@@ -165,7 +170,7 @@ const createTeamButton = css`
   height: 42px;
   padding: 0 14px;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   box-sizing: border-box;
   background-color: #3396f4;
   font-size: 16px;
@@ -188,7 +193,7 @@ const createTeamButton = css`
     margin: auto 0;
   }
 
-  @media screen and (max-width: 540px) {
+  @media (max-width: 540px) {
     max-width: 540px;
     height: 38px;
     font-size: 14px;

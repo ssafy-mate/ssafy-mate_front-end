@@ -15,6 +15,7 @@ import Header from '../components/common/Header';
 import BannerContainer from '../components/common/BannerContainer';
 import FilterForm from '../components/projects/FilterForm';
 import Footer from '../components/common/Footer';
+import Announcement from '../components/projects/Announcement';
 
 const SpecializationProjectPage: React.FC = () => {
   return (
@@ -46,12 +47,9 @@ const SpecializationProjectPage: React.FC = () => {
             </Link>
           </NavItem>
         </NavTabs>
-        <Section>
-          <BannerContainer />
-        </Section>
-        <Section>
-          <FilterForm />
-        </Section>
+        <BannerContainer />
+        <FilterForm />
+        <Announcement />
       </Container>
       <Footer />
     </>
@@ -84,12 +82,12 @@ const NavItem = styled.li`
   }
 `;
 
-const Section = styled.section`
-  max-width: 1200px;
-  margin: 0 auto 24px;
-  padding: 0 16px;
-  box-sizing: border-box;
-`;
+// const Section = styled.section`
+//   max-width: 1200px;
+//   margin: 0 auto 24px;
+//   padding: 0 16px;
+//   box-sizing: border-box;
+// `;
 
 const navLink = css`
   display: flex;
@@ -100,7 +98,7 @@ const navLink = css`
   font-size: 16px;
   line-height: 1.6;
 
-  @media screen and (max-width: 540px) {
+  @media (max-width: 540px) {
     font-size: 14px;
   }
 `;
@@ -108,7 +106,7 @@ const navLink = css`
 const navLinkIcon = css`
   margin-bottom: 4px;
 
-  @media screen and (max-width: 540px) {
+  @media (max-width: 540px) {
     display: none;
   }
 `;

@@ -108,12 +108,12 @@ const SwiperCard = styled.div`
   padding: 58px 40px 24px;
   color: #fff;
 
-  @media screen and (max-width: 760px) {
+  @media (max-width: 760px) {
     flex-direction: column;
     justify-content: space-around;
     height: 480px;
   }
-  @media screen and (max-width: 420px) {
+  @media (max-width: 420px) {
     height: 440px;
   }
 `;
@@ -122,7 +122,7 @@ const CardInformation = styled.div`
   margin-right: 24px;
   padding: 48px 0;
 
-  @media screen and (max-width: 760px) {
+  @media (max-width: 760px) {
     padding: 12px 0 0 0;
   }
 `;
@@ -130,7 +130,7 @@ const CardInformation = styled.div`
 const CardImgWrapper = styled.div`
   height: 280px;
 
-  @media screen and (max-width: 760px) {
+  @media (max-width: 760px) {
     height: 220px;
   }
 `;
@@ -138,10 +138,10 @@ const CardImgWrapper = styled.div`
 const CardImg = styled.img`
   height: 280px;
 
-  @media screen and (max-width: 760px) {
+  @media (max-width: 760px) {
     height: 220px;
   }
-  @media screen and (max-width: 420px) {
+  @media (max-width: 420px) {
     height: 180px;
   }
 `;
@@ -152,10 +152,10 @@ const CardSubHead = styled.h5`
   line-height: 1.5;
   text-align: left;
 
-  @media screen and (max-width: 760px) {
+  @media (max-width: 760px) {
     margin-bottom: 6px;
   }
-  @media screen and (max-width: 420px) {
+  @media (max-width: 420px) {
     margin-bottom: 4px;
     font-size: 12px;
   }
@@ -168,11 +168,11 @@ const CardHead = styled.h4`
   line-height: 1.6;
   text-align: left;
 
-  @media screen and (max-width: 760px) {
+  @media (max-width: 760px) {
     margin-bottom: 16px;
     font-size: 26px;
   }
-  @media screen and (max-width: 420px) {
+  @media (max-width: 420px) {
     margin-bottom: 12px;
     font-size: 24px;
   }
@@ -184,7 +184,7 @@ const ProjectDescription = styled.div`
   color: #d2d2d2;
   text-align: left;
 
-  @media screen and (max-width: 420px) {
+  @media (max-width: 420px) {
     font-size: 14px;
   }
 `;
@@ -241,16 +241,16 @@ const swiper = css`
   }
   .swiper-button-prev::after,
   .swiper-button-next::after {
+    display: none;
     font-size: 24px;
     color: #fff;
-    opacity: 0;
     transition: opacity 0.12s ease-in-out;
   }
 
   .swiper:hover {
     .swiper-button-prev::after,
     .swiper-button-next::after {
-      opacity: 1;
+      display: block;
     }
   }
 `;
