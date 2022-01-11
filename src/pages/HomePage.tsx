@@ -305,6 +305,40 @@ const swiper = css`
       background-color: #373549;
     }
   }
+
+  .swiper-pagination-bullet {
+    background-color: #fff;
+    transition: all 0.08s ease-in-out;
+    transition-delay: initial;
+
+    &.swiper-pagination-bullet-active {
+      width: 3rem;
+      border-radius: 0.3125rem;
+    }
+  }
+
+  .swiper-button-prev::after {
+    content: 'prev';
+    margin-left: 24px;
+  }
+  .swiper-button-next::after {
+    content: 'next';
+    margin-right: 24px;
+  }
+  .swiper-button-prev::after,
+  .swiper-button-next::after {
+    font-size: 24px;
+    color: #fff;
+    opacity: 0;
+    transition: opacity 0.12s ease-in-out;
+  }
+
+  .swiper:hover {
+    .swiper-button-prev::after,
+    .swiper-button-next::after {
+      opacity: 1;
+    }
+  }
 `;
 
 export default HomePage;
