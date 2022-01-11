@@ -8,19 +8,17 @@ import Footer from '../components/common/Footer';
 
 const SignInPage: React.FC = () => {
   return (
-    <Container>
+    <>
       <Header />
-      <Wrapper>
+      <Container>
         <SignInCard />
-      </Wrapper>
+      </Container>
       <Footer />
-    </Container>
+    </>
   );
 };
 
-const Container = styled.div``;
-
-const Wrapper = styled.div`
+const Container = styled.div`
   margin-top: 160px;
   padding: 0 16px;
 `;
