@@ -103,13 +103,13 @@ const Options = styled.div`
   align-items: center;
   margin-bottom: 16px;
 
-  @media screen and (max-width: 420px) {
+  @media (max-width: 420px) {
     flex-direction: column;
   }
 `;
 
 const IdSaveCheckBox = styled.div`
-  @media screen and (max-width: 420px) {
+  @media (max-width: 420px) {
     margin-bottom: 8px;
   }
 `;
