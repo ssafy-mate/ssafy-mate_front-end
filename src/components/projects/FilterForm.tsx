@@ -1,6 +1,12 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
+
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+
+import GroupsIcon from '@mui/icons-material/Groups';
 
 const FilterForm: React.FC = () => {
   return (
@@ -36,7 +42,10 @@ const FilterForm: React.FC = () => {
       <FilterList>
         <FilterInput type="text" placeholder="팀 이름" />
         <FilterInput type="text" placeholder="태그 검색" />
-        <FilterInput type="text" placeholder="미정" />
+        <Link to="/projects/create" css={createTeamButton}>
+          <GroupsIcon />
+          <span>팀 생성</span>
+        </Link>
       </FilterList>
     </Container>
   );
@@ -133,6 +142,41 @@ const FilterInput = styled.input`
     &:nth-of-type(2) {
       margin-bottom: 8px;
     }
+  }
+`;
+
+const createTeamButton = css`
+  display: flex;
+  width: 100%;
+  max-width: 378px;
+  height: 42px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 6px;
+  box-sizing: border-box;
+  background-color: #3396f4;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #fff;
+  transition: color 0.08s ease-in-out, background-color 0.08s ease-in-out,
+    border-color 0.08s ease-in-out, box-shadow 0.08s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #2878c3;
+  }
+
+  svg {
+    margin: auto 8px auto 0;
+    font-size: 24px;
+  }
+  span {
+    margin: auto 0;
+  }
+
+  @media screen and (max-width: 540px) {
+    max-width: 540px;
   }
 `;
 
