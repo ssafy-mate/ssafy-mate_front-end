@@ -1,15 +1,9 @@
 import React from 'react';
 
-import { Link } from 'react-router-dom';
-
 /** @jsxImportSource @emotion/react  */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import 'swiper/css/pagination';
 import SwiperCore, {
   Navigation,
   Pagination,
@@ -17,11 +11,15 @@ import SwiperCore, {
   Keyboard,
   Autoplay,
 } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
 
 const SwiperContainer: React.FC = () => {
   return (
     <>
-      <Container css={swiper}>
+      <Container>
         <Swiper
           cssMode={true}
           navigation={true}
@@ -32,6 +30,7 @@ const SwiperContainer: React.FC = () => {
             delay: 8000,
             disableOnInteraction: false,
           }}
+          css={swiper}
           className="mySwiper"
         >
           <SwiperSlide>
