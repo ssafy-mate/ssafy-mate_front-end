@@ -19,96 +19,108 @@ import 'swiper/css/pagination';
 const BannerContainer: React.FC = () => {
   return (
     <Container>
-      <Swiper
-        cssMode={true}
-        navigation={true}
-        pagination={true}
-        mousewheel={true}
-        keyboard={true}
-        autoplay={{
-          delay: 8000,
-          disableOnInteraction: false,
-        }}
-        css={swiper}
-        className="mySwiper"
-      >
-        <SwiperSlide>
-          <SwiperCard>
-            <CardInformation>
-              <CardSubHead>특화 프로젝트</CardSubHead>
-              <CardHead>Track 1. 인공지능 (AI)</CardHead>
-              <ProjectDescription>
-                인간의 학습능력과 추론능력, 지각능력, 자연언어의 이해능력 등을
-                컴퓨터 프로그램으로 실현한 기술
-              </ProjectDescription>
-            </CardInformation>
-            <CardImgWrapper>
-              <CardImg src="/images/projects/ai_animation.gif" alt="인공지능" />
-            </CardImgWrapper>
-          </SwiperCard>
-        </SwiperSlide>
-        <SwiperSlide>
-          <SwiperCard>
-            <CardInformation>
-              <CardSubHead>특화 프로젝트</CardSubHead>
-              <CardHead>Track 2. 빅데이터 (Big Data)</CardHead>
-              <ProjectDescription>
-                정형·반정형·비정형 데이터세트의 집적물, 그리고 이로부터 경제적
-                가치를 추출 및 분석할 수 있는 기술
-              </ProjectDescription>
-            </CardInformation>
-            <CardImgWrapper>
-              <CardImg
-                src="/images/projects/bigdata_animation.gif"
-                alt="빅데이터 프로젝트"
-              />
-            </CardImgWrapper>
-          </SwiperCard>
-        </SwiperSlide>
-        <SwiperSlide>
-          <SwiperCard>
-            <CardInformation>
-              <CardSubHead>특화 프로젝트</CardSubHead>
-              <CardHead>Track 3. 블록체인 (Block Chain)</CardHead>
-              <ProjectDescription>
-                누구나 열람할 수 있는 장부에 거래 내역을 투명하게 기록하고, 여러
-                대의 컴퓨터에 이를 복제해 저장하는 분산형 데이터 저장기술
-              </ProjectDescription>
-            </CardInformation>
-            <CardImgWrapper>
-              <CardImg
-                src="/images/projects/blockchain_animation.gif"
-                alt="블록체인"
-              />
-            </CardImgWrapper>
-          </SwiperCard>
-        </SwiperSlide>
-        <SwiperSlide>
-          <SwiperCard>
-            <CardInformation>
-              <CardSubHead>특화 프로젝트</CardSubHead>
-              <CardHead>Track 4. IoT 제어 (Internet of Things)</CardHead>
-              <ProjectDescription>
-                인터넷을 기반으로 모든 사물을 연결하여 정보를 상호 소통하는
-                지능형 기술 및 서비스
-              </ProjectDescription>
-            </CardInformation>
-            <CardImgWrapper>
-              <CardImg
-                src="/images/projects/iot_animation.gif"
-                alt="IoT 제어"
-              />
-            </CardImgWrapper>
-          </SwiperCard>
-        </SwiperSlide>
-      </Swiper>
+      <Wrapper>
+        <Swiper
+          cssMode={true}
+          navigation={true}
+          pagination={true}
+          mousewheel={true}
+          keyboard={true}
+          autoplay={{
+            delay: 8000,
+            disableOnInteraction: false,
+          }}
+          css={swiper}
+          className="mySwiper"
+        >
+          <SwiperSlide>
+            <SwiperCard>
+              <CardInformation>
+                <CardSubHead>특화 프로젝트</CardSubHead>
+                <CardHead>Track 1. 인공지능 (AI)</CardHead>
+                <ProjectDescription>
+                  인간의 학습능력과 추론능력, 지각능력, 자연언어의 이해능력 등을
+                  컴퓨터 프로그램으로 실현한 기술
+                </ProjectDescription>
+              </CardInformation>
+              <CardImgWrapper>
+                <CardImg
+                  src="/images/projects/ai_animation.gif"
+                  alt="인공지능"
+                />
+              </CardImgWrapper>
+            </SwiperCard>
+          </SwiperSlide>
+          <SwiperSlide>
+            <SwiperCard>
+              <CardInformation>
+                <CardSubHead>특화 프로젝트</CardSubHead>
+                <CardHead>Track 2. 빅데이터 (Big Data)</CardHead>
+                <ProjectDescription>
+                  정형·반정형·비정형 데이터세트의 집적물, 그리고 이로부터 경제적
+                  가치를 추출 및 분석할 수 있는 기술
+                </ProjectDescription>
+              </CardInformation>
+              <CardImgWrapper>
+                <CardImg
+                  src="/images/projects/bigdata_animation.gif"
+                  alt="빅데이터 프로젝트"
+                />
+              </CardImgWrapper>
+            </SwiperCard>
+          </SwiperSlide>
+          <SwiperSlide>
+            <SwiperCard>
+              <CardInformation>
+                <CardSubHead>특화 프로젝트</CardSubHead>
+                <CardHead>Track 3. 블록체인 (Block Chain)</CardHead>
+                <ProjectDescription>
+                  누구나 열람할 수 있는 장부에 거래 내역을 투명하게 기록하고,
+                  여러 대의 컴퓨터에 이를 복제해 저장하는 분산형 데이터 저장기술
+                </ProjectDescription>
+              </CardInformation>
+              <CardImgWrapper>
+                <CardImg
+                  src="/images/projects/blockchain_animation.gif"
+                  alt="블록체인"
+                />
+              </CardImgWrapper>
+            </SwiperCard>
+          </SwiperSlide>
+          <SwiperSlide>
+            <SwiperCard>
+              <CardInformation>
+                <CardSubHead>특화 프로젝트</CardSubHead>
+                <CardHead>Track 4. IoT 제어 (Internet of Things)</CardHead>
+                <ProjectDescription>
+                  인터넷을 기반으로 모든 사물을 연결하여 정보를 상호 소통하는
+                  지능형 기술 및 서비스
+                </ProjectDescription>
+              </CardInformation>
+              <CardImgWrapper>
+                <CardImg
+                  src="/images/projects/iot_animation.gif"
+                  alt="IoT 제어"
+                />
+              </CardImgWrapper>
+            </SwiperCard>
+          </SwiperSlide>
+        </Swiper>
+      </Wrapper>
     </Container>
   );
 };
 
 SwiperCore.use([Navigation, Pagination, Mousewheel, Keyboard, Autoplay]);
 
-const Container = styled.div`
+const Container = styled.section`
+  max-width: 1200px;
+  margin: 0 auto 24px;
+  padding: 0 16px;
+  box-sizing: border-box;
+`;
+
+const Wrapper = styled.div`
   overflow: hidden;
   border-radius: 12px;
   box-sizing: border-box;

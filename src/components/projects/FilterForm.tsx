@@ -11,47 +11,56 @@ import GroupsIcon from '@mui/icons-material/Groups';
 const FilterForm: React.FC = () => {
   return (
     <Container>
-      <FilterList>
-        <FilterSelect name="campus">
-          <option value="" selected>
-            지역
-          </option>
-          <option value="seoul">서울</option>
-          <option value="daejeon">대전</option>
-          <option value="gwangju">광주</option>
-          <option value="gumi">구미</option>
-          <option value="busan">부울경</option>
-        </FilterSelect>
-        <FilterSelect name="track">
-          <option value="" selected>
-            트랙
-          </option>
-          <option value="ai">인공지능</option>
-          <option value="bigdata">빅데이터</option>
-          <option value="blockchain">블록체인</option>
-          <option value="iot">IoT 제어</option>
-        </FilterSelect>
-        <FilterSelect name="job">
-          <option value="" selected>
-            희망 직무
-          </option>
-          <option value="frontend">프론트엔드(Front-end)</option>
-          <option value="backend">백엔드(Back-end)</option>
-        </FilterSelect>
-      </FilterList>
-      <FilterList>
-        <FilterInput type="text" placeholder="팀 이름" />
-        <FilterInput type="text" placeholder="태그 검색" />
-        <Link to="/projects/create" css={createTeamButton}>
-          <GroupsIcon />
-          <span>팀 생성</span>
-        </Link>
-      </FilterList>
+      <Wrapper>
+        <FilterList>
+          <FilterSelect name="campus">
+            <option value="" selected>
+              지역
+            </option>
+            <option value="seoul">서울</option>
+            <option value="daejeon">대전</option>
+            <option value="gwangju">광주</option>
+            <option value="gumi">구미</option>
+            <option value="busan">부울경</option>
+          </FilterSelect>
+          <FilterSelect name="track">
+            <option value="" selected>
+              트랙
+            </option>
+            <option value="ai">인공지능</option>
+            <option value="bigdata">빅데이터</option>
+            <option value="blockchain">블록체인</option>
+            <option value="iot">IoT 제어</option>
+          </FilterSelect>
+          <FilterSelect name="job">
+            <option value="" selected>
+              희망 직무
+            </option>
+            <option value="frontend">프론트엔드(Front-end)</option>
+            <option value="backend">백엔드(Back-end)</option>
+          </FilterSelect>
+        </FilterList>
+        <FilterList>
+          <FilterInput type="text" placeholder="팀 이름" />
+          <FilterInput type="text" placeholder="태그 검색" />
+          <Link to="/projects/create" css={createTeamButton}>
+            <GroupsIcon />
+            <span>팀 생성</span>
+          </Link>
+        </FilterList>
+      </Wrapper>
     </Container>
   );
 };
 
-const Container = styled.div``;
+const Container = styled.section`
+  max-width: 1200px;
+  margin: 0 auto 24px;
+  padding: 0 16px;
+  box-sizing: border-box;
+`;
+
+const Wrapper = styled.div``;
 
 const FilterList = styled.div`
   display: flex;
@@ -97,7 +106,9 @@ const FilterSelect = styled.select`
 
   @media screen and (max-width: 540px) {
     max-width: 540px;
+    height: 38px;
     margin-bottom: 8px;
+    font-size: 14px;
 
     &:nth-of-type(2) {
       margin-bottom: 8px;
@@ -137,7 +148,9 @@ const FilterInput = styled.input`
 
   @media screen and (max-width: 540px) {
     max-width: 540px;
+    height: 38px;
     margin-bottom: 8px;
+    font-size: 14px;
 
     &:nth-of-type(2) {
       margin-bottom: 8px;
@@ -177,6 +190,8 @@ const createTeamButton = css`
 
   @media screen and (max-width: 540px) {
     max-width: 540px;
+    height: 38px;
+    font-size: 14px;
   }
 `;
 
