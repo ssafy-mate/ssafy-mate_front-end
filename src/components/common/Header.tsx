@@ -125,6 +125,7 @@ const AccountItem = styled.li`
 const signInLink = css`
   font-size: 16px;
   font-weight: 500;
+  line-height: 1.6;
   color: #b2c0cc;
   text-decoration: none;
   transition: color 0.08s ease-in-out;
@@ -143,6 +144,7 @@ const brand = css`
 const signUpLink = css`
   font-size: 16px;
   font-weight: 500;
+  line-height: 1.6;
   color: #b2c0cc;
   text-decoration: none;
   transition: color 0.08s ease-in-out;
