@@ -38,10 +38,10 @@ const BannerContainer: React.FC = () => {
               <CardInformation>
                 <CardSubHead>특화 프로젝트</CardSubHead>
                 <CardHead>Track 1. 인공지능 (AI)</CardHead>
-                <ProjectDescription>
+                <TrackDescription>
                   인간의 학습능력과 추론능력, 지각능력, 자연언어의 이해능력 등을
                   컴퓨터 프로그램으로 실현한 기술
-                </ProjectDescription>
+                </TrackDescription>
               </CardInformation>
               <CardImgWrapper>
                 <CardImg
@@ -56,10 +56,10 @@ const BannerContainer: React.FC = () => {
               <CardInformation>
                 <CardSubHead>특화 프로젝트</CardSubHead>
                 <CardHead>Track 2. 빅데이터 (Big Data)</CardHead>
-                <ProjectDescription>
+                <TrackDescription>
                   정형·반정형·비정형 데이터세트의 집적물, 그리고 이로부터 경제적
                   가치를 추출 및 분석할 수 있는 기술
-                </ProjectDescription>
+                </TrackDescription>
               </CardInformation>
               <CardImgWrapper>
                 <CardImg
@@ -74,10 +74,10 @@ const BannerContainer: React.FC = () => {
               <CardInformation>
                 <CardSubHead>특화 프로젝트</CardSubHead>
                 <CardHead>Track 3. 블록체인 (Block Chain)</CardHead>
-                <ProjectDescription>
+                <TrackDescription>
                   누구나 열람할 수 있는 장부에 거래 내역을 투명하게 기록하고,
                   여러 대의 컴퓨터에 이를 복제해 저장하는 분산형 데이터 저장기술
-                </ProjectDescription>
+                </TrackDescription>
               </CardInformation>
               <CardImgWrapper>
                 <CardImg
@@ -92,10 +92,10 @@ const BannerContainer: React.FC = () => {
               <CardInformation>
                 <CardSubHead>특화 프로젝트</CardSubHead>
                 <CardHead>Track 4. IoT 제어 (Internet of Things)</CardHead>
-                <ProjectDescription>
+                <TrackDescription>
                   인터넷을 기반으로 모든 사물을 연결하여 정보를 상호 소통하는
                   지능형 기술 및 서비스
-                </ProjectDescription>
+                </TrackDescription>
               </CardInformation>
               <CardImgWrapper>
                 <CardImg
@@ -205,11 +205,11 @@ const CardHead = styled.h4`
   }
 `;
 
-const ProjectDescription = styled.div`
+const TrackDescription = styled.div`
+  padding-right: 60px;
   font-size: 16px;
   line-height: 1.6;
   color: #f3f3f3;
-  padding-right: 48px;
   text-align: left;
 
   @media screen and (max-width: 420px) {
