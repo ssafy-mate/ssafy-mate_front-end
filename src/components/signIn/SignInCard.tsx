@@ -43,11 +43,12 @@ const SignInCard: React.FC = () => {
 
 const Container = styled.div`
   width: 100%;
-  max-width: 460px;
+  max-width: 520px;
   margin: 0 auto;
   padding: 56px;
   border: 1px solid #d7e2eb;
   border-radius: 6px;
+  box-sizing: border-box;
 `;
 
 const CardHead = styled.h3`
@@ -96,13 +97,21 @@ const SignInInput = styled.input`
   }
 `;
 
-const IdSaveCheckBox = styled.div`
-  margin-bottom: 16px;
-`;
-
 const Options = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+
+  @media screen and (max-width: 420px) {
+    flex-direction: column;
+  }
+`;
+
+const IdSaveCheckBox = styled.div`
+  @media screen and (max-width: 420px) {
+    margin-bottom: 8px;
+  }
 `;
 
 const IdSaveCheckInput = styled.input``;
@@ -112,6 +121,7 @@ const IdSaveCheckLabel = styled.label`
   color: #98a8b9;
   transition: color 0.08s ease-in-out;
   cursor: pointer;
+  line-height: 1.5;
 
   &:hover {
     color: #3396f4;
@@ -170,6 +180,7 @@ const SignUpLinkBox = styled.div`
 
 const accountLink = css`
   font-size: 14px;
+  line-height: 1.5;
   color: #98a8b9;
   transition: color 0.08s ease-in-out;
   cursor: pointer;

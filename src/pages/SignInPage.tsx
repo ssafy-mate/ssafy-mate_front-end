@@ -21,7 +21,6 @@ const SignInPage: React.FC = () => {
 const Container = styled.div``;
 
 const Wrapper = styled.div`
-  max-width: 1200px;
   margin-top: 160px;
   padding: 0 16px;
 `;
