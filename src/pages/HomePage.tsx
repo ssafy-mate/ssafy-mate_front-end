@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
+
 /** @jsxImportSource @emotion/react  */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
@@ -94,34 +96,40 @@ const HomePage: React.FC = () => {
       </SwiperContainer>
       <LinkContainer>
         <LinkCard>
-          <LinkCardImg
-            src="/images/common-project_link.png"
-            alt="공통 프로젝트"
-          />
-          <LinkCardTitle>
-            공통 프로젝트
-            <br />팀 빌딩 바로가기
-          </LinkCardTitle>
+          <Link to="/projects/common" css={linkCardWrapper}>
+            <LinkCardImg
+              src="/images/common-project_link.png"
+              alt="공통 프로젝트"
+            />
+            <LinkCardTitle>
+              공통 프로젝트
+              <br />팀 빌딩 바로가기
+            </LinkCardTitle>
+          </Link>
         </LinkCard>
         <LinkCard>
-          <LinkCardImg
-            src="/images/specialization-project_link.png"
-            alt="특화 프로젝트"
-          />
-          <LinkCardTitle>
-            특화 프로젝트
-            <br />팀 빌딩 바로가기
-          </LinkCardTitle>
+          <Link to="/projects/specialization" css={linkCardWrapper}>
+            <LinkCardImg
+              src="/images/specialization-project_link.png"
+              alt="특화 프로젝트"
+            />
+            <LinkCardTitle>
+              특화 프로젝트
+              <br />팀 빌딩 바로가기
+            </LinkCardTitle>
+          </Link>
         </LinkCard>
         <LinkCard>
-          <LinkCardImg
-            src="/images/autonomy-project_link.png"
-            alt="자율 프로젝트"
-          />
-          <LinkCardTitle>
-            자율 프로젝트
-            <br />팀 빌딩 바로가기
-          </LinkCardTitle>
+          <Link to="/projects/autonomy" css={linkCardWrapper}>
+            <LinkCardImg
+              src="/images/autonomy-project_link.png"
+              alt="자율 프로젝트"
+            />
+            <LinkCardTitle>
+              자율 프로젝트
+              <br />팀 빌딩 바로가기
+            </LinkCardTitle>
+          </Link>
         </LinkCard>
       </LinkContainer>
       <Footer />
@@ -151,6 +159,9 @@ const SwiperCard = styled.div`
     justify-content: space-around;
     height: 480px;
   }
+  @media screen and (max-width: 420px) {
+    height: 440px;
+  }
 `;
 
 const CardInformation = styled.div`
@@ -176,6 +187,9 @@ const CardImg = styled.img`
   @media screen and (max-width: 760px) {
     height: 220px;
   }
+  @media screen and (max-width: 420px) {
+    height: 180px;
+  }
 `;
 
 const CardSubHead = styled.h5`
@@ -183,6 +197,14 @@ const CardSubHead = styled.h5`
   font-size: 14px;
   line-height: 1.5;
   text-align: left;
+
+  @media screen and (max-width: 760px) {
+    margin-bottom: 6px;
+  }
+  @media screen and (max-width: 420px) {
+    margin-bottom: 4px;
+    font-size: 12px;
+  }
 `;
 
 const CardHead = styled.h4`
@@ -194,6 +216,11 @@ const CardHead = styled.h4`
 
   @media screen and (max-width: 760px) {
     margin-bottom: 16px;
+    font-size: 26px;
+  }
+  @media screen and (max-width: 420px) {
+    margin-bottom: 12px;
+    font-size: 24px;
   }
 `;
 
@@ -202,6 +229,10 @@ const ProjectDescription = styled.div`
   line-height: 1.6;
   color: #d2d2d2;
   text-align: left;
+
+  @media screen and (max-width: 420px) {
+    font-size: 14px;
+  }
 `;
 
 const LinkContainer = styled.div`
@@ -217,7 +248,7 @@ const LinkContainer = styled.div`
   }
 `;
 
-const LinkCard = styled.a`
+const LinkCard = styled.div`
   width: 320px;
   margin: 0 auto 24px;
   padding: 24px 16px;
@@ -259,7 +290,10 @@ const LinkCardImg = styled.img`
 
   @media screen and (max-width: 780px) {
     margin: 0 0 0 12px;
-    width: 160px;
+    width: 140px;
+  }
+  @media screen and (max-width: 420px) {
+    width: 100px;
   }
 `;
 
@@ -272,6 +306,9 @@ const LinkCardTitle = styled.p`
   @media screen and (max-width: 780px) {
     padding-left: 0;
     margin: auto 0;
+  }
+  @media screen and (max-width: 420px) {
+    font-size: 20px;
   }
 `;
 
@@ -338,6 +375,15 @@ const swiper = css`
     .swiper-button-next::after {
       opacity: 1;
     }
+  }
+`;
+
+const linkCardWrapper = css`
+  @media screen and (max-width: 780px) {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-around;
+    width: 100%;
   }
 `;
 
