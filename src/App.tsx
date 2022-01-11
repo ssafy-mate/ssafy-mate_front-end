@@ -13,6 +13,9 @@ import ErrorPage from './pages/ErrorPage';
 import HomePage from './pages/HomePage';
 import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
+import CommonProjectPage from './pages/CommonProjectPage';
+import SpecializationProjectPage from './pages/SpecializationProjectPage';
+import AutonomyProjectPage from './pages/AutonomyProjectPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 const App: React.FC = () => {
@@ -24,6 +27,12 @@ const App: React.FC = () => {
           <Route exact path="/" component={HomePage} />
           <Route path="/users/sign_in" component={SignInPage} />
           <Route path="/users/sign_up" component={SignUpPage} />
+          <Route path="/projects/common" component={CommonProjectPage} />
+          <Route
+            path="/projects/specialization"
+            component={SpecializationProjectPage}
+          />
+          <Route path="/projects/autonomy" component={AutonomyProjectPage} />
           <Route component={NotFoundPage} />
         </Switch>
       </BrowserRouter>
