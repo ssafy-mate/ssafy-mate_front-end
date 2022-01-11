@@ -31,7 +31,7 @@ const SignInCard: React.FC = () => {
         </Options>
         <SignInButton>로그인</SignInButton>
         <SignUpLinkBox>
-          아직 계정이 없으신가요?{' '}
+          아직 계정이 없으신가요?
           <Link to="/users/sign_up" className="sign-up-link">
             계정 만들기
           </Link>
