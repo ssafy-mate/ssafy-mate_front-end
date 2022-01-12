@@ -17,7 +17,7 @@ const HomePage: React.FC = () => {
       <SwiperContainer />
       <LinkContainer>
         <LinkCard>
-          <Link to="/projects/common" css={linkCardWrapper}>
+          <Link to="#" css={linkCardWrapper}>
             <LinkCardImg
               src="/images/common-project_link.png"
               alt="공통 프로젝트"
@@ -29,7 +29,7 @@ const HomePage: React.FC = () => {
           </Link>
         </LinkCard>
         <LinkCard>
-          <Link to="/projects/specialization" css={linkCardWrapper}>
+          <Link to="/projects/specialization/team" css={linkCardWrapper}>
             <LinkCardImg
               src="/images/specialization-project_link.png"
               alt="특화 프로젝트"
@@ -41,7 +41,7 @@ const HomePage: React.FC = () => {
           </Link>
         </LinkCard>
         <LinkCard>
-          <Link to="/projects/autonomy" css={linkCardWrapper}>
+          <Link to="#" css={linkCardWrapper}>
             <LinkCardImg
               src="/images/autonomy-project_link.png"
               alt="자율 프로젝트"
