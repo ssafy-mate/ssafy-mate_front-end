@@ -67,7 +67,7 @@ const AuthButton = styled.button`
   border: none;
   border-radius: 0.25rem;
   box-sizing: border-box;
-  background-color: #9e9e9e;
+  background-color: #96a0ac;
   font-size: 14px;
   font-weight: 500;
   color: #fff;

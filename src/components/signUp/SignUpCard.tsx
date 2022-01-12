@@ -6,6 +6,7 @@ import styled from '@emotion/styled';
 
 import SignUpSteeper from './SignUpStepper';
 import AuthForm from './AuthForm';
+import SignUpForm from './SignUpForm';
 
 const SignUpCard: React.FC = () => {
   return (
@@ -13,7 +14,8 @@ const SignUpCard: React.FC = () => {
       <Wrapper>
         <Head>회원가입</Head>
         <SignUpSteeper />
-        <AuthForm />
+        {/* <AuthForm /> */}
+        <SignUpForm />
       </Wrapper>
     </Container>
   );

@@ -15,7 +15,7 @@ const SignUpStepper: React.FC = () => {
     <Box sx={{ width: '100%' }} css={box}>
       <Stepper activeStep={0} alternativeLabel>
         {steps.map((label) => (
-          <Step key={label}>
+          <Step key={label} css={step}>
             <StepLabel>{label}</StepLabel>
           </Step>
         ))}
@@ -26,6 +26,24 @@ const SignUpStepper: React.FC = () => {
 
 const box = css`
   margin-bottom: 36px;
+`;
+
+const step = css`
+  .MuiStepIcon-root {
+    color: #a3acb6;
+  }
+  .MuiStepIcon-text {
+    color: #a3acb6;
+  }
+  .MuiStepLabel-label {
+    color: #a3acb6;
+  }
+  .Mui-active {
+    color: #3396f4;
+  }
+  .Mui-completed {
+    color: #3396f4;
+  }
 `;
 
 export default SignUpStepper;
