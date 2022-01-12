@@ -7,7 +7,7 @@ import ProjectNavigation from '../components/projects/ProjectNavigation';
 import BannerContainer from '../components/common/BannerContainer';
 import FilterForm from '../components/projects/FilterForm';
 import Footer from '../components/common/Footer';
-import Announcement from '../components/projects/Announcement';
+import TeamAnnouncement from '../components/projects/TeamAnnouncement';
 
 const TeamSpecializationProjectPage: React.FC = () => {
   return (
@@ -17,7 +17,7 @@ const TeamSpecializationProjectPage: React.FC = () => {
         <ProjectNavigation />
         <BannerContainer />
         <FilterForm />
-        <Announcement />
+        <TeamAnnouncement />
       </Container>
       <Footer />
     </>
