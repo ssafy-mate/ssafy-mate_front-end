@@ -6,6 +6,8 @@ import WebIcon from '@mui/icons-material/Web';
 import StorageIcon from '@mui/icons-material/Storage';
 import GroupsIcon from '@mui/icons-material/Groups';
 
+import Pagenation from './Pagenation';
+
 const Announcement: React.FC = () => {
   return (
     <Container>
@@ -302,6 +304,7 @@ const Announcement: React.FC = () => {
           </ItemBody>
         </TeamItem>
       </TeamList>
+      <Pagenation />
     </Container>
   );
 };
