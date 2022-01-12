@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 import Header from '../components/common/Header';
 import ProjectNavigation from '../components/projects/ProjectNavigation';
 import BannerContainer from '../components/common/BannerContainer';
-import FilterForm from '../components/projects/FilterForm';
+import TeamFilterForm from '../components/projects/TeamFilterForm';
 import Footer from '../components/common/Footer';
 import TeamAnnouncement from '../components/projects/TeamAnnouncement';
 
@@ -16,7 +16,7 @@ const TeamSpecializationProjectPage: React.FC = () => {
       <Container>
         <ProjectNavigation />
         <BannerContainer />
-        <FilterForm />
+        <TeamFilterForm />
         <TeamAnnouncement />
       </Container>
       <Footer />
