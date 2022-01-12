@@ -49,6 +49,13 @@ const Container = styled.div`
   border: 1px solid #d7e2eb;
   border-radius: 6px;
   box-sizing: border-box;
+
+  @media (max-width: 580px) {
+    padding: 56px 28px;
+  }
+  @media (max-width: 414px) {
+    padding: 32px 16px;
+  }
 `;
 
 const CardHead = styled.h3`
