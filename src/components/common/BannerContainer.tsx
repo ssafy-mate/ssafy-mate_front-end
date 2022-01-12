@@ -27,7 +27,7 @@ const BannerContainer: React.FC = () => {
           mousewheel={true}
           keyboard={true}
           autoplay={{
-            delay: 8000,
+            delay: 80000,
             disableOnInteraction: false,
           }}
           css={swiper}
@@ -138,38 +138,52 @@ const SwiperCard = styled.div`
   @media (max-width: 760px) {
     flex-direction: column;
     justify-content: space-around;
-    height: 480px;
+    height: 460px;
+    padding: 0 36px;
   }
   @media (max-width: 420px) {
-    height: 440px;
+    height: 420px;
+    padding: 0 24px;
   }
 `;
 
 const CardInformation = styled.div`
-  margin-right: 24px;
+  margin-right: 60px;
   padding: 48px 0;
 
   @media (max-width: 760px) {
+    margin-right: 0;
     padding: 12px 0 0 0;
   }
 `;
 
 const CardImgWrapper = styled.div`
+  margin-top: 16px;
   height: 280px;
 
+  @media (max-width: 990px) {
+    height: 250px;
+  }
   @media (max-width: 760px) {
+    margin-top: 0;
     height: 220px;
+  }
+  @media (max-width: 420px) {
+    height: 200px;
   }
 `;
 
 const CardImg = styled.img`
   height: 260px;
 
+  @media (max-width: 990px) {
+    height: 240px;
+  }
   @media (max-width: 760px) {
     height: 220px;
   }
   @media (max-width: 420px) {
-    height: 180px;
+    height: 200px;
   }
 `;
 
@@ -179,6 +193,9 @@ const CardSubHead = styled.h5`
   line-height: 1.5;
   text-align: left;
 
+  @media (max-width: 990px) {
+    font-size: 13px;
+  }
   @media (max-width: 760px) {
     margin-bottom: 6px;
   }
@@ -195,25 +212,34 @@ const CardHead = styled.h4`
   line-height: 1.6;
   text-align: left;
 
+  @media (max-width: 990px) {
+    margin-bottom: 24px;
+    font-size: 24px;
+  }
   @media (max-width: 760px) {
     margin-bottom: 16px;
-    font-size: 26px;
+    font-size: 22px;
   }
   @media (max-width: 420px) {
     margin-bottom: 12px;
-    font-size: 24px;
+    font-size: 20px;
   }
 `;
 
 const TrackDescription = styled.div`
-  padding-right: 60px;
   font-size: 16px;
   line-height: 1.6;
   color: #f3f3f3;
   text-align: left;
 
-  @media (max-width: 420px) {
+  @media (max-width: 990px) {
     font-size: 14px;
+  }
+  @media (max-width: 420px) {
+    font-size: 13px;
+  }
+  @media (max-width: 360px) {
+    font-size: 12px;
   }
 `;
 
@@ -237,6 +263,7 @@ const swiper = css`
     -webkit-align-items: center;
     align-items: center;
     text-align: center;
+    padding: 12px 0;
 
     &:nth-of-type(1) {
       background-color: #ffc107;
@@ -279,7 +306,7 @@ const swiper = css`
     transition: opacity 0.12s ease-in-out;
   }
 
-  .swiper:hover {
+  &:hover {
     .swiper-button-prev::after,
     .swiper-button-next::after {
       opacity: 1;

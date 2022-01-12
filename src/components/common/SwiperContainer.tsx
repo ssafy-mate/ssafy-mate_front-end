@@ -187,6 +187,9 @@ const ProjectDescription = styled.div`
   @media (max-width: 420px) {
     font-size: 14px;
   }
+  @media (max-width: 360px) {
+    font-size: 13px;
+  }
 `;
 
 const swiper = css`
@@ -241,16 +244,16 @@ const swiper = css`
   }
   .swiper-button-prev::after,
   .swiper-button-next::after {
-    display: none;
+    opacity: 0;
     font-size: 24px;
     color: #fff;
     transition: opacity 0.12s ease-in-out;
   }
 
-  .swiper:hover {
+  &:hover {
     .swiper-button-prev::after,
     .swiper-button-next::after {
-      display: block;
+      opacity: 1;
     }
   }
 `;
