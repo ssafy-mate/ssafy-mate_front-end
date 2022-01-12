@@ -14,6 +14,8 @@ import reset from './styles/reset';
 
 import 'swiper/css/bundle';
 
+import ScrollToTop from './utils/ScrollToTop';
+
 import ErrorPage from './pages/ErrorPage';
 import HomePage from './pages/HomePage';
 import SignInPage from './pages/SignInPage';
@@ -29,6 +31,7 @@ const App: React.FC = () => {
     <ErrorBoundary FallbackComponent={ErrorPage}>
       <Global styles={reset} />
       <BrowserRouter>
+        <ScrollToTop />
         <Switch>
           <Route exact path="/" component={HomePage} />
           <Route path="/users/sign_in" component={SignInPage} />
