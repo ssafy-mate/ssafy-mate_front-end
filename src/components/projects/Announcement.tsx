@@ -13,10 +13,8 @@ const Announcement: React.FC = () => {
     <Container>
       <AnnouncementHeader>
         <TotalCount>총 28개의 팀</TotalCount>
-        <FilterSelect>
-          <option value="recent" selected>
-            최신순
-          </option>
+        <FilterSelect defaultValue={'recent'}>
+          <option value="recent">최신순</option>
           <option value="headcount">인원순</option>
         </FilterSelect>
       </AnnouncementHeader>
@@ -372,7 +370,7 @@ const TeamItem = styled.li`
   &:hover {
     border: 1px solid #3396f4;
   }
-  &:nth-child(even) {
+  &:nth-of-type(even) {
     margin-left: 16px;
   }
 
@@ -385,7 +383,7 @@ const TeamItem = styled.li`
     width: 100%;
     max-width: 100%;
 
-    &:nth-child(even) {
+    &:nth-of-type(even) {
       margin-left: 0;
     }
   }

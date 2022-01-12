@@ -13,8 +13,8 @@ const FilterForm: React.FC = () => {
     <Container>
       <Wrapper>
         <FilterList>
-          <FilterSelect name="campus">
-            <option value="" selected>
+          <FilterSelect name="campus" defaultValue={'default'}>
+            <option value="default" disabled>
               지역
             </option>
             <option value="seoul">서울</option>
@@ -23,8 +23,8 @@ const FilterForm: React.FC = () => {
             <option value="gumi">구미</option>
             <option value="busan">부울경</option>
           </FilterSelect>
-          <FilterSelect name="track">
-            <option value="" selected>
+          <FilterSelect name="track" defaultValue={'default'}>
+            <option value="default" disabled>
               트랙
             </option>
             <option value="ai">인공지능</option>
@@ -32,8 +32,8 @@ const FilterForm: React.FC = () => {
             <option value="blockchain">블록체인</option>
             <option value="iot">IoT 제어</option>
           </FilterSelect>
-          <FilterSelect name="job">
-            <option value="" selected>
+          <FilterSelect name="job" defaultValue={'default'}>
+            <option value="default" disabled>
               희망 직무
             </option>
             <option value="frontend">프론트엔드(Front-end)</option>
