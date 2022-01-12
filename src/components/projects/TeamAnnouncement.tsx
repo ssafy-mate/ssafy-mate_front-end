@@ -8,7 +8,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 
 import Pagenation from './Pagenation';
 
-const Announcement: React.FC = () => {
+const TeamAnnouncement: React.FC = () => {
   return (
     <Container>
       <AnnouncementHeader>
@@ -65,7 +65,7 @@ const Announcement: React.FC = () => {
           <ItemBody>
             <TeamTitle>워라벨을 지향하는 팀원들을 모집합니다.</TeamTitle>
             <TeamName>
-              워라벨 <TeamCampus>(서울)</TeamCampus>
+              리디 <TeamCampus>(서울)</TeamCampus>
             </TeamName>
             <TeamStatusList>
               <TeamStatusItem>
@@ -408,7 +408,7 @@ const ItemImg = styled.img`
   width: 72px;
   height: 72px;
   border-radius: 4px;
-  object-fit: contain;
+  object-fit: cover;
 
   @media (max-width: 575px) {
     width: 40px;
@@ -518,4 +518,4 @@ const TeckStackItem = styled.li`
   }
 `;
 
-export default Announcement;
+export default TeamAnnouncement;
