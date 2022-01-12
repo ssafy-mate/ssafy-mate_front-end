@@ -21,7 +21,7 @@ const StudentAnnouncement: React.FC = () => {
         <TotalCount>총 28개의 팀</TotalCount>
         <FilterSelect defaultValue={'recent'}>
           <option value="recent">최신순</option>
-          <option value="headcount">인원순</option>
+          <option value="headcount">희망 직무순</option>
         </FilterSelect>
       </AnnouncementHeader>
       <StudentList>
