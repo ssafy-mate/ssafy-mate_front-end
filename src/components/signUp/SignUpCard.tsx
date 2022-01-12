@@ -7,7 +7,7 @@ import styled from '@emotion/styled';
 import SignUpSteeper from './SignUpStepper';
 import AuthForm from './AuthForm';
 
-const SignUpForm: React.FC = () => {
+const SignUpCard: React.FC = () => {
   return (
     <Container>
       <Wrapper>
@@ -39,4 +39,4 @@ const Head = styled.h3`
   text-align: center;
 `;
 
-export default SignUpForm;
+export default SignUpCard;

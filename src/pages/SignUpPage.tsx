@@ -3,7 +3,7 @@ import React from 'react';
 import styled from '@emotion/styled';
 
 import Header from '../components/common/Header';
-import SignUpCard from '../components/signUp/SignUpForm';
+import SignUpCard from '../components/signUp/SignUpCard';
 import Footer from '../components/common/Footer';
 
 const SignUpPage: React.FC = () => {
