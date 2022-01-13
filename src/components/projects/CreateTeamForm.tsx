@@ -341,8 +341,8 @@ const FileInputLabel = styled.label`
     height: 200px;
     padding: 30px;
     border: 1px solid #d7e2eb;
-    box-sizing: border-box;
     border-radius: 0.25rem;
+    box-sizing: border-box;
     background-color: #fbfbfd;
     color: #5f7f90;
   }
