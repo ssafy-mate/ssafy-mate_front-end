@@ -97,8 +97,8 @@ const Logo = styled.img`
 
 const LogoName = styled.span`
   margin-left: 6px;
-  padding-top: 2px;
-  font-size: 22px;
+  padding-top: 1px;
+  font-size: 20px;
   font-weight: 700;
   color: #fff;
 `;
