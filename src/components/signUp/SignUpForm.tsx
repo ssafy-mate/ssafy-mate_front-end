@@ -6,31 +6,52 @@ const SignUpForm: React.FC = () => {
   return (
     <Container>
       <InputWrapper>
-        <RequirementLabel>이메일</RequirementLabel>
+        <RequirementLabel htmlFor="signup-email">이메일</RequirementLabel>
         <ButtonWrapper>
-          <InfoInput type="email" placeholder="이메일" />
+          <InfoInput
+            type="email"
+            id="signup-email"
+            name="signup-email"
+            placeholder="이메일"
+          />
           <AuthButton>이메일 인증</AuthButton>
         </ButtonWrapper>
       </InputWrapper>
       <InputWrapper>
-        <RequirementLabel>인증번호 입력</RequirementLabel>
+        <RequirementLabel htmlFor="verification-code">
+          인증번호 입력
+        </RequirementLabel>
         <ButtonWrapper>
           <InfoInput
             type="text"
-            placeholder="해당 이메일로 전송된 인증번호를 입력하세요."
+            id="verification-code"
+            name="verification-code"
+            placeholder="이메일로 전송된 인증번호를 입력하세요."
           />
           <AuthButton>확인</AuthButton>
         </ButtonWrapper>
       </InputWrapper>
       <InputWrapper>
-        <RequirementLabel>
+        <RequirementLabel htmlFor="signup-password">
           비밀번호 (영문자와 숫자 포함 최소 6자)
         </RequirementLabel>
-        <InfoInput type="password" placeholder="비밀번호" />
+        <InfoInput
+          type="password"
+          id="signup-password"
+          name="signup-password"
+          placeholder="비밀번호"
+        />
       </InputWrapper>
       <InputWrapper>
-        <RequirementLabel>비밀번호 확인</RequirementLabel>
-        <InfoInput type="password" placeholder="비밀번호" />
+        <RequirementLabel htmlFor="signup-check-password">
+          비밀번호 확인
+        </RequirementLabel>
+        <InfoInput
+          type="password"
+          id="signup-check-password"
+          name="signup-check-password"
+          placeholder="비밀번호 확인"
+        />
       </InputWrapper>
       <ButtonGroup>
         <PrevButton>이전</PrevButton>
@@ -76,6 +97,10 @@ const AuthButton = styled.button`
 
   &:hover {
     background-color: #3396f4;
+  }
+
+  @media (max-width: 540px) {
+    font-size: 12px;
   }
 `;
 
@@ -139,6 +164,10 @@ const InfoInput = styled.input`
     background-color: #fff;
     color: #495057;
   }
+
+  @media (max-width: 540px) {
+    font-size: 13px;
+  }
 `;
 
 const RequirementLabel = styled.label`
@@ -157,6 +186,10 @@ const RequirementLabel = styled.label`
     font-weight: 700;
     line-height: 1.25rem;
     color: #f44336;
+  }
+
+  @media (max-width: 540px) {
+    font-size: 13px;
   }
 `;
 
