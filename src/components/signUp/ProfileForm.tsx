@@ -585,6 +585,10 @@ const SignUpButton = styled.button`
 
 const rightGap = css`
   margin-right: 12px;
+
+  @media (max-width: 540px) {
+    margin-right: 6px;
+  }
 `;
 
 const TechStackList = styled.ul`
