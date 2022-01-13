@@ -63,6 +63,7 @@ const CardHead = styled.h3`
   font-size: 26px;
   font-weight: 600;
   text-align: center;
+  color: #263747;
 `;
 
 const SignInForm = styled.form`

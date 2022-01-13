@@ -600,6 +600,13 @@ const TechStackItem = styled.li`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
+  padding: 3px 6px;
+  box-sizing: border-box;
+
+  &:hover {
+    border-radius: 0.25rem;
+    background-color: #eaf4fd;
+  }
 
   @media (max-width: 540px) {
     margin-bottom: 16px;
