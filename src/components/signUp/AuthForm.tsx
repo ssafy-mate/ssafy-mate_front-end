@@ -7,10 +7,10 @@ const AuthForm: React.FC = () => {
     <Container>
       <SsafyInfo>
         <InputWrapper>
-          <Label>지역</Label>
-          <CampusSelect name="campus" defaultValue={'default'}>
+          <Label htmlFor="campus">캠퍼스</Label>
+          <CampusSelect id="campus" name="campus" defaultValue={'default'}>
             <option value="default" disabled>
-              지역
+              - 선택 -
             </option>
             <option value="seoul">서울</option>
             <option value="daejeon">대전</option>
@@ -20,13 +20,13 @@ const AuthForm: React.FC = () => {
           </CampusSelect>
         </InputWrapper>
         <InputWrapper>
-          <Label>학번</Label>
-          <InfoInput />
+          <Label htmlFor="student-number">학번</Label>
+          <InfoInput type="text" id="student-number" name="student-number" />
         </InputWrapper>
       </SsafyInfo>
       <InputWrapper>
-        <Label>이름</Label>
-        <InfoInput />
+        <Label htmlFor="student-name">이름</Label>
+        <InfoInput type="text" id="student-name" name="student-name" />
       </InputWrapper>
       <AuthButton>교육생 인증</AuthButton>
     </Container>
@@ -82,6 +82,10 @@ const CampusSelect = styled.select`
     background-color: #fff;
     color: #495057;
   }
+
+  @media (max-width: 540px) {
+    font-size: 15px;
+  }
 `;
 
 const InfoInput = styled.input`
@@ -107,6 +111,10 @@ const InfoInput = styled.input`
     box-shadow: inset 0 0 0 1px #3396f4;
     background-color: #fff;
     color: #495057;
+  }
+
+  @media (max-width: 540px) {
+    font-size: 15px;
   }
 `;
 
