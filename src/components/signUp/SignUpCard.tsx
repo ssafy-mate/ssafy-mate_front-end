@@ -7,6 +7,7 @@ import styled from '@emotion/styled';
 import SignUpSteeper from './SignUpStepper';
 import AuthForm from './AuthForm';
 import SignUpForm from './SignUpForm';
+import ProfileForm from './ProfileForm';
 
 const SignUpCard: React.FC = () => {
   return (
@@ -14,8 +15,12 @@ const SignUpCard: React.FC = () => {
       <Wrapper>
         <Head>회원가입</Head>
         <SignUpSteeper />
+        {/* 1단계 : 교육생 인증 */}
         {/* <AuthForm /> */}
-        <SignUpForm />
+        {/* 2단계 : 기본 정보 작성 */}
+        {/* <SignUpForm /> */}
+        {/* 3단계 : 프로필 작성 */}
+        <ProfileForm />
       </Wrapper>
     </Container>
   );
@@ -32,6 +37,13 @@ const Wrapper = styled.div`
   padding: 56px;
   border: 1px solid #d7e2eb;
   border-radius: 6px;
+
+  @media (max-width: 620px) {
+    padding: 56px 28px;
+  }
+  @media (max-width: 414px) {
+    padding: 32px 16px;
+  }
 `;
 
 const Head = styled.h3`

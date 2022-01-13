@@ -406,6 +406,10 @@ const Label = styled.label`
   font-size: 14px;
   line-height: 1.5;
   color: #263747;
+
+  @media (max-width: 540px) {
+    font-size: 13px;
+  }
 `;
 
 const RequirementLabel = styled.label`
@@ -425,11 +429,19 @@ const RequirementLabel = styled.label`
     line-height: 1.25rem;
     color: #f44336;
   }
+
+  @media (max-width: 540px) {
+    font-size: 13px;
+  }
 `;
 
 const Em = styled.em`
   font-size: 13px;
   color: #3396f4;
+
+  @media (max-width: 540px) {
+    font-size: 12px;
+  }
 `;
 
 const AvatarWrapper = styled.div`
@@ -459,10 +471,7 @@ const Textarea = styled.textarea`
   transition: all 0.08s ease-in-out;
 
   @media (max-width: 540px) {
-    font-size: 15px;
-  }
-  @media (max-width: 414px) {
-    font-size: 14px;
+    font-size: 13px;
   }
 `;
 
@@ -497,10 +506,7 @@ const Select = styled.select`
   }
 
   @media (max-width: 540px) {
-    font-size: 15px;
-  }
-  @media (max-width: 414px) {
-    font-size: 14px;
+    font-size: 13px;
   }
 `;
 
@@ -530,10 +536,7 @@ const InfoInput = styled.input`
   }
 
   @media (max-width: 540px) {
-    font-size: 15px;
-  }
-  @media (max-width: 414px) {
-    font-size: 14px;
+    font-size: 13px;
   }
 `;
 
@@ -548,7 +551,7 @@ const CheckBoxLabel = styled.label`
   line-height: 1.5;
   color: #98a8b9;
 
-  @media (max-width: 414px) {
+  @media (max-width: 540px) {
     font-size: 13px;
   }
 `;
@@ -573,6 +576,10 @@ const SignUpButton = styled.button`
 
   &:hover {
     background-color: #2878c3;
+  }
+
+  @media (max-width: 540px) {
+    font-size: 15px;
   }
 `;
 
@@ -631,7 +638,6 @@ const CancelButton = styled.button`
   margin-left: 6px;
   border: none;
   background-color: transparent;
-  font-size: 14px;
   color: #f44336;
   cursor: pointer;
   transition: all 0.12s ease-in-out;
@@ -641,8 +647,6 @@ const CancelButton = styled.button`
   }
 
   @media (max-width: 540px) {
-    font-size: 13px;
-
     svg {
       width: 22px;
       height: 22px;

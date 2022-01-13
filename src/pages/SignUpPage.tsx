@@ -19,7 +19,7 @@ const SignUpPage: React.FC = () => {
 };
 
 const Container = styled.div`
-  margin-top: 160px;
+  margin-top: 140px;
   padding: 0 16px;
 
   @media (max-width: 580px) {

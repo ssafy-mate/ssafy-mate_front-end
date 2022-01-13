@@ -84,7 +84,7 @@ const CampusSelect = styled.select`
   }
 
   @media (max-width: 540px) {
-    font-size: 15px;
+    font-size: 13px;
   }
 `;
 
@@ -114,7 +114,7 @@ const InfoInput = styled.input`
   }
 
   @media (max-width: 540px) {
-    font-size: 15px;
+    font-size: 13px;
   }
 `;
 
@@ -135,6 +135,10 @@ const AuthButton = styled.button`
   &:hover {
     background-color: #2878c3;
   }
+
+  @media (max-width: 540px) {
+    font-size: 15px;
+  }
 `;
 
 const Label = styled.label`
@@ -142,6 +146,10 @@ const Label = styled.label`
   font-size: 14px;
   line-height: 1.5;
   color: #263747;
+
+  @media (max-width: 540px) {
+    font-size: 13px;
+  }
 `;
 
 export default AuthForm;

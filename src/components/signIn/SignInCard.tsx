@@ -75,6 +75,10 @@ const SignInLabel = styled.label`
   font-size: 14px;
   line-height: 1.5;
   color: #263747;
+
+  @media (max-width: 540px) {
+    font-size: 13px;
+  }
 `;
 
 const SignInInput = styled.input`
@@ -101,6 +105,10 @@ const SignInInput = styled.input`
     box-shadow: inset 0 0 0 1px #3396f4;
     background-color: #fff;
     color: #495057;
+  }
+
+  @media (max-width: 540px) {
+    font-size: 13px;
   }
 `;
 
@@ -153,6 +161,10 @@ const SignInButton = styled.button`
   &:hover {
     background-color: #2878c3;
   }
+
+  @media (max-width: 540px) {
+    font-size: 15px;
+  }
 `;
 
 const SignUpLinkBox = styled.div`
@@ -183,6 +195,10 @@ const SignUpLinkBox = styled.div`
       }
     }
   }
+
+  @media (max-width: 540px) {
+    font-size: 13px;
+  }
 `;
 
 const accountLink = css`
@@ -205,6 +221,10 @@ const accountLink = css`
       margin: 0 8px;
       background-color: #98a8b9;
     }
+  }
+
+  @media (max-width: 540px) {
+    font-size: 13px;
   }
 `;
 
