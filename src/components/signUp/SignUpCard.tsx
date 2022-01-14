@@ -39,7 +39,7 @@ const Wrapper = styled.div`
   border-radius: 6px;
 
   @media (max-width: 620px) {
-    padding: 56px 28px;
+    padding: 40px 28px;
   }
   @media (max-width: 414px) {
     padding: 32px 16px;
@@ -52,6 +52,10 @@ const Head = styled.h3`
   font-weight: 600;
   text-align: center;
   color: #263747;
+
+  @media (max-width: 580px) {
+    margin-bottom: 40px;
+  }
 `;
 
 export default SignUpCard;
