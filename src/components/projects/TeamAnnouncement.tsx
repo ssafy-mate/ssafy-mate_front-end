@@ -12,7 +12,7 @@ const TeamAnnouncement: React.FC = () => {
   return (
     <Container>
       <AnnouncementHeader>
-        <TotalCount>총 28개의 팀</TotalCount>
+        <TotalCount>검색된 팀 총 6팀</TotalCount>
         <FilterSelect defaultValue={'recent'}>
           <option value="recent">최신순</option>
           <option value="headcount">인원순</option>

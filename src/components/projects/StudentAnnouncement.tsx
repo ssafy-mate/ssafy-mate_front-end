@@ -18,7 +18,7 @@ const StudentAnnouncement: React.FC = () => {
   return (
     <Container>
       <AnnouncementHeader>
-        <TotalCount>총 28개의 팀</TotalCount>
+        <TotalCount>검색된 교육생 총 6명</TotalCount>
         <FilterSelect defaultValue={'recent'}>
           <option value="recent">최신순</option>
           <option value="headcount">희망 직무순</option>
@@ -82,7 +82,7 @@ const StudentAnnouncement: React.FC = () => {
                   <GitHubLink
                     href="https://github.com/Jo-wonbin"
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                   >
                     https://github.com/Jo-wonbin
                   </GitHubLink>
@@ -154,7 +154,7 @@ const StudentAnnouncement: React.FC = () => {
                   <GitHubLink
                     href="https://github.com/sojjeong"
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                   >
                     https://github.com/sojjeong
                   </GitHubLink>
@@ -226,7 +226,7 @@ const StudentAnnouncement: React.FC = () => {
                   <GitHubLink
                     href="https://github.com/dudqo225"
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                   >
                     https://github.com/dudqo225
                   </GitHubLink>
@@ -298,7 +298,7 @@ const StudentAnnouncement: React.FC = () => {
                   <GitHubLink
                     href="https://github.com/person003333"
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                   >
                     https://github.com/person003333
                   </GitHubLink>
@@ -370,7 +370,7 @@ const StudentAnnouncement: React.FC = () => {
                   <GitHubLink
                     href="https://github.com/JeongHwan-dev"
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                   >
                     https://github.com/JeongHwan-dev
                   </GitHubLink>
@@ -442,7 +442,7 @@ const StudentAnnouncement: React.FC = () => {
                   <GitHubLink
                     href="https://github.com/orgs/ssafy-mate/people/limejin"
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                   >
                     https://github.com/orgs/ssafy-mate/people/limejin
                   </GitHubLink>
@@ -719,8 +719,8 @@ const profileLink = css`
   font-weight: 500;
   line-height: 1.5;
   color: #263747;
-  cursor: pointer;
   transition: background-color 0.08s ease-in-out;
+  cursor: pointer;
 
   &:hover {
     background-color: #d1d4da;
