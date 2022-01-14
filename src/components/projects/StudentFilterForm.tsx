@@ -51,13 +51,13 @@ const StudentFilterForm: React.FC = () => {
           </FilterSelect>
           <FilterInput
             type="text"
-            name="student-name-search"
-            placeholder="교육생 이름 검색"
+            name="team-tech-stack-search"
+            placeholder="기술 스택 검색"
           />
           <FilterInput
             type="text"
-            name="team-tech-stack-search"
-            placeholder="기술 스택 검색"
+            name="student-name-search"
+            placeholder="교육생 이름 검색"
           />
         </FilterList>
       </Wrapper>

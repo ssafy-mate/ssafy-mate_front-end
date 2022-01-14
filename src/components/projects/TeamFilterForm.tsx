@@ -48,13 +48,13 @@ const FilterForm: React.FC = () => {
         <FilterList>
           <FilterInput
             type="text"
-            name="team-name-search"
-            placeholder="팀 이름 검색"
+            name="team-tech-stack-search"
+            placeholder="기술 스택 검색"
           />
           <FilterInput
             type="text"
-            name="team-tech-stack-search"
-            placeholder="기술 스택 검색"
+            name="team-name-search"
+            placeholder="팀 이름 검색"
           />
           <Link to="/projects/team/create" css={createTeamButton}>
             <GroupsIcon />
