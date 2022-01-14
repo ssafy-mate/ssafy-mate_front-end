@@ -12,11 +12,11 @@ const AuthForm: React.FC = () => {
             <option value="default" disabled>
               - 선택 -
             </option>
-            <option value="seoul">서울</option>
-            <option value="daejeon">대전</option>
-            <option value="gwangju">광주</option>
-            <option value="gumi">구미</option>
-            <option value="busan">부울경</option>
+            <option value="서울">서울</option>
+            <option value="대전">대전</option>
+            <option value="광주">광주</option>
+            <option value="구미">구미</option>
+            <option value="부울경">부울경</option>
           </CampusSelect>
         </InputWrapper>
         <InputWrapper>

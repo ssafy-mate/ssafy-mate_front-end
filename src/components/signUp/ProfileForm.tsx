@@ -40,8 +40,10 @@ const ProfileForm: React.FC = () => {
             <option value="default" disabled>
               - 선택 -
             </option>
-            <option value="javaTrack">전공자 (Java Track)</option>
-            <option value="pythonTrack">비전공자 (Python Track)</option>
+            <option value="전공자 (Java Track)">전공자 (Java Track)</option>
+            <option value="비전공자 (Python Track)">
+              비전공자 (Python Track)
+            </option>
           </Select>
         </InputWrapper>
         <InputWrapper>
@@ -56,10 +58,10 @@ const ProfileForm: React.FC = () => {
             <option value="default" disabled>
               - 선택 -
             </option>
-            <option value="ai">인공지능</option>
-            <option value="bigdata">빅데이터</option>
-            <option value="blockchain">블록체인</option>
-            <option value="iot">IoT 제어</option>
+            <option value="인공지능">인공지능</option>
+            <option value="빅데이터">빅데이터</option>
+            <option value="블록체인">블록체인</option>
+            <option value="IoT 제어">IoT 제어</option>
           </Select>
         </InputWrapper>
       </Row>
@@ -70,8 +72,10 @@ const ProfileForm: React.FC = () => {
             <option value="default" disabled>
               - 선택 -
             </option>
-            <option value="frontend">프론트엔드 (Front-end)</option>
-            <option value="backend">백엔드 (Back-end)</option>
+            <option value="프론트엔드 (Front-end)">
+              프론트엔드 (Front-end)
+            </option>
+            <option value="백엔드 (Back-end)">백엔드 (Back-end)</option>
           </Select>
         </InputWrapper>
         <InputWrapper>
@@ -82,8 +86,10 @@ const ProfileForm: React.FC = () => {
             <option value="default" disabled>
               - 선택 -
             </option>
-            <option value="frontend">프론트엔드(Front-end)</option>
-            <option value="backend">백엔드(Back-end)</option>
+            <option value="프론트엔드 (Front-end)">
+              프론트엔드 (Front-end)
+            </option>
+            <option value="백엔드 (Back-end)">백엔드(Back-end)</option>
           </Select>
         </InputWrapper>
       </Row>
