@@ -15,35 +15,46 @@ const FilterForm: React.FC = () => {
         <FilterList>
           <FilterSelect name="campus" defaultValue={'default'}>
             <option value="default" disabled>
-              지역
+              캠퍼스
             </option>
-            <option value="seoul">서울</option>
-            <option value="daejeon">대전</option>
-            <option value="gwangju">광주</option>
-            <option value="gumi">구미</option>
-            <option value="busan">부울경</option>
+            <option value="서울">서울</option>
+            <option value="대전">대전</option>
+            <option value="광주">광주</option>
+            <option value="구미">구미</option>
+            <option value="부울경">부울경</option>
           </FilterSelect>
-          <FilterSelect name="track" defaultValue={'default'}>
+          <FilterSelect
+            name="specializaion-project-track"
+            defaultValue={'default'}
+          >
             <option value="default" disabled>
-              트랙
+              특화 프로젝트 트랙
             </option>
-            <option value="ai">인공지능</option>
-            <option value="bigdata">빅데이터</option>
-            <option value="blockchain">블록체인</option>
-            <option value="iot">IoT 제어</option>
+            <option value="인공지능">인공지능</option>
+            <option value="빅데이터">빅데이터</option>
+            <option value="블록체인">블록체인</option>
+            <option value="IoT 제어">IoT 제어</option>
           </FilterSelect>
-          <FilterSelect name="job" defaultValue={'default'}>
+          <FilterSelect name="job1" defaultValue={'default'}>
             <option value="default" disabled>
               희망 직무
             </option>
-            <option value="frontend">프론트엔드(Front-end)</option>
-            <option value="backend">백엔드(Back-end)</option>
+            <option value="프론트엔드(Front-end)">프론트엔드(Front-end)</option>
+            <option value="백엔드(Back-end)">백엔드(Back-end)</option>
           </FilterSelect>
         </FilterList>
         <FilterList>
-          <FilterInput type="text" placeholder="팀 이름" />
-          <FilterInput type="text" placeholder="태그 검색" />
-          <Link to="/projects/create" css={createTeamButton}>
+          <FilterInput
+            type="text"
+            name="team-name-search"
+            placeholder="팀 이름 검색"
+          />
+          <FilterInput
+            type="text"
+            name="team-tech-stack-search"
+            placeholder="기술 스택 검색"
+          />
+          <Link to="/projects/team/create" css={createTeamButton}>
             <GroupsIcon />
             <span>팀 생성</span>
           </Link>

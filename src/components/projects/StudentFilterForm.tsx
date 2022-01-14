@@ -15,7 +15,7 @@ const StudentFilterForm: React.FC = () => {
         <FilterList>
           <FilterSelect name="campus" defaultValue={'default'}>
             <option value="default" disabled>
-              지역
+              캠퍼스
             </option>
             <option value="seoul">서울</option>
             <option value="daejeon">대전</option>
@@ -23,7 +23,10 @@ const StudentFilterForm: React.FC = () => {
             <option value="gumi">구미</option>
             <option value="busan">부울경</option>
           </FilterSelect>
-          <FilterSelect name="track" defaultValue={'default'}>
+          <FilterSelect
+            name="specializaion-project-track"
+            defaultValue={'default'}
+          >
             <option value="default" disabled>
               트랙
             </option>
@@ -32,21 +35,38 @@ const StudentFilterForm: React.FC = () => {
             <option value="blockchain">블록체인</option>
             <option value="iot">IoT 제어</option>
           </FilterSelect>
-          <FilterSelect name="job" defaultValue={'default'}>
+          <FilterSelect name="job1" defaultValue={'default'}>
             <option value="default" disabled>
               희망 직무
             </option>
-            <option value="frontend">프론트엔드(Front-end)</option>
-            <option value="backend">백엔드(Back-end)</option>
+            <option value="frontend">프론트엔드 (Front-end)</option>
+            <option value="backend">백엔드 (Back-end)</option>
           </FilterSelect>
         </FilterList>
         <FilterList>
-          <FilterInput type="text" placeholder="교육생 이름" />
-          <FilterInput type="text" placeholder="태그 검색" />
-          <Link to="/projects/create" css={createTeamButton}>
+          <FilterSelect name="ssafy-track" defaultValue={'default'}>
+            <option value="default" disabled>
+              교육 트랙
+            </option>
+            <option value="전공자 (Java Track)">전공자 (Java Track)</option>
+            <option value="비전공자 (Python Track)">
+              비전공자 (Python Track)
+            </option>
+          </FilterSelect>
+          <FilterInput
+            type="text"
+            name="student-name-search"
+            placeholder="교육생 이름 검색"
+          />
+          <FilterInput
+            type="text"
+            name="team-tech-stack-search"
+            placeholder="기술 스택 검색"
+          />
+          {/* <Link to="/projects/create" css={createTeamButton}>
             <ArticleIcon />
             <span>프로필 작성</span>
-          </Link>
+          </Link> */}
         </FilterList>
       </Wrapper>
     </Container>
@@ -149,7 +169,7 @@ const FilterInput = styled.input`
     background-color: #fff;
     color: #495057;
   }
-  &:nth-of-type(2) {
+  &:nth-of-type(1) {
     margin: 0 12px;
   }
 
@@ -159,47 +179,47 @@ const FilterInput = styled.input`
     margin-bottom: 8px;
     font-size: 14px;
 
-    &:nth-of-type(2) {
+    &:nth-of-type(1) {
       margin-bottom: 8px;
     }
   }
 `;
 
-const createTeamButton = css`
-  display: flex;
-  width: 100%;
-  max-width: 378px;
-  height: 42px;
-  padding: 0 14px;
-  border: none;
-  border-radius: 4px;
-  box-sizing: border-box;
-  background-color: #3396f4;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1.5;
-  color: #fff;
-  transition: color 0.08s ease-in-out, background-color 0.08s ease-in-out,
-    border-color 0.08s ease-in-out, box-shadow 0.08s ease-in-out;
-  cursor: pointer;
+// const createTeamButton = css`
+//   display: flex;
+//   width: 100%;
+//   max-width: 378px;
+//   height: 42px;
+//   padding: 0 14px;
+//   border: none;
+//   border-radius: 4px;
+//   box-sizing: border-box;
+//   background-color: #3396f4;
+//   font-size: 16px;
+//   font-weight: 500;
+//   line-height: 1.5;
+//   color: #fff;
+//   transition: color 0.08s ease-in-out, background-color 0.08s ease-in-out,
+//     border-color 0.08s ease-in-out, box-shadow 0.08s ease-in-out;
+//   cursor: pointer;
 
-  &:hover {
-    background-color: #2878c3;
-  }
+//   &:hover {
+//     background-color: #2878c3;
+//   }
 
-  svg {
-    margin: auto 8px auto 0;
-    font-size: 24px;
-  }
-  span {
-    margin: auto 0;
-  }
+//   svg {
+//     margin: auto 8px auto 0;
+//     font-size: 24px;
+//   }
+//   span {
+//     margin: auto 0;
+//   }
 
-  @media (max-width: 540px) {
-    max-width: 540px;
-    height: 38px;
-    font-size: 14px;
-  }
-`;
+//   @media (max-width: 540px) {
+//     max-width: 540px;
+//     height: 38px;
+//     font-size: 14px;
+//   }
+// `;
 
 export default StudentFilterForm;
