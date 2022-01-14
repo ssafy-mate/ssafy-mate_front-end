@@ -3,13 +3,15 @@ import React from 'react';
 import styled from '@emotion/styled';
 
 import Header from '../components/common/Header';
+import ProjectNavigation from '../components/projects/ProjectNavigation';
+import CreateTeamForm from '../components/team/CreateTeamForm';
 import Footer from '../components/common/Footer';
-import CreateTeamForm from '../components/projects/CreateTeamForm';
 
 const CreateTeamPage: React.FC = () => {
   return (
     <>
       <Header />
+      <ProjectNavigation />
       <Container>
         <CreateTeamForm />
       </Container>
@@ -19,14 +21,14 @@ const CreateTeamPage: React.FC = () => {
 };
 
 const Container = styled.div`
-  margin-top: 140px;
+  margin-top: 80px;
   padding: 0 16px;
 
   @media (max-width: 580px) {
-    margin-top: 120px;
+    margin-top: 60px;
   }
   @media (max-width: 414px) {
-    margin-top: 100px;
+    margin-top: 40px;
   }
 `;
 

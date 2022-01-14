@@ -10,6 +10,7 @@ import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
+import GroupsIcon from '@mui/icons-material/Groups';
 
 const ProjectNavigation: React.FC = () => {
   return (
@@ -35,6 +36,11 @@ const ProjectNavigation: React.FC = () => {
         <Link to="#" css={navLink}>
           <HowToVoteIcon css={navLinkIcon} />
           지원한 팀
+        </Link>
+      </NavItem>
+      <NavItem>
+        <Link to="/projects/team/create" css={navLink}>
+          <GroupsIcon css={navLinkIcon} />팀 생성
         </Link>
       </NavItem>
     </NavTabs>
@@ -74,6 +80,12 @@ const navLink = css`
 
   @media (max-width: 540px) {
     font-size: 14px;
+  }
+  @media (max-width: 414px) {
+    font-size: 13px;
+  }
+  @media (max-width: 340px) {
+    font-size: 12px;
   }
 `;
 
