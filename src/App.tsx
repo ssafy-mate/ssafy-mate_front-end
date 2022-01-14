@@ -20,6 +20,8 @@ import ErrorPage from './pages/ErrorPage';
 import HomePage from './pages/HomePage';
 import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
+import CreateTeamPage from './pages/CreateTeamPage';
+import EditTeamPage from './pages/EditTeamPage';
 import CommonProjectPage from './pages/CommonProjectPage';
 import TeamSpecializationProjectPage from './pages/TeamSpecializationProjectPage';
 import StduentSpecializationProjectPage from './pages/StduentSpecializationProjectPage';
@@ -36,6 +38,8 @@ const App: React.FC = () => {
           <Route exact path="/" component={HomePage} />
           <Route path="/users/sign_in" component={SignInPage} />
           <Route path="/users/sign_up" component={SignUpPage} />
+          <Route path="/projects/team/create" component={CreateTeamPage} />
+          <Route path="/projects/team/edit" component={EditTeamPage} />
           <Route path="/projects/common" component={CommonProjectPage} />
           <Route
             path="/projects/specialization/team"
