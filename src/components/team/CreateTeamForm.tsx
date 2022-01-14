@@ -83,7 +83,22 @@ const CreateTeamForm: React.FC = () => {
       </Row>
       <Row>
         <InputWrapper>
-          <Label htmlFor="team-self-introduction">팀 소개</Label>
+          <RequirementLabel htmlFor="team-name">
+            팀원 공고 문구 <Em>(한 문장으로 작성해주세요.)</Em>
+          </RequirementLabel>
+          <InfoInput
+            type="text"
+            id="team-name"
+            name="team-name"
+            placeholder="ex) 최우수상에 도전할 팀원을 모집합니다."
+          />
+        </InputWrapper>
+      </Row>
+      <Row>
+        <InputWrapper>
+          <Label htmlFor="team-self-introduction">
+            팀 소개 <Em>(선택)</Em>
+          </Label>
           <Textarea id="team-self-introduction" name="team-self-introduction" />
         </InputWrapper>
       </Row>
@@ -110,9 +125,9 @@ const CreateTeamForm: React.FC = () => {
               <TechStackName>TypeScript</TechStackName>
             </InfoGroup>
             <OptionGroup>
-              <CancelButton>
+              <TechStackDeleteButton>
                 <CloseIcon />
-              </CancelButton>
+              </TechStackDeleteButton>
             </OptionGroup>
           </TechStackItem>
           <TechStackItem>
@@ -124,9 +139,9 @@ const CreateTeamForm: React.FC = () => {
               <TechStackName>React</TechStackName>
             </InfoGroup>
             <OptionGroup>
-              <CancelButton>
+              <TechStackDeleteButton>
                 <CloseIcon />
-              </CancelButton>
+              </TechStackDeleteButton>
             </OptionGroup>
           </TechStackItem>
           <TechStackItem>
@@ -138,9 +153,9 @@ const CreateTeamForm: React.FC = () => {
               <TechStackName>Redux</TechStackName>
             </InfoGroup>
             <OptionGroup>
-              <CancelButton>
+              <TechStackDeleteButton>
                 <CloseIcon />
-              </CancelButton>
+              </TechStackDeleteButton>
             </OptionGroup>
           </TechStackItem>
           <TechStackItem>
@@ -152,9 +167,9 @@ const CreateTeamForm: React.FC = () => {
               <TechStackName>Redux-Saga</TechStackName>
             </InfoGroup>
             <OptionGroup>
-              <CancelButton>
+              <TechStackDeleteButton>
                 <CloseIcon />
-              </CancelButton>
+              </TechStackDeleteButton>
             </OptionGroup>
           </TechStackItem>
           <TechStackItem>
@@ -166,9 +181,9 @@ const CreateTeamForm: React.FC = () => {
               <TechStackName>Emotion</TechStackName>
             </InfoGroup>
             <OptionGroup>
-              <CancelButton>
+              <TechStackDeleteButton>
                 <CloseIcon />
-              </CancelButton>
+              </TechStackDeleteButton>
             </OptionGroup>
           </TechStackItem>
         </TechStackList>
@@ -256,7 +271,7 @@ const Container = styled.div`
   box-sizing: border-box;
 
   @media (max-width: 580px) {
-    padding: 56px 28px;
+    padding: 40px 28px;
   }
   @media (max-width: 414px) {
     padding: 32px 16px;
@@ -264,11 +279,16 @@ const Container = styled.div`
 `;
 
 const Head = styled.h1`
-  margin-bottom: 32px;
+  margin-bottom: 48px;
   font-size: 32px;
   font-weight: 600;
   text-align: center;
   color: #263747;
+
+  @media (max-width: 580px) {
+    margin-bottom: 32px;
+    font-size: 28px;
+  }
 `;
 
 const Hr = styled.hr`
@@ -280,7 +300,7 @@ const Hr = styled.hr`
 const Row = styled.div`
   display: flex;
 
-  &:nth-of-type(4) {
+  &:nth-of-type(5) {
     flex-direction: column;
   }
   &:last-of-type {
@@ -293,7 +313,7 @@ const Row = styled.div`
     }
   }
   @media (max-width: 340px) {
-    &:nth-of-type(6) {
+    &:nth-of-type(7) {
       flex-direction: column;
     }
   }
@@ -541,7 +561,7 @@ const TechStackName = styled.h6`
   }
 `;
 
-const CancelButton = styled.button`
+const TechStackDeleteButton = styled.button`
   margin-left: 6px;
   border: none;
   background-color: transparent;
