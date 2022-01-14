@@ -39,7 +39,6 @@ const box = css`
 const step = css`
   .MuiStepLabel-label {
     font-family: 'Spoqa Han Sans Neo', 'sans-serif';
-    /* font-size: 12px; */
 
     @media (max-width: 390px) {
       font-size: 13px;
