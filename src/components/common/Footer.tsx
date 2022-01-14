@@ -76,16 +76,20 @@ const Footer: React.FC = () => {
             </SubMenuItem>
           </SubMenuList>
           <SnsList>
-            <SnsItem href="https://github.com/ssafy-mate" target="_blank">
+            <SnsItem
+              href="https://github.com/ssafy-mate"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <GitHubIcon css={snsIcon} />
             </SnsItem>
-            <SnsItem href="#" target="_blank">
+            <SnsItem href="#" target="_blank" rel="noopener noreferrer">
               <YouTubeIcon css={snsIcon} />
             </SnsItem>
-            <SnsItem href="#" target="_blank">
+            <SnsItem href="#" target="_blank" rel="noopener noreferrer">
               <FacebookIcon css={snsIcon} />
             </SnsItem>
-            <SnsItem href="#" target="_blank">
+            <SnsItem href="#" target="_blank" rel="noopener noreferrer">
               <InstagramIcon css={snsIcon} />
             </SnsItem>
           </SnsList>
@@ -113,6 +117,10 @@ const Wrapper = styled.div`
   margin: 0 auto;
   padding: 48px 16px;
   box-sizing: border-box;
+
+  @media (max-width: 580px) {
+    padding: 36px 16px;
+  }
 `;
 
 const FooterMenuGroup = styled.div`
@@ -122,6 +130,9 @@ const FooterMenuGroup = styled.div`
   @media (max-width: 760px) {
     flex-direction: column;
     margin-bottom: 36px;
+  }
+  @media (max-width: 580px) {
+    margin-bottom: 32px;
   }
 `;
 
@@ -151,7 +162,7 @@ const MenuList = styled.ul`
   margin-right: 40px;
 
   @media (max-width: 760px) {
-    margin-bottom: 18px;
+    margin-bottom: 20px;
   }
 `;
 
