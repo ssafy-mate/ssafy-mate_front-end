@@ -6,8 +6,6 @@ import { Link } from 'react-router-dom';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-import ArticleIcon from '@mui/icons-material/Article';
-
 const StudentFilterForm: React.FC = () => {
   return (
     <Container>
@@ -17,11 +15,11 @@ const StudentFilterForm: React.FC = () => {
             <option value="default" disabled>
               캠퍼스
             </option>
-            <option value="seoul">서울</option>
-            <option value="daejeon">대전</option>
-            <option value="gwangju">광주</option>
-            <option value="gumi">구미</option>
-            <option value="busan">부울경</option>
+            <option value="서울">서울</option>
+            <option value="대전">대전</option>
+            <option value="광주">광주</option>
+            <option value="구미">구미</option>
+            <option value="부울경">부울경</option>
           </FilterSelect>
           <FilterSelect
             name="specializaion-project-track"
@@ -30,17 +28,19 @@ const StudentFilterForm: React.FC = () => {
             <option value="default" disabled>
               트랙
             </option>
-            <option value="ai">인공지능</option>
-            <option value="bigdata">빅데이터</option>
-            <option value="blockchain">블록체인</option>
-            <option value="iot">IoT 제어</option>
+            <option value="인공지능">인공지능</option>
+            <option value="빅데이터">빅데이터</option>
+            <option value="블록체인">블록체인</option>
+            <option value="IoT 제어">IoT 제어</option>
           </FilterSelect>
           <FilterSelect name="job1" defaultValue={'default'}>
             <option value="default" disabled>
               희망 직무
             </option>
-            <option value="frontend">프론트엔드 (Front-end)</option>
-            <option value="backend">백엔드 (Back-end)</option>
+            <option value="프론트엔드 (Front-end)">
+              프론트엔드 (Front-end)
+            </option>
+            <option value="백엔드 (Back-end)">백엔드 (Back-end)</option>
           </FilterSelect>
         </FilterList>
         <FilterList>
@@ -63,10 +63,6 @@ const StudentFilterForm: React.FC = () => {
             name="team-tech-stack-search"
             placeholder="기술 스택 검색"
           />
-          {/* <Link to="/projects/create" css={createTeamButton}>
-            <ArticleIcon />
-            <span>프로필 작성</span>
-          </Link> */}
         </FilterList>
       </Wrapper>
     </Container>
@@ -184,42 +180,5 @@ const FilterInput = styled.input`
     }
   }
 `;
-
-// const createTeamButton = css`
-//   display: flex;
-//   width: 100%;
-//   max-width: 378px;
-//   height: 42px;
-//   padding: 0 14px;
-//   border: none;
-//   border-radius: 4px;
-//   box-sizing: border-box;
-//   background-color: #3396f4;
-//   font-size: 16px;
-//   font-weight: 500;
-//   line-height: 1.5;
-//   color: #fff;
-//   transition: color 0.08s ease-in-out, background-color 0.08s ease-in-out,
-//     border-color 0.08s ease-in-out, box-shadow 0.08s ease-in-out;
-//   cursor: pointer;
-
-//   &:hover {
-//     background-color: #2878c3;
-//   }
-
-//   svg {
-//     margin: auto 8px auto 0;
-//     font-size: 24px;
-//   }
-//   span {
-//     margin: auto 0;
-//   }
-
-//   @media (max-width: 540px) {
-//     max-width: 540px;
-//     height: 38px;
-//     font-size: 14px;
-//   }
-// `;
 
 export default StudentFilterForm;

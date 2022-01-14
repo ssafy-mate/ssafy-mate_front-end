@@ -39,8 +39,10 @@ const FilterForm: React.FC = () => {
             <option value="default" disabled>
               희망 직무
             </option>
-            <option value="프론트엔드(Front-end)">프론트엔드(Front-end)</option>
-            <option value="백엔드(Back-end)">백엔드(Back-end)</option>
+            <option value="프론트엔드 (Front-end)">
+              프론트엔드(Front-end)
+            </option>
+            <option value="백엔드 (Back-end)">백엔드(Back-end)</option>
           </FilterSelect>
         </FilterList>
         <FilterList>
