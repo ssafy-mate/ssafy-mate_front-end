@@ -33,40 +33,6 @@ const ProfileForm: React.FC = () => {
       </Row>
       <Row>
         <InputWrapper css={rightGap}>
-          <RequirementLabel htmlFor="ssafy-track">
-            SSAFY 교육 트랙
-          </RequirementLabel>
-          <Select id="ssafy-track" name="ssafy-track" defaultValue={'default'}>
-            <option value="default" disabled>
-              - 선택 -
-            </option>
-            <option value="전공자 (Java Track)">전공자 (Java Track)</option>
-            <option value="비전공자 (Python Track)">
-              비전공자 (Python Track)
-            </option>
-          </Select>
-        </InputWrapper>
-        <InputWrapper>
-          <RequirementLabel htmlFor="specializaion-project-track">
-            특화 프로젝트 트랙
-          </RequirementLabel>
-          <Select
-            id="specializaion-project-track"
-            name="specializaion-project-track"
-            defaultValue={'default'}
-          >
-            <option value="default" disabled>
-              - 선택 -
-            </option>
-            <option value="인공지능">인공지능</option>
-            <option value="빅데이터">빅데이터</option>
-            <option value="블록체인">블록체인</option>
-            <option value="IoT 제어">IoT 제어</option>
-          </Select>
-        </InputWrapper>
-      </Row>
-      <Row>
-        <InputWrapper css={rightGap}>
           <RequirementLabel htmlFor="job1">희망 직무1</RequirementLabel>
           <Select id="job1" name="job1" defaultValue={'default'}>
             <option value="default" disabled>
@@ -95,13 +61,13 @@ const ProfileForm: React.FC = () => {
       </Row>
       <Row>
         <InputWrapper>
-          <RequirementLabel htmlFor="tech-stack">
+          <RequirementLabel htmlFor="tech-stack-options">
             기술 스택 <Em>(필수 2가지 이상 기입)</Em>
           </RequirementLabel>
           <InfoInput
             type="text"
-            id="tech-stack"
-            name="tech-stack"
+            id="tech-stack-options"
+            name="tech-stack-options"
             placeholder="ex) Vue.js, django, Spring Boot, MySQL"
           />
           <TechStackList>
@@ -392,6 +358,27 @@ const Row = styled.div`
   &:first-of-type {
     margin-bottom: 12px;
   }
+
+  @media (max-width: 441px) {
+    &:nth-of-type(2) {
+      flex-direction: column;
+    }
+  }
+`;
+
+const AvatarWrapper = styled.div`
+  margin: auto 32px;
+
+  @media (max-width: 540px) {
+    margin: auto 24px auto 0;
+  }
+  @media (max-width: 414px) {
+    margin: auto 16px auto 0;
+  }
+`;
+
+const FileInputWrapper = styled.div`
+  text-align: right;
 `;
 
 const InputWrapper = styled.div`
@@ -404,7 +391,6 @@ const InputWrapper = styled.div`
 const CheckBoxWrapper = styled.div`
   display: flex;
   width: 100%;
-  margin-bottom: 16px;
 `;
 
 const Label = styled.label`
@@ -447,17 +433,6 @@ const Em = styled.em`
 
   @media (max-width: 540px) {
     font-size: 12px;
-  }
-`;
-
-const AvatarWrapper = styled.div`
-  margin: auto 32px;
-
-  @media (max-width: 540px) {
-    margin: auto 24px auto 0;
-  }
-  @media (max-width: 414px) {
-    margin: auto 16px auto 0;
   }
 `;
 
@@ -570,6 +545,7 @@ const AgreementLink = styled.a`
 const SignUpButton = styled.button`
   width: 100%;
   height: 40px;
+  margin-top: 24px;
   border: none;
   border-radius: 0.25rem;
   box-sizing: border-box;
@@ -586,14 +562,6 @@ const SignUpButton = styled.button`
 
   @media (max-width: 540px) {
     font-size: 15px;
-  }
-`;
-
-const rightGap = css`
-  margin-right: 12px;
-
-  @media (max-width: 540px) {
-    margin-right: 6px;
   }
 `;
 
@@ -640,6 +608,11 @@ const TechStackImg = styled.img`
     width: 22px;
     height: 22px;
   }
+
+  @media (max-width: 348px) {
+    width: 18px;
+    height: 18px;
+  }
 `;
 
 const TechStackName = styled.h6`
@@ -648,6 +621,10 @@ const TechStackName = styled.h6`
 
   @media (max-width: 540px) {
     font-size: 13px;
+  }
+
+  @media (max-width: 348px) {
+    font-size: 12px;
   }
 `;
 
@@ -669,14 +646,13 @@ const CancelButton = styled.button`
       height: 22px;
     }
   }
-`;
 
-const FileInputWrapper = styled.div`
-  text-align: right;
-`;
-
-const FileInput = styled.input`
-  display: none;
+  @media (max-width: 348px) {
+    svg {
+      width: 18px;
+      height: 18px;
+    }
+  }
 `;
 
 const FileInputLabel = styled.label`
@@ -686,6 +662,10 @@ const FileInputLabel = styled.label`
   z-index: 10;
   color: #3396f4;
   cursor: pointer;
+`;
+
+const FileInput = styled.input`
+  display: none;
 `;
 
 const avatar = css`
@@ -723,6 +703,24 @@ const skillLevelButton = css`
     width: 22px;
     height: 22px;
     font-size: 13px;
+  }
+
+  @media (max-width: 348px) {
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+  }
+`;
+
+const rightGap = css`
+  margin-right: 12px;
+
+  @media (max-width: 540px) {
+    margin-right: 6px;
+  }
+
+  @media (max-width: 441px) {
+    margin-right: 0px;
   }
 `;
 
