@@ -1,7 +1,5 @@
 import React from 'react';
 
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import SignUpSteeper from './SignUpStepper';
@@ -16,11 +14,11 @@ const SignUpCard: React.FC = () => {
         <Head>회원가입</Head>
         <SignUpSteeper />
         {/* 1단계 : 교육생 인증 */}
-        {/* <AuthForm /> */}
+        <AuthForm />
         {/* 2단계 : 기본 정보 작성 */}
         {/* <SignUpForm /> */}
         {/* 3단계 : 프로필 작성 */}
-        <ProfileForm />
+        {/* <ProfileForm /> */}
       </Wrapper>
     </Container>
   );
@@ -41,6 +39,7 @@ const Wrapper = styled.div`
   @media (max-width: 620px) {
     padding: 40px 28px;
   }
+
   @media (max-width: 414px) {
     padding: 32px 16px;
   }
