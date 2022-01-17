@@ -7,25 +7,39 @@ const AuthForm: React.FC = () => {
     <Container>
       <SsafyInfo>
         <InputWrapper>
-          <Label htmlFor="campus">캠퍼스</Label>
-          <CampusSelect id="campus" name="campus" defaultValue={'default'}>
+          <RequirementLabel htmlFor="campus">캠퍼스</RequirementLabel>
+          <Select id="campus" name="campus" defaultValue={'default'}>
             <option value="default" disabled>
               - 선택 -
             </option>
             <option value="서울">서울</option>
-            <option value="대전">대전</option>
+            <option value="대전">대전</option>c
             <option value="광주">광주</option>
             <option value="구미">구미</option>
             <option value="부울경">부울경</option>
-          </CampusSelect>
+          </Select>
         </InputWrapper>
         <InputWrapper>
-          <Label htmlFor="student-number">학번</Label>
-          <InfoInput type="text" id="student-number" name="student-number" />
+          <RequirementLabel htmlFor="ssafy-track">
+            SSAFY 교육 트랙
+          </RequirementLabel>
+          <Select id="ssafy-track" name="ssafy-track" defaultValue={'default'}>
+            <option value="default" disabled>
+              - 선택 -
+            </option>
+            <option value="Java Track">Java Track</option>
+            <option value="Python Track">Python Track</option>
+            <option value="Embeded Track">Embeded Track</option>
+            <option value="Mobile Track">Mobile Track</option>
+          </Select>
         </InputWrapper>
       </SsafyInfo>
       <InputWrapper>
-        <Label htmlFor="student-name">이름</Label>
+        <RequirementLabel htmlFor="student-number">학번</RequirementLabel>
+        <InfoInput type="text" id="student-number" name="student-number" />
+      </InputWrapper>
+      <InputWrapper>
+        <RequirementLabel htmlFor="student-name">이름</RequirementLabel>
         <InfoInput type="text" id="student-name" name="student-name" />
       </InputWrapper>
       <AuthButton>교육생 인증</AuthButton>
@@ -39,21 +53,32 @@ const Container = styled.div`
 
 const SsafyInfo = styled.div`
   display: flex;
-  margin-bottom: 16px;
+
+  @media (max-width: 414px) {
+    flex-direction: column;
+  }
 `;
 
 const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-bottom: 16px;
 
   &:first-of-type {
+    width: 60%;
     margin-right: 12px;
-    width: 50%;
+  }
+
+  @media (max-width: 414px) {
+    &:first-of-type {
+      width: 100%;
+      margin-right: 0;
+    }
   }
 `;
 
-const CampusSelect = styled.select`
+const Select = styled.select`
   width: 100%;
   height: 40px;
   padding: 8px 12px;
@@ -141,11 +166,23 @@ const AuthButton = styled.button`
   }
 `;
 
-const Label = styled.label`
+const RequirementLabel = styled.label`
   margin-bottom: 4px;
   font-size: 14px;
   line-height: 1.5;
   color: #263747;
+
+  &::before {
+    content: '*';
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 0.125rem 0 0;
+    -webkit-font-smoothing: antialiased;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.25rem;
+    color: #f44336;
+  }
 
   @media (max-width: 540px) {
     font-size: 13px;
