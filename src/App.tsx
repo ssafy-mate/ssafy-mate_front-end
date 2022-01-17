@@ -1,18 +1,17 @@
 import React from 'react';
 
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
-
+import { Switch, Route } from 'react-router-dom';
 import { ConnectedRouter as Router } from 'connected-react-router';
 
 import { ErrorBoundary } from 'react-error-boundary';
-
-import history from './history';
 
 import { Global } from '@emotion/react';
 
 import reset from './styles/reset';
 
 import 'swiper/css/bundle';
+
+import history from './history';
 
 import ScrollToTop from './utils/ScrollToTop';
 
@@ -32,27 +31,37 @@ const App: React.FC = () => {
   return (
     <ErrorBoundary FallbackComponent={ErrorPage}>
       <Global styles={reset} />
-      <BrowserRouter>
+      <Router history={history}>
         <ScrollToTop />
         <Switch>
           <Route exact path="/" component={HomePage} />
-          <Route path="/users/sign_in" component={SignInPage} />
-          <Route path="/users/sign_up" component={SignUpPage} />
-          <Route path="/projects/team/create" component={CreateTeamPage} />
-          <Route path="/projects/team/edit" component={EditTeamPage} />
-          <Route path="/projects/common" component={CommonProjectPage} />
+          <Route exact path="/users/sign_in" component={SignInPage} />
+          <Route exact path="/users/sign_up" component={SignUpPage} />
           <Route
+            exact
+            path="/projects/team/create"
+            component={CreateTeamPage}
+          />
+          <Route exact path="/projects/team/edit" component={EditTeamPage} />
+          <Route exact path="/projects/common" component={CommonProjectPage} />
+          <Route
+            exact
             path="/projects/specialization/team"
             component={TeamSpecializationProjectPage}
           />
           <Route
+            exact
             path="/projects/specialization/student"
             component={StduentSpecializationProjectPage}
           />
-          <Route path="/projects/autonomy/" component={AutonomyProjectPage} />
+          <Route
+            exact
+            path="/projects/autonomy/"
+            component={AutonomyProjectPage}
+          />
           <Route component={NotFoundPage} />
         </Switch>
-      </BrowserRouter>
+      </Router>
     </ErrorBoundary>
   );
 };
