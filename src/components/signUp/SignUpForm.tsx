@@ -79,6 +79,7 @@ const ButtonWrapper = styled.div`
 const ButtonGroup = styled.div`
   display: flex;
   justify-content: space-between;
+  margin-top: 24px;
 `;
 
 const AuthButton = styled.button`
