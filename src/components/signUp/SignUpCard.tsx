@@ -2,7 +2,7 @@ import React from 'react';
 
 import styled from '@emotion/styled';
 
-import SignUpSteeper from './SignUpStepper';
+import SignUpStepper from './SignUpStepper';
 import AuthForm from './AuthForm';
 import SignUpForm from './SignUpForm';
 import ProfileForm from './ProfileForm';
@@ -12,7 +12,7 @@ const SignUpCard: React.FC = () => {
     <Container>
       <Wrapper>
         <Head>회원가입</Head>
-        <SignUpSteeper />
+        <SignUpStepper />
         {/* 1단계 : 교육생 인증 */}
         <AuthForm />
         {/* 2단계 : 기본 정보 작성 */}

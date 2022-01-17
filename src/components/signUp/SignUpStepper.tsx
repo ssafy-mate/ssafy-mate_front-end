@@ -13,7 +13,7 @@ const SignUpStepper: React.FC = () => {
 
   return (
     <Box sx={{ width: '100%' }} css={box}>
-      <Stepper activeStep={2} alternativeLabel>
+      <Stepper activeStep={0} alternativeLabel>
         {steps.map((label) => (
           <Step key={label} css={step}>
             <StepLabel>{label}</StepLabel>
