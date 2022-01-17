@@ -69,6 +69,9 @@ const InputWrapper = styled.div`
     width: 60%;
     margin-right: 12px;
   }
+  &:last-of-type {
+    margin-bottom: 0;
+  }
 
   @media (max-width: 414px) {
     &:first-of-type {
