@@ -18,7 +18,7 @@ const Header: React.FC = () => {
       <Wrapper>
         <Link to="/" css={brand}>
           <LogoWrapper>
-            <Logo src="/images/ssafy-mate_logo.png" alt="SSAFY MATE" />
+            <Logo src="/images/common/ssafy-mate_logo.png" alt="SSAFY MATE" />
           </LogoWrapper>
           <LogoName>SSAFY MATE</LogoName>
         </Link>

@@ -19,7 +19,7 @@ const HomePage: React.FC = () => {
         <LinkCard>
           <Link to="#" css={linkCardWrapper}>
             <LinkCardImg
-              src="/images/common-project_link.png"
+              src="/images/projects/common-project_link.png"
               alt="공통 프로젝트"
             />
             <LinkCardTitle>
@@ -31,7 +31,7 @@ const HomePage: React.FC = () => {
         <LinkCard>
           <Link to="/projects/specialization/team" css={linkCardWrapper}>
             <LinkCardImg
-              src="/images/specialization-project_link.png"
+              src="/images/projects/specialization-project_link.png"
               alt="특화 프로젝트"
             />
             <LinkCardTitle>
@@ -43,7 +43,7 @@ const HomePage: React.FC = () => {
         <LinkCard>
           <Link to="#" css={linkCardWrapper}>
             <LinkCardImg
-              src="/images/autonomy-project_link.png"
+              src="/images/projects/autonomy-project_link.png"
               alt="자율 프로젝트"
             />
             <LinkCardTitle>

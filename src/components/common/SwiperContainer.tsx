@@ -44,7 +44,10 @@ const SwiperContainer: React.FC = () => {
                 </ProjectDescription>
               </CardInformation>
               <CardImgWrapper>
-                <CardImg src="/images/common-project.gif" alt="공통 프로젝트" />
+                <CardImg
+                  src="/images/projects/common-project.gif"
+                  alt="공통 프로젝트"
+                />
               </CardImgWrapper>
             </SwiperCard>
           </SwiperSlide>
@@ -61,7 +64,7 @@ const SwiperContainer: React.FC = () => {
               </CardInformation>
               <CardImgWrapper>
                 <CardImg
-                  src="/images/specialization-project.gif"
+                  src="/images/projects/specialization-project.gif"
                   alt="특화 프로젝트"
                 />
               </CardImgWrapper>
@@ -81,7 +84,7 @@ const SwiperContainer: React.FC = () => {
               </CardInformation>
               <CardImgWrapper>
                 <CardImg
-                  src="/images/autonomy-project.gif"
+                  src="/images/projects/autonomy-project.gif"
                   alt="자율 프로젝트"
                 />
               </CardImgWrapper>
