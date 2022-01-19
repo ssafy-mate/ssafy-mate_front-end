@@ -4,8 +4,8 @@ import React from 'react';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CheckIcon from '@mui/icons-material/Check';
 
 import { techStackListData } from '../../data/techStackListData';
@@ -131,7 +131,7 @@ const CreateTeamForm: React.FC = () => {
         </InputWrapper>
       </Row>
       <Hr />
-      <Row>
+      <Row css={techStackRow}>
         <InputWrapper {...getRootProps()} css={techStackInputWrapper}>
           <RequirementLabel htmlFor="team-tech-stack" {...getInputLabelProps()}>
             계획 중인 기술 스택 <Em>(필수 2가지 이상 기입)</Em>
@@ -287,9 +287,6 @@ const Hr = styled.hr`
 const Row = styled.div`
   display: flex;
 
-  &:nth-of-type(5) {
-    flex-direction: column;
-  }
   &:last-of-type {
     margin-top: 16px;
   }
@@ -317,7 +314,6 @@ const InputWrapper = styled.div`
   flex-direction: column;
   width: 100%;
   margin-bottom: 16px;
-  position: relative;
 `;
 
 const FileInputWrapper = styled.div`
@@ -497,9 +493,7 @@ const Textarea = styled.textarea`
   }
 `;
 
-const TechStackList = styled.ul`
-  margin-top: 16px;
-`;
+const TechStackList = styled.ul``;
 
 const TechStackImg = styled.img`
   margin-right: 8px;
@@ -611,8 +605,12 @@ const rightGap = css`
   }
 `;
 
+const techStackRow = css`
+  flex-direction: column;
+`;
+
 const techStackInputWrapper = css`
-  margin-bottom: 0;
+  position: relative;
 `;
 
 export default CreateTeamForm;
