@@ -5,9 +5,33 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
-import CloseIcon from '@mui/icons-material/Close';
+import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
+import CheckIcon from '@mui/icons-material/Check';
+
+import { techStackList } from '../../data/techStackList';
+import { TechStack } from '../../types/commonType';
+
+import TechStackTag from '../common/TechStackTag';
 
 const CreateTeamForm: React.FC = () => {
+  const {
+    getRootProps,
+    getInputLabelProps,
+    getInputProps,
+    getTagProps,
+    getListboxProps,
+    getOptionProps,
+    groupedOptions,
+    value,
+    focused,
+    setAnchorEl,
+  } = useAutocomplete({
+    id: 'search-tech-stack',
+    multiple: true,
+    options: techStackList,
+    getOptionLabel: (option) => option.name,
+  });
+
   return (
     <Container>
       <Head>팀 생성</Head>
@@ -104,88 +128,45 @@ const CreateTeamForm: React.FC = () => {
       </Row>
       <Hr />
       <Row>
-        <InputWrapper>
-          <RequirementLabel htmlFor="team-tech-stack">
+        <InputWrapper {...getRootProps()} css={techStackInputWrapper}>
+          <RequirementLabel htmlFor="team-tech-stack" {...getInputLabelProps()}>
             계획 중인 기술 스택 <Em>(필수 2가지 이상 기입)</Em>
           </RequirementLabel>
-          <InfoInput
-            type="text"
-            id="team-tech-stack"
-            name="team-tech-stack"
-            placeholder="ex) Vue.js, django, Spring Boot, MySQL"
-          />
+          <InfoInputWrapper
+            ref={setAnchorEl}
+            className={focused ? 'focused' : ''}
+          >
+            <InfoInput
+              type="text"
+              id="team-tech-stack"
+              name="team-tech-stack"
+              placeholder="ex) Vue.js, django, Spring Boot, MySQL"
+              {...getInputProps()}
+            />
+          </InfoInputWrapper>
+          {groupedOptions.length > 0 ? (
+            <SearchList {...getListboxProps()}>
+              {(groupedOptions as typeof techStackList).map((option, index) => (
+                <SearchItem {...getOptionProps({ option, index })}>
+                  <TechStackInfo>
+                    <TechStackImg src={option.imgUrl} alt={option.name} />
+                    {option.name}
+                  </TechStackInfo>
+                  <CheckIcon fontSize="small" />
+                </SearchItem>
+              ))}
+            </SearchList>
+          ) : null}
         </InputWrapper>
         <TechStackList>
-          <TechStackItem>
-            <InfoGroup>
-              <TechStackImg
-                src="/images/assets/tech-stack/TypeScript.png"
-                alt="TypeScript"
-              />
-              <TechStackName>TypeScript</TechStackName>
-            </InfoGroup>
-            <OptionGroup>
-              <TechStackDeleteButton>
-                <CloseIcon />
-              </TechStackDeleteButton>
-            </OptionGroup>
-          </TechStackItem>
-          <TechStackItem>
-            <InfoGroup>
-              <TechStackImg
-                src="/images/assets/tech-stack/React.png"
-                alt="React"
-              />
-              <TechStackName>React</TechStackName>
-            </InfoGroup>
-            <OptionGroup>
-              <TechStackDeleteButton>
-                <CloseIcon />
-              </TechStackDeleteButton>
-            </OptionGroup>
-          </TechStackItem>
-          <TechStackItem>
-            <InfoGroup>
-              <TechStackImg
-                src="/images/assets/tech-stack/Redux.png"
-                alt="Redux"
-              />
-              <TechStackName>Redux</TechStackName>
-            </InfoGroup>
-            <OptionGroup>
-              <TechStackDeleteButton>
-                <CloseIcon />
-              </TechStackDeleteButton>
-            </OptionGroup>
-          </TechStackItem>
-          <TechStackItem>
-            <InfoGroup>
-              <TechStackImg
-                src="/images/assets/tech-stack/Redux-Saga.png"
-                alt="Redux-Saga"
-              />
-              <TechStackName>Redux-Saga</TechStackName>
-            </InfoGroup>
-            <OptionGroup>
-              <TechStackDeleteButton>
-                <CloseIcon />
-              </TechStackDeleteButton>
-            </OptionGroup>
-          </TechStackItem>
-          <TechStackItem>
-            <InfoGroup>
-              <TechStackImg
-                src="/images/assets/tech-stack/Emotion.png"
-                alt="Emotion"
-              />
-              <TechStackName>Emotion</TechStackName>
-            </InfoGroup>
-            <OptionGroup>
-              <TechStackDeleteButton>
-                <CloseIcon />
-              </TechStackDeleteButton>
-            </OptionGroup>
-          </TechStackItem>
+          {value.map((option: TechStack, index: number) => (
+            <TechStackTag
+              id={option.id}
+              name={option.name}
+              imgUrl={option.imgUrl}
+              {...getTagProps({ index })}
+            />
+          ))}
         </TechStackList>
       </Row>
       <Hr />
@@ -330,6 +311,7 @@ const InputWrapper = styled.div`
   flex-direction: column;
   width: 100%;
   margin-bottom: 16px;
+  position: relative;
 `;
 
 const FileInputWrapper = styled.div`
@@ -457,6 +439,8 @@ const Select = styled.select`
   }
 `;
 
+const InfoInputWrapper = styled.div``;
+
 const InfoInput = styled.input`
   width: 100%;
   height: 40px;
@@ -511,73 +495,16 @@ const TechStackList = styled.ul`
   margin-top: 16px;
 `;
 
-const TechStackItem = styled.li`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  padding: 3px 6px;
-  box-sizing: border-box;
-
-  &:hover {
-    border-radius: 0.25rem;
-    background-color: #eaf4fd;
-  }
-
-  @media (max-width: 540px) {
-    margin-bottom: 16px;
-  }
-`;
-
-const InfoGroup = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const OptionGroup = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
 const TechStackImg = styled.img`
-  margin-right: 6px;
+  margin-right: 8px;
   width: 24px;
   height: 24px;
-  border-radius: 3px;
+  border-radius: 2px;
   object-fit: cover;
 
   @media (max-width: 540px) {
     width: 22px;
     height: 22px;
-  }
-`;
-
-const TechStackName = styled.h6`
-  font-size: 14px;
-  color: #5f7f90;
-
-  @media (max-width: 540px) {
-    font-size: 13px;
-  }
-`;
-
-const TechStackDeleteButton = styled.button`
-  margin-left: 6px;
-  border: none;
-  background-color: transparent;
-  color: #f44336;
-  cursor: pointer;
-  transition: all 0.12s ease-in-out;
-
-  &:hover {
-    transform: scale(1.15);
-  }
-
-  @media (max-width: 540px) {
-    svg {
-      width: 22px;
-      height: 22px;
-    }
   }
 `;
 
@@ -612,6 +539,61 @@ const CreateTeamButton = styled.button`
   }
 `;
 
+const SearchList = styled.ul`
+  overflow-y: scroll;
+  position: absolute;
+  top: 62px;
+  z-index: 10;
+  width: 100%;
+  max-height: 200px;
+  border: 1px solid #d7e2eb;
+  border-radius: 0.25rem;
+  background-color: #fff;
+`;
+
+const SearchItem = styled.li`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  padding: 8px 12px;
+  outline: 0;
+  border-bottom: 1px solid #d7e2eb;
+  box-sizing: border-box;
+  background-color: #fff;
+  font-size: 16px;
+  line-height: 24px;
+  color: #5f7f90;
+  transition: all 0.08s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #eaf4fd;
+  }
+
+  & svg {
+    color: transparent;
+  }
+
+  &[aria-selected='true'] {
+    background-color: #eaf4fd;
+
+    & svg {
+      color: #3396f4;
+    }
+  }
+
+  @media (max-width: 540px) {
+    font-size: 13px;
+  }
+`;
+
+const TechStackInfo = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
 const rightGap = css`
   margin-right: 12px;
 
@@ -621,6 +603,10 @@ const rightGap = css`
   @media (max-width: 340px) {
     margin-right: 0;
   }
+`;
+
+const techStackInputWrapper = css`
+  margin-bottom: 0;
 `;
 
 export default CreateTeamForm;
