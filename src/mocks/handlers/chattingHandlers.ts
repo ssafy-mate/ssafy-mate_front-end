@@ -1,3 +1,3 @@
 import { rest } from 'msw';
 
-export const chattingHandler = [];
+export const chattingHandlers = [];
