@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useForm } from 'react-hook-form';
 
@@ -11,9 +11,31 @@ interface StudentAuth {
   studentName: string;
 }
 
-const AuthForm: React.FC = () => {
-  //let StudentAuth: StudentAuth;
+interface StudentAuthProps {
+  campus: string;
+  updateCampus: (arg: string) => void;
+  ssafyTrack: string;
+  updateSsafyTrack: (arg: string) => void;
+  studentNumber: string;
+  updateStudentNumber: (arg: string) => void;
+  studentName: string;
+  updateStudentName: (arg: string) => void;
+  auth: number;
+  updateAuth: (arg: number) => void;
+}
 
+const AuthForm: React.FC<StudentAuthProps> = ({
+  campus,
+  updateCampus,
+  ssafyTrack,
+  updateSsafyTrack,
+  studentNumber,
+  updateStudentNumber,
+  studentName,
+  updateStudentName,
+  auth,
+  updateAuth,
+}) => {
   const {
     watch,
     register,
@@ -22,9 +44,14 @@ const AuthForm: React.FC = () => {
   } = useForm<StudentAuth>({ mode: 'onChange' });
 
   const onSubmit = (data: StudentAuth) => {
-    // StudentAuth = data;
-    // console.log(JSON.stringify(StudentAuth));
-    alert(JSON.stringify(data));
+    //post 요청 보내기->인증 통과한 경우
+    //alert(JSON.stringify(data));
+    updateCampus(data.campus);
+    updateSsafyTrack(data.ssafyTrack);
+    updateStudentNumber(data.studentNumber);
+    updateStudentName(data.studentName);
+    updateAuth(1);
+    //통과하지 못한 경우
   };
 
   const selectCampus = watch('campus', '');
@@ -37,7 +64,12 @@ const AuthForm: React.FC = () => {
             <RequirementLabel htmlFor="campus">캠퍼스</RequirementLabel>
             <Select
               id="campus"
-              {...register('campus')}
+              {...register('campus', {
+                pattern: {
+                  value: /^((?!default).)*$/,
+                  message: '지역을 선택해주세요',
+                },
+              })}
               defaultValue={'default'}
             >
               <option value="default" disabled>
@@ -49,6 +81,10 @@ const AuthForm: React.FC = () => {
               <option value="구미">구미</option>
               <option value="부울경">부울경</option>
             </Select>
+
+            {errors.campus?.type === 'pattern' && (
+              <ErrorSpan>{errors.campus.message}</ErrorSpan>
+            )}
           </InputWrapper>
 
           <InputWrapper>
@@ -60,8 +96,12 @@ const AuthForm: React.FC = () => {
                 return (
                   <Select
                     id="ssafy-track"
-                    {...register('ssafyTrack')}
-                    defaultValue={'default'}
+                    {...register('ssafyTrack', {
+                      pattern: {
+                        value: /^((?!default).)*$/,
+                        message: '트랙을 선택해주세요',
+                      },
+                    })}
                   >
                     <option value="default" disabled>
                       - 선택 -
@@ -77,7 +117,15 @@ const AuthForm: React.FC = () => {
                 selectCampus === '광주'
               ) {
                 return (
-                  <Select {...register('ssafyTrack')} defaultValue={'default'}>
+                  <Select
+                    {...register('ssafyTrack', {
+                      pattern: {
+                        value: /^((?!default).)*$/,
+                        message: '트랙을 선택해주세요',
+                      },
+                    })}
+                    defaultValue={'default'}
+                  >
                     <option value="default" disabled>
                       - 선택 -
                     </option>
@@ -87,7 +135,15 @@ const AuthForm: React.FC = () => {
                 );
               } else if (selectCampus === '구미') {
                 return (
-                  <Select {...register('ssafyTrack')} defaultValue={'default'}>
+                  <Select
+                    {...register('ssafyTrack', {
+                      pattern: {
+                        value: /^((?!default).)*$/,
+                        message: '트랙을 선택해주세요',
+                      },
+                    })}
+                    defaultValue={'default'}
+                  >
                     <option value="default" disabled>
                       - 선택 -
                     </option>
@@ -98,7 +154,15 @@ const AuthForm: React.FC = () => {
                 );
               } else {
                 return (
-                  <Select {...register('ssafyTrack')} defaultValue={'default'}>
+                  <Select
+                    {...register('ssafyTrack', {
+                      pattern: {
+                        value: /^((?!default).)*$/,
+                        message: '트랙을 선택해주세요',
+                      },
+                    })}
+                    defaultValue={'default'}
+                  >
                     <option value="default" disabled>
                       - 선택 -
                     </option>
@@ -106,6 +170,10 @@ const AuthForm: React.FC = () => {
                 );
               }
             })()}
+
+            {errors.ssafyTrack?.type === 'pattern' && (
+              <ErrorSpan>{errors.ssafyTrack.message}</ErrorSpan>
+            )}
           </InputWrapper>
         </SsafyInfo>
 
@@ -114,9 +182,36 @@ const AuthForm: React.FC = () => {
           <InfoInput
             type="text"
             id="student-number"
-            {...register('studentNumber', { required: true })}
-            placeholder="학번을 입력해주세요"
+            {...register('studentNumber', {
+              required: {
+                value: true,
+                message: '학번을 입력해주세요',
+              },
+              pattern: {
+                value: /\d+/,
+                message: '교육생 인증을 위해 학번을 정확하게 입력해주세요',
+              },
+              maxLength: {
+                value: 7,
+                message: '교육생 인증을 위해 학번을 정확하게 입력해주세요',
+              },
+              minLength: {
+                value: 7,
+                message: '교육생 인증을 위해 학번을 정확하게 입력해주세요',
+              },
+            })}
           />
+
+          {(() => {
+            if (
+              errors.studentNumber?.type === 'required' ||
+              errors.studentNumber?.type === 'pattern' ||
+              errors.studentNumber?.type === 'maxLength' ||
+              errors.studentNumber?.type === 'minLength'
+            ) {
+              return <ErrorSpan>{errors.studentNumber.message}</ErrorSpan>;
+            }
+          })()}
         </InputWrapper>
 
         <InputWrapper>
@@ -124,9 +219,26 @@ const AuthForm: React.FC = () => {
           <InfoInput
             type="text"
             id="student-name"
-            {...register('studentName', { required: true })}
-            placeholder="이름을 입력해주세요"
+            {...register('studentName', {
+              required: {
+                value: true,
+                message: '이름 입력해주세요',
+              },
+              pattern: {
+                value: /^[가-힣]*$/i,
+                message: '교육생 인증을 위해 이름을 정확하게 입력해주세요.',
+              },
+            })}
           />
+
+          {(() => {
+            if (
+              errors.studentName?.type === 'required' ||
+              errors.studentName?.type === 'pattern'
+            ) {
+              return <ErrorSpan>{errors.studentName.message}</ErrorSpan>;
+            }
+          })()}
         </InputWrapper>
 
         <AuthButton type="submit">교육생 인증</AuthButton>
@@ -278,6 +390,13 @@ const RequirementLabel = styled.label`
   @media (max-width: 540px) {
     font-size: 13px;
   }
+`;
+
+const ErrorSpan = styled.span`
+  padding: 8px 12px;
+  font-weight: 400;
+  font-size: 0.875rem;
+  color: #f44336;
 `;
 
 export default AuthForm;

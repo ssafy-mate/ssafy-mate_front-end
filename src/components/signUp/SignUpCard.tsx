@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -8,21 +8,61 @@ import SignUpForm from './SignUpForm';
 import ProfileForm from './ProfileForm';
 
 const SignUpCard: React.FC = () => {
+  const [campus, setCampus] = useState<string>('');
+  const [ssafyTrack, setSsafyTrack] = useState<string>('');
+  const [studentNumber, setStudentNumber] = useState<string>('');
+  const [studentName, setStudentName] = useState<string>('');
+  const [auth, setAuth] = useState<number>(0);
+  const updateCampus = (updateCampus: string): void => {
+    setCampus(updateCampus);
+  };
+  const updateSsafyTrack = (updateSsafyTrack: string): void => {
+    setSsafyTrack(updateSsafyTrack);
+  };
+  const updateStudentNumber = (updateStudentNumber: string): void => {
+    setStudentNumber(updateStudentNumber);
+  };
+  const updateStudentName = (updateStudentName: string): void => {
+    setStudentName(updateStudentName);
+  };
+  const updateAuth = (updateAuth: number): void => {
+    setAuth(updateAuth);
+  };
   return (
-    <Container>
-      <Wrapper>
-        <Head>회원가입</Head>
-        <SignUpStepper />
-        {/* 1단계 : 교육생 인증 */}
-        <AuthForm />
+    <>
+      {/* updateAuth={updateAuth} */}
+      <Container>
+        <Wrapper>
+          <Head>회원가입</Head>
+          <SignUpStepper auth={auth} />
+          {/* 1단계 : 교육생 인증 */}
+          {auth ? (
+            <SignUpForm />
+          ) : (
+            <AuthForm
+              campus={campus}
+              updateCampus={updateCampus}
+              ssafyTrack={ssafyTrack}
+              updateSsafyTrack={updateSsafyTrack}
+              studentNumber={studentNumber}
+              updateStudentNumber={updateStudentNumber}
+              studentName={studentName}
+              updateStudentName={updateStudentName}
+              auth={auth}
+              updateAuth={updateAuth}
+            />
+          )}
+          {console.log(
+            `캠퍼스 : ${campus} 트랙 : ${ssafyTrack} 학번 : ${studentNumber} 이름 : ${studentName}`,
+          )}
 
-        {/* <AuthForm /> */}
-        {/* 2단계 : 기본 정보 작성 */}
-        {/* <SignUpForm /> */}
-        {/* 3단계 : 프로필 작성 */}
-        {/* <ProfileForm /> */}
-      </Wrapper>
-    </Container>
+          {/* 2단계 : 기본 정보 작성 */}
+
+          {/* 3단계 : 프로필 작성 */}
+          {/* <ProfileForm /> */}
+        </Wrapper>
+      </Container>
+    </>
   );
 };
 
