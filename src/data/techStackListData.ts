@@ -247,7 +247,7 @@ export const techStackListData = [
   {
     id: 'TS50',
     name: 'MariaDB',
-    imgUrl: '/images/assets/tech-stack/React.png',
+    imgUrl: '/images/assets/tech-stack/MariaDB.png',
   },
   {
     id: 'TS51',
@@ -467,7 +467,7 @@ export const techStackListData = [
   {
     id: 'TS94',
     name: 'Apache-Kafka',
-    imgUrl: '/images/assets/tech-stack/React.png',
+    imgUrl: '/images/assets/tech-stack/Apache-Kafka.png',
   },
   {
     id: 'TS95',
