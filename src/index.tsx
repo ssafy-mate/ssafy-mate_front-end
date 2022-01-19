@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { QueryClient, QueryClientProvider } from 'react-query';
+
 import { Provider } from 'react-redux';
 
 import createReduxStore from './redux/createReduxStore';
@@ -13,13 +15,16 @@ if (process.env.NODE_ENV === 'development') {
   worker.start();
 }
 
+const queryClient = new QueryClient();
 const store = createReduxStore();
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
-  </React.StrictMode>,
+  <QueryClientProvider client={queryClient}>
+    <React.StrictMode>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </React.StrictMode>
+  </QueryClientProvider>,
   document.getElementById('root'),
 );
