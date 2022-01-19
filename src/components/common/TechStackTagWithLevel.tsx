@@ -2,11 +2,14 @@ import React from 'react';
 
 import styled from '@emotion/styled';
 
+import Box from '@mui/material/Box';
+import ButtonGroup from '@mui/material/ButtonGroup';
+import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 
 import { TechStackTagProps } from '../../types/commonType';
 
-const TechStackTag: React.FC<TechStackTagProps> = ({
+const TechStackTagWithLevel: React.FC<TechStackTagProps> = ({
   id,
   name,
   imgUrl,
@@ -20,6 +23,24 @@ const TechStackTag: React.FC<TechStackTagProps> = ({
         <Name>{name}</Name>
       </Group>
       <Group>
+        <Box
+          sx={{
+            'display': 'flex',
+            'flexDirection': 'column',
+            'alignItems': 'center',
+            '& > *': {
+              m: 1,
+            },
+          }}
+        >
+          <MuiButtonGroup size="small" aria-label="small button group">
+            <LevelButton key="low">하</LevelButton>
+            <LevelButton key="middle" className="selected">
+              중
+            </LevelButton>
+            <LevelButton key="high">상</LevelButton>
+          </MuiButtonGroup>
+        </Box>
         <DeleteButton onClick={onDelete}>
           <CloseIcon />
         </DeleteButton>
@@ -41,7 +62,7 @@ const TagItem = styled.li`
     background-color: #eaf4fd;
   }
   &:last-of-type {
-    margin-bottom: 0;
+    margin-bottom: 16px;
   }
 
   @media (max-width: 540px) {
@@ -76,13 +97,17 @@ const Name = styled.h6`
   }
 `;
 
+const MuiButtonGroup = styled(ButtonGroup)`
+  margin: 0;
+`;
+
 const DeleteButton = styled.button`
   margin-left: 6px;
   border: none;
   background-color: transparent;
   color: #f44336;
-  cursor: pointer;
   transition: all 0.12s ease-in-out;
+  cursor: pointer;
 
   &:hover {
     transform: scale(1.15);
@@ -96,4 +121,36 @@ const DeleteButton = styled.button`
   }
 `;
 
-export default TechStackTag;
+const LevelButton = styled(Button)`
+  width: 24px;
+  height: 24px;
+  border-color: #5babf6;
+  background-color: #fbfbfd;
+  box-sizing: border-box;
+  font-size: 14px;
+  font-weight: 400;
+  color: #3396f4;
+
+  &:hover {
+    background-color: #5babf6;
+    color: #fff;
+  }
+  &.selected {
+    background-color: #5babf6;
+    color: #fff;
+  }
+
+  @media (max-width: 540px) {
+    width: 22px;
+    height: 22px;
+    font-size: 13px;
+  }
+
+  @media (max-width: 348px) {
+    width: 18px;
+    height: 18px;
+    font-size: 12px;
+  }
+`;
+
+export default TechStackTagWithLevel;

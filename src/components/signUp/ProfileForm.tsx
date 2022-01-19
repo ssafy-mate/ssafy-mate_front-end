@@ -8,10 +8,37 @@ import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
 import CloseIcon from '@mui/icons-material/Close';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import CheckIcon from '@mui/icons-material/Check';
+
+import { jobListData } from '../../data/jobListData';
+import { techStackListData } from '../../data/techStackListData';
+
+import { TechStack } from '../../types/commonType';
+
+import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
 
 const ProfileForm: React.FC = () => {
+  const {
+    getRootProps,
+    getInputLabelProps,
+    getInputProps,
+    getTagProps,
+    getListboxProps,
+    getOptionProps,
+    groupedOptions,
+    value,
+    focused,
+    setAnchorEl,
+  } = useAutocomplete({
+    id: 'search-tech-stack',
+    multiple: true,
+    options: techStackListData,
+    getOptionLabel: (option) => option.name,
+  });
+
   return (
     <Container>
       <Row>
@@ -38,10 +65,11 @@ const ProfileForm: React.FC = () => {
             <option value="default" disabled>
               - 선택 -
             </option>
-            <option value="프론트엔드 (Front-end)">
-              프론트엔드 (Front-end)
-            </option>
-            <option value="백엔드 (Back-end)">백엔드 (Back-end)</option>
+            {jobListData.map((job) => (
+              <option key={job.id} value={job.name}>
+                {job.name}
+              </option>
+            ))}
           </Select>
         </InputWrapper>
         <InputWrapper>
@@ -52,247 +80,60 @@ const ProfileForm: React.FC = () => {
             <option value="default" disabled>
               - 선택 -
             </option>
-            <option value="프론트엔드 (Front-end)">
-              프론트엔드 (Front-end)
-            </option>
-            <option value="백엔드 (Back-end)">백엔드(Back-end)</option>
+            {jobListData.map((job) => (
+              <option key={job.id} value={job.name}>
+                {job.name}
+              </option>
+            ))}
           </Select>
         </InputWrapper>
       </Row>
-      <Row>
-        <InputWrapper>
-          <RequirementLabel htmlFor="tech-stack-options">
+      <Row css={techStackRow}>
+        <InputWrapper {...getRootProps()} css={techStackInputWrapper}>
+          <RequirementLabel
+            htmlFor="tech-stack-options"
+            {...getInputLabelProps()}
+          >
             기술 스택 <Em>(필수 2가지 이상 기입)</Em>
           </RequirementLabel>
-          <InfoInput
-            type="text"
-            id="tech-stack-options"
-            name="tech-stack-options"
-            placeholder="ex) Vue.js, django, Spring Boot, MySQL"
-          />
-          <TechStackList>
-            <TechStackItem>
-              <InfoGroup>
-                <TechStackImg
-                  src="/images/assets/tech-stack/TypeScript.png"
-                  alt="TypeScript"
-                />
-                <TechStackName>TypeScript</TechStackName>
-              </InfoGroup>
-              <OptionGroup>
-                <Box
-                  sx={{
-                    'display': 'flex',
-                    'flexDirection': 'column',
-                    'alignItems': 'center',
-                    '& > *': {
-                      m: 1,
-                    },
-                  }}
-                >
-                  <ButtonGroup
-                    size="small"
-                    aria-label="small button group"
-                    css={buttonGroup}
-                  >
-                    <Button
-                      key="low"
-                      className="selected"
-                      css={skillLevelButton}
-                    >
-                      하
-                    </Button>
-                    <Button key="middle" css={skillLevelButton}>
-                      중
-                    </Button>
-                    <Button key="high" css={skillLevelButton}>
-                      상
-                    </Button>
-                  </ButtonGroup>
-                </Box>
-                <CancelButton>
-                  <CloseIcon />
-                </CancelButton>
-              </OptionGroup>
-            </TechStackItem>
-            <TechStackItem>
-              <InfoGroup>
-                <TechStackImg
-                  src="/images/assets/tech-stack/React.png"
-                  alt="React"
-                />
-                <TechStackName>React</TechStackName>
-              </InfoGroup>
-              <OptionGroup>
-                <Box
-                  sx={{
-                    'display': 'flex',
-                    'flexDirection': 'column',
-                    'alignItems': 'center',
-                    '& > *': {
-                      m: 1,
-                    },
-                  }}
-                >
-                  <ButtonGroup
-                    size="small"
-                    aria-label="small button group"
-                    css={buttonGroup}
-                  >
-                    <Button key="low" css={skillLevelButton}>
-                      하
-                    </Button>
-                    <Button
-                      key="middle"
-                      className="selected"
-                      css={skillLevelButton}
-                    >
-                      중
-                    </Button>
-                    <Button key="high" css={skillLevelButton}>
-                      상
-                    </Button>
-                  </ButtonGroup>
-                </Box>
-                <CancelButton>
-                  <CloseIcon />
-                </CancelButton>
-              </OptionGroup>
-            </TechStackItem>
-            <TechStackItem>
-              <InfoGroup>
-                <TechStackImg
-                  src="/images/assets/tech-stack/Redux.png"
-                  alt="Redux"
-                />
-                <TechStackName>Redux</TechStackName>
-              </InfoGroup>
-              <OptionGroup>
-                <Box
-                  sx={{
-                    'display': 'flex',
-                    'flexDirection': 'column',
-                    'alignItems': 'center',
-                    '& > *': {
-                      m: 1,
-                    },
-                  }}
-                >
-                  <ButtonGroup
-                    size="small"
-                    aria-label="small button group"
-                    css={buttonGroup}
-                  >
-                    <Button key="low" css={skillLevelButton}>
-                      하
-                    </Button>
-                    <Button
-                      key="middle"
-                      className="selected"
-                      css={skillLevelButton}
-                    >
-                      중
-                    </Button>
-                    <Button key="high" css={skillLevelButton}>
-                      상
-                    </Button>
-                  </ButtonGroup>
-                </Box>
-                <CancelButton>
-                  <CloseIcon />
-                </CancelButton>
-              </OptionGroup>
-            </TechStackItem>
-            <TechStackItem>
-              <InfoGroup>
-                <TechStackImg
-                  src="/images/assets/tech-stack/Redux-Saga.png"
-                  alt="Redux-Saga"
-                />
-                <TechStackName>Redux-Saga</TechStackName>
-              </InfoGroup>
-              <OptionGroup>
-                <Box
-                  sx={{
-                    'display': 'flex',
-                    'flexDirection': 'column',
-                    'alignItems': 'center',
-                    '& > *': {
-                      m: 1,
-                    },
-                  }}
-                >
-                  <ButtonGroup
-                    size="small"
-                    aria-label="small button group"
-                    css={buttonGroup}
-                  >
-                    <Button
-                      key="low"
-                      className="selected"
-                      css={skillLevelButton}
-                    >
-                      하
-                    </Button>
-                    <Button key="middle" css={skillLevelButton}>
-                      중
-                    </Button>
-                    <Button key="high" css={skillLevelButton}>
-                      상
-                    </Button>
-                  </ButtonGroup>
-                </Box>
-                <CancelButton>
-                  <CloseIcon />
-                </CancelButton>
-              </OptionGroup>
-            </TechStackItem>
-            <TechStackItem>
-              <InfoGroup>
-                <TechStackImg
-                  src="/images/assets/tech-stack/Emotion.png"
-                  alt="Emotion"
-                />
-                <TechStackName>Emotion</TechStackName>
-              </InfoGroup>
-              <OptionGroup>
-                <Box
-                  sx={{
-                    'display': 'flex',
-                    'flexDirection': 'column',
-                    'alignItems': 'center',
-                    '& > *': {
-                      m: 1,
-                    },
-                  }}
-                >
-                  <ButtonGroup
-                    size="small"
-                    aria-label="small button group"
-                    css={buttonGroup}
-                  >
-                    <Button key="low" css={skillLevelButton}>
-                      하
-                    </Button>
-                    <Button key="middle" css={skillLevelButton}>
-                      중
-                    </Button>
-                    <Button
-                      key="high"
-                      className="selected"
-                      css={skillLevelButton}
-                    >
-                      상
-                    </Button>
-                  </ButtonGroup>
-                </Box>
-                <CancelButton>
-                  <CloseIcon />
-                </CancelButton>
-              </OptionGroup>
-            </TechStackItem>
-          </TechStackList>
+          <InfoInputWrapper
+            ref={setAnchorEl}
+            className={focused ? 'focused' : ''}
+          >
+            <InfoInput
+              type="text"
+              id="tech-stack-options"
+              name="tech-stack-options"
+              placeholder="ex) Vue.js, django, Spring Boot, MySQL"
+              {...getInputProps()}
+            />
+          </InfoInputWrapper>
+          {groupedOptions.length > 0 ? (
+            <SearchList {...getListboxProps()}>
+              {(groupedOptions as typeof techStackListData).map(
+                (option, index) => (
+                  <SearchItem {...getOptionProps({ option, index })}>
+                    <TechStackInfo>
+                      <TechStackImg src={option.imgUrl} alt={option.name} />
+                      {option.name}
+                    </TechStackInfo>
+                    <CheckIcon fontSize="small" />
+                  </SearchItem>
+                ),
+              )}
+            </SearchList>
+          ) : null}
         </InputWrapper>
+        <TechStackList>
+          {value.map((option: TechStack, index: number) => (
+            <TechStackTagWithLevel
+              id={option.id}
+              name={option.name}
+              imgUrl={option.imgUrl}
+              {...getTagProps({ index })}
+            />
+          ))}
+        </TechStackList>
       </Row>
       <Row>
         <InputWrapper>
@@ -491,6 +332,8 @@ const Select = styled.select`
   }
 `;
 
+const InfoInputWrapper = styled.div``;
+
 const InfoInput = styled.input`
   width: 100%;
   height: 40px;
@@ -519,6 +362,61 @@ const InfoInput = styled.input`
   @media (max-width: 540px) {
     font-size: 13px;
   }
+`;
+
+const SearchList = styled.ul`
+  overflow-y: scroll;
+  position: absolute;
+  top: 62px;
+  z-index: 10;
+  width: 100%;
+  max-height: 200px;
+  border: 1px solid #d7e2eb;
+  border-radius: 0.25rem;
+  background-color: #fff;
+`;
+
+const SearchItem = styled.li`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  padding: 8px 12px;
+  outline: 0;
+  border-bottom: 1px solid #d7e2eb;
+  box-sizing: border-box;
+  background-color: #fff;
+  font-size: 16px;
+  line-height: 24px;
+  color: #5f7f90;
+  transition: all 0.08s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #eaf4fd;
+  }
+
+  & svg {
+    color: transparent;
+  }
+
+  &[aria-selected='true'] {
+    background-color: #eaf4fd;
+
+    & svg {
+      color: #3396f4;
+    }
+  }
+
+  @media (max-width: 540px) {
+    font-size: 13px;
+  }
+`;
+
+const TechStackInfo = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 const AgreementCheckBox = styled.input`
@@ -565,37 +463,7 @@ const SignUpButton = styled.button`
   }
 `;
 
-const TechStackList = styled.ul`
-  margin-top: 16px;
-`;
-
-const TechStackItem = styled.li`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  padding: 3px 6px;
-  box-sizing: border-box;
-
-  &:hover {
-    border-radius: 0.25rem;
-    background-color: #eaf4fd;
-  }
-
-  @media (max-width: 540px) {
-    margin-bottom: 16px;
-  }
-`;
-
-const InfoGroup = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
-const OptionGroup = styled.div`
-  display: flex;
-  align-items: center;
-`;
+const TechStackList = styled.ul``;
 
 const TechStackImg = styled.img`
   margin-right: 6px;
@@ -612,46 +480,6 @@ const TechStackImg = styled.img`
   @media (max-width: 348px) {
     width: 18px;
     height: 18px;
-  }
-`;
-
-const TechStackName = styled.h6`
-  font-size: 14px;
-  color: #5f7f90;
-
-  @media (max-width: 540px) {
-    font-size: 13px;
-  }
-
-  @media (max-width: 348px) {
-    font-size: 12px;
-  }
-`;
-
-const CancelButton = styled.button`
-  margin-left: 6px;
-  border: none;
-  background-color: transparent;
-  color: #f44336;
-  cursor: pointer;
-  transition: all 0.12s ease-in-out;
-
-  &:hover {
-    transform: scale(1.15);
-  }
-
-  @media (max-width: 540px) {
-    svg {
-      width: 22px;
-      height: 22px;
-    }
-  }
-
-  @media (max-width: 348px) {
-    svg {
-      width: 18px;
-      height: 18px;
-    }
   }
 `;
 
@@ -679,39 +507,6 @@ const avatar = css`
   }
 `;
 
-const skillLevelButton = css`
-  width: 24px;
-  height: 24px;
-  border-color: #5babf6;
-  background-color: #fbfbfd;
-  box-sizing: border-box;
-  font-size: 14px;
-  font-weight: 400;
-  color: #3396f4;
-
-  &:hover {
-    color: #fff;
-    background-color: #5babf6;
-  }
-
-  &.selected {
-    color: #fff;
-    background-color: #5babf6;
-  }
-
-  @media (max-width: 540px) {
-    width: 22px;
-    height: 22px;
-    font-size: 13px;
-  }
-
-  @media (max-width: 348px) {
-    width: 18px;
-    height: 18px;
-    font-size: 12px;
-  }
-`;
-
 const rightGap = css`
   margin-right: 12px;
 
@@ -724,8 +519,12 @@ const rightGap = css`
   }
 `;
 
-const buttonGroup = css`
-  margin: 0;
+const techStackRow = css`
+  flex-direction: column;
+`;
+
+const techStackInputWrapper = css`
+  position: relative;
 `;
 
 export default ProfileForm;
