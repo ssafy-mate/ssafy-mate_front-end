@@ -1,53 +1,141 @@
 import React from 'react';
 
+import { useForm } from 'react-hook-form';
+
 import styled from '@emotion/styled';
 
+interface StudentAuth {
+  campus: string;
+  ssafyTrack: string;
+  studentNumber: string;
+  studentName: string;
+}
+
 const AuthForm: React.FC = () => {
+  //let StudentAuth: StudentAuth;
+
+  const {
+    watch,
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<StudentAuth>({ mode: 'onChange' });
+
+  const onSubmit = (data: StudentAuth) => {
+    // StudentAuth = data;
+    // console.log(JSON.stringify(StudentAuth));
+    alert(JSON.stringify(data));
+  };
+
+  const selectCampus = watch('campus', '');
+
   return (
-    <Container>
-      <SsafyInfo>
+    <>
+      <Container onSubmit={handleSubmit(onSubmit)}>
+        <SsafyInfo>
+          <InputWrapper>
+            <RequirementLabel htmlFor="campus">캠퍼스</RequirementLabel>
+            <Select
+              id="campus"
+              {...register('campus')}
+              defaultValue={'default'}
+            >
+              <option value="default" disabled>
+                - 선택 -
+              </option>
+              <option value="서울">서울</option>
+              <option value="대전">대전</option>
+              <option value="광주">광주</option>
+              <option value="구미">구미</option>
+              <option value="부울경">부울경</option>
+            </Select>
+          </InputWrapper>
+
+          <InputWrapper>
+            <RequirementLabel htmlFor="ssafy-track">
+              SSAFY 교육 트랙
+            </RequirementLabel>
+            {(() => {
+              if (selectCampus === '서울') {
+                return (
+                  <Select
+                    id="ssafy-track"
+                    {...register('ssafyTrack')}
+                    defaultValue={'default'}
+                  >
+                    <option value="default" disabled>
+                      - 선택 -
+                    </option>
+                    <option value="Python Track">Python Track</option>
+                    <option value="Java Track">Java Track</option>
+                    <option value="Embedded Track">Embedded Track</option>
+                  </Select>
+                );
+              } else if (
+                selectCampus === '대전' ||
+                selectCampus === '부울경' ||
+                selectCampus === '광주'
+              ) {
+                return (
+                  <Select {...register('ssafyTrack')} defaultValue={'default'}>
+                    <option value="default" disabled>
+                      - 선택 -
+                    </option>
+                    <option value="Python Track">Python Track</option>
+                    <option value="Java Track">Java Track</option>
+                  </Select>
+                );
+              } else if (selectCampus === '구미') {
+                return (
+                  <Select {...register('ssafyTrack')} defaultValue={'default'}>
+                    <option value="default" disabled>
+                      - 선택 -
+                    </option>
+                    <option value="Python Track">Python Track</option>
+                    <option value="Java Track">Java Track</option>
+                    <option value="Mobile Track">Mobile Track</option>
+                  </Select>
+                );
+              } else {
+                return (
+                  <Select {...register('ssafyTrack')} defaultValue={'default'}>
+                    <option value="default" disabled>
+                      - 선택 -
+                    </option>
+                  </Select>
+                );
+              }
+            })()}
+          </InputWrapper>
+        </SsafyInfo>
+
         <InputWrapper>
-          <RequirementLabel htmlFor="campus">캠퍼스</RequirementLabel>
-          <Select id="campus" name="campus" defaultValue={'default'}>
-            <option value="default" disabled>
-              - 선택 -
-            </option>
-            <option value="서울">서울</option>
-            <option value="대전">대전</option>c
-            <option value="광주">광주</option>
-            <option value="구미">구미</option>
-            <option value="부울경">부울경</option>
-          </Select>
+          <RequirementLabel htmlFor="student-number">학번</RequirementLabel>
+          <InfoInput
+            type="text"
+            id="student-number"
+            {...register('studentNumber', { required: true })}
+            placeholder="학번을 입력해주세요"
+          />
         </InputWrapper>
+
         <InputWrapper>
-          <RequirementLabel htmlFor="ssafy-track">
-            SSAFY 교육 트랙
-          </RequirementLabel>
-          <Select id="ssafy-track" name="ssafy-track" defaultValue={'default'}>
-            <option value="default" disabled>
-              - 선택 -
-            </option>
-            <option value="Java Track">Java Track</option>
-            <option value="Python Track">Python Track</option>
-            <option value="Embeded Track">Embeded Track</option>
-            <option value="Mobile Track">Mobile Track</option>
-          </Select>
+          <RequirementLabel htmlFor="student-name">이름</RequirementLabel>
+          <InfoInput
+            type="text"
+            id="student-name"
+            {...register('studentName', { required: true })}
+            placeholder="이름을 입력해주세요"
+          />
         </InputWrapper>
-      </SsafyInfo>
-      <InputWrapper>
-        <RequirementLabel htmlFor="student-number">학번</RequirementLabel>
-        <InfoInput type="text" id="student-number" name="student-number" />
-      </InputWrapper>
-      <InputWrapper>
-        <RequirementLabel htmlFor="student-name">이름</RequirementLabel>
-        <InfoInput type="text" id="student-name" name="student-name" />
-      </InputWrapper>
-      <AuthButton>교육생 인증</AuthButton>
-    </Container>
+
+        <AuthButton type="submit">교육생 인증</AuthButton>
+      </Container>
+    </>
   );
 };
 
-const Container = styled.div`
+const Container = styled.form`
   width: 100%;
 `;
 

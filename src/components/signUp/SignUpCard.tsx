@@ -15,6 +15,8 @@ const SignUpCard: React.FC = () => {
         <SignUpStepper />
         {/* 1단계 : 교육생 인증 */}
         <AuthForm />
+
+        {/* <AuthForm /> */}
         {/* 2단계 : 기본 정보 작성 */}
         {/* <SignUpForm /> */}
         {/* 3단계 : 프로필 작성 */}
