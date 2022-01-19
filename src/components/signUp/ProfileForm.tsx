@@ -469,7 +469,7 @@ const TechStackImg = styled.img`
   margin-right: 6px;
   width: 24px;
   height: 24px;
-  border-radius: 3px;
+  border-radius: 2px;
   object-fit: cover;
 
   @media (max-width: 540px) {
