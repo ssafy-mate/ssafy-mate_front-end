@@ -8,7 +8,9 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
 import CheckIcon from '@mui/icons-material/Check';
 
-import { techStackList } from '../../data/techStackList';
+import { techStackListData } from '../../data/techStackListData';
+import { campusListData, projectListData } from '../../data/ssafyData';
+
 import { TechStack } from '../../types/commonType';
 
 import TechStackTag from '../common/TechStackTag';
@@ -28,7 +30,7 @@ const CreateTeamForm: React.FC = () => {
   } = useAutocomplete({
     id: 'search-tech-stack',
     multiple: true,
-    options: techStackList,
+    options: techStackListData,
     getOptionLabel: (option) => option.name,
   });
 
@@ -56,11 +58,11 @@ const CreateTeamForm: React.FC = () => {
               <option value="default" disabled>
                 - 선택 -
               </option>
-              <option value="서울">서울</option>
-              <option value="대전">대전</option>
-              <option value="광주">광주</option>
-              <option value="구미">구미</option>
-              <option value="부울경">부울경</option>
+              {campusListData.map((campus) => (
+                <option key={campus.id} value={campus.area}>
+                  {campus.area}
+                </option>
+              ))}
             </Select>
           </InputWrapper>
           <InputWrapper>
@@ -73,9 +75,11 @@ const CreateTeamForm: React.FC = () => {
               <option value="default" disabled>
                 - 선택 -
               </option>
-              <option value="공통 프로젝트">공통 프로젝트</option>
-              <option value="특화 프로젝트">특화 프로젝트</option>
-              <option value="자율 프로젝트">자율 프로젝트</option>
+              {projectListData.map((project) => (
+                <option key={project.id} value={project.name}>
+                  {project.name}
+                </option>
+              ))}
             </Select>
           </InputWrapper>
           <InputWrapper>
@@ -146,15 +150,17 @@ const CreateTeamForm: React.FC = () => {
           </InfoInputWrapper>
           {groupedOptions.length > 0 ? (
             <SearchList {...getListboxProps()}>
-              {(groupedOptions as typeof techStackList).map((option, index) => (
-                <SearchItem {...getOptionProps({ option, index })}>
-                  <TechStackInfo>
-                    <TechStackImg src={option.imgUrl} alt={option.name} />
-                    {option.name}
-                  </TechStackInfo>
-                  <CheckIcon fontSize="small" />
-                </SearchItem>
-              ))}
+              {(groupedOptions as typeof techStackListData).map(
+                (option, index) => (
+                  <SearchItem {...getOptionProps({ option, index })}>
+                    <TechStackInfo>
+                      <TechStackImg src={option.imgUrl} alt={option.name} />
+                      {option.name}
+                    </TechStackInfo>
+                    <CheckIcon fontSize="small" />
+                  </SearchItem>
+                ),
+              )}
             </SearchList>
           ) : null}
         </InputWrapper>
