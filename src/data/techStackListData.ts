@@ -30,7 +30,7 @@ export const techStackListData = [
     imgUrl: '/images/assets/tech-stack/React.png',
   },
   {
-    id: 'ts7',
+    id: 'TS7',
     name: 'Angular',
     imgUrl: '/images/assets/tech-stack/Angular.png',
   },
@@ -45,12 +45,12 @@ export const techStackListData = [
     imgUrl: '/images/assets/tech-stack/Node.js.png',
   },
   {
-    id: 'ts10',
+    id: 'TS10',
     name: 'Vuex',
     imgUrl: '/images/assets/tech-stack/Vuex.png',
   },
   {
-    id: 'ts11',
+    id: 'TS11',
     name: 'Redux',
     imgUrl: '/images/assets/tech-stack/Redux.png',
   },
