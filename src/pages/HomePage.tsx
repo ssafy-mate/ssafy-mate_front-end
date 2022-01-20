@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -11,6 +11,10 @@ import SwiperContainer from '../components/common/SwiperContainer';
 import Footer from '../components/common/Footer';
 
 const HomePage: React.FC = () => {
+  useEffect(() => {
+    document.title = '싸피 메이트';
+  }, []);
+
   return (
     <>
       <Header />
