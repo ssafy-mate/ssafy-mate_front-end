@@ -8,11 +8,11 @@ export const campusListData = [
         name: 'Python Track',
       },
       {
-        id: 'ET1',
+        id: 'ET2',
         name: 'Java Track',
       },
       {
-        id: 'ET1',
+        id: 'ET3',
         name: 'Embeded Track',
       },
     ],
