@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -8,15 +8,20 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 
-interface AuthStepProps {
-  auth: number;
+interface SignUpStepperProps {
+  signUpStep: number;
 }
-const SignUpStepper: React.FC<AuthStepProps> = ({ auth }) => {
+
+const SignUpStepper: React.FC<SignUpStepperProps> = ({ signUpStep }) => {
   const steps = ['교육생 인증', '기본 정보 작성', '프로필 작성'];
-  console.log(auth);
+
+  // useEffect(() => {
+  //   console.log(signUpStep)
+  // }, [signUpStep])
+
   return (
     <Box sx={{ width: '100%' }} css={box}>
-      <Stepper activeStep={auth} alternativeLabel>
+      <Stepper activeStep={signUpStep} alternativeLabel>
         {steps.map((label) => (
           <Step key={label} css={step}>
             <StepLabel>{label}</StepLabel>

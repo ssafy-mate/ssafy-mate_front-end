@@ -1,30 +1,42 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 import { useForm } from 'react-hook-form';
 
 import styled from '@emotion/styled';
 
-interface StudentAuth {
+import {
+  exceptDefault,
+  onlyKorean,
+  onlyNumber,
+} from '../../data/regularExpressionData';
+import { campusListData } from '../../data/ssafyData';
+
+interface SsafyTrack {
+  id: string;
+  name: string;
+}
+
+interface SsafyAuth {
   campus: string;
   ssafyTrack: string;
   studentNumber: string;
   studentName: string;
 }
 
-interface StudentAuthProps {
+interface SsafyAuthProps {
   campus: string;
-  updateCampus: (arg: string) => void;
   ssafyTrack: string;
-  updateSsafyTrack: (arg: string) => void;
   studentNumber: string;
-  updateStudentNumber: (arg: string) => void;
   studentName: string;
-  updateStudentName: (arg: string) => void;
-  auth: number;
-  updateAuth: (arg: number) => void;
+  signUpStep: number;
+  updateCampus: (campus: string) => void;
+  updateSsafyTrack: (ssafyTrack: string) => void;
+  updateStudentNumber: (studentNumber: string) => void;
+  updateStudentName: (studentName: string) => void;
+  updateSignUpStep: (signUpStep: number) => void;
 }
 
-const AuthForm: React.FC<StudentAuthProps> = ({
+const AuthForm: React.FC<SsafyAuthProps> = ({
   campus,
   updateCampus,
   ssafyTrack,
@@ -33,28 +45,36 @@ const AuthForm: React.FC<StudentAuthProps> = ({
   updateStudentNumber,
   studentName,
   updateStudentName,
-  auth,
-  updateAuth,
+  signUpStep,
+  updateSignUpStep,
 }) => {
   const {
     watch,
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<StudentAuth>({ mode: 'onChange' });
+  } = useForm<SsafyAuth>({ mode: 'onChange' });
 
-  const onSubmit = (data: StudentAuth) => {
-    //post 요청 보내기->인증 통과한 경우
-    //alert(JSON.stringify(data));
-    updateCampus(data.campus);
-    updateSsafyTrack(data.ssafyTrack);
-    updateStudentNumber(data.studentNumber);
-    updateStudentName(data.studentName);
-    updateAuth(1);
-    //통과하지 못한 경우
+  const selectedCampus = watch('campus', '');
+
+  let selectedTracks: Array<SsafyTrack>;
+
+  const updateSsafyAuthProps = (data: SsafyAuth) => {
+    const { campus, ssafyTrack, studentNumber, studentName } = data;
+    updateCampus(campus);
+    updateSsafyTrack(ssafyTrack);
+    updateStudentNumber(studentNumber);
+    updateStudentName(studentName);
+    updateSignUpStep(1);
   };
 
-  const selectCampus = watch('campus', '');
+  const onSubmit = (data: SsafyAuth) => {
+    //post 요청 보내기->인증 통과한 경우
+    //alert(JSON.stringify(data));
+    updateSsafyAuthProps(data);
+
+    //통과하지 못한 경우 modal 창 띄우기->리다이렉트?
+  };
 
   return (
     <>
@@ -66,8 +86,8 @@ const AuthForm: React.FC<StudentAuthProps> = ({
               id="campus"
               {...register('campus', {
                 pattern: {
-                  value: /^((?!default).)*$/,
-                  message: '지역을 선택해주세요',
+                  value: exceptDefault,
+                  message: '지역을 선택해주세요.',
                 },
               })}
               defaultValue={'default'}
@@ -75,11 +95,11 @@ const AuthForm: React.FC<StudentAuthProps> = ({
               <option value="default" disabled>
                 - 선택 -
               </option>
-              <option value="서울">서울</option>
-              <option value="대전">대전</option>
-              <option value="광주">광주</option>
-              <option value="구미">구미</option>
-              <option value="부울경">부울경</option>
+              {campusListData.map((campus) => (
+                <option key={campus.id} value={campus.area}>
+                  {campus.area}
+                </option>
+              ))}
             </Select>
 
             {errors.campus?.type === 'pattern' && (
@@ -91,85 +111,34 @@ const AuthForm: React.FC<StudentAuthProps> = ({
             <RequirementLabel htmlFor="ssafy-track">
               SSAFY 교육 트랙
             </RequirementLabel>
-            {(() => {
-              if (selectCampus === '서울') {
-                return (
-                  <Select
-                    id="ssafy-track"
-                    {...register('ssafyTrack', {
-                      pattern: {
-                        value: /^((?!default).)*$/,
-                        message: '트랙을 선택해주세요',
-                      },
-                    })}
-                  >
-                    <option value="default" disabled>
-                      - 선택 -
-                    </option>
-                    <option value="Python Track">Python Track</option>
-                    <option value="Java Track">Java Track</option>
-                    <option value="Embedded Track">Embedded Track</option>
-                  </Select>
-                );
-              } else if (
-                selectCampus === '대전' ||
-                selectCampus === '부울경' ||
-                selectCampus === '광주'
-              ) {
-                return (
-                  <Select
-                    {...register('ssafyTrack', {
-                      pattern: {
-                        value: /^((?!default).)*$/,
-                        message: '트랙을 선택해주세요',
-                      },
-                    })}
-                    defaultValue={'default'}
-                  >
-                    <option value="default" disabled>
-                      - 선택 -
-                    </option>
-                    <option value="Python Track">Python Track</option>
-                    <option value="Java Track">Java Track</option>
-                  </Select>
-                );
-              } else if (selectCampus === '구미') {
-                return (
-                  <Select
-                    {...register('ssafyTrack', {
-                      pattern: {
-                        value: /^((?!default).)*$/,
-                        message: '트랙을 선택해주세요',
-                      },
-                    })}
-                    defaultValue={'default'}
-                  >
-                    <option value="default" disabled>
-                      - 선택 -
-                    </option>
-                    <option value="Python Track">Python Track</option>
-                    <option value="Java Track">Java Track</option>
-                    <option value="Mobile Track">Mobile Track</option>
-                  </Select>
-                );
-              } else {
-                return (
-                  <Select
-                    {...register('ssafyTrack', {
-                      pattern: {
-                        value: /^((?!default).)*$/,
-                        message: '트랙을 선택해주세요',
-                      },
-                    })}
-                    defaultValue={'default'}
-                  >
-                    <option value="default" disabled>
-                      - 선택 -
-                    </option>
-                  </Select>
-                );
-              }
-            })()}
+            <Select
+              id="ssafy-track"
+              {...register('ssafyTrack', {
+                pattern: {
+                  value: exceptDefault,
+                  message: '트랙을 선택해주세요.',
+                },
+              })}
+              defaultValue={'default'}
+            >
+              <option value="default" disabled>
+                - 선택 -
+              </option>
+              {campusListData.map((campus) => {
+                if (selectedCampus === campus.area) {
+                  selectedTracks = campus.educationTrack;
+                  return (
+                    <>
+                      {selectedTracks.map((track: SsafyTrack) => (
+                        <option key={track.id} value={track.name}>
+                          {track.name}
+                        </option>
+                      ))}
+                    </>
+                  );
+                }
+              })}
+            </Select>
 
             {errors.ssafyTrack?.type === 'pattern' && (
               <ErrorSpan>{errors.ssafyTrack.message}</ErrorSpan>
@@ -185,19 +154,19 @@ const AuthForm: React.FC<StudentAuthProps> = ({
             {...register('studentNumber', {
               required: {
                 value: true,
-                message: '학번을 입력해주세요',
+                message: '학번을 입력해주세요.',
               },
               pattern: {
-                value: /\d+/,
-                message: '교육생 인증을 위해 학번을 정확하게 입력해주세요',
+                value: onlyNumber,
+                message: '교육생 인증을 위해 학번을 정확하게 입력해주세요.',
               },
               maxLength: {
                 value: 7,
-                message: '교육생 인증을 위해 학번을 정확하게 입력해주세요',
+                message: '교육생 인증을 위해 학번을 정확하게 입력해주세요.',
               },
               minLength: {
                 value: 7,
-                message: '교육생 인증을 위해 학번을 정확하게 입력해주세요',
+                message: '교육생 인증을 위해 학번을 정확하게 입력해주세요.',
               },
             })}
           />
@@ -222,10 +191,10 @@ const AuthForm: React.FC<StudentAuthProps> = ({
             {...register('studentName', {
               required: {
                 value: true,
-                message: '이름 입력해주세요',
+                message: '이름 입력해주세요.',
               },
               pattern: {
-                value: /^[가-힣]*$/i,
+                value: onlyKorean,
                 message: '교육생 인증을 위해 이름을 정확하게 입력해주세요.',
               },
             })}
@@ -395,7 +364,7 @@ const RequirementLabel = styled.label`
 const ErrorSpan = styled.span`
   padding: 8px 12px;
   font-weight: 400;
-  font-size: 0.875rem;
+  font-size: 13px;
   color: #f44336;
 `;
 
