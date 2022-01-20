@@ -29,7 +29,7 @@ const HomePage: React.FC = () => {
           </Link>
         </LinkCard>
         <LinkCard>
-          <Link to="/projects/specialization/team" css={linkCardWrapper}>
+          <Link to="/projects/specialization/teams" css={linkCardWrapper}>
             <LinkCardImg
               src="/images/projects/specialization-project_link.png"
               alt="특화 프로젝트"

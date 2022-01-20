@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -10,6 +10,10 @@ import Footer from '../components/common/Footer';
 import TeamAnnouncement from '../components/projects/TeamAnnouncement';
 
 const TeamSpecializationProjectPage: React.FC = () => {
+  useEffect(() => {
+    document.title = '특화 프로젝트 팀 공고 | 싸피 메이트';
+  }, []);
+
   return (
     <>
       <Header />
