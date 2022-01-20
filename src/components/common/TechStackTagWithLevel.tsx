@@ -80,7 +80,7 @@ const Img = styled.img`
   width: 24px;
   height: 24px;
   border-radius: 2px;
-  object-fit: cover;
+  object-fit: fill;
 
   @media (max-width: 540px) {
     width: 22px;
