@@ -5,9 +5,9 @@ import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
 
 import {
-  exceptDefault,
-  onlyKorean,
-  onlyNumber,
+  exceptDefaultReg,
+  onlyKoreanReg,
+  onlyNumberReg,
 } from '../../data/regularExpressionData';
 import { campusListData } from '../../data/ssafyData';
 
@@ -86,7 +86,7 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
               id="campus"
               {...register('campus', {
                 pattern: {
-                  value: exceptDefault,
+                  value: exceptDefaultReg,
                   message: '지역을 선택해주세요.',
                 },
               })}
@@ -115,7 +115,7 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
               id="ssafy-track"
               {...register('ssafyTrack', {
                 pattern: {
-                  value: exceptDefault,
+                  value: exceptDefaultReg,
                   message: '트랙을 선택해주세요.',
                 },
               })}
@@ -157,7 +157,7 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
                 message: '학번을 입력해주세요.',
               },
               pattern: {
-                value: onlyNumber,
+                value: onlyNumberReg,
                 message: '교육생 인증을 위해 학번을 정확하게 입력해주세요.',
               },
               maxLength: {
@@ -194,7 +194,7 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
                 message: '이름 입력해주세요.',
               },
               pattern: {
-                value: onlyKorean,
+                value: onlyKoreanReg,
                 message: '교육생 인증을 위해 이름을 정확하게 입력해주세요.',
               },
             })}

@@ -6,60 +6,84 @@ import SignUpStepper from './SignUpStepper';
 import AuthForm from './AuthForm';
 import SignUpForm from './SignUpForm';
 import ProfileForm from './ProfileForm';
+import ErrorPage from '../../pages/ErrorPage';
 
 const SignUpCard: React.FC = () => {
   const [campus, setCampus] = useState<string>('');
   const [ssafyTrack, setSsafyTrack] = useState<string>('');
   const [studentNumber, setStudentNumber] = useState<string>('');
   const [studentName, setStudentName] = useState<string>('');
-  const [auth, setAuth] = useState<number>(0);
-  const updateCampus = (updateCampus: string): void => {
-    setCampus(updateCampus);
+  const [signUpStep, setSignUpStep] = useState<number>(0);
+  const [signUpEmail, setSignUpEmail] = useState<string>('');
+  const [signUpPassword, setSignUpPassword] = useState<string>('');
+
+  const updateCampus = (campus: string): void => {
+    setCampus(campus);
   };
-  const updateSsafyTrack = (updateSsafyTrack: string): void => {
-    setSsafyTrack(updateSsafyTrack);
+
+  const updateSsafyTrack = (ssafyTrack: string): void => {
+    setSsafyTrack(ssafyTrack);
   };
-  const updateStudentNumber = (updateStudentNumber: string): void => {
-    setStudentNumber(updateStudentNumber);
+
+  const updateStudentNumber = (studentNumber: string): void => {
+    setStudentNumber(studentNumber);
   };
-  const updateStudentName = (updateStudentName: string): void => {
-    setStudentName(updateStudentName);
+
+  const updateStudentName = (studentName: string): void => {
+    setStudentName(studentName);
   };
-  const updateAuth = (updateAuth: number): void => {
-    setAuth(updateAuth);
+
+  const updateSignUpStep = (signUpStep: number): void => {
+    setSignUpStep(signUpStep);
   };
+
+  const updateSignUpEmail = (signUpEmail: string): void => {
+    setSignUpEmail(signUpEmail);
+  };
+  const updateSignUpPassword = (signUpPassword: string): void => {
+    setSignUpPassword(signUpPassword);
+  };
+
   return (
     <>
-      {/* updateAuth={updateAuth} */}
       <Container>
         <Wrapper>
           <Head>회원가입</Head>
-          <SignUpStepper auth={auth} />
-          {/* 1단계 : 교육생 인증 */}
-          {auth ? (
-            <SignUpForm />
-          ) : (
-            <AuthForm
-              campus={campus}
-              updateCampus={updateCampus}
-              ssafyTrack={ssafyTrack}
-              updateSsafyTrack={updateSsafyTrack}
-              studentNumber={studentNumber}
-              updateStudentNumber={updateStudentNumber}
-              studentName={studentName}
-              updateStudentName={updateStudentName}
-              auth={auth}
-              updateAuth={updateAuth}
-            />
-          )}
-          {console.log(
-            `캠퍼스 : ${campus} 트랙 : ${ssafyTrack} 학번 : ${studentNumber} 이름 : ${studentName}`,
-          )}
-
-          {/* 2단계 : 기본 정보 작성 */}
-
-          {/* 3단계 : 프로필 작성 */}
-          {/* <ProfileForm /> */}
+          <SignUpStepper signUpStep={signUpStep} />
+          {(() => {
+            switch (signUpStep) {
+              case 0:
+                return (
+                  <AuthForm
+                    campus={campus}
+                    updateCampus={updateCampus}
+                    ssafyTrack={ssafyTrack}
+                    updateSsafyTrack={updateSsafyTrack}
+                    studentNumber={studentNumber}
+                    updateStudentNumber={updateStudentNumber}
+                    studentName={studentName}
+                    updateStudentName={updateStudentName}
+                    signUpStep={signUpStep}
+                    updateSignUpStep={updateSignUpStep}
+                  />
+                );
+              case 1:
+                return (
+                  <SignUpForm
+                    signUpEmail={signUpEmail}
+                    updateSignUpEmail={updateSignUpEmail}
+                    signUpPassword={signUpPassword}
+                    updateSignUpPassword={updateSignUpPassword}
+                    signUpStep={signUpStep}
+                    updateSignUpStep={updateSignUpStep}
+                  />
+                );
+              case 2:
+                return <ProfileForm />;
+              default:
+                return <ErrorPage />;
+            }
+          })()}
         </Wrapper>
       </Container>
     </>
