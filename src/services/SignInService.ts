@@ -1,4 +1,10 @@
+import { SsafyAuth } from './../types/commonType';
 import { axiosInstance } from '../utils/axios';
 
-export const Studuent = (studentData: any) =>
-  axiosInstance.post('/api/verification/ssafy', studentData);
+const getSsafyAuth = async (data: SsafyAuth) => {
+  return await axiosInstance.get('/api/user/sign-up/verification/ssafy', {
+    params: data,
+  });
+};
+
+export default getSsafyAuth;
