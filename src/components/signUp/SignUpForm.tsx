@@ -3,12 +3,14 @@ import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import styled from '@emotion/styled';
+
 import {
   passwordReg,
   requiredFields,
   validEmailReg,
   verificationCodeReg,
 } from '../../data/regularExpressionData';
+
 import { useEffect } from 'react';
 
 interface SignUpProps {
@@ -43,9 +45,11 @@ const SignUpForm: React.FC<SignUpProps> = ({
   } = useForm<SignUp>({ mode: 'onChange' });
 
   const [signUpEmailValidation, setSignUpEmailValidation] = useState(true);
+
   const [validationCode, setValidationCode] = useState(true);
 
   const signUpEmailOnChange: string = watch('signUpEmail');
+
   const verificationCodeOnChange: string = watch('verificationCode');
 
   const signUpPasswordOnChange = watch('signUpPassword');
@@ -96,6 +100,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
     //post 요청 보내기
     updateSignUpProps(data);
     //SignupCard로 상태 올려보내기
+
     //요청 실패한 경우 modal
   };
 
@@ -133,22 +138,26 @@ const SignUpForm: React.FC<SignUpProps> = ({
             <ErrorSpan>{errors.signUpEmail.message}</ErrorSpan>
           )}
         </InputWrapper>
+
         <InputWrapper>
           <RequirementLabel htmlFor="verification-code">
             인증코드 입력
           </RequirementLabel>
           <ButtonWrapper>
-            <InfoInput
-              type="text"
-              id="verification-code"
-              {...register('verificationCode', {
-                required: true,
-                pattern: verificationCodeReg,
-                minLength: 8,
-                maxLength: 8,
-              })}
-              placeholder="인증코드 8자리 입력"
-            />
+            <VerificationCodeWrapper>
+              <InfoInput
+                type="text"
+                id="verification-code"
+                {...register('verificationCode', {
+                  required: true,
+                  pattern: verificationCodeReg,
+                  minLength: 8,
+                  maxLength: 8,
+                })}
+                placeholder="인증코드 8자리 입력"
+              />
+              <TimeLimit>시간</TimeLimit>
+            </VerificationCodeWrapper>
             <AuthButton
               type="button"
               onClick={EmailAuthConfirm}
@@ -296,6 +305,13 @@ const NextButton = styled.button`
     background-color: #96a0ac;
   }
 `;
+const VerificationCodeWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+`;
 
 const InfoInput = styled.input`
   width: 100%;
@@ -310,7 +326,7 @@ const InfoInput = styled.input`
   line-height: 24px;
   color: #263747;
   transition: all 0.08s ease-in-out;
-
+  flex: 1 0 0px;
   &:hover {
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px#3396f4;
@@ -349,11 +365,16 @@ const RequirementLabel = styled.label`
     font-size: 13px;
   }
 `;
+
 const ErrorSpan = styled.span`
   padding: 8px 12px;
   font-weight: 400;
   font-size: 13px;
   color: #f44336;
+`;
+
+const TimeLimit = styled.span`
+  margin-right: 20px;
 `;
 
 export default SignUpForm;
