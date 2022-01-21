@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { Link } from 'react-router-dom';
+
+import { useMediaQuery } from 'react-responsive';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -9,9 +11,18 @@ import styled from '@emotion/styled';
 import ArticleIcon from '@mui/icons-material/Article';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import MenuBar from './MenuBar';
 
 const Header: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const isMobile = useMediaQuery({
+    query: '(max-width: 992px)',
+  });
+  const [menuBarStatus, setMenuBarStatus] = useState<boolean>(false);
+
+  const handleOpenMenuBar = () => {
+    setMenuBarStatus(!menuBarStatus);
+  };
 
   return (
     <Container>
@@ -22,7 +33,9 @@ const Header: React.FC = () => {
           </LogoWrapper>
           <LogoName>SSAFY MATE</LogoName>
         </Link>
-        {!isLoggedIn ? (
+        {isMobile ? (
+          <MenuBar isActive={menuBarStatus} onOpenMenuBar={handleOpenMenuBar} />
+        ) : !isLoggedIn ? (
           <AuthContainer>
             <AuthItem>
               <Link to="/users/sign_in" css={signInLink}>
