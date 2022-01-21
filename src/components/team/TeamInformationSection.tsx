@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 import { Link } from 'react-router-dom';
 
 import styled from '@emotion/styled';
@@ -9,14 +11,36 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import WebIcon from '@mui/icons-material/Web';
 import StorageIcon from '@mui/icons-material/Storage';
 import FlagIcon from '@mui/icons-material/Flag';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import WarningIcon from '@mui/icons-material/Warning';
 import SchoolIcon from '@mui/icons-material/School';
 import ComputerIcon from '@mui/icons-material/Computer';
 import StyleIcon from '@mui/icons-material/Style';
+
+import { UserType } from '../../types/userTypes';
+
+import RecruitStatusBadge from '../projects/RecruitStatusBadge';
+import RecruitStatusTag from '../projects/RecruitStatusTag';
 import JobDoughnutChart from '../chart/DoughnutChart';
+import TeamTechStack from './TeamTechStack';
 
 const TeamInformationSection: React.FC = () => {
+  const [techStacks, setTechStacks] = useState<string[]>([]);
+  const [members, setMembers] = useState<UserType[]>([]);
+
+  useEffect(() => {
+    const techStacksData = [
+      'TypeScript',
+      'Redux',
+      'Redux-Saga',
+      'React-Query',
+      'Emotion',
+      'Spring-Boot',
+      'JPA',
+      'MySQL',
+    ];
+
+    setTechStacks(techStacksData);
+  }, []);
+
   return (
     <Container>
       <HeadContainer>
@@ -26,7 +50,10 @@ const TeamInformationSection: React.FC = () => {
           </TeamImgWrapper>
           <TeamTitleWrapper>
             <Notice>실제 운영할 서비스 개발을 도전할 분들을 모집합니다.</Notice>
-            <TeamName>데스파시토</TeamName>
+            <Row>
+              <TeamName>데스파시토</TeamName>
+              <RecruitStatusBadge isActive={false} />
+            </Row>
           </TeamTitleWrapper>
         </TitleBox>
         <ButtonBox>
@@ -85,55 +112,9 @@ const TeamInformationSection: React.FC = () => {
           <Section>
             <SubHead>계획 중인 기술 스택</SubHead>
             <TechStackList>
-              <TechStackItem>
-                <TechStackImg
-                  src="/images/assets/tech-stack/TypeScript.png"
-                  alt="TypeScript"
-                />
-                <TechStackName>TypeScript</TechStackName>
-              </TechStackItem>
-              <TechStackItem>
-                <TechStackImg
-                  src="/images/assets/tech-stack/Redux.png"
-                  alt="Redux"
-                />
-                <TechStackName>Redux</TechStackName>
-              </TechStackItem>
-              <TechStackItem>
-                <TechStackImg
-                  src="/images/assets/tech-stack/Redux-Saga.png"
-                  alt="Redux-Saga"
-                />
-                <TechStackName>Redux-Saga</TechStackName>
-              </TechStackItem>
-              <TechStackItem>
-                <TechStackImg
-                  src="/images/assets/tech-stack/Emotion.png"
-                  alt="Emotion"
-                />
-                <TechStackName>Emotion</TechStackName>
-              </TechStackItem>
-              <TechStackItem>
-                <TechStackImg
-                  src="/images/assets/tech-stack/Spring-Boot.png"
-                  alt="Spring-Boot"
-                />
-                <TechStackName>Spring-Boot</TechStackName>
-              </TechStackItem>
-              <TechStackItem>
-                <TechStackImg
-                  src="/images/assets/tech-stack/JPA.png"
-                  alt="JPA"
-                />
-                <TechStackName>JPA</TechStackName>
-              </TechStackItem>
-              <TechStackItem>
-                <TechStackImg
-                  src="/images/assets/tech-stack/MySQL.png"
-                  alt="MySQL"
-                />
-                <TechStackName>MySQL</TechStackName>
-              </TechStackItem>
+              {techStacks.map((techStack, index) => (
+                <TeamTechStack key={index} techStackName={techStack} />
+              ))}
             </TechStackList>
           </Section>
         </Contents>
@@ -211,8 +192,8 @@ const TeamInformationSection: React.FC = () => {
                 </HeadcountLabel>
                 <HeadcountContent>
                   <span>4명</span>/<span>6명</span>
-                  <WarningIcon fontSize="small" className="warning" />
                 </HeadcountContent>
+                <RecruitStatusTag isSufficent={false} />
               </HeadcountItem>
               <HeadcountItem>
                 <HeadcountLabel>
@@ -221,8 +202,8 @@ const TeamInformationSection: React.FC = () => {
                 </HeadcountLabel>
                 <HeadcountContent>
                   <span>1명</span>/<span>3명</span>
-                  <WarningIcon fontSize="small" className="warning" />
                 </HeadcountContent>
+                <RecruitStatusTag isSufficent={false} />
               </HeadcountItem>
               <HeadcountItem>
                 <HeadcountLabel>
@@ -231,8 +212,8 @@ const TeamInformationSection: React.FC = () => {
                 </HeadcountLabel>
                 <HeadcountContent>
                   <span>3명</span>/<span>3명</span>
-                  <CheckCircleIcon fontSize="small" className="check" />
                 </HeadcountContent>
+                <RecruitStatusTag isSufficent={true} />
               </HeadcountItem>
             </HeadcountList>
           </MembersStatus>
@@ -318,6 +299,7 @@ const Notice = styled.h1`
 `;
 
 const TeamName = styled.h2`
+  margin-right: 20px;
   font-size: 20px;
   font-weight: 500;
   line-height: 1.6;
@@ -395,6 +377,10 @@ const MemberItem = styled.li`
       text-decoration: underline;
       color: #3396f4;
     }
+  }
+
+  @media (max-width: 540px) {
+    min-width: 100%;
   }
 `;
 
@@ -586,6 +572,10 @@ const MembersStatus = styled.li`
   border-radius: 4px;
   box-sizing: border-box;
   transition: all 0.08s ease-in-out;
+
+  @media (max-width: 540px) {
+    min-width: 100%;
+  }
 `;
 
 const HeadcountList = styled.ul`
@@ -633,7 +623,6 @@ const HeadcountContent = styled.p`
   overflow: hidden;
   display: flex;
   align-items: center;
-  width: 100%;
   padding: 6px 16px;
   font-size: 14px;
   line-height: 1.5;
@@ -651,14 +640,14 @@ const HeadcountContent = styled.p`
   }
 
   & svg {
-    margin-left: 16px;
+    /* margin-left: 16px; */
 
-    &.check {
+    /* &.check {
       color: #4ab050;
     }
     &.warning {
       color: #ffc00a;
-    }
+    } */
   }
 `;
 
@@ -732,46 +721,6 @@ const Introduction = styled.p`
 
 const TechStackList = styled.ul``;
 
-const TechStackItem = styled.li`
-  display: flex;
-  align-items: center;
-  margin-bottom: 12px;
-  padding: 10px 16px;
-  box-sizing: border-box;
-  border-radius: 4px;
-  background-color: #eff3f7;
-
-  &:last-of-type {
-    margin-bottom: 0;
-  }
-
-  @media (max-width: 540px) {
-    margin-bottom: 10px;
-  }
-`;
-
-const TechStackImg = styled.img`
-  margin-right: 8px;
-  width: 24px;
-  height: 24px;
-  border-radius: 2px;
-  object-fit: fill;
-
-  @media (max-width: 540px) {
-    width: 22px;
-    height: 22px;
-  }
-`;
-
-const TechStackName = styled.h6`
-  font-size: 14px;
-  color: #5f7f90;
-
-  @media (max-width: 540px) {
-    font-size: 13px;
-  }
-`;
-
 const TeamImgWrapper = styled.div`
   width: 90px;
   height: 90px;
@@ -801,6 +750,11 @@ const TeamImg = styled.img`
     width: 80px;
     height: 80px;
   }
+`;
+
+const Row = styled.div`
+  display: flex;
+  align-items: center;
 `;
 
 export default TeamInformationSection;
