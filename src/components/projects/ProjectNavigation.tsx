@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Link, useLocation } from 'react-router-dom';
 
 /** @jsxImportSource @emotion/react */
@@ -19,7 +17,10 @@ const ProjectNavigation: React.FC = () => {
     <NavTabs>
       <NavItem
         className={
-          location.pathname === '/projects/specialization/teams' ? 'active' : ''
+          location.pathname === '/projects/specialization/teams' ||
+          location.pathname === '/info/team/1'
+            ? 'active'
+            : ''
         }
       >
         <NavLink to="/projects/specialization/teams">
@@ -106,7 +107,7 @@ const NavLink = styled(Link)`
   @media (max-width: 414px) {
     font-size: 13px;
   }
-  @media (max-width: 340px) {
+  @media (max-width: 360px) {
     font-size: 12px;
   }
 `;
