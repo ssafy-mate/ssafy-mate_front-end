@@ -1,24 +1,57 @@
 import styled from '@emotion/styled';
 
-const RecruitStatusTag: React.FC = () => {
-  return <Tag>모집 중</Tag>;
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+import WarningIcon from '@mui/icons-material/Warning';
+
+interface Props {
+  isSufficent: boolean;
+}
+
+const RecruitStatusTag: React.FC<Props> = ({ isSufficent }) => {
+  return (
+    <Tag>
+      {isSufficent ? (
+        <>
+          <SufficentIcon />
+          <SufficentContent>충족</SufficentContent>
+        </>
+      ) : (
+        <>
+          <LackIcon />
+          <LackContent>부족</LackContent>
+        </>
+      )}
+    </Tag>
+  );
 };
 
-const Tag = styled.span`
-  padding: 4px 10px;
-  border: 1px solid #4ab050;
-  border-radius: 12px;
-  background-color: #ecf7ed;
-  font-size: 14px;
-  font-weight: 500;
-  color: #4ab050;
+const Tag = styled.div`
+  display: flex;
+  align-items: center;
+`;
 
-  @media (max-width: 960px) {
-    font-size: 13px;
-  }
-  @media (max-width: 720px) {
-    font-size: 12px;
-  }
+const SufficentIcon = styled(CheckCircleIcon)`
+  margin-right: 4px;
+  font-size: 20px;
+  color: #4ab050;
+`;
+
+const LackIcon = styled(WarningIcon)`
+  margin-right: 4px;
+  font-size: 20px;
+  color: #ffc00a;
+`;
+
+const SufficentContent = styled.span`
+  font-size: 14px;
+  line-height: 0;
+  color: #4ab050;
+`;
+
+const LackContent = styled.span`
+  color: #ffc00a;
+  font-size: 14px;
+  line-height: 0;
 `;
 
 export default RecruitStatusTag;
