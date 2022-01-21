@@ -16,9 +16,10 @@ import { campusListData } from '../../data/ssafyData';
 
 import { SsafyAuth } from '../../types/commonType';
 
-import getSsafyAuth from '../../services/SignInService';
+import getSsafyAuth from '../../services/UserService';
 import Stack from '@mui/material/Stack';
 import AlertTitle from '@mui/material/AlertTitle';
+import UserService from '../../services/UserService';
 
 interface SsafyTrack {
   id: string;
@@ -82,48 +83,13 @@ const AuthForm: React.FC<Props> = ({
   const onSubmit = (data: SsafyAuth) => {
     AuthRequest(data);
   };
-  //const authResponse=getSsafyAuth(data);
-  //post 요청 보내기->인증 통과한 경우
-  //  alert(JSON.stringify(data));
-
-  // updateSsafyAuthProps(data);
-  //통과하지 못한 경우 modal 창 띄우기->리다이렉트?
 
   const AuthRequest = async (data: SsafyAuth) => {
-    // await getSsafyAuth(data)
-    //   .then((response) =>{
-    //     response.data.success ? (
-    //       updateSsafyAuthProps(data)
-    //     ) : (
-    //       <Alert severity="error">This is an error alert — check it out!</Alert>
-    //     ),
-    //   }
+    const response = await UserService.getSsafyAuth(data);
 
-    //   )
-    //   .catch((error) => console.log(error));
-
-    await getSsafyAuth(data)
-      .then((response) => {
-        if (response.data.success) {
-          console.log('성공');
-          updateSsafyAuthProps(data);
-        } else {
-          return (
-            <>
-              {console.log('실패')}
-              <Stack sx={{ width: '100%' }} spacing={2}>
-                <Alert severity="error">
-                  <AlertTitle>Error</AlertTitle>
-                  This is an error alert — <strong>check it out!</strong>
-                </Alert>
-              </Stack>
-            </>
-          );
-        }
-      })
-      .catch((errors) => {
-        //에러페이지로 이동
-      });
+    if (response.success) {
+      updateSsafyAuthProps(data);
+    }
   };
 
   return (

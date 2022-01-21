@@ -16,3 +16,9 @@ export interface SsafyAuth {
   studentNumber: string;
   studentName: string;
 }
+
+export interface SsafyAuthResopnse {
+  status: number;
+  success: boolean;
+  message: string;
+}
