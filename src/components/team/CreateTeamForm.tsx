@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent, useState } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -7,6 +7,7 @@ import styled from '@emotion/styled';
 import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CheckIcon from '@mui/icons-material/Check';
+import ClearIcon from '@mui/icons-material/Clear';
 
 import { techStackListData } from '../../data/techStackListData';
 import { campusListData, projectListData } from '../../data/ssafyData';
@@ -16,6 +17,8 @@ import { TechStack } from '../../types/commonType';
 import TechStackTag from '../common/TechStackTag';
 
 const CreateTeamForm: React.FC = () => {
+  const [teamImg, setTeamImg] = useState(null);
+  const [previewTeamImg, setPreviewTeamImg] = useState(null);
   const {
     getRootProps,
     getInputLabelProps,
@@ -34,18 +37,60 @@ const CreateTeamForm: React.FC = () => {
     getOptionLabel: (option) => option.name,
   });
 
+  const handleChangeTeamImg = (event: ChangeEvent<HTMLInputElement>) => {
+    const {
+      target: { files },
+    }: any = event;
+    const theImgFile = files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = (finishedEvent) => {
+      const {
+        currentTarget: { result },
+      }: any = finishedEvent;
+
+      setPreviewTeamImg(result);
+    };
+
+    reader.readAsDataURL(theImgFile);
+    setTeamImg(theImgFile);
+  };
+
+  const handleClearTeamImg = () => {
+    setPreviewTeamImg(null);
+    setTeamImg(null);
+  };
+
   return (
     <Container>
       <Head>팀 생성</Head>
       <Row>
         <FileInputWrapper>
-          <FileInputLabel htmlFor="team-img">
-            <AddPhotoAlternateIcon />
-          </FileInputLabel>
-          <FileInput type="file" id="team-img" />
-          <FileInputDescription>
-            팀 대표 이미지를 업로드해주세요.
-          </FileInputDescription>
+          <Label>
+            팀 대표 이미지 <Em>(선택)</Em>
+          </Label>
+          {previewTeamImg ? (
+            <>
+              <FilePreviewImgWrapper>
+                <FilePreviewImg src={previewTeamImg} alt="팀 대표 이미지" />
+                <ClearButton onClick={handleClearTeamImg}>
+                  <ClearIcon fontSize="large" />
+                </ClearButton>
+              </FilePreviewImgWrapper>
+            </>
+          ) : (
+            <>
+              <FileInputLabel htmlFor="team-img">
+                <AddPhotoAlternateIcon />
+              </FileInputLabel>
+              <FileInput
+                type="file"
+                id="team-img"
+                accept="image/*"
+                onChange={handleChangeTeamImg}
+              />
+            </>
+          )}
         </FileInputWrapper>
         <SsafyInfoWrapper>
           <InputWrapper>
@@ -278,12 +323,6 @@ const Head = styled.h1`
   }
 `;
 
-const Hr = styled.hr`
-  width: 100%;
-  margin: 24px 0;
-  border: 1px dashed #d7e2eb;
-`;
-
 const Row = styled.div`
   display: flex;
 
@@ -320,15 +359,56 @@ const FileInputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 100%;
-  margin-right: 56px;
+  margin-right: 48px;
 
-  @media (max-width: 580px) {
+  @media (max-width: 740px) {
     margin-right: 24px;
   }
 
   @media (max-width: 540px) {
-    margin-right: 0;
-    margin-bottom: 12px;
+    width: 100%;
+    margin: 0 auto 16px;
+  }
+`;
+
+const FilePreviewImgWrapper = styled.div`
+  position: relative;
+
+  @media (max-width: 540px) {
+    width: 100%;
+    margin: 0 auto;
+  }
+`;
+
+const InfoInputWrapper = styled.div``;
+
+const InfoInput = styled.input`
+  width: 100%;
+  height: 40px;
+  padding: 8px 12px;
+  outline: 0;
+  border: 1px solid #d7e2eb;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+  background-color: #fbfbfd;
+  font-size: 16px;
+  line-height: 24px;
+  color: #263747;
+  transition: all 0.08s ease-in-out;
+
+  &:hover {
+    border: 1px solid #3396f4;
+    box-shadow: inset 0 0 0 1px#3396f4;
+  }
+  &:focus {
+    border: 1px solid #3396f4;
+    box-shadow: inset 0 0 0 1px #3396f4;
+    background-color: #fff;
+    color: #495057;
+  }
+
+  @media (max-width: 540px) {
+    font-size: 13px;
   }
 `;
 
@@ -336,70 +416,20 @@ const FileInput = styled.input`
   display: none;
 `;
 
-const FileInputLabel = styled.label`
+const Textarea = styled.textarea`
+  width: 100%;
+  height: 120px;
+  padding: 8px 12px;
+  outline: 0;
+  border: 1px solid #d7e2eb;
+  border-radius: 0.25rem;
   box-sizing: border-box;
-  cursor: pointer;
-
-  svg {
-    width: 200px;
-    height: 200px;
-    padding: 30px;
-    border: 1px solid #d7e2eb;
-    border-radius: 0.25rem;
-    box-sizing: border-box;
-    background-color: #fbfbfd;
-    color: #5f7f90;
-  }
-
-  @media (max-width: 540px) {
-    margin: 0 auto;
-
-    svg {
-      width: 160px;
-      height: 160px;
-    }
-  }
-`;
-
-const FileInputDescription = styled.span`
-  margin-top: 12px;
-  font-size: 13px;
-  color: #5f7f90;
-  text-align: center;
-
-  @media (max-width: 540px) {
-    font-size: 12px;
-  }
-`;
-
-const Label = styled.label`
-  margin-bottom: 4px;
-  font-size: 14px;
-  line-height: 1.5;
+  background-color: #fbfbfd;
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  font-size: 16px;
+  line-height: 24px;
   color: #263747;
-
-  @media (max-width: 540px) {
-    font-size: 13px;
-  }
-`;
-
-const RequirementLabel = styled.label`
-  margin-bottom: 4px;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #263747;
-
-  &::before {
-    content: '*';
-    display: inline-block;
-    vertical-align: top;
-    margin: 0 0.125rem 0 0;
-    -webkit-font-smoothing: antialiased;
-    font-size: 1.25rem;
-    font-weight: 700;
-    line-height: 1.25rem;
-    color: #f44336;
-  }
+  transition: all 0.08s ease-in-out;
 
   @media (max-width: 540px) {
     font-size: 13px;
@@ -441,31 +471,33 @@ const Select = styled.select`
   }
 `;
 
-const InfoInputWrapper = styled.div``;
-
-const InfoInput = styled.input`
-  width: 100%;
-  height: 40px;
-  padding: 8px 12px;
-  outline: 0;
-  border: 1px solid #d7e2eb;
-  border-radius: 0.25rem;
-  box-sizing: border-box;
-  background-color: #fbfbfd;
-  font-size: 16px;
-  line-height: 24px;
+const Label = styled.label`
+  margin-bottom: 4px;
+  font-size: 14px;
+  line-height: 1.5;
   color: #263747;
-  transition: all 0.08s ease-in-out;
 
-  &:hover {
-    border: 1px solid #3396f4;
-    box-shadow: inset 0 0 0 1px#3396f4;
+  @media (max-width: 540px) {
+    font-size: 13px;
   }
-  &:focus {
-    border: 1px solid #3396f4;
-    box-shadow: inset 0 0 0 1px #3396f4;
-    background-color: #fff;
-    color: #495057;
+`;
+
+const RequirementLabel = styled.label`
+  margin-bottom: 4px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #263747;
+
+  &::before {
+    content: '*';
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 0.125rem 0 0;
+    -webkit-font-smoothing: antialiased;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.25rem;
+    color: #f44336;
   }
 
   @media (max-width: 540px) {
@@ -473,39 +505,36 @@ const InfoInput = styled.input`
   }
 `;
 
-const Textarea = styled.textarea`
-  width: 100%;
-  height: 120px;
-  padding: 8px 12px;
-  outline: 0;
-  border: 1px solid #d7e2eb;
-  border-radius: 0.25rem;
+const FileInputLabel = styled.label`
   box-sizing: border-box;
-  background-color: #fbfbfd;
-  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
-  font-size: 16px;
-  line-height: 24px;
-  color: #263747;
-  transition: all 0.08s ease-in-out;
+  cursor: pointer;
+
+  & svg {
+    width: 200px;
+    height: 200px;
+    padding: 30px;
+    border: 1px solid #d7e2eb;
+    border-radius: 0.25rem;
+    box-sizing: border-box;
+    background-color: #fbfbfd;
+    color: #5f7f90;
+  }
 
   @media (max-width: 540px) {
-    font-size: 13px;
+    width: 100%;
+    margin: 0 auto;
+
+    & svg {
+      width: 100%;
+      height: 160px;
+    }
   }
 `;
 
-const TechStackList = styled.ul``;
-
-const TechStackImg = styled.img`
-  margin-right: 8px;
-  width: 24px;
-  height: 24px;
-  border-radius: 2px;
-  object-fit: cover;
-
-  @media (max-width: 540px) {
-    width: 22px;
-    height: 22px;
-  }
+const Hr = styled.hr`
+  width: 100%;
+  margin: 24px 0;
+  border: 1px dashed #d7e2eb;
 `;
 
 const Em = styled.em`
@@ -517,25 +546,31 @@ const Em = styled.em`
   }
 `;
 
-const CreateTeamButton = styled.button`
-  width: 100%;
-  height: 40px;
-  border: none;
+const FilePreviewImg = styled.img`
+  width: 200px;
+  height: 200px;
   border-radius: 0.25rem;
   box-sizing: border-box;
-  background-color: #3396f4;
-  font-size: 16px;
-  font-weight: 500;
-  color: #fff;
-  transition: background-color 0.08s ease-in-out;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #2878c3;
-  }
+  object-fit: fill;
 
   @media (max-width: 540px) {
-    font-size: 15px;
+    width: 100%;
+    height: 160px;
+  }
+`;
+
+const TechStackList = styled.ul``;
+
+const TechStackImg = styled.img`
+  margin-right: 8px;
+  width: 24px;
+  height: 24px;
+  border-radius: 2px;
+  object-fit: fill;
+
+  @media (max-width: 540px) {
+    width: 22px;
+    height: 22px;
   }
 `;
 
@@ -594,14 +629,41 @@ const TechStackInfo = styled.div`
   align-items: center;
 `;
 
-const rightGap = css`
-  margin-right: 12px;
+const ClearButton = styled.button`
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  border: none;
+  background-color: transparent;
+  color: #f44336;
+  transition: all 0.12s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    transform: scale(1.15);
+  }
+`;
+
+const CreateTeamButton = styled.button`
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+  background-color: #3396f4;
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+  transition: background-color 0.08s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #2878c3;
+  }
 
   @media (max-width: 540px) {
-    margin-right: 6px;
-  }
-  @media (max-width: 340px) {
-    margin-right: 0;
+    font-size: 15px;
   }
 `;
 
@@ -611,6 +673,17 @@ const techStackRow = css`
 
 const techStackInputWrapper = css`
   position: relative;
+`;
+
+const rightGap = css`
+  margin-right: 12px;
+
+  @media (max-width: 540px) {
+    margin-right: 6px;
+  }
+  @media (max-width: 340px) {
+    margin-right: 0;
+  }
 `;
 
 export default CreateTeamForm;
