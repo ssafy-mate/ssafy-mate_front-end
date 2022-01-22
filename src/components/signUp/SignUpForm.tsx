@@ -1,6 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 import { useForm } from 'react-hook-form';
+
+import { useHistory } from 'react-router-dom';
 
 import styled from '@emotion/styled';
 
@@ -12,6 +14,14 @@ import {
 } from '../../data/regularExpressionData';
 
 import { useEffect } from 'react';
+import {
+  EmailVerificationCodeConfirmRequest,
+  EmailVerificationCodeRequest,
+  SignInResopnse,
+} from '../../types/UserInfomationType';
+import UserService from '../../services/UserService';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 interface SignUpProps {
   signUpEmail: string;
@@ -44,9 +54,26 @@ const SignUpForm: React.FC<SignUpProps> = ({
     formState: { errors, isValid },
   } = useForm<SignUp>({ mode: 'onChange' });
 
-  const [signUpEmailValidation, setSignUpEmailValidation] = useState(true);
+  type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
 
-  const [validationCode, setValidationCode] = useState(true);
+  const history = useHistory();
+
+  const [statusAlertOpen, setStatusAlertOpen] = useState(true);
+  const [statusAlertSeverity, setStatusAlertSeverity] =
+    useState<Severity>('success');
+
+  const [statusAlertText, setStatusAlertText] =
+    useState('교육생 인증에 성공했습니다.');
+
+  const [signUpEmailValidationButton, setSignUpEmailValidationButton] =
+    useState(true);
+
+  const [validationCodeConfirmButton, setValidationCodeConfirmButton] =
+    useState(true);
+
+  const [validationCodeInput, setValidationCodeInput] = useState(true);
+
+  const [codeConfirmButtonText, setSodeConfirmButtonText] = useState('확인');
 
   const signUpEmailOnChange: string = watch('signUpEmail');
 
@@ -54,39 +81,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
   const signUpPasswordOnChange = watch('signUpPassword');
 
-  useEffect(() => {
-    if (errors.signUpEmail) {
-      setSignUpEmailValidation(true);
-    } else if (
-      signUpEmailOnChange !== undefined &&
-      signUpEmailOnChange.length >= 1
-    ) {
-      setSignUpEmailValidation(false);
-    }
-  }, [errors.signUpEmail, signUpEmailOnChange]);
-
-  useEffect(() => {
-    if (errors.verificationCode) {
-      setValidationCode(true);
-    } else if (
-      verificationCodeOnChange !== undefined &&
-      verificationCodeOnChange.length === 8
-    ) {
-      setValidationCode(false);
-    }
-  }, [errors.verificationCode, verificationCodeOnChange]);
-
-  const EmailAuthRequest = () => {
-    //이메일 인증 코드 요청
-  };
-
-  const EmailAuthConfirm = () => {
-    //이메일 인증 코드 확인 요청
-  };
-
-  const goBack = () => {
-    updateSignUpStep(1);
-  }; //다 날려버리기
+  const [resendEmail, setResendEmail] = useState(false);
 
   const updateSignUpProps = (data: SignUp) => {
     const { signUpEmail, signUpPassword } = data;
@@ -95,17 +90,96 @@ const SignUpForm: React.FC<SignUpProps> = ({
     updateSignUpStep(2);
   };
 
-  const onSubmit = (data: SignUp) => {
-    console.log(JSON.stringify(data));
-    //post 요청 보내기
-    updateSignUpProps(data);
-    //SignupCard로 상태 올려보내기
+  useEffect(() => {
+    if (errors.signUpEmail) {
+      setSignUpEmailValidationButton(true);
+    } else if (
+      signUpEmailOnChange !== undefined &&
+      signUpEmailOnChange.length >= 1
+    ) {
+      setSignUpEmailValidationButton(false);
+    }
+  }, [errors.signUpEmail, signUpEmailOnChange]);
 
-    //요청 실패한 경우 modal
+  useEffect(() => {
+    if (errors.verificationCode) {
+      setValidationCodeConfirmButton(true);
+    } else if (
+      verificationCodeOnChange !== undefined &&
+      verificationCodeOnChange.length === 8
+    ) {
+      setValidationCodeConfirmButton(false);
+    }
+  }, [errors.verificationCode, verificationCodeOnChange]);
+
+  const EmailVerificationCodeRequest = async () => {
+    //이메일 인증 코드 요청
+    const data: EmailVerificationCodeRequest = { email: '' };
+    data.email = signUpEmailOnChange;
+    const response: SignInResopnse = await UserService.getEmailVerificationCode(
+      data,
+    );
+    if (response.success) {
+      setValidationCodeInput(false);
+      setSignUpEmailValidationButton(true);
+      setResendEmail(true);
+    } else if (response.status === 401) {
+      //이미 등록된 이메일입니다.alert 주고 로그인 페이지로 넘기기
+      setStatusAlertSeverity('info');
+      setStatusAlertText('이미 가입된 이메일입니다.');
+      setStatusAlertOpen(true);
+      //history.push() 하면 현재 alert 없이 페이지 그냥 넘어간다.
+    } else if (response.status === 500) {
+      //error alert
+      setStatusAlertSeverity('warning');
+      setStatusAlertText('이메일 인증 코드 전송에 실패했습니다.');
+      setStatusAlertOpen(true);
+    }
   };
 
+  const EmailVerificationCodeConfirm = async () => {
+    //이메일 인증 코드 확인 요청
+    const data: EmailVerificationCodeConfirmRequest = { code: '', email: '' };
+    data.email = signUpEmailOnChange;
+    data.code = verificationCodeOnChange;
+    const response: SignInResopnse =
+      await UserService.getEmailVerificationCodeConfirm(data);
+    if (response.success) {
+      setSodeConfirmButtonText('인증 완료');
+      setValidationCodeConfirmButton(true);
+      setValidationCodeInput(true);
+    } else if (response.status === 400) {
+    } else if (response.status === 500) {
+    }
+  };
+
+  const onSubmit = (data: SignUp) => {
+    updateSignUpProps(data);
+  };
+  const alertClose = () => {
+    setStatusAlertOpen(false);
+  };
   return (
     <>
+      {statusAlertOpen && (
+        <SsafyAuthSnackBar
+          open={statusAlertOpen}
+          autoHideDuration={1500}
+          onClose={alertClose}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          <Alert
+            onClose={alertClose}
+            severity={statusAlertSeverity}
+            sx={{ width: '100%' }}
+          >
+            {statusAlertText}
+          </Alert>
+        </SsafyAuthSnackBar>
+      )}
       <Container onSubmit={handleSubmit(onSubmit)}>
         <InputWrapper>
           <RequirementLabel htmlFor="signup-email">이메일</RequirementLabel>
@@ -128,8 +202,8 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
             <AuthButton
               type="button"
-              disabled={signUpEmailValidation}
-              onClick={EmailAuthRequest}
+              disabled={signUpEmailValidationButton}
+              onClick={EmailVerificationCodeRequest}
             >
               이메일 인증
             </AuthButton>
@@ -155,20 +229,23 @@ const SignUpForm: React.FC<SignUpProps> = ({
                   maxLength: 8,
                 })}
                 placeholder="인증코드 8자리 입력"
+                disabled={validationCodeInput}
               />
               <TimeLimit>시간</TimeLimit>
             </VerificationCodeWrapper>
             <AuthButton
               type="button"
-              onClick={EmailAuthConfirm}
-              disabled={validationCode}
+              onClick={EmailVerificationCodeConfirm}
+              disabled={validationCodeConfirmButton}
             >
-              확인
+              {codeConfirmButtonText}
             </AuthButton>
           </ButtonWrapper>
           {errors.verificationCode && (
             <ErrorSpan>올바른 인증 코드가 아닙니다.</ErrorSpan>
           )}
+
+          {resendEmail && <ErrorSpan>이메일 재전송 버튼</ErrorSpan>}
         </InputWrapper>
 
         <InputWrapper>
@@ -185,7 +262,11 @@ const SignUpForm: React.FC<SignUpProps> = ({
             })}
             placeholder="비밀번호"
           />
-          {errors.signUpPassword && (
+          {errors.signUpCheckPassword?.type === 'required' && (
+            <ErrorSpan>필수 입력 항목입니다.</ErrorSpan>
+          )}
+          {(errors.signUpPassword?.type === 'pattern' ||
+            errors.signUpPassword?.type === 'minLength') && (
             <ErrorSpan>
               비밀번호는 영문, 숫자를 포함하여 6자 이상이어야 합니다.
             </ErrorSpan>
@@ -213,15 +294,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
             <ErrorSpan>비밀번호가 일치하지 않습니다.</ErrorSpan>
           )}
         </InputWrapper>
-
-        <ButtonGroup>
-          <PrevButton type="button" onClick={goBack}>
-            이전
-          </PrevButton>
-          <NextButton type="submit" disabled={!isValid}>
-            다음
-          </NextButton>
-        </ButtonGroup>
+        <NextButton type="submit">기본 정보 작성</NextButton>
       </Container>
     </>
   );
@@ -240,12 +313,6 @@ const InputWrapper = styled.div`
 
 const ButtonWrapper = styled.div`
   display: flex;
-`;
-
-const ButtonGroup = styled.div`
-  display: flex;
-  justify-content: space-between;
-  margin-top: 24px;
 `;
 
 const AuthButton = styled.button`
@@ -270,41 +337,32 @@ const AuthButton = styled.button`
   }
 `;
 
-const PrevButton = styled.button`
-  width: 80px;
+const NextButton = styled.button`
+  width: 100%;
   height: 40px;
+  margin-top: 24px;
   border: none;
   border-radius: 0.25rem;
   box-sizing: border-box;
-  background-color: #7c8998;
-  font-size: 14px;
+  background-color: #3396f4;
+  font-size: 16px;
   font-weight: 500;
   color: #fff;
   transition: background-color 0.08s ease-in-out;
   cursor: pointer;
 
   &:hover {
-    background-color: #56677a;
+    background-color: #2878c3;
   }
-`;
-
-const NextButton = styled.button`
-  width: 80px;
-  height: 40px;
-  border: none;
-  border-radius: 0.25rem;
-  box-sizing: border-box;
-  background-color: #3396f4;
-  font-size: 14px;
-  font-weight: 500;
-  color: #fff;
-  transition: background-color 0.08s ease-in-out;
-  cursor: pointer;
 
   &:disabled {
     background-color: #96a0ac;
   }
+  @media (max-width: 540px) {
+    font-size: 15px;
+  }
 `;
+
 const VerificationCodeWrapper = styled.div`
   display: flex;
   justify-content: space-between;
@@ -337,7 +395,13 @@ const InfoInput = styled.input`
     background-color: #fff;
     color: #495057;
   }
-
+  &:disabled {
+    /* background-color: #f8f8fa; */
+    background-color: #dadce0;
+    /* &:hover {
+      border: 1px solid #dadce0;
+    } */
+  }
   @media (max-width: 540px) {
     font-size: 13px;
   }
@@ -376,5 +440,7 @@ const ErrorSpan = styled.span`
 const TimeLimit = styled.span`
   margin-right: 20px;
 `;
-
+const SsafyAuthSnackBar = styled(Snackbar)`
+  height: 20%;
+`;
 export default SignUpForm;
