@@ -1,13 +1,17 @@
-import { rest } from 'msw';
+import { rest, response } from 'msw';
 
 export const authHandlers = [
   rest.get(
     'http://localhost:3000/api/user/sign-up/verification/ssafy',
     async (request, response, context) => {
-      const status: number = 500;
+      const status: number = 200;
 
-      console.log(`[CREATE | /api/user/sign-up], ${JSON.stringify(request)}`);
-      //return response(context.status(404, 'Custom status text'));
+      console.log(
+        `[GET | /api/user/sign-up/verification/ssafy], ${JSON.stringify(
+          request,
+        )}`,
+      );
+
       switch (status) {
         case 200:
           return response(
@@ -24,6 +28,115 @@ export const authHandlers = [
               status: 500,
               success: false,
               message: '',
+            }),
+          );
+      }
+    },
+  ),
+  rest.post(
+    'http://localhost:3000/api/user/sign-up/verification/email',
+    async (request, response, context) => {
+      const status: number = 200;
+
+      console.log(
+        `[POST | /api/user/sign-up/verification/email], ${JSON.stringify(
+          request,
+        )}`,
+      );
+
+      switch (status) {
+        case 200:
+          return response(
+            context.json({
+              status: 200,
+              success: true,
+              message: '',
+            }),
+          );
+        case 401:
+          return response(
+            context.json({
+              status: 401,
+              success: false,
+              message: '이미 등록된 이메일입니다.',
+            }),
+          );
+        case 500:
+          return response(
+            context.json({
+              status: 500,
+              success: false,
+              message: 'Internal Server Error, 이메일 전송 실패',
+            }),
+          );
+      }
+    },
+  ),
+  rest.put(
+    'http://localhost:3000/api/user/sign-up/verification/email',
+    async (request, response, context) => {
+      const status: number = 200;
+
+      console.log(
+        `[PUT | /api/user/sign-up/verification/email], ${JSON.stringify(
+          request,
+        )}`,
+      );
+
+      switch (status) {
+        case 200:
+          return response(
+            context.json({
+              status: 200,
+              success: true,
+              message: '',
+            }),
+          );
+        case 401:
+          return response(
+            context.json({
+              status: 400,
+              success: false,
+              message: '올바른 인증 코드가 아닙니다.',
+            }),
+          );
+        case 500:
+          return response(
+            context.json({
+              status: 403,
+              success: false,
+              message: '입력 유효 시간이 초과되었습니다.',
+            }),
+          );
+      }
+    },
+  ),
+  rest.post(
+    'http://localhost:3000/api/user',
+    async (request, response, context) => {
+      const status: number = 200;
+
+      console.log(
+        `[POST | /api/user/sign-up/verification/email], ${JSON.stringify(
+          request,
+        )}`,
+      );
+
+      switch (status) {
+        case 200:
+          return response(
+            context.json({
+              status: 200,
+              success: true,
+              message: '',
+            }),
+          );
+        case 500:
+          return response(
+            context.json({
+              status: 403,
+              success: false,
+              message: 'Internal Server Error, 계정 생성 실패',
             }),
           );
       }
