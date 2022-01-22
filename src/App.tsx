@@ -26,6 +26,7 @@ import TeamSpecializationProjectPage from './pages/TeamSpecializationProjectPage
 import StduentSpecializationProjectPage from './pages/StduentSpecializationProjectPage';
 import AutonomyProjectPage from './pages/AutonomyProjectPage';
 import NotFoundPage from './pages/NotFoundPage';
+import ChattingPage from './pages/ChattingPage';
 
 const App: React.FC = () => {
   return (
@@ -61,6 +62,7 @@ const App: React.FC = () => {
             path="/projects/autonomy/"
             component={AutonomyProjectPage}
           />
+          <Route exact path="/chatting/" component={ChattingPage} />
           <Route component={NotFoundPage} />
         </Switch>
       </Router>
