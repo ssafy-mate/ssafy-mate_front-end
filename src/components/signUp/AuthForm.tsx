@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import styled from '@emotion/styled';
+import UserService from '../../services/UserService';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 import {
   exceptDefaultReg,
@@ -12,12 +15,7 @@ import {
 } from '../../data/regularExpressionData';
 import { campusListData } from '../../data/ssafyData';
 
-import { SsafyAuth } from '../../types/commonType';
-
-import UserService from '../../services/UserService';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
-import reset from '../../styles/reset';
+import { SignInResopnse, SsafyAuth } from '../../types/UserInfomationType';
 
 interface SsafyTrack {
   id: string;
@@ -57,7 +55,7 @@ const AuthForm: React.FC<Props> = ({
     register,
     handleSubmit,
     reset,
-    formState: { errors, isValid },
+    formState: { errors },
   } = useForm<SsafyAuth>({ mode: 'onChange' });
   const selectedCampus = watch('campus', '');
 
@@ -86,7 +84,7 @@ const AuthForm: React.FC<Props> = ({
   };
 
   const AuthRequest = async (data: SsafyAuth) => {
-    const response = await UserService.getSsafyAuth(data);
+    const response: SignInResopnse = await UserService.getSsafyAuth(data);
 
     if (response.success) {
       updateSsafyAuthProps(data);
@@ -95,7 +93,7 @@ const AuthForm: React.FC<Props> = ({
     }
   };
 
-  const alertClose = async () => {
+  const alertClose = () => {
     setFailAlertOpen(false);
     reset();
   };
@@ -103,7 +101,7 @@ const AuthForm: React.FC<Props> = ({
   return (
     <>
       {failAlertOpen && (
-        <CustonSnackBar
+        <SsafyAuthSnackBar
           open={failAlertOpen}
           autoHideDuration={1500}
           onClose={alertClose}
@@ -114,12 +112,12 @@ const AuthForm: React.FC<Props> = ({
         >
           <FailAlert
             onClose={alertClose}
-            severity="error"
+            severity="info"
             sx={{ width: '100%' }}
           >
             교육생 인증에 실패했습니다.
           </FailAlert>
-        </CustonSnackBar>
+        </SsafyAuthSnackBar>
       )}
 
       <Container onSubmit={handleSubmit(onSubmit)}>
@@ -370,7 +368,7 @@ const ErrorSpan = styled.span`
 
 const FailAlert = styled(Alert)``;
 
-const CustonSnackBar = styled(Snackbar)`
+const SsafyAuthSnackBar = styled(Snackbar)`
   height: 20%;
 `;
 export default AuthForm;

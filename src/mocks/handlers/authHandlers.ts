@@ -1,4 +1,4 @@
-import { rest, response } from 'msw';
+import { rest } from 'msw';
 
 export const authHandlers = [
   rest.get(
