@@ -24,7 +24,7 @@ const MenuBar: React.FC<MenuBarProps> = ({ isActive, onOpenMenuBar }) => {
 
 const Bar = styled.button<BarProps>`
   position: relative;
-  padding: 0.5rem;
+  padding: 8px;
   border: none;
   background-color: transparent;
   cursor: pointer;
