@@ -6,6 +6,7 @@ import { Stomp, CompatClient } from '@stomp/stompjs';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+import SendIcon from '@mui/icons-material/Send';
 
 const ChattingForm: React.FC = () => {
   const [messageList, setMessageList] = useState<string[]>([]);
@@ -98,36 +99,47 @@ const ChattingForm: React.FC = () => {
   };
 
   return (
-    <ChattingContianer>
-      <ChattingList></ChattingList>
-      <ChattingArea>
-        <ChattingFlow>
-          <MessageWrapper>
-            {messageList.length > 0
-              ? messageList.map((message, index) => (
-                  <MessageItem key={index}>
-                    <p>{message}</p>
-                  </MessageItem>
-                ))
-              : null}
-          </MessageWrapper>
-        </ChattingFlow>
-        <ChattingTypingWrapper>
-          <textarea
-            ref={messageInput}
-            onKeyPress={handleMessageSendKeyPress}
-            placeholder="메시지를 입력해주세요"
-          />
-          <button onClick={handleSendMessage}>Send</button>
-        </ChattingTypingWrapper>
-      </ChattingArea>
-    </ChattingContianer>
+    <ChatContianer>
+      <ChatListWrapper>
+        <ChatListSidebar></ChatListSidebar>
+      </ChatListWrapper>
+      <ChatRoomSection>
+        <ChatRoomWrapper>
+          <ChatRoomLogWrapper>
+            <ChatRoomNicknameBar></ChatRoomNicknameBar>
+            <ChatRoomLog>
+              <MessageWrapper>
+                {messageList.length > 0
+                  ? messageList.map((message, index) => (
+                      <MessageItem key={index}>
+                        <p>{message}</p>
+                      </MessageItem>
+                    ))
+                  : null}
+              </MessageWrapper>
+            </ChatRoomLog>
+          </ChatRoomLogWrapper>
+          <ChatTypingWrapper>
+            <textarea
+              ref={messageInput}
+              onKeyPress={handleMessageSendKeyPress}
+              placeholder="메시지를 입력해주세요"
+            />
+            <button onClick={handleSendMessage}>
+              <SendIcon css={SendButton}></SendIcon>
+            </button>
+          </ChatTypingWrapper>
+        </ChatRoomWrapper>
+      </ChatRoomSection>
+    </ChatContianer>
   );
 };
 
-const ChattingContianer = styled.div`
+const ChatContianer = styled.div`
   display: flex;
   justify-content: center;
+
+  box-sizing: border-box;
 
   width: 100%;
   height: 600px;
@@ -145,17 +157,25 @@ const ChattingContianer = styled.div`
   }
 `;
 
-const ChattingList = styled.div`
+const ChatListWrapper = styled.div`
   display: flex;
-  flex-wrap: wrap;
+`;
+
+const ChatListSidebar = styled.nav`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 300px;
   margin-left: 1em;
   margin-block-start: 1em;
   margin-block-end: 1em;
-  border: solid 1px #b4b4b4;
+  /* border: solid 1px #b4b4b4; */
+  border-left: 1px solid #b4b4b4;
+  border-top: 1px solid #b4b4b4;
+  border-bottom: 1px solid #b4b4b4;
 `;
 
-const ChattingListItem = styled.li`
+const ChatListItem = styled.li`
   display: flex;
   flex-wrap: wrap;
   width: 200px;
@@ -166,7 +186,7 @@ const ChattingListItem = styled.li`
   margin-right: 1em;
 `;
 
-const ChattingArea = styled.div`
+const ChatRoomSection = styled.section`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
@@ -176,16 +196,33 @@ const ChattingArea = styled.div`
   border: solid 1px #b4b4b4;
 `;
 
-const ChattingFlow = styled.div`
+const ChatRoomWrapper = styled.div`
   display: flex;
-  flex-wrap: wrap;
-  width: 600px;
-  height: 480px;
-  margin-block-start: 1em;
-  margin-left: 1em;
-  margin-right: 1em;
-  /* border: solid 1px #b4b4b4; */
-  overflow-y: auto;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+`;
+
+const ChatRoomLogWrapper = styled.div`
+  position: relative;
+  display: flex;
+  flex: 1 1 0px;
+  flex-direction: column;
+  overflow: hidden;
+`;
+
+const ChatRoomNicknameBar = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 64px;
+  border-bottom: 1px solid #b4b4b4;
+  padding: 0px 20px;
+`;
+
+const ChatRoomLog = styled.div`
+  overflow: hidden auto;
+  padding: 0px 20px;
 `;
 
 const MessageWrapper = styled.div`
@@ -210,33 +247,42 @@ const MessageItem = styled.div`
   }
 `;
 
-const ChattingTypingWrapper = styled.div`
+const ChatTypingWrapper = styled.div`
   display: flex;
-  align-items: center;
-  width: 100%;
+  flex-direction: row;
+  position: relative;
+  margin: 12px;
   height: 24px;
-  margin-left: 1em;
-  margin-right: 1em;
-  gap: 0.5em;
   border-radius: 0.5rem;
   padding: 0.8em;
   --tw-bg-opacity: 1;
   background-color: rgba(243, 244, 246, var(--tw-bg-opacity));
 
   textarea {
-    /* margin: 12px 12px 12px; */
     width: 100%;
-    line-height: 100%;
+    line-height: 150%;
     flex-grow: 1;
+    padding: 0px;
     resize: none;
     outline: none;
     border: none;
     overflow: auto;
     overflow-wrap: break-word;
-
     --tw-bg-opacity: 1;
     background-color: rgba(243, 244, 246, var(--tw-bg-opacity));
   }
+
+  button {
+    outline: none;
+    border: none;
+    --tw-bg-opacity: 1;
+    background-color: rgba(243, 244, 246, var(--tw-bg-opacity));
+  }
+`;
+
+const SendButton = css`
+  cursor: pointer;
+  color: #3396f4;
 `;
 
 export default ChattingForm;
