@@ -9,16 +9,3 @@ export interface TechStack {
 export interface TechStackTagProps
   extends TechStack,
     ReturnType<AutocompleteGetTagProps> {}
-
-export interface SsafyAuth {
-  campus: string;
-  ssafyTrack: string;
-  studentNumber: string;
-  studentName: string;
-}
-
-export interface SsafyAuthResopnse {
-  status: number;
-  success: boolean;
-  message: string;
-}
