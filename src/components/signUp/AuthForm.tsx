@@ -4,8 +4,6 @@ import { useForm } from 'react-hook-form';
 
 import styled from '@emotion/styled';
 
-import Alert from '@mui/material/Alert';
-
 import {
   exceptDefaultReg,
   onlyKoreanReg,
@@ -16,10 +14,10 @@ import { campusListData } from '../../data/ssafyData';
 
 import { SsafyAuth } from '../../types/commonType';
 
-import getSsafyAuth from '../../services/UserService';
-import Stack from '@mui/material/Stack';
-import AlertTitle from '@mui/material/AlertTitle';
 import UserService from '../../services/UserService';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import reset from '../../styles/reset';
 
 interface SsafyTrack {
   id: string;
@@ -52,10 +50,13 @@ const AuthForm: React.FC<Props> = ({
   updateSignUpStep,
 }) => {
   const [selectedTracks, setSelectedTracks] = useState<SsafyTrack[]>([]);
+  const [failAlertOpen, setFailAlertOpen] = useState(false);
+
   const {
     watch,
     register,
     handleSubmit,
+    reset,
     formState: { errors, isValid },
   } = useForm<SsafyAuth>({ mode: 'onChange' });
   const selectedCampus = watch('campus', '');
@@ -89,11 +90,38 @@ const AuthForm: React.FC<Props> = ({
 
     if (response.success) {
       updateSsafyAuthProps(data);
+    } else {
+      setFailAlertOpen(true);
     }
+  };
+
+  const alertClose = async () => {
+    setFailAlertOpen(false);
+    reset();
   };
 
   return (
     <>
+      {failAlertOpen && (
+        <CustonSnackBar
+          open={failAlertOpen}
+          autoHideDuration={1500}
+          onClose={alertClose}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          <FailAlert
+            onClose={alertClose}
+            severity="error"
+            sx={{ width: '100%' }}
+          >
+            교육생 인증에 실패했습니다.
+          </FailAlert>
+        </CustonSnackBar>
+      )}
+
       <Container onSubmit={handleSubmit(onSubmit)}>
         <SsafyInfo>
           <InputWrapper>
@@ -179,9 +207,7 @@ const AuthForm: React.FC<Props> = ({
           )}
         </InputWrapper>
 
-        <AuthButton type="submit" disabled={!isValid}>
-          교육생 인증
-        </AuthButton>
+        <AuthButton type="submit">교육생 인증</AuthButton>
       </Container>
     </>
   );
@@ -342,4 +368,9 @@ const ErrorSpan = styled.span`
   color: #f44336;
 `;
 
+const FailAlert = styled(Alert)``;
+
+const CustonSnackBar = styled(Snackbar)`
+  height: 20%;
+`;
 export default AuthForm;
