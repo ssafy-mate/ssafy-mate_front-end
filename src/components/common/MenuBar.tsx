@@ -3,18 +3,18 @@ import React from 'react';
 import styled from '@emotion/styled';
 
 interface MenuBarProps {
-  isActive: boolean;
-  onOpenMenuBar: () => void;
+  isExpanded: boolean;
+  onExpandMenu: () => void;
 }
 
 interface BarProps {
-  isActive: boolean;
+  isExpanded: boolean;
   onClick: () => void;
 }
 
-const MenuBar: React.FC<MenuBarProps> = ({ isActive, onOpenMenuBar }) => {
+const MenuBar: React.FC<MenuBarProps> = ({ isExpanded, onExpandMenu }) => {
   return (
-    <Bar isActive={isActive} onClick={onOpenMenuBar}>
+    <Bar isExpanded={isExpanded} onClick={onExpandMenu}>
       <Line />
       <Line />
       <Line />
@@ -31,14 +31,14 @@ const Bar = styled.button<BarProps>`
 
   & span:nth-of-type(1) {
     transform: ${(props) =>
-      props.isActive ? 'rotate(45deg) translate(2px, 2px)' : ''};
+      props.isExpanded ? 'rotate(45deg) translate(2px, 2px)' : ''};
   }
   & span:nth-of-type(2) {
-    display: ${(props) => (props.isActive ? 'none' : 'block')};
+    display: ${(props) => (props.isExpanded ? 'none' : 'block')};
   }
   & span:nth-of-type(3) {
     transform: ${(props) =>
-      props.isActive ? 'rotate(-45deg) translate(2px, -2px)' : ''};
+      props.isExpanded ? 'rotate(-45deg) translate(2px, -2px)' : ''};
   }
 `;
 
