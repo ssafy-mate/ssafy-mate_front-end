@@ -356,7 +356,7 @@ const TeamList = styled.ul`
   display: flex;
   flex-wrap: wrap;
 
-  @media (max-width: 1015px) {
+  @media (max-width: 1199px) {
     flex-direction: column;
   }
 `;
@@ -370,12 +370,11 @@ const TeamItem = styled.li`
   border: 1px solid #d7e2eb;
   border-radius: 4px;
   box-sizing: border-box;
-  transition: all 0.12s ease-in-out;
+  transition: all 0.08s ease-in-out;
   cursor: pointer;
 
   &:hover {
     border: 1px solid #84c0f8;
-    box-shadow: 4px 12px 30px 4px rgb(0 0 0 / 6%);
     background-color: #f8fbfe;
 
     & h5 {
@@ -392,7 +391,7 @@ const TeamItem = styled.li`
     filter: grayscale(80%);
   }
 
-  @media (max-width: 1015px) {
+  @media (max-width: 1199px) {
     width: 100%;
     max-width: 100%;
 
@@ -435,13 +434,13 @@ const ItemBody = styled.div`
 
 const TeamTitle = styled.h5`
   width: 100%;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   font-size: 18px;
   line-height: 1.5;
   color: #263747;
   transition: all 0.12s ease-in-out;
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     font-size: 16px;
   }
 `;
@@ -449,11 +448,11 @@ const TeamTitle = styled.h5`
 const TeamCampus = styled.span``;
 
 const TeamName = styled.h6`
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   font-size: 14px;
   color: #98a8b9;
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     font-size: 13px;
   }
 `;
@@ -462,7 +461,7 @@ const TeamStatusList = styled.ul`
   display: flex;
   margin-bottom: 6px;
 
-  @media (max-width: 472px) {
+  @media (max-width: 575px) {
     flex-direction: column;
   }
 `;
@@ -470,7 +469,7 @@ const TeamStatusList = styled.ul`
 const TeamStatusItem = styled.li`
   font-size: 14px;
   color: #98a8b9;
-  line-height: 1.5;
+  line-height: 1.6;
 
   svg {
     margin-right: 2px;
@@ -491,14 +490,14 @@ const TeamStatusItem = styled.li`
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     font-size: 13px;
 
     svg {
       font-size: 15px;
     }
   }
-  @media (max-width: 472px) {
+  @media (max-width: 575px) {
     &:not(:last-of-type) {
       &:after {
         content: none;
