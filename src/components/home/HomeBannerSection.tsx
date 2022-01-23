@@ -12,12 +12,12 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { HomeBannerSlideData } from '../../../types/commonType';
+import { HomeBannerSlideData } from '../../types/commonTypes';
 
-import HomeBannerCard from './HomeBannerCard';
+import HomeBannerCard from '../common/banner/HomeBannerCard';
 
 const HomeBannerSection: React.FC = () => {
-  const HomeBannerSectionData: HomeBannerSlideData[] = [
+  const HomeBannerSlideDataList: HomeBannerSlideData[] = [
     {
       head: 'SSAFY 2학기 프로젝트',
       subHead: '공통 프로젝트',
@@ -69,17 +69,17 @@ const HomeBannerSection: React.FC = () => {
           }}
           className="mySwiper"
         >
-          {HomeBannerSectionData.map((banner) => (
+          {HomeBannerSlideDataList.map((homeBannerSlideData) => (
             <SwiperSlide
-              key={banner.subHead}
-              style={{ backgroundColor: banner.hexColorCode }}
+              key={homeBannerSlideData.subHead}
+              style={{ backgroundColor: homeBannerSlideData.hexColorCode }}
             >
               <HomeBannerCard
-                head={banner.head}
-                subHead={banner.subHead}
-                descriptions={banner.descriptions}
-                pageUrl={banner.pageUrl}
-                imgUrl={banner.imgUrl}
+                head={homeBannerSlideData.head}
+                subHead={homeBannerSlideData.subHead}
+                descriptions={homeBannerSlideData.descriptions}
+                pageUrl={homeBannerSlideData.pageUrl}
+                imgUrl={homeBannerSlideData.imgUrl}
               />
             </SwiperSlide>
           ))}

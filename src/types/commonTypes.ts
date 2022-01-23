@@ -18,13 +18,17 @@ export interface HomeBannerCardData {
   imgUrl: string;
 }
 
+export interface HomeBannderCardProps extends HomeBannerCardData {}
+
 export interface HomeBannerSlideData extends HomeBannerCardData {
   hexColorCode: string;
 }
 
-export interface ProjectLinkCardProps {
+export interface ProjectLinkCardData {
   projectName: string;
   pageUrl: string;
   imgUrl: string;
   hexColorCode: string;
 }
+
+export interface ProjectLinkCardProps extends ProjectLinkCardData {}

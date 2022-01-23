@@ -2,9 +2,9 @@ import { Link } from 'react-router-dom';
 
 import styled from '@emotion/styled';
 
-import { HomeBannerCardData } from '../../../types/commonType';
+import { HomeBannderCardProps } from '../../../types/commonTypes';
 
-const HomeBannerCard: React.FC<HomeBannerCardData> = ({
+const HomeBannerCard: React.FC<HomeBannderCardProps> = ({
   head,
   subHead,
   descriptions,

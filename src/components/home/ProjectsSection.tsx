@@ -1,11 +1,11 @@
 import styled from '@emotion/styled';
 
-import { ProjectLinkCardProps } from '../../types/commonTypes';
+import { ProjectLinkCardData } from '../../types/commonTypes';
 
 import ProjectLinkCard from './ProjectLinkCard';
 
 const ProjectsSection: React.FC = () => {
-  const projectLinkCardDataList: ProjectLinkCardProps[] = [
+  const projectLinkCardDataList: ProjectLinkCardData[] = [
     {
       projectName: '공통 프로젝트',
       pageUrl: '/projects/common/teams',
