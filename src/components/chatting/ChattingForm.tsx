@@ -158,7 +158,12 @@ const ChattingForm: React.FC = () => {
       <ChatRoomSection>
         <ChatRoomWrapper>
           <ChatRoomMessageWrapper>
-            <ChatRoomNicknameBar></ChatRoomNicknameBar>
+            <ChatRoomUserNameBar>
+              <ChatRoomHeaderProfile>
+                <img></img>
+                <div className="userName">dummy userName</div>
+              </ChatRoomHeaderProfile>
+            </ChatRoomUserNameBar>
             <ChatRoomMessageList>
               <MessageWrapper ref={chatRoomMessageRef}>
                 {messageList.length > 0
@@ -288,7 +293,7 @@ const ChatRoomMessageWrapper = styled.div`
   overflow: hidden;
 `;
 
-const ChatRoomNicknameBar = styled.div`
+const ChatRoomUserNameBar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -296,6 +301,25 @@ const ChatRoomNicknameBar = styled.div`
   min-height: 64px;
   border-bottom: 1px solid #b4b4b4;
   padding: 0px 20px;
+`;
+
+const ChatRoomHeaderProfile = styled.div`
+  display: flex;
+  align-items: center;
+
+  &img {
+    margin-right: 12px;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #eaebef;
+    border-radius: 50%;
+    background-color: #eaebef;
+  }
+
+  &.userName {
+    display: inline-flex;
+    align-items: center;
+  }
 `;
 
 const ChatRoomMessageList = styled.div`
