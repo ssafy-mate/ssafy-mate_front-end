@@ -6,13 +6,22 @@ import { Stomp, CompatClient } from '@stomp/stompjs';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+
 import SendIcon from '@mui/icons-material/Send';
 
+import { MessageType } from '../../types/messageType';
+
 const ChattingForm: React.FC = () => {
-  const [messageList, setMessageList] = useState<string[]>([]);
+  const date = new Date();
+  const dummyData: MessageType = {
+    userId: 100,
+    userName: 'dummy',
+    content: '상대방 더미 데이터',
+    sentTime: date.toString(),
+  };
+  const [messageList, setMessageList] = useState<MessageType[]>([dummyData]);
   const messageInputRef = useRef<HTMLTextAreaElement>(null);
   const chatRoomMessageRef = useRef<HTMLDivElement>(null);
-  const date = new Date();
 
   // SockJS 로 웹소켓 연결, Stomp 프로토콜을 이용
   const [stompClient, setStompClient] = useState<CompatClient>(() =>
@@ -23,7 +32,7 @@ const ChattingForm: React.FC = () => {
 
   // send,recive 메시지 숨기기
   // stompClient.debug = () => {};
-  const username = 'test';
+  const userId: number = 111;
 
   useEffect(() => {
     stompClient.connect({}, onConnected);
@@ -44,7 +53,7 @@ const ChattingForm: React.FC = () => {
       '/app/chat.addUser',
       {},
       JSON.stringify({
-        sender: username,
+        sender: userId,
         type: 'JOIN',
       }),
     );
@@ -59,7 +68,7 @@ const ChattingForm: React.FC = () => {
       message.content = message.sender + ' left!';
     }
 
-    addMessageToList(message.content);
+    addMessageToList(message);
   };
 
   const handleSendMessage = (
@@ -68,17 +77,9 @@ const ChattingForm: React.FC = () => {
     const messageContent = messageInputRef.current?.value.trim();
 
     if (messageContent && stompClient) {
-      const chatMessage = {
-        content: messageInputRef.current?.value,
-        sender: username,
-        type: 'CHAT',
-      };
+      const curMessage = makeMessageFormat(userId);
 
-      stompClient.send(
-        '/app/chat.sendMessage',
-        {},
-        JSON.stringify(chatMessage),
-      );
+      stompClient.send('/app/chat.sendMessage', {}, JSON.stringify(curMessage));
     }
 
     messageInputInitialize();
@@ -92,15 +93,27 @@ const ChattingForm: React.FC = () => {
         try {
           handleSendMessage(event);
         } catch {
-          addMessageToList(messageInputRef.current?.value as string);
+          const curMessage = makeMessageFormat(userId);
+          addMessageToList(curMessage);
           messageInputInitialize();
         }
       }
     }
-    chatLogScrollDown();
   };
 
-  const addMessageToList = (message: string) => {
+  const makeMessageFormat = (setUserId: number): MessageType => {
+    const currentTime = currentTimeCalculate();
+    const chatMessage: MessageType = {
+      userId: setUserId,
+      content: messageInputRef.current?.value as string,
+      userName: 'test',
+      sentTime: currentTime,
+    };
+
+    return chatMessage;
+  };
+
+  const addMessageToList = (message: MessageType) => {
     setMessageList((preMessageList) => {
       return [...preMessageList, message];
     });
@@ -149,27 +162,36 @@ const ChattingForm: React.FC = () => {
             <ChatRoomMessageList>
               <MessageWrapper ref={chatRoomMessageRef}>
                 {messageList.length > 0
-                  ? messageList.map((message, index) => (
-                      <MessageBoxRightWrapper key={index}>
-                        <MessageBoxRightContent>
-                          <MessageTimeBox>
-                            <div className="message_date">
-                              {currentTimeCalculate()}
-                            </div>
-                          </MessageTimeBox>
-                          <p>{message}</p>
-                        </MessageBoxRightContent>
-                        {/* <MessageBoxLeftContent key={index}>
-                          <img></img>
-                          <p>{message}</p>
-                          <MessageTimeBox>
-                            <div className="message_date">
-                              {currentTimeCalculate()}
-                            </div>
-                          </MessageTimeBox>
-                        </MessageBoxLeftContent> */}
-                      </MessageBoxRightWrapper>
-                    ))
+                  ? messageList.map((message, index) => {
+                      if (message.userId === userId) {
+                        return (
+                          <MessageBoxRightWrapper key={index}>
+                            <MessageBoxRightContent>
+                              <MessageTimeBox>
+                                <div className="message_date">
+                                  {message.sentTime}
+                                </div>
+                              </MessageTimeBox>
+                              <p>{message.content}</p>
+                            </MessageBoxRightContent>
+                          </MessageBoxRightWrapper>
+                        );
+                      } else {
+                        return (
+                          <MessageBoxLeftWrapper>
+                            <MessageBoxLeftContent key={index}>
+                              <img></img>
+                              <p>{message.content}</p>
+                              <MessageTimeBox>
+                                <div className="message_date">
+                                  {message.sentTime}
+                                </div>
+                              </MessageTimeBox>
+                            </MessageBoxLeftContent>
+                          </MessageBoxLeftWrapper>
+                        );
+                      }
+                    })
                   : null}
               </MessageWrapper>
             </ChatRoomMessageList>
