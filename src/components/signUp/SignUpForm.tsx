@@ -18,7 +18,7 @@ import { useEffect } from 'react';
 import {
   EmailVerificationCodeConfirmRequest,
   EmailVerificationCodeRequest,
-  SignInResopnse,
+  SignInResponse,
 } from '../../types/UserInfomationType';
 import UserService from '../../services/UserService';
 import Snackbar from '@mui/material/Snackbar';
@@ -69,7 +69,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
   //alert 색 다르게
   type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
 
-  //const history = useHistory();
+  const history = useHistory();
 
   //alert 열건지 말건지
   const [statusAlertOpen, setStatusAlertOpen] = useState(true);
@@ -192,7 +192,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
     //이메일 인증 코드 요청 api
     const data: EmailVerificationCodeRequest = { email: '' };
     data.email = signUpEmailOnChange;
-    const response: SignInResopnse = await UserService.getEmailVerificationCode(
+    const response: SignInResponse = await UserService.getEmailVerificationCode(
       data,
     );
     if (response.success) {
@@ -228,6 +228,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
       setStatusAlertOpen(true);
 
       //로그인 창으로 이동
+      // history.push('/');
     } else if (response.status === 500) {
       //서버에서 이메일 인증 코드 전송을 실패한 경우 alert 표시
       setStatusAlertSeverity('warning');
@@ -247,7 +248,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
     const data: EmailVerificationCodeConfirmRequest = { code: '', email: '' };
     data.email = signUpEmailOnChange;
     data.code = verificationCodeOnChange;
-    const response: SignInResopnse =
+    const response: SignInResponse =
       await UserService.getEmailVerificationCodeConfirm(data);
 
     if (response.success) {
