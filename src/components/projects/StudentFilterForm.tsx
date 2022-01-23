@@ -1,6 +1,11 @@
-import React from 'react';
-
 import styled from '@emotion/styled';
+
+import {
+  ssafyTrackListData,
+  campusListData,
+  projectListData,
+} from '../../data/ssafyData';
+import { jobListData } from '../../data/jobListData';
 
 const StudentFilterForm: React.FC = () => {
   return (
@@ -11,32 +16,34 @@ const StudentFilterForm: React.FC = () => {
             <option value="default" disabled>
               캠퍼스
             </option>
-            <option value="서울">서울</option>
-            <option value="대전">대전</option>
-            <option value="광주">광주</option>
-            <option value="구미">구미</option>
-            <option value="부울경">부울경</option>
+            {campusListData.map((campus) => (
+              <option key={campus.id} value={campus.area}>
+                {campus.area}
+              </option>
+            ))}
           </FilterSelect>
           <FilterSelect
             name="specializaion-project-track"
             defaultValue={'default'}
           >
             <option value="default" disabled>
-              트랙
+              특화 프로젝트 트랙
             </option>
-            <option value="인공지능">인공지능</option>
-            <option value="빅데이터">빅데이터</option>
-            <option value="블록체인">블록체인</option>
-            <option value="IoT 제어">IoT 제어</option>
+            {projectListData.map((project) => (
+              <option key={project.id} value={project.name}>
+                {project.name}
+              </option>
+            ))}
           </FilterSelect>
           <FilterSelect name="job1" defaultValue={'default'}>
             <option value="default" disabled>
               희망 직무
             </option>
-            <option value="프론트엔드 (Front-end)">
-              프론트엔드 (Front-end)
-            </option>
-            <option value="백엔드 (Back-end)">백엔드 (Back-end)</option>
+            {jobListData.map((job) => (
+              <option key={job.id} value={job.name}>
+                {job.name}
+              </option>
+            ))}
           </FilterSelect>
         </FilterList>
         <FilterList>
@@ -44,10 +51,11 @@ const StudentFilterForm: React.FC = () => {
             <option value="default" disabled>
               교육 트랙
             </option>
-            <option value="전공자 (Java Track)">전공자 (Java Track)</option>
-            <option value="비전공자 (Python Track)">
-              비전공자 (Python Track)
-            </option>
+            {ssafyTrackListData.map((ssafyTrack) => (
+              <option key={ssafyTrack.id} value={ssafyTrack.name}>
+                {ssafyTrack.name}
+              </option>
+            ))}
           </FilterSelect>
           <FilterInput
             type="text"
@@ -79,7 +87,7 @@ const FilterList = styled.div`
   justify-content: space-between;
   margin-bottom: 8px;
 
-  @media (max-width: 540px) {
+  @media (max-width: 767px) {
     margin-bottom: 0px;
     flex-direction: column;
     align-items: center;
@@ -122,8 +130,8 @@ const FilterSelect = styled.select`
     margin: 0 12px;
   }
 
-  @media (max-width: 540px) {
-    max-width: 540px;
+  @media (max-width: 767px) {
+    max-width: 100%;
     height: 38px;
     margin-bottom: 8px;
     font-size: 14px;
@@ -149,7 +157,6 @@ const FilterInput = styled.input`
   color: #263747;
   transition: color 0.08s ease-in-out, background-color 0.08s ease-in-out,
     border-color 0.08s ease-in-out, box-shadow 0.08s ease-in-out;
-  cursor: pointer;
 
   &:hover {
     border: 1px solid #3396f4;
@@ -165,8 +172,8 @@ const FilterInput = styled.input`
     margin: 0 12px;
   }
 
-  @media (max-width: 540px) {
-    max-width: 540px;
+  @media (max-width: 767px) {
+    max-width: 100%;
     height: 38px;
     margin-bottom: 8px;
     font-size: 14px;
