@@ -36,12 +36,12 @@ const BannerCard = styled(Link)`
   box-sizing: border-box;
   color: #fff;
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     flex-direction: column;
     justify-content: space-around;
     height: 480px;
   }
-  @media (max-width: 576px) {
+  @media (max-width: 575px) {
     height: 440px;
   }
 
@@ -56,7 +56,7 @@ const InfoWrapper = styled.div`
   margin-right: 24px;
   padding: 48px 0;
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     margin-right: 0;
     margin-bottom: 20px;
     padding: 12px 0 0 0;
@@ -66,7 +66,7 @@ const InfoWrapper = styled.div`
 const ImgWrapper = styled.div`
   height: 280px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     height: 220px;
   }
 `;
@@ -74,10 +74,10 @@ const ImgWrapper = styled.div`
 const Img = styled.img`
   height: 280px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     height: 220px;
   }
-  @media (max-width: 576px) {
+  @media (max-width: 575px) {
     height: 180px;
   }
 `;
@@ -88,10 +88,10 @@ const Head = styled.h1`
   line-height: 1.5;
   text-align: left;
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     margin-bottom: 6px;
   }
-  @media (max-width: 576px) {
+  @media (max-width: 575px) {
     margin-bottom: 4px;
     font-size: 12px;
   }
@@ -104,11 +104,11 @@ const SubHead = styled.h2`
   line-height: 1.6;
   text-align: left;
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     margin-bottom: 16px;
     font-size: 26px;
   }
-  @media (max-width: 576px) {
+  @media (max-width: 575px) {
     margin-bottom: 12px;
     font-size: 24px;
   }
@@ -120,7 +120,7 @@ const Description = styled.p`
   color: #d2d2d2;
   text-align: left;
 
-  @media (max-width: 576px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;

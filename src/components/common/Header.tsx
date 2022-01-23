@@ -22,7 +22,7 @@ const Header: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const isMobile = useMediaQuery({
-    query: '(max-width: 992px)',
+    query: '(max-width: 991px)',
   });
 
   const handleExpandMenu = () => {
@@ -118,7 +118,7 @@ const Wrapper = styled.div`
   padding: 6px 16px;
   box-sizing: border-box;
 
-  @media (max-width: 992px) {
+  @media (max-width: 991px) {
     flex-direction: column;
     padding-top: 0;
     padding-bottom: 0;
@@ -128,7 +128,7 @@ const Wrapper = styled.div`
 const BrandWrapper = styled.div`
   height: 34px;
 
-  @media (max-width: 992px) {
+  @media (max-width: 991px) {
     display: flex;
     justify-content: space-between;
     width: 100%;
@@ -168,7 +168,7 @@ const LogoName = styled.span`
 const MenuList = styled.ul<MenuListProps>`
   display: flex;
 
-  @media (max-width: 992px) {
+  @media (max-width: 991px) {
     overflow-y: hidden;
     flex-direction: column;
     width: 100%;
@@ -199,7 +199,7 @@ const PageLink = styled(Link)`
     color: #fff;
   }
 
-  @media (max-width: 992px) {
+  @media (max-width: 991px) {
     padding: 0;
     font-size: 15px;
     line-height: 1.4669;
