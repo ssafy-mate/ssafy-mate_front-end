@@ -172,7 +172,7 @@ const ChattingForm: React.FC = () => {
                   ? messageList.map((message, index) => {
                       if (message.userId === userId) {
                         return (
-                          <MessageBoxRightWrapper key={index}>
+                          <MessageBoxWrapper key={index}>
                             <MessageBoxRightContent>
                               <MessageTimeBox>
                                 <div className="message_date">
@@ -181,11 +181,11 @@ const ChattingForm: React.FC = () => {
                               </MessageTimeBox>
                               <p>{message.content}</p>
                             </MessageBoxRightContent>
-                          </MessageBoxRightWrapper>
+                          </MessageBoxWrapper>
                         );
                       } else {
                         return (
-                          <MessageBoxLeftWrapper>
+                          <MessageBoxWrapper>
                             <MessageBoxLeftContent key={index}>
                               <img></img>
                               <p>{message.content}</p>
@@ -195,7 +195,7 @@ const ChattingForm: React.FC = () => {
                                 </div>
                               </MessageTimeBox>
                             </MessageBoxLeftContent>
-                          </MessageBoxLeftWrapper>
+                          </MessageBoxWrapper>
                         );
                       }
                     })
@@ -355,11 +355,7 @@ const MessageWrapper = styled.div`
   contain: content;
 `;
 
-const MessageBoxLeftWrapper = styled.div`
-  margin-top: 15px;
-`;
-
-const MessageBoxRightWrapper = styled.div`
+const MessageBoxWrapper = styled.div`
   margin-top: 15px;
 `;
 
@@ -376,6 +372,8 @@ const MessageBoxLeftContent = styled.div`
     border-radius: 10px 10px 10px 2px;
     background-color: #eaebef;
     color: #000;
+    white-space: pre-wrap;
+    line-height: 150%;
   }
 
   img {
@@ -401,6 +399,8 @@ const MessageBoxRightContent = styled.div`
     border-radius: 10px 10px 2px 10px;
     background-color: #3396f4;
     color: #fff;
+    white-space: pre-wrap;
+    line-height: 150%;
   }
 `;
 
