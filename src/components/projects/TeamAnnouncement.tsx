@@ -22,7 +22,7 @@ const TeamAnnouncement: React.FC = () => {
       </AnnouncementHeader>
       <TeamList>
         <TeamItem>
-          <TeamLink to="/info/team/1">
+          <TeamLink to="/teams/1">
             <ItemHeader>
               <ItemImg
                 src="/images/common/ssafy-mate_logo.png"
