@@ -13,7 +13,7 @@ const SignUpCard: React.FC = () => {
   const [ssafyTrack, setSsafyTrack] = useState<string>('');
   const [studentNumber, setStudentNumber] = useState<string>('');
   const [studentName, setStudentName] = useState<string>('');
-  const [signUpStep, setSignUpStep] = useState<number>(0);
+  const [signUpStep, setSignUpStep] = useState<number>(2);
   const [signUpEmail, setSignUpEmail] = useState<string>('');
   const [signUpPassword, setSignUpPassword] = useState<string>('');
 
@@ -79,7 +79,18 @@ const SignUpCard: React.FC = () => {
                   />
                 );
               case 2:
-                return <ProfileForm />;
+                return (
+                  <ProfileForm
+                    campus={campus}
+                    ssafyTrack={ssafyTrack}
+                    studentNumber={studentNumber}
+                    studentName={studentName}
+                    signUpStep={signUpStep}
+                    updateSignUpStep={updateSignUpStep}
+                    signUpEmail={signUpEmail}
+                    signUpPassword={signUpPassword}
+                  />
+                );
               default:
                 return <ErrorPage />;
             }

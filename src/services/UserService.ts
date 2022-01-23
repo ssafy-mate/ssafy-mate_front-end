@@ -1,15 +1,15 @@
 import {
   SsafyAuth,
-  SignInResponse,
+  SignUpResponse,
   EmailVerificationCodeRequest,
   EmailVerificationCodeConfirmRequest,
-  SignInProfile,
+  SignUpProfile,
 } from '../types/UserInfomationType';
 import { axiosInstance } from '../utils/axios';
 
 class UserService {
-  public static async getSsafyAuth(data: SsafyAuth): Promise<SignInResponse> {
-    const response = await axiosInstance.get<SignInResponse>(
+  public static async getSsafyAuth(data: SsafyAuth): Promise<SignUpResponse> {
+    const response = await axiosInstance.get<SignUpResponse>(
       '/api/user/sign-up/verification/ssafy',
       {
         params: data,
@@ -20,8 +20,8 @@ class UserService {
 
   public static async getEmailVerificationCode(
     data: EmailVerificationCodeRequest,
-  ): Promise<SignInResponse> {
-    const response = await axiosInstance.post<SignInResponse>(
+  ): Promise<SignUpResponse> {
+    const response = await axiosInstance.post<SignUpResponse>(
       '/api/user/sign-up/verification/email',
       data,
     );
@@ -30,16 +30,16 @@ class UserService {
 
   public static async getEmailVerificationCodeConfirm(
     data: EmailVerificationCodeConfirmRequest,
-  ): Promise<SignInResponse> {
-    const response = await axiosInstance.put<SignInResponse>(
+  ): Promise<SignUpResponse> {
+    const response = await axiosInstance.put<SignUpResponse>(
       '/api/user/sign-up/verification/email',
       data,
     );
     return response.data;
   }
 
-  public static async signIn(data: SignInProfile): Promise<SignInResponse> {
-    const response = await axiosInstance.post<SignInResponse>(
+  public static async signUp(data: SignUpProfile): Promise<SignUpResponse> {
+    const response = await axiosInstance.post<SignUpResponse>(
       '/api/user',
       data,
     );

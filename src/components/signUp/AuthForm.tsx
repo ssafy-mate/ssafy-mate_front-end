@@ -15,7 +15,7 @@ import {
 } from '../../data/regularExpressionData';
 import { campusListData } from '../../data/ssafyData';
 
-import { SignInResponse, SsafyAuth } from '../../types/UserInfomationType';
+import { SignUpResponse, SsafyAuth } from '../../types/UserInfomationType';
 
 interface SsafyTrack {
   id: string;
@@ -84,7 +84,7 @@ const AuthForm: React.FC<Props> = ({
   };
 
   const AuthRequest = async (data: SsafyAuth) => {
-    const response: SignInResponse = await UserService.getSsafyAuth(data);
+    const response: SignUpResponse = await UserService.getSsafyAuth(data);
 
     if (response.success) {
       updateSsafyAuthProps(data);
