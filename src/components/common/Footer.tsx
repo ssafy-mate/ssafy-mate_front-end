@@ -11,9 +11,15 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 
-const Footer: React.FC = () => {
+interface FooterProps {
+  offMarginTop?: boolean;
+}
+
+interface ContainerProps extends FooterProps {}
+
+const Footer: React.FC<FooterProps> = ({ offMarginTop }) => {
   return (
-    <Container>
+    <Container offMarginTop={offMarginTop}>
       <Wrapper>
         <MenuGroup>
           <MenuList>
@@ -85,16 +91,16 @@ const Footer: React.FC = () => {
   );
 };
 
-const Container = styled.footer`
-  margin-top: 80px;
+const Container = styled.footer<ContainerProps>`
+  margin-top: ${(props) => (props.offMarginTop ? '0' : '80px')};
   border-top: 1px solid #f1f1f1;
   background-color: #f9f9f9;
 
   @media (max-width: 767px) {
-    margin-top: 60px;
+    margin-top: ${(props) => (props.offMarginTop ? '0' : '60px')};
   }
   @media (max-width: 575px) {
-    margin-top: 40px;
+    margin-top: ${(props) => (props.offMarginTop ? '0' : '40px')};
   }
 `;
 
