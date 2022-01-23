@@ -161,7 +161,9 @@ const ChattingForm: React.FC = () => {
             <ChatRoomUserNameBar>
               <ChatRoomHeaderProfile>
                 <img></img>
-                <div className="userName">dummy userName</div>
+                <div className="userName">
+                  <span>dummy userName</span>
+                </div>
               </ChatRoomHeaderProfile>
             </ChatRoomUserNameBar>
             <ChatRoomMessageList>
@@ -307,7 +309,7 @@ const ChatRoomHeaderProfile = styled.div`
   display: flex;
   align-items: center;
 
-  &img {
+  & img {
     margin-right: 12px;
     width: 40px;
     height: 40px;
