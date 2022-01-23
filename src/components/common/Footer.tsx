@@ -129,8 +129,8 @@ const FooterAddress = styled.address`
   cursor: default;
 
   p:nth-of-type(1) {
-    font-weight: 600;
     margin-bottom: 6px;
+    font-weight: 600;
   }
 `;
 
