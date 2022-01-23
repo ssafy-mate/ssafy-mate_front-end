@@ -1,6 +1,4 @@
-import React, { useEffect } from 'react';
-
-import styled from '@emotion/styled';
+import { useEffect } from 'react';
 
 import Header from '../components/common/Header';
 import ProjectNavigation from '../components/projects/ProjectNavigation';
@@ -17,19 +15,13 @@ const StudentSpecializationProjectPage: React.FC = () => {
   return (
     <>
       <Header />
-      <Container>
-        <ProjectNavigation />
-        <ProjectsBannerSection />
-        <StudentFilterForm />
-        <StudentAnnouncement />
-      </Container>
+      <ProjectNavigation />
+      <ProjectsBannerSection />
+      <StudentFilterForm />
+      <StudentAnnouncement />
       <Footer />
     </>
   );
 };
-
-const Container = styled.main`
-  width: 100%;
-`;
 
 export default StudentSpecializationProjectPage;
