@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import Header from '../components/common/Header';
 import ProjectNavigation from '../components/projects/ProjectNavigation';
-import ProjectsBannerSection from '../components/projects/ProjectsBannerSection';
+import ProjectBannerSection from '../components/projects/ProjectBannerSection';
 import TeamFilterForm from '../components/projects/TeamFilterForm';
 import Footer from '../components/common/Footer';
 import TeamAnnouncement from '../components/projects/TeamAnnouncement';
@@ -16,7 +16,7 @@ const TeamSpecializationProjectPage: React.FC = () => {
     <>
       <Header />
       <ProjectNavigation />
-      <ProjectsBannerSection />
+      <ProjectBannerSection />
       <TeamFilterForm />
       <TeamAnnouncement />
       <Footer />

@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import Header from '../components/common/Header';
 import ProjectNavigation from '../components/projects/ProjectNavigation';
-import ProjectsBannerSection from '../components/projects/ProjectsBannerSection';
+import ProjectBannerSection from '../components/projects/ProjectBannerSection';
 import StudentFilterForm from '../components/projects/StudentFilterForm';
 import StudentAnnouncement from '../components/projects/StudentAnnouncement';
 import Footer from '../components/common/Footer';
@@ -16,7 +16,7 @@ const StudentSpecializationProjectPage: React.FC = () => {
     <>
       <Header />
       <ProjectNavigation />
-      <ProjectsBannerSection />
+      <ProjectBannerSection />
       <StudentFilterForm />
       <StudentAnnouncement />
       <Footer />
