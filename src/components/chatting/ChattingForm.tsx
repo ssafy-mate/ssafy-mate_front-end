@@ -10,7 +10,9 @@ import SendIcon from '@mui/icons-material/Send';
 
 const ChattingForm: React.FC = () => {
   const [messageList, setMessageList] = useState<string[]>([]);
-  const messageInput = useRef<HTMLTextAreaElement>(null);
+  const messageInputRef = useRef<HTMLTextAreaElement>(null);
+  const chatRoomMessageRef = useRef<HTMLDivElement>(null);
+  const date = new Date();
 
   // SockJS 로 웹소켓 연결, Stomp 프로토콜을 이용
   const [stompClient, setStompClient] = useState<CompatClient>(() =>
@@ -29,6 +31,10 @@ const ChattingForm: React.FC = () => {
       stompClient.disconnect();
     };
   }, []);
+
+  useEffect(() => {
+    chatLogScrollDown();
+  }, [messageList]);
 
   const onConnected = () => {
     stompClient.subscribe('/topic/public', onMessageReceived);
@@ -53,17 +59,17 @@ const ChattingForm: React.FC = () => {
       message.content = message.sender + ' left!';
     }
 
-    addMessageInList(message.content);
+    addMessageToList(message.content);
   };
 
   const handleSendMessage = (
     event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent,
   ) => {
-    const messageContent = messageInput.current?.value.trim();
+    const messageContent = messageInputRef.current?.value.trim();
 
     if (messageContent && stompClient) {
       const chatMessage = {
-        content: messageInput.current?.value,
+        content: messageInputRef.current?.value,
         sender: username,
         type: 'CHAT',
       };
@@ -75,11 +81,7 @@ const ChattingForm: React.FC = () => {
       );
     }
 
-    if (messageInput.current) {
-      messageInput.current.value = '';
-      messageInput.current?.focus();
-    }
-
+    messageInputInitialize();
     event.preventDefault();
   };
 
@@ -87,15 +89,52 @@ const ChattingForm: React.FC = () => {
     if (event.code === 'Enter' || event.code === 'NumpadEnter') {
       if (!event.shiftKey) {
         event.preventDefault();
-        handleSendMessage(event);
+        try {
+          handleSendMessage(event);
+        } catch {
+          addMessageToList(messageInputRef.current?.value as string);
+          messageInputInitialize();
+        }
       }
     }
+    chatLogScrollDown();
   };
 
-  const addMessageInList = (message: string) => {
+  const addMessageToList = (message: string) => {
     setMessageList((preMessageList) => {
       return [...preMessageList, message];
     });
+  };
+
+  const messageInputInitialize = () => {
+    if (messageInputRef.current) {
+      messageInputRef.current.value = '';
+      messageInputRef.current?.focus();
+    }
+  };
+
+  const currentTimeCalculate = (): string => {
+    let am = '오전';
+    let hours = date.getHours();
+    const minutes = date.getMinutes();
+
+    if (hours >= 12) {
+      am = '오후';
+      if (hours !== 12) hours -= 12;
+    }
+
+    const currentTime: string = `${am} ${hours}시 ${minutes}분`;
+    return currentTime;
+  };
+
+  const chatLogScrollDown = () => {
+    if (chatRoomMessageRef.current) {
+      chatRoomMessageRef.current?.scrollIntoView({
+        behavior: 'auto',
+        block: 'end',
+        inline: 'nearest',
+      });
+    }
   };
 
   return (
@@ -105,23 +144,39 @@ const ChattingForm: React.FC = () => {
       </ChatListWrapper>
       <ChatRoomSection>
         <ChatRoomWrapper>
-          <ChatRoomLogWrapper>
+          <ChatRoomMessageWrapper>
             <ChatRoomNicknameBar></ChatRoomNicknameBar>
-            <ChatRoomLog>
-              <MessageWrapper>
+            <ChatRoomMessageList>
+              <MessageWrapper ref={chatRoomMessageRef}>
                 {messageList.length > 0
                   ? messageList.map((message, index) => (
-                      <MessageItem key={index}>
-                        <p>{message}</p>
-                      </MessageItem>
+                      <MessageBoxRightWrapper key={index}>
+                        <MessageBoxRightContent>
+                          <MessageTimeBox>
+                            <div className="message_date">
+                              {currentTimeCalculate()}
+                            </div>
+                          </MessageTimeBox>
+                          <p>{message}</p>
+                        </MessageBoxRightContent>
+                        {/* <MessageBoxLeftContent key={index}>
+                          <img></img>
+                          <p>{message}</p>
+                          <MessageTimeBox>
+                            <div className="message_date">
+                              {currentTimeCalculate()}
+                            </div>
+                          </MessageTimeBox>
+                        </MessageBoxLeftContent> */}
+                      </MessageBoxRightWrapper>
                     ))
                   : null}
               </MessageWrapper>
-            </ChatRoomLog>
-          </ChatRoomLogWrapper>
+            </ChatRoomMessageList>
+          </ChatRoomMessageWrapper>
           <ChatTypingWrapper>
             <textarea
-              ref={messageInput}
+              ref={messageInputRef}
               onKeyPress={handleMessageSendKeyPress}
               placeholder="메시지를 입력해주세요"
             />
@@ -142,7 +197,7 @@ const ChatContianer = styled.div`
   box-sizing: border-box;
 
   width: 100%;
-  height: 600px;
+  height: 700px;
 
   background-color: #ffffff;
 
@@ -190,7 +245,7 @@ const ChatRoomSection = styled.section`
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
-  width: 600px;
+  width: 700px;
   margin-block-start: 1em;
   margin-block-end: 1em;
   border: solid 1px #b4b4b4;
@@ -203,7 +258,7 @@ const ChatRoomWrapper = styled.div`
   height: 100%;
 `;
 
-const ChatRoomLogWrapper = styled.div`
+const ChatRoomMessageWrapper = styled.div`
   position: relative;
   display: flex;
   flex: 1 1 0px;
@@ -216,34 +271,103 @@ const ChatRoomNicknameBar = styled.div`
   justify-content: space-between;
   align-items: center;
   height: 64px;
+  min-height: 64px;
   border-bottom: 1px solid #b4b4b4;
   padding: 0px 20px;
 `;
 
-const ChatRoomLog = styled.div`
+const ChatRoomMessageList = styled.div`
   overflow: hidden auto;
   padding: 0px 20px;
+
+  ::-webkit-scrollbar {
+    opacity: 0;
+    width: 6px;
+    height: 7px;
+    appearance: auto;
+  }
+
+  ::-webkit-scrollbar-button {
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-corner {
+    background-color: transparent;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: rgba(51, 150, 244, 5);
+    border-radius: 5px;
+  }
 `;
 
 const MessageWrapper = styled.div`
-  display: flex;
+  /* display: flex;
+  flex-direction: column; */
+  contain: content;
 `;
 
-const MessageItem = styled.div`
-  display: block;
-  border-width: 1px;
-  border-radius: 15px;
-  border-color: #4726ffe4;
+const MessageBoxLeftWrapper = styled.div`
+  margin-top: 15px;
+`;
 
-  p {
-    display: flex;
+const MessageBoxRightWrapper = styled.div`
+  margin-top: 15px;
+`;
+
+const MessageBoxLeftContent = styled.div`
+  display: flex;
+  justify-content: start;
+  padding: 4px;
+
+  & p {
+    display: inline-flex;
+    max-width: 364px;
     margin: 0px;
     padding: 10px 14px;
-    max-width: 484px;
-    white-space: pre-wrap;
-    font-size: 14px;
+    border-radius: 10px 10px 10px 2px;
+    background-color: #eaebef;
+    color: #000;
+  }
+
+  img {
+    border: 1px solid #f9f9f9;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    background-color: #eaebef;
+    margin-right: 8px;
+  }
+`;
+
+const MessageBoxRightContent = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  padding: 4px;
+
+  p {
+    display: inline-flex;
+    max-width: 364px;
+    margin: 0px;
+    padding: 10px 14px;
+    border-radius: 10px 10px 2px 10px;
+    background-color: #3396f4;
+    color: #fff;
+  }
+`;
+
+const MessageTimeBox = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 0px 4px;
+  align-items: flex-end;
+
+  .message_date {
+    font-size: 12px;
     line-height: 150%;
     letter-spacing: -0.02em;
+    color: #868b94;
   }
 `;
 
@@ -251,32 +375,40 @@ const ChatTypingWrapper = styled.div`
   display: flex;
   flex-direction: row;
   position: relative;
-  margin: 12px;
-  height: 24px;
-  border-radius: 0.5rem;
-  padding: 0.8em;
-  --tw-bg-opacity: 1;
-  background-color: rgba(243, 244, 246, var(--tw-bg-opacity));
+  margin: 20px;
+  height: 40px;
+  border-radius: 10px;
+  padding: 0px 10px;
+  background-color: #eaebef;
 
   textarea {
     width: 100%;
     line-height: 150%;
-    flex-grow: 1;
-    padding: 0px;
+    padding: 10px;
     resize: none;
     outline: none;
     border: none;
     overflow: auto;
     overflow-wrap: break-word;
-    --tw-bg-opacity: 1;
-    background-color: rgba(243, 244, 246, var(--tw-bg-opacity));
+    background-color: #eaebef;
+
+    ::-webkit-scrollbar {
+      opacity: 0;
+      width: 6px;
+      height: 7px;
+      appearance: auto;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background-color: rgba(51, 150, 244, 5);
+      border-radius: 5px;
+    }
   }
 
   button {
     outline: none;
     border: none;
-    --tw-bg-opacity: 1;
-    background-color: rgba(243, 244, 246, var(--tw-bg-opacity));
+    background-color: #eaebef;
   }
 `;
 
