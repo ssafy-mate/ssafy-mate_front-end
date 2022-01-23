@@ -1,7 +1,7 @@
 import { AutocompleteGetTagProps } from '@mui/material';
 
 export interface TechStack {
-  id: string;
+  id: number;
   name: string;
   imgUrl: string;
 }
