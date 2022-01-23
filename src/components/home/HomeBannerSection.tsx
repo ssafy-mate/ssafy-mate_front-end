@@ -14,11 +14,12 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { HomeBannerSlideData } from '../../types/commonTypes';
 
-import HomeBannerCard from '../common/banner/HomeBannerCard';
+import HomeBannerCard from './HomeBannerCard';
 
 const HomeBannerSection: React.FC = () => {
-  const HomeBannerSlideDataList: HomeBannerSlideData[] = [
+  const homeBannerSlideDataList: HomeBannerSlideData[] = [
     {
+      id: 1,
       head: 'SSAFY 2학기 프로젝트',
       subHead: '공통 프로젝트',
       descriptions: [
@@ -30,6 +31,7 @@ const HomeBannerSection: React.FC = () => {
       hexColorCode: '#172335',
     },
     {
+      id: 2,
       head: 'SSAFY 2학기 프로젝트',
       subHead: '특화 프로젝트',
       descriptions: [
@@ -41,6 +43,7 @@ const HomeBannerSection: React.FC = () => {
       hexColorCode: '#152029',
     },
     {
+      id: 3,
       head: 'SSAFY 2학기 프로젝트',
       subHead: '자율 프로젝트',
       descriptions: [
@@ -69,20 +72,27 @@ const HomeBannerSection: React.FC = () => {
           }}
           className="mySwiper"
         >
-          {HomeBannerSlideDataList.map((homeBannerSlideData) => (
-            <SwiperSlide
-              key={homeBannerSlideData.subHead}
-              style={{ backgroundColor: homeBannerSlideData.hexColorCode }}
-            >
-              <HomeBannerCard
-                head={homeBannerSlideData.head}
-                subHead={homeBannerSlideData.subHead}
-                descriptions={homeBannerSlideData.descriptions}
-                pageUrl={homeBannerSlideData.pageUrl}
-                imgUrl={homeBannerSlideData.imgUrl}
-              />
-            </SwiperSlide>
-          ))}
+          {homeBannerSlideDataList.map(
+            ({
+              id,
+              head,
+              subHead,
+              descriptions,
+              pageUrl,
+              imgUrl,
+              hexColorCode,
+            }) => (
+              <SwiperSlide key={id} style={{ backgroundColor: hexColorCode }}>
+                <HomeBannerCard
+                  head={head}
+                  subHead={subHead}
+                  descriptions={descriptions}
+                  pageUrl={pageUrl}
+                  imgUrl={imgUrl}
+                />
+              </SwiperSlide>
+            ),
+          )}
         </BannerSwiper>
       </Container>
     </>
