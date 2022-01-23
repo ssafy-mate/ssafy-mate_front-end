@@ -1,6 +1,7 @@
 import { rest } from 'msw';
 
 export const authHandlers = [
+  //회원 가입 1단계 교육생 인증
   rest.get(
     'http://localhost:3000/api/user/sign-up/verification/ssafy',
     async (request, response, context) => {
@@ -33,6 +34,8 @@ export const authHandlers = [
       }
     },
   ),
+
+  //회원가입 2단계 이메일 인증 코드 전송
   rest.post(
     'http://localhost:3000/api/user/sign-up/verification/email',
     async (request, response, context) => {
@@ -75,7 +78,7 @@ export const authHandlers = [
   rest.put(
     'http://localhost:3000/api/user/sign-up/verification/email',
     async (request, response, context) => {
-      const status: number = 200;
+      const status: number = 403;
 
       console.log(
         `[PUT | /api/user/sign-up/verification/email], ${JSON.stringify(
@@ -92,15 +95,15 @@ export const authHandlers = [
               message: '',
             }),
           );
-        case 401:
+        case 400:
           return response(
             context.json({
-              status: 400,
+              status: 401,
               success: false,
               message: '올바른 인증 코드가 아닙니다.',
             }),
           );
-        case 500:
+        case 403:
           return response(
             context.json({
               status: 403,
