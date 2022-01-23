@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 
 import CloseIcon from '@mui/icons-material/Close';
 
-import { TechStackTagProps } from '../../types/commonType';
+import { TechStackTagProps } from '../../types/commonTypes';
 
 const TechStackTag: React.FC<TechStackTagProps> = ({
   id,

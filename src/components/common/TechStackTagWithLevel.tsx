@@ -7,7 +7,7 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { TechStackTagProps } from '../../types/commonType';
+import { TechStackTagProps } from '../../types/commonTypes';
 
 const TechStackTagWithLevel: React.FC<TechStackTagProps> = ({
   id,
