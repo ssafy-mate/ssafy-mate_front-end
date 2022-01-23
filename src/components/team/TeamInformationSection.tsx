@@ -52,7 +52,7 @@ const TeamInformationSection: React.FC = () => {
             <Notice>실제 운영할 서비스 개발을 도전할 분들을 모집합니다.</Notice>
             <Row>
               <TeamName>데스파시토</TeamName>
-              <RecruitStatusBadge isActive={false} />
+              <RecruitStatusBadge isActive={true} />
             </Row>
           </TeamTitleWrapper>
         </TitleBox>
@@ -224,7 +224,12 @@ const TeamInformationSection: React.FC = () => {
   );
 };
 
-const Container = styled.section``;
+const Container = styled.section`
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+  box-sizing: border-box;
+`;
 
 const HeadContainer = styled.div`
   display: flex;
@@ -233,10 +238,10 @@ const HeadContainer = styled.div`
   border-bottom: 1px solid #d7e2eb;
   box-sizing: border-box;
 
-  @media (max-width: 1140px) {
+  @media (max-width: 1199px) {
     flex-direction: column;
   }
-  @media (max-width: 740px) {
+  @media (max-width: 767px) {
     padding: 10px 0 34px;
   }
 `;
@@ -245,7 +250,7 @@ const BodyContainer = styled.div`
   display: flex;
   box-sizing: border-box;
 
-  @media (max-width: 1140px) {
+  @media (max-width: 1199px) {
     flex-direction: column;
   }
 `;
@@ -262,11 +267,11 @@ const TitleBox = styled.div`
   display: flex;
   padding: 0 16px;
 
-  @media (max-width: 1140px) {
+  @media (max-width: 1199px) {
     margin-bottom: 40px;
     padding: 0;
   }
-  @media (max-width: 740px) {
+  @media (max-width: 767px) {
     margin-bottom: 30px;
   }
 `;
@@ -283,17 +288,17 @@ const Notice = styled.h1`
   line-height: 1.8;
   color: #263647;
 
-  @media (max-width: 1140px) {
+  @media (max-width: 1199px) {
     font-size: 26px;
   }
-  @media (max-width: 960px) {
+  @media (max-width: 991px) {
     font-size: 24px;
   }
-  @media (max-width: 720px) {
+  @media (max-width: 767px) {
     font-size: 20px;
     line-height: 1.5;
   }
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 18px;
   }
 `;
@@ -305,13 +310,13 @@ const TeamName = styled.h2`
   line-height: 1.6;
   color: #98a8b9;
 
-  @media (max-width: 1140px) {
+  @media (max-width: 1199px) {
     font-size: 18px;
   }
-  @media (max-width: 960px) {
+  @media (max-width: 991px) {
     font-size: 16px;
   }
-  @media (max-width: 720px) {
+  @media (max-width: 767px) {
     font-size: 15px;
   }
 `;
@@ -322,7 +327,7 @@ const Contents = styled.div`
   border-right: 1px solid #d7e2eb;
   box-sizing: border-box;
 
-  @media (max-width: 1140px) {
+  @media (max-width: 1199px) {
     padding-right: 0;
     padding-left: 0;
     border-right: 0;
@@ -334,7 +339,7 @@ const Aside = styled.aside`
   box-sizing: border-box;
   padding: 40px 16px 0 40px;
 
-  @media (max-width: 1140px) {
+  @media (max-width: 1199px) {
     padding: 40px 0 0;
     min-width: 100%;
   }
@@ -347,10 +352,10 @@ const SubHead = styled.h3`
   line-height: 1.6;
   color: #263747;
 
-  @media (max-width: 720px) {
+  @media (max-width: 767px) {
     font-size: 16px;
   }
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 15px;
   }
 `;
@@ -379,7 +384,7 @@ const MemberItem = styled.li`
     }
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     min-width: 100%;
   }
 `;
@@ -410,12 +415,12 @@ const ApplicationButton = styled.button`
     font-size: 22px;
   }
 
-  @media (max-width: 1140px) {
+  @media (max-width: 1199px) {
     width: 100%;
     padding-right: 0;
     padding-left: 0;
   }
-  @media (max-width: 960px) {
+  @media (max-width: 991px) {
     font-size: 15px;
 
     & svg {
@@ -454,12 +459,12 @@ const SharingButton = styled.button`
     }
   }
 
-  @media (max-width: 1140px) {
+  @media (max-width: 1199px) {
     width: 100%;
     padding-right: 0;
     padding-left: 0;
   }
-  @media (max-width: 960px) {
+  @media (max-width: 991px) {
     font-size: 15px;
 
     & svg {
@@ -474,11 +479,11 @@ const ProfileImgWrapper = styled.div`
   margin-right: 24px;
   border-radius: 4px;
 
-  @media (max-width: 960px) {
+  @media (max-width: 991px) {
     width: 48px;
     height: 48px;
   }
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     width: 46px;
     height: 46px;
   }
@@ -490,11 +495,11 @@ const ProfileImg = styled.img`
   border-radius: 4px;
   object-fit: fill;
 
-  @media (max-width: 960px) {
+  @media (max-width: 991px) {
     width: 48px;
     height: 48px;
   }
-  @media (max-width: 428px) {
+  @media (max-width: 575px) {
     width: 46px;
     height: 46px;
   }
@@ -513,12 +518,12 @@ const MemberName = styled.h5`
     color: #3396f4;
   }
 
-  @media (max-width: 720px) {
+  @media (max-width: 767px) {
     & svg {
       height: 17px;
     }
   }
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     & svg {
       height: 15px;
     }
@@ -533,10 +538,10 @@ const MemberLink = styled(Link)`
   transition: all 0.08s ease-in-out;
   cursor: pointer;
 
-  @media (max-width: 720px) {
+  @media (max-width: 767px) {
     font-size: 15px;
   }
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 14px;
   }
 `;
@@ -557,7 +562,7 @@ const SsafyInfo = styled.span`
     }
   }
 
-  @media (max-width: 720px) {
+  @media (max-width: 767px) {
     font-size: 13px;
   }
 `;
@@ -573,7 +578,7 @@ const MembersStatus = styled.li`
   box-sizing: border-box;
   transition: all 0.08s ease-in-out;
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     min-width: 100%;
   }
 `;
@@ -610,7 +615,7 @@ const HeadcountLabel = styled.label`
     line-height: 1.5;
   }
 
-  @media (max-width: 720px) {
+  @media (max-width: 767px) {
     font-size: 14px;
 
     svg {
@@ -637,17 +642,6 @@ const HeadcountContent = styled.p`
     &:nth-of-type(2) {
       margin-left: 6px;
     }
-  }
-
-  & svg {
-    /* margin-left: 16px; */
-
-    /* &.check {
-      color: #4ab050;
-    }
-    &.warning {
-      color: #ffc00a;
-    } */
   }
 `;
 
@@ -683,7 +677,7 @@ const InfoLabel = styled.label`
     line-height: 1.5;
   }
 
-  @media (max-width: 740px) {
+  @media (max-width: 767px) {
     font-size: 14px;
 
     svg {
@@ -704,7 +698,7 @@ const InfoContent = styled.p`
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  @media (max-width: 740px) {
+  @media (max-width: 767px) {
     font-size: 14px;
   }
 `;
@@ -714,7 +708,7 @@ const Introduction = styled.p`
   line-height: 1.5;
   color: #5f7f90;
 
-  @media (max-width: 740px) {
+  @media (max-width: 767px) {
     font-size: 14px;
   }
 `;
@@ -728,7 +722,7 @@ const TeamImgWrapper = styled.div`
   border-radius: 4px;
   box-shadow: 4px 12px 18px 2px rgb(0 0 0 / 8%);
 
-  @media (max-width: 1140px) {
+  @media (max-width: 1199px) {
     width: 80px;
     height: 80px;
   }
@@ -746,7 +740,7 @@ const TeamImg = styled.img`
   border-radius: 4px;
   object-fit: fill;
 
-  @media (max-width: 1140px) {
+  @media (max-width: 1199px) {
     width: 80px;
     height: 80px;
   }

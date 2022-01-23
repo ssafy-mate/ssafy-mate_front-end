@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import styled from '@emotion/styled';
 
 import Header from '../components/common/Header';
+import ProjectNavigation from '../components/projects/ProjectNavigation';
 import TeamInformationSection from '../components/team/TeamInformationSection';
 import Footer from '../components/common/Footer';
-import ProjectNavigation from '../components/projects/ProjectNavigation';
 
 const TeamDetailInfoPage: React.FC = () => {
   useEffect(() => {
@@ -15,20 +15,11 @@ const TeamDetailInfoPage: React.FC = () => {
   return (
     <>
       <Header />
-      <Container>
-        <ProjectNavigation />
-        <TeamInformationSection />
-      </Container>
+      <ProjectNavigation />
+      <TeamInformationSection />
       <Footer />
     </>
   );
 };
-
-const Container = styled.main`
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 16px;
-  box-sizing: border-box;
-`;
 
 export default TeamDetailInfoPage;
