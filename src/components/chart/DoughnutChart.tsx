@@ -5,7 +5,7 @@ import styled from '@emotion/styled';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Doughnut } from 'react-chartjs-2';
 
-import { DoughnutChartData } from '../../types/chartType';
+import { DoughnutChartData } from '../../types/chartTypes';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
