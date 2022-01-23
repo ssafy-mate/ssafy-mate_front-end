@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import { useState } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -12,7 +12,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import { techStackListData } from '../../data/techStackListData';
 import { campusListData, projectListData } from '../../data/ssafyData';
 
-import { TechStack } from '../../types/commonType';
+import { TechStack } from '../../types/commonTypes';
 
 import TechStackTag from '../common/TechStackTag';
 
@@ -37,7 +37,7 @@ const CreateTeamForm: React.FC = () => {
     getOptionLabel: (option) => option.name,
   });
 
-  const handleChangeTeamImg = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChangeTeamImg = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { files },
     }: any = event;
@@ -66,9 +66,7 @@ const CreateTeamForm: React.FC = () => {
       <Head>팀 생성</Head>
       <Row>
         <FileInputWrapper>
-          <Label>
-            팀 대표 이미지 <Em>(선택)</Em>
-          </Label>
+          <Label>팀 대표 이미지</Label>
           {previewTeamImg ? (
             <>
               <FilePreviewImgWrapper>
@@ -169,9 +167,7 @@ const CreateTeamForm: React.FC = () => {
       </Row>
       <Row>
         <InputWrapper>
-          <Label htmlFor="team-self-introduction">
-            팀 소개 <Em>(선택)</Em>
-          </Label>
+          <Label htmlFor="team-self-introduction">팀 소개</Label>
           <Textarea id="team-self-introduction" name="team-self-introduction" />
         </InputWrapper>
       </Row>
@@ -302,10 +298,10 @@ const Container = styled.div`
   border-radius: 6px;
   box-sizing: border-box;
 
-  @media (max-width: 580px) {
+  @media (max-width: 767px) {
     padding: 40px 28px;
   }
-  @media (max-width: 414px) {
+  @media (max-width: 575px) {
     padding: 32px 16px;
   }
 `;
@@ -317,9 +313,13 @@ const Head = styled.h1`
   text-align: center;
   color: #263747;
 
-  @media (max-width: 580px) {
-    margin-bottom: 32px;
+  @media (max-width: 767px) {
+    margin-bottom: 40px;
     font-size: 28px;
+  }
+  @media (max-width: 575px) {
+    margin-bottom: 32px;
+    font-size: 26px;
   }
 `;
 
@@ -330,12 +330,10 @@ const Row = styled.div`
     margin-top: 16px;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     &:first-of-type {
       flex-direction: column;
     }
-  }
-  @media (max-width: 340px) {
     &:nth-of-type(7) {
       flex-direction: column;
     }
@@ -361,11 +359,11 @@ const FileInputWrapper = styled.div`
   height: 100%;
   margin-right: 48px;
 
-  @media (max-width: 740px) {
+  @media (max-width: 767px) {
     margin-right: 24px;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     width: 100%;
     margin: 0 auto 16px;
   }
@@ -374,7 +372,7 @@ const FileInputWrapper = styled.div`
 const FilePreviewImgWrapper = styled.div`
   position: relative;
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     width: 100%;
     margin: 0 auto;
   }
@@ -407,7 +405,7 @@ const InfoInput = styled.input`
     color: #495057;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -431,7 +429,18 @@ const Textarea = styled.textarea`
   color: #263747;
   transition: all 0.08s ease-in-out;
 
-  @media (max-width: 540px) {
+  &:hover {
+    border: 1px solid #3396f4;
+    box-shadow: inset 0 0 0 1px#3396f4;
+  }
+  &:focus {
+    border: 1px solid #3396f4;
+    box-shadow: inset 0 0 0 1px #3396f4;
+    background-color: #fff;
+    color: #495057;
+  }
+
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -466,7 +475,7 @@ const Select = styled.select`
     color: #495057;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -477,7 +486,7 @@ const Label = styled.label`
   line-height: 1.5;
   color: #263747;
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -500,7 +509,7 @@ const RequirementLabel = styled.label`
     color: #f44336;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -520,7 +529,7 @@ const FileInputLabel = styled.label`
     color: #5f7f90;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     width: 100%;
     margin: 0 auto;
 
@@ -541,7 +550,7 @@ const Em = styled.em`
   font-size: 13px;
   color: #3396f4;
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 12px;
   }
 `;
@@ -553,7 +562,7 @@ const FilePreviewImg = styled.img`
   box-sizing: border-box;
   object-fit: fill;
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     width: 100%;
     height: 160px;
   }
@@ -568,7 +577,7 @@ const TechStackImg = styled.img`
   border-radius: 2px;
   object-fit: fill;
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     width: 22px;
     height: 22px;
   }
@@ -619,7 +628,7 @@ const SearchItem = styled.li`
     }
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -662,7 +671,7 @@ const CreateTeamButton = styled.button`
     background-color: #2878c3;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 15px;
   }
 `;
@@ -678,10 +687,7 @@ const techStackInputWrapper = css`
 const rightGap = css`
   margin-right: 12px;
 
-  @media (max-width: 540px) {
-    margin-right: 6px;
-  }
-  @media (max-width: 340px) {
+  @media (max-width: 575px) {
     margin-right: 0;
   }
 `;
