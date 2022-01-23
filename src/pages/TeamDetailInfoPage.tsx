@@ -1,7 +1,5 @@
 import { useEffect } from 'react';
 
-import styled from '@emotion/styled';
-
 import Header from '../components/common/Header';
 import ProjectNavigation from '../components/projects/ProjectNavigation';
 import TeamInformationSection from '../components/team/TeamInformationSection';
