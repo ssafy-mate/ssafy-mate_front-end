@@ -1,127 +1,168 @@
-export const campusListData = [
+interface SsafyTrack {
+  id: number;
+  name: string;
+}
+
+interface Campus {
+  id: number;
+  area: string;
+  ssafyTracks: SsafyTrack[];
+}
+
+export const ssafyTrackListData: SsafyTrack[] = [
   {
-    id: 'C1',
+    id: 1,
+    name: 'Python Track',
+  },
+  {
+    id: 2,
+    name: 'Java Track',
+  },
+  {
+    id: 3,
+    name: 'Embeded Track',
+  },
+  {
+    id: 4,
+    name: 'Mobile Track',
+  },
+];
+
+export const campusListData: Campus[] = [
+  {
+    id: 1,
     area: '서울',
-    educationTrack: [
+    ssafyTracks: [
       {
-        id: 'ET1',
+        id: 1,
         name: 'Python Track',
       },
       {
-        id: 'ET2',
+        id: 2,
         name: 'Java Track',
       },
       {
-        id: 'ET3',
+        id: 3,
         name: 'Embeded Track',
       },
     ],
   },
   {
-    id: 'C2',
+    id: 2,
     area: '대전',
-    educationTrack: [
+    ssafyTracks: [
       {
-        id: 'ET1',
+        id: 1,
         name: 'Python Track',
       },
       {
-        id: 'ET2',
+        id: 2,
         name: 'Java Track',
       },
     ],
   },
   {
-    id: 'C3',
+    id: 3,
     area: '광주',
-    educationTrack: [
+    ssafyTracks: [
       {
-        id: 'ET1',
+        id: 1,
         name: 'Python Track',
       },
       {
-        id: 'ET2',
+        id: 2,
         name: 'Java Track',
       },
     ],
   },
   {
-    id: 'C4',
+    id: 4,
     area: '구미',
-    educationTrack: [
+    ssafyTracks: [
       {
-        id: 'ET1',
+        id: 1,
         name: 'Python Track',
       },
       {
-        id: 'ET2',
+        id: 2,
         name: 'Java Track',
       },
       {
-        id: 'ET3',
+        id: 3,
         name: 'Mobile Track',
       },
     ],
   },
   {
-    id: 'C5',
+    id: 5,
     area: '부울경',
-    educationTrack: [
+    ssafyTracks: [
       {
-        id: 'ET1',
+        id: 1,
         name: 'Python Track',
       },
       {
-        id: 'ET2',
+        id: 2,
         name: 'Java Track',
       },
     ],
   },
 ];
 
-export const projectListData = [
+interface ProjectTrack {
+  id: number;
+  name: string;
+}
+
+interface Project {
+  id: number;
+  name: string;
+  projectTracks?: ProjectTrack[];
+}
+
+export const projectListData: Project[] = [
   {
-    id: 'P1',
+    id: 1,
     name: '공통 프로젝트',
-    track: [
+    projectTracks: [
       {
-        id: 'T1',
+        id: 1,
         name: '웹 기술',
       },
       {
-        id: 'T2',
+        id: 2,
         name: '웹 디자인',
       },
       {
-        id: 'T3',
+        id: 3,
         name: '웹 IoT',
       },
     ],
   },
   {
-    id: 'P2',
+    id: 2,
     name: '특화 프로젝트',
-    track: [
+    projectTracks: [
       {
-        id: 'T1',
+        id: 1,
         name: '인공지능',
       },
       {
-        id: 'T2',
+        id: 2,
         name: '빅데이터',
       },
       {
-        id: 'T3',
+        id: 3,
         name: '블록체인',
       },
       {
-        id: 'T3',
+        id: 3,
         name: 'IoT 제어',
       },
     ],
   },
   {
-    id: 'P3',
+    id: 3,
     name: '자율 프로젝트',
   },
 ];
