@@ -15,31 +15,23 @@ const Footer: React.FC = () => {
   return (
     <Container>
       <Wrapper>
-        <FooterMenuGroup>
+        <MenuGroup>
           <MenuList>
             <MenuItem>서비스</MenuItem>
             <MenuItem>
-              <Link to="#" css={link}>
-                교육 프로용 싸피 메이트
-              </Link>
+              <PageLink to="#">교육 프로용 싸피 메이트</PageLink>
             </MenuItem>
             <MenuItem>
-              <Link to="#" css={link}>
-                운영 관리자용 싸피 메이트
-              </Link>
+              <PageLink to="#">운영 관리자용 싸피 메이트</PageLink>
             </MenuItem>
           </MenuList>
           <MenuList>
             <MenuItem>문의</MenuItem>
             <MenuItem>
-              <Link to="#" css={link}>
-                FAQ
-              </Link>
+              <PageLink to="#">FAQ</PageLink>
             </MenuItem>
             <MenuItem>
-              <Link to="#" css={link}>
-                1대1 문의
-              </Link>
+              <PageLink to="#">1대1 문의</PageLink>
             </MenuItem>
           </MenuList>
           <MenuList>
@@ -49,7 +41,7 @@ const Footer: React.FC = () => {
               운영 시간: 오전 9시 ~ 오후 6시 (주말 및 공휴일 휴무)
             </MenuItem>
           </MenuList>
-        </FooterMenuGroup>
+        </MenuGroup>
         <FooterAddress>
           <p>SSAFY MATE / 싸피 메이트</p>
           <p>
@@ -60,19 +52,13 @@ const Footer: React.FC = () => {
         <FooterOthers>
           <SubMenuList>
             <SubMenuItem>
-              <Link to="#" css={link}>
-                개인정보 처리방침
-              </Link>
+              <PageLink to="#">개인정보 처리방침</PageLink>
             </SubMenuItem>
             <SubMenuItem>
-              <Link to="#" css={link}>
-                이용약관
-              </Link>
+              <PageLink to="#">이용약관</PageLink>
             </SubMenuItem>
             <SubMenuItem>
-              <Link to="#" css={link}>
-                싸피 메이트 인재 채용
-              </Link>
+              <PageLink to="#">싸피 메이트 인재 채용</PageLink>
             </SubMenuItem>
           </SubMenuList>
           <SnsList>
@@ -104,11 +90,11 @@ const Container = styled.footer`
   border-top: 1px solid #f1f1f1;
   background-color: #f9f9f9;
 
-  @media (max-width: 580px) {
-    margin-top: 70px;
-  }
-  @media (max-width: 414px) {
+  @media (max-width: 767px) {
     margin-top: 60px;
+  }
+  @media (max-width: 575px) {
+    margin-top: 40px;
   }
 `;
 
@@ -118,27 +104,25 @@ const Wrapper = styled.div`
   padding: 48px 16px;
   box-sizing: border-box;
 
-  @media (max-width: 580px) {
-    padding: 36px 16px;
+  @media (max-width: 575px) {
+    padding-top: 40px;
+    padding-bottom: 40px;
   }
 `;
 
-const FooterMenuGroup = styled.div`
+const MenuGroup = styled.div`
   display: flex;
   margin-bottom: 48px;
 
-  @media (max-width: 760px) {
+  @media (max-width: 991px) {
     flex-direction: column;
     margin-bottom: 36px;
-  }
-  @media (max-width: 580px) {
-    margin-bottom: 32px;
   }
 `;
 
 const FooterAddress = styled.address`
   margin-bottom: 24px;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
   line-height: 1.6;
   color: #98a8b9;
@@ -146,6 +130,7 @@ const FooterAddress = styled.address`
 
   p:nth-of-type(1) {
     font-weight: 600;
+    margin-bottom: 6px;
   }
 `;
 
@@ -153,7 +138,7 @@ const FooterOthers = styled.div`
   display: flex;
   justify-content: space-between;
 
-  @media (max-width: 480px) {
+  @media (max-width: 767px) {
     flex-direction: column;
   }
 `;
@@ -161,8 +146,9 @@ const FooterOthers = styled.div`
 const MenuList = styled.ul`
   margin-right: 40px;
 
-  @media (max-width: 760px) {
-    margin-bottom: 20px;
+  @media (max-width: 991px) {
+    margin-right: 0;
+    margin-bottom: 32px;
   }
 `;
 
@@ -178,7 +164,7 @@ const MenuItem = styled.li`
     color: #44576c;
   }
 
-  @media (max-width: 760px) {
+  @media (max-width: 767px) {
     &:nth-of-type(1) {
       margin-bottom: 8px;
     }
@@ -189,13 +175,18 @@ const SubMenuList = styled.ul`
   display: flex;
   align-items: center;
 
-  @media (max-width: 480px) {
+  @media (max-width: 767px) {
     margin-bottom: 24px;
+  }
+  @media (max-width: 349px) {
+    flex-direction: column;
+    align-items: flex-start;
   }
 `;
 
 const SubMenuItem = styled.li`
-  font-size: 12px;
+  font-size: 13px;
+  line-height: 1.6;
   color: #98a8b9;
 
   &:nth-of-type(1) {
@@ -211,6 +202,16 @@ const SubMenuItem = styled.li`
       background-color: #98a8b9;
     }
   }
+
+  @media (max-width: 349px) {
+    margin-bottom: 4px;
+
+    &:not(:last-of-type) {
+      &:after {
+        content: none;
+      }
+    }
+  }
 `;
 
 const SnsList = styled.div`
@@ -218,14 +219,14 @@ const SnsList = styled.div`
 `;
 
 const SnsItem = styled.a`
-  margin-left: 8px;
+  margin-left: 10px;
 
   &:first-of-type {
     margin-left: 0;
   }
 `;
 
-const link = css`
+const PageLink = styled(Link)`
   transition: color 0.08s ease-in-out;
 
   &:hover {
@@ -234,6 +235,7 @@ const link = css`
 `;
 
 const snsIcon = css`
+  font-size: 26px;
   color: #98a8b9;
   transition: color 0.08s ease-in-out;
 
