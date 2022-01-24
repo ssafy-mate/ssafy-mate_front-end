@@ -15,12 +15,12 @@ import SchoolIcon from '@mui/icons-material/School';
 import ComputerIcon from '@mui/icons-material/Computer';
 import StyleIcon from '@mui/icons-material/Style';
 
-import { UserType } from '../../types/userTypes';
-
 import RecruitStatusBadge from '../projects/RecruitStatusBadge';
 import RecruitStatusTag from '../projects/RecruitStatusTag';
 import JobDoughnutChart from '../chart/DoughnutChart';
 import TeamTechStack from './TeamTechStack';
+
+import { UserType } from '../../types/userTypes';
 
 const TeamInformationSection: React.FC = () => {
   const [techStacks, setTechStacks] = useState<string[]>([]);

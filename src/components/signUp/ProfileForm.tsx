@@ -16,7 +16,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { jobListData } from '../../data/jobListData';
 import { techStackListData } from '../../data/techStackListData';
 
-import { TechStack } from '../../types/commonType';
+import { TechStack } from '../../types/commonTypes';
 
 import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
 import { finished } from 'stream';

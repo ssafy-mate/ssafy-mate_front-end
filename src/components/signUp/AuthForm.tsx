@@ -18,7 +18,7 @@ import { campusListData } from '../../data/ssafyData';
 import { SignUpResponse, SsafyAuth } from '../../types/UserInfomationType';
 
 interface SsafyTrack {
-  id: string;
+  id: number;
   name: string;
 }
 
@@ -65,7 +65,7 @@ const AuthForm: React.FC<Props> = ({
     );
 
     if (selectedCampusIndex > -1) {
-      setSelectedTracks(campusListData[selectedCampusIndex].educationTrack);
+      setSelectedTracks(campusListData[selectedCampusIndex].ssafyTracks);
     }
   }, [selectedCampus]);
 
