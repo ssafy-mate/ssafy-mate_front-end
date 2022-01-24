@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import Header from '../components/common/Header';
 import ProjectNavigation from '../components/projects/ProjectNavigation';
-import TeamInformationSection from '../components/team/TeamInformationSection';
+import TeamInfoSection from '../components/team/TeamInfoSection';
 import Footer from '../components/common/Footer';
 
 const TeamDetailInfoPage: React.FC = () => {
@@ -14,7 +14,7 @@ const TeamDetailInfoPage: React.FC = () => {
     <>
       <Header />
       <ProjectNavigation />
-      <TeamInformationSection />
+      <TeamInfoSection />
       <Footer />
     </>
   );
