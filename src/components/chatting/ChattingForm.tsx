@@ -9,7 +9,7 @@ import styled from '@emotion/styled';
 
 import SendIcon from '@mui/icons-material/Send';
 
-import { MessageType } from '../../types/messageType';
+import { MessageType } from '../../types/messageTypes';
 
 const ChattingForm: React.FC = () => {
   const date = new Date();
