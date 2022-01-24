@@ -15,7 +15,7 @@ const ChattingPage: React.FC = () => {
       <Container>
         <ChattingForm />
       </Container>
-      <Footer />
+      {/* <Footer /> */}
     </>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import SockJS from 'sockjs-client';
 import { Stomp, CompatClient } from '@stomp/stompjs';
@@ -159,7 +159,7 @@ const ChattingForm: React.FC = () => {
         <ChatRoomWrapper>
           <ChatRoomMessageWrapper>
             <ChatRoomUserNameBar>
-              <ChatRoomHeaderProfile>
+              <ChatRoomHeaderProfile className="userName">
                 <img></img>
                 <div className="userName">
                   <span>dummy userName</span>
@@ -222,17 +222,11 @@ const ChattingForm: React.FC = () => {
 const ChatContianer = styled.div`
   display: flex;
   justify-content: center;
-
   box-sizing: border-box;
-
   width: 100%;
-  height: 700px;
-
+  height: 100vh;
   background-color: #ffffff;
-
-  margin-block-start: 4em;
-  margin-block-end: 4em;
-  box-shadow: 1px;
+  padding-top: 46px;
 
   @media (max-width: 400px) {
     display: flex;
@@ -250,13 +244,7 @@ const ChatListSidebar = styled.nav`
   flex-direction: column;
   justify-content: space-between;
   width: 300px;
-  margin-left: 1em;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
-  /* border: solid 1px #b4b4b4; */
   border-left: 1px solid #b4b4b4;
-  border-top: 1px solid #b4b4b4;
-  border-bottom: 1px solid #b4b4b4;
 `;
 
 const ChatListItem = styled.li`
@@ -264,8 +252,6 @@ const ChatListItem = styled.li`
   flex-wrap: wrap;
   width: 200px;
   background-color: #f1ff;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
   margin-left: 1em;
   margin-right: 1em;
 `;
@@ -275,8 +261,6 @@ const ChatRoomSection = styled.section`
   justify-content: center;
   flex-wrap: wrap;
   width: 700px;
-  margin-block-start: 1em;
-  margin-block-end: 1em;
   border: solid 1px #b4b4b4;
 `;
 
@@ -318,7 +302,7 @@ const ChatRoomHeaderProfile = styled.div`
     background-color: #eaebef;
   }
 
-  &.userName {
+  & .userName {
     display: inline-flex;
     align-items: center;
   }
@@ -430,15 +414,16 @@ const ChatTypingWrapper = styled.div`
   background-color: #eaebef;
 
   textarea {
+    overflow: auto;
+    overflow-wrap: break-word;
     width: 100%;
-    line-height: 150%;
     padding: 10px;
     resize: none;
     outline: none;
     border: none;
-    overflow: auto;
-    overflow-wrap: break-word;
     background-color: #eaebef;
+    line-height: 150%;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
 
     ::-webkit-scrollbar {
       opacity: 0;
@@ -461,8 +446,8 @@ const ChatTypingWrapper = styled.div`
 `;
 
 const SendButton = css`
-  cursor: pointer;
   color: #3396f4;
+  cursor: pointer;
 `;
 
 export default ChattingForm;
