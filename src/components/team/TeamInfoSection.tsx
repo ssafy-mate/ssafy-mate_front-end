@@ -20,7 +20,7 @@ import { UserType } from '../../types/userTypes';
 import RecruitStatusBadge from '../projects/RecruitStatusBadge';
 import RecruitStatusTag from '../projects/RecruitStatusTag';
 import JobDoughnutChart from '../chart/DoughnutChart';
-import TeamTechStack from './TeamTechStack';
+import TeamTechStackTag from './TeamTechStackTag';
 
 const TeamInformationSection: React.FC = () => {
   const [techStacks, setTechStacks] = useState<string[]>([]);
@@ -113,7 +113,7 @@ const TeamInformationSection: React.FC = () => {
             <SubHead>계획 중인 기술 스택</SubHead>
             <TechStackList>
               {techStacks.map((techStack, index) => (
-                <TeamTechStack key={index} techStackName={techStack} />
+                <TeamTechStackTag key={index} techStackName={techStack} />
               ))}
             </TechStackList>
           </Section>
