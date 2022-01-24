@@ -23,7 +23,7 @@ export interface SignUpRequest {
   password: string;
 }
 
-interface textStacks {
+interface teckStacks {
   techStackName: string;
   techStackLevel: string;
 }
@@ -40,7 +40,7 @@ export interface SignUpProfile {
   selfIntroduction: string;
   job1: string;
   job2: string;
-  techStacks: Array<textStacks>;
+  techStacks: Array<teckStacks>;
   githubUrl: string;
   etcUrl: string;
   agreement: boolean;
