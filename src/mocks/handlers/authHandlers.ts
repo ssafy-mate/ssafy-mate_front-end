@@ -78,7 +78,7 @@ export const authHandlers = [
   rest.put(
     'http://localhost:3000/api/user/sign-up/verification/email',
     async (request, response, context) => {
-      const status: number = 403;
+      const status: number = 200;
 
       console.log(
         `[PUT | /api/user/sign-up/verification/email], ${JSON.stringify(
@@ -114,16 +114,13 @@ export const authHandlers = [
       }
     },
   ),
+  //회원가입 3단계
   rest.post(
     'http://localhost:3000/api/user',
     async (request, response, context) => {
       const status: number = 200;
 
-      console.log(
-        `[POST | /api/user/sign-up/verification/email], ${JSON.stringify(
-          request,
-        )}`,
-      );
+      console.log(`[POST | /api/user], ${JSON.stringify(request)}`);
 
       switch (status) {
         case 200:

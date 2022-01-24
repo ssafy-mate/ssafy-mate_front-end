@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import { useForm } from 'react-hook-form';
 
@@ -6,6 +6,8 @@ import { useHistory } from 'react-router-dom';
 
 import styled from '@emotion/styled';
 import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 import {
   passwordReg,
@@ -13,33 +15,15 @@ import {
   validEmailReg,
   verificationCodeReg,
 } from '../../data/regularExpressionData';
-
-import { useEffect } from 'react';
 import {
   EmailVerificationCodeConfirmRequest,
   EmailVerificationCodeRequest,
-  SignInResponse,
+  SignUpResponse,
+  SignUpProps,
+  SignUp,
 } from '../../types/UserInfomationType';
+
 import UserService from '../../services/UserService';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
-
-interface SignUpProps {
-  signUpEmail: string;
-  signUpPassword: string;
-  signUpStep: number;
-  updateSignUpEmail: (email: string) => void;
-  updateSignUpPassword: (password: string) => void;
-  updateSignUpStep: (signUpStep: number) => void;
-}
-
-interface SignUp {
-  signUpEmail: string;
-  verificationCode: string;
-  signUpPassword: string;
-  signUpCheckPassword: string;
-  signUpConfiromButton: string | undefined;
-}
 
 const SignUpForm: React.FC<SignUpProps> = ({
   signUpEmail,
@@ -191,10 +175,13 @@ const SignUpForm: React.FC<SignUpProps> = ({
   const verificationCodeRequest = async () => {
     //이메일 인증 코드 요청 api
     const data: EmailVerificationCodeRequest = { email: '' };
+
     data.email = signUpEmailOnChange;
-    const response: SignInResponse = await UserService.getEmailVerificationCode(
+
+    const response: SignUpResponse = await UserService.getEmailVerificationCode(
       data,
     );
+
     if (response.success) {
       //인증 코드 만료일 때 재전송인 경우 고려해서
       setCodeVerificationError(false);
@@ -219,7 +206,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
       setCodeInputDisabled(false);
 
       //타이머 3분으로 리셋(통신 시간 고려로 179)
-      setTime(0);
       setTime(179);
     } else if (response.status === 401) {
       //이미 등록된 이메일인 경우 alert 후
@@ -246,15 +232,19 @@ const SignUpForm: React.FC<SignUpProps> = ({
   const EmailVerificationCodeConfirm = async () => {
     //인증 코드 확인 api
     const data: EmailVerificationCodeConfirmRequest = { code: '', email: '' };
+
     data.email = signUpEmailOnChange;
+
     data.code = verificationCodeOnChange;
-    const response: SignInResponse =
+
+    const response: SignUpResponse =
       await UserService.getEmailVerificationCodeConfirm(data);
 
     if (response.success) {
       //이메일 인증 코드 응답 성공 시 인증 코드 확인 버튼 비활성화
       setCodeConfirmButtonText('인증 완료');
       setCodeConfirmButton(true);
+
       //이메일, 인증 코드 입력창 비활성화
       setEmailInputDisabled(true);
       setCodeInputDisabled(true);
@@ -268,8 +258,10 @@ const SignUpForm: React.FC<SignUpProps> = ({
       //에러문구 표시해주고
       setCodeVerificationError(true);
       setCodeVerificationErrorText('인증 코드가 만료되었습니다.');
+
       //인증 코드 입력 창 막기
       setCodeInputDisabled(true);
+
       //확인 버튼 비활성화
       setCodeConfirmButton(true);
     }
@@ -281,9 +273,9 @@ const SignUpForm: React.FC<SignUpProps> = ({
   };
   //2단계 form 작성 마무리
   const onSubmit = (data: SignUp) => {
-    // alert(JSON.stringify(data));
     updateSignUpProps(data);
   };
+
   return (
     <>
       {statusAlertOpen && (

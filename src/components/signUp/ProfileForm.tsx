@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -19,8 +19,46 @@ import { techStackListData } from '../../data/techStackListData';
 import { TechStack } from '../../types/commonType';
 
 import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
+import { finished } from 'stream';
+import { useForm } from 'react-hook-form';
+import { SignUpProfile, SignUpResponse } from '../../types/UserInfomationType';
+import UserService from '../../services/UserService';
+import { exceptDefaultReg } from '../../data/regularExpressionData';
 
-const ProfileForm: React.FC = () => {
+interface Props {
+  campus: string;
+  ssafyTrack: string;
+  studentNumber: string;
+  studentName: string;
+  signUpStep: number;
+  signUpEmail: string;
+  signUpPassword: string;
+  updateSignUpStep: (signUpStep: number) => void;
+}
+const ProfileForm: React.FC<Props> = ({
+  campus,
+  ssafyTrack,
+  studentNumber,
+  studentName,
+  signUpStep,
+  signUpEmail,
+  signUpPassword,
+  updateSignUpStep,
+}) => {
+  const {
+    handleSubmit,
+    register,
+    setValue,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm<SignUpProfile>({ mode: 'onChange' });
+
+  const [profileImg, setProfileImg] = useState(null);
+  const [previewProgileImg, setPreviewProfileImg] = useState(null);
+
+  const job1 = watch('job1');
+
   const {
     getRootProps,
     getInputLabelProps,
@@ -39,29 +77,95 @@ const ProfileForm: React.FC = () => {
     getOptionLabel: (option) => option.name,
   });
 
+  const handleChangeProfileImg = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const {
+      target: { files },
+    }: any = event;
+    const theImgFile = files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = (finishedEvent) => {
+      const {
+        currentTarget: { result },
+      }: any = finishedEvent;
+
+      setPreviewProfileImg(result);
+    };
+
+    //전송해야할 이미지
+    reader.readAsDataURL(theImgFile);
+    setProfileImg(theImgFile);
+    console.log(theImgFile);
+  };
+
+  const handleClearProfileImg = () => {
+    setProfileImg(null);
+    setPreviewProfileImg(null);
+    reset({ profileImg: undefined });
+  };
+
+  const onSubmit = (data: SignUpProfile) => {
+    SignUpRequest(data);
+  };
+
+  const SignUpRequest = async (data: SignUpProfile) => {
+    const response: SignUpResponse = await UserService.signUp(data);
+  };
   return (
-    <Container>
+    <Container onSubmit={handleSubmit(onSubmit)}>
       <Row>
         <AvatarWrapper>
-          <Avatar src="/broken-image.jpg" css={avatar} />
-          <FileInputWrapper>
-            <FileInputLabel htmlFor="profile-img">
-              <AddAPhotoIcon />
-            </FileInputLabel>
-            <FileInput type="file" id="profile-img" />
-          </FileInputWrapper>
+          {previewProgileImg ? (
+            <>
+              <Avatar src={previewProgileImg} css={avatar} />
+              <FileInputWrapper>
+                <FileInputLabel htmlFor="profile-img">
+                  <CloseIcon fontSize="large" onClick={handleClearProfileImg} />
+                </FileInputLabel>
+              </FileInputWrapper>
+            </>
+          ) : (
+            <>
+              <Avatar src="/broken-image.jpg" css={avatar} />
+              <FileInputWrapper>
+                <FileInputLabel htmlFor="profile-img">
+                  <AddAPhotoIcon />
+                </FileInputLabel>
+                <FileInput
+                  type="file"
+                  id="profile-img"
+                  accept="image/*"
+                  onChange={handleChangeProfileImg}
+                />
+              </FileInputWrapper>
+            </>
+          )}
         </AvatarWrapper>
         <InputWrapper>
           <RequirementLabel htmlFor="self-introduction">
             자기소개
           </RequirementLabel>
-          <Textarea id="self-introduction" name="self-introduction" />
+          <Textarea
+            id="self-introduction"
+            {...register('selfIntroduction', {
+              required: true,
+            })}
+          />
         </InputWrapper>
       </Row>
       <Row>
         <InputWrapper css={rightGap}>
           <RequirementLabel htmlFor="job1">희망 직무1</RequirementLabel>
-          <Select id="job1" name="job1" defaultValue={'default'}>
+          <Select
+            id="job1"
+            {...register('job1', {
+              required: true,
+              pattern: exceptDefaultReg,
+            })}
+            defaultValue={'default'}
+          >
             <option value="default" disabled>
               - 선택 -
             </option>
@@ -76,15 +180,16 @@ const ProfileForm: React.FC = () => {
           <Label htmlFor="job2">
             희망 직무2 <Em>(선택)</Em>
           </Label>
-          <Select id="job2" name="job2" defaultValue={'default'}>
-            <option value="default" disabled>
-              - 선택 -
-            </option>
-            {jobListData.map((job) => (
-              <option key={job.id} value={job.name}>
-                {job.name}
-              </option>
-            ))}
+          <Select id="job2" {...register('job2')} defaultValue={'default'}>
+            <option value="default">- 선택 -</option>
+            {jobListData.map(
+              (job) =>
+                job1 !== job.name && (
+                  <option key={job.id} value={job.name}>
+                    {job.name}
+                  </option>
+                ),
+            )}
           </Select>
         </InputWrapper>
       </Row>
@@ -143,7 +248,7 @@ const ProfileForm: React.FC = () => {
           <InfoInput
             type="url"
             id="github-url"
-            name="github-url"
+            {...register('githubUrl')}
             placeholder="https://github.com/ssafy-mate"
             pattern="https://.*"
           />
@@ -157,7 +262,7 @@ const ProfileForm: React.FC = () => {
           <InfoInput
             type="url"
             id="etc-url"
-            name="etc-url"
+            {...register('etcUrl')}
             placeholder="https://velog.io/@ssafy-mate"
             pattern="https://.*"
           />
@@ -183,13 +288,13 @@ const ProfileForm: React.FC = () => {
         </CheckBoxWrapper>
       </Row>
       <Row>
-        <SignUpButton>계정 만들기</SignUpButton>
+        <SignUpButton type="submit">계정 만들기</SignUpButton>
       </Row>
     </Container>
   );
 };
 
-const Container = styled.div`
+const Container = styled.form`
   width: 100%;
 `;
 
@@ -233,7 +338,20 @@ const CheckBoxWrapper = styled.div`
   display: flex;
   width: 100%;
 `;
-
+const IconButton = styled.button`
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  border: none;
+  background-color: transparent;
+  color: #f44336;
+  transition: all 0.12s ease-in-out;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.15);
+  }
+`;
 const Label = styled.label`
   margin-bottom: 4px;
   font-size: 14px;

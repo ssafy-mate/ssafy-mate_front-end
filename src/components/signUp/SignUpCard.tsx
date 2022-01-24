@@ -13,7 +13,7 @@ const SignUpCard: React.FC = () => {
   const [ssafyTrack, setSsafyTrack] = useState<string>('');
   const [studentNumber, setStudentNumber] = useState<string>('');
   const [studentName, setStudentName] = useState<string>('');
-  const [signUpStep, setSignUpStep] = useState<number>(2);
+  const [signUpStep, setSignUpStep] = useState<number>(0);
   const [signUpEmail, setSignUpEmail] = useState<string>('');
   const [signUpPassword, setSignUpPassword] = useState<string>('');
 
