@@ -56,36 +56,40 @@ const SignUpForm: React.FC<SignUpProps> = ({
   const history = useHistory();
 
   //alert 열건지 말건지
-  const [statusAlertOpen, setStatusAlertOpen] = useState(true);
+  const [statusAlertOpen, setStatusAlertOpen] = useState<boolean>(true);
 
   //alert 무슨 색으로 열건지
   const [statusAlertSeverity, setStatusAlertSeverity] =
     useState<Severity>('success');
 
-  const codeConfirmButtonOnChange = watch('signUpConfiromButton');
+  const codeConfirmButtonOnChange: string | undefined = watch(
+    'signUpConfiromButton',
+  );
 
   //alert 문구 뭐로 할건지
   const [statusAlertText, setStatusAlertText] =
-    useState('교육생 인증에 성공했습니다.');
+    useState<string>('교육생 인증에 성공했습니다.');
 
   // 이메일 인증 코드 요청하는 버튼 활성화, 비활성화
-  const [emailCodeRequestButton, setEmailCodeRequestButton] = useState(true);
+  const [emailCodeRequestButton, setEmailCodeRequestButton] =
+    useState<boolean>(true);
 
   //이메일 인증 코드 확인하는 버튼 활성화 비활성화
-  const [codeConfirmButton, setCodeConfirmButton] = useState(true);
+  const [codeConfirmButton, setCodeConfirmButton] = useState<boolean>(true);
 
   //이메일 인증 코드 입력하는 부분 활성화 비활성화
-  const [codeInputDisabled, setCodeInputDisabled] = useState(true);
+  const [codeInputDisabled, setCodeInputDisabled] = useState<boolean>(true);
 
   //이메일 입력하는 부분 활성화 비활성화
-  const [emailInputDisabled, setEmailInputDisabled] = useState(false);
+  const [emailInputDisabled, setEmailInputDisabled] = useState<boolean>(false);
 
   //이메일 인증 코드 확인하는 버튼 문구
-  const [codeConfirmButtonText, setCodeConfirmButtonText] = useState('확인');
+  const [codeConfirmButtonText, setCodeConfirmButtonText] =
+    useState<string>('확인');
 
   //이메일 인증 코드 요청하는 버튼 문구
   const [verificationCodeButtonText, setVerificationCodeButtonText] =
-    useState('이메일 인증');
+    useState<string>('이메일 인증');
 
   // 이메일 적는 input
   const signUpEmailOnChange: string = watch('signUpEmail');
@@ -95,19 +99,20 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
   //인증 코드 에러 문구
   const [codeVerificationErrorText, setCodeVerificationErrorText] =
-    useState('이메일 인증을 완료해주세요.');
+    useState<string>('이메일 인증을 완료해주세요.');
 
   //인증 코드 에러 종류
-  const [codeVerificationError, setCodeVerificationError] = useState(false);
+  const [codeVerificationError, setCodeVerificationError] =
+    useState<boolean>(false);
 
   // 비밀번호
-  const signUpPasswordOnChange = watch('signUpPassword');
+  const signUpPasswordOnChange: string = watch('signUpPassword');
 
   // 이메일 재전송 div 보일지 말지
-  const [resendEmail, setResendEmail] = useState(false);
+  const [resendEmail, setResendEmail] = useState<boolean>(false);
 
   //3분 타이머
-  const [time, setTime] = useState(179);
+  const [time, setTime] = useState<number>(179);
 
   //3분 타이머
   useEffect(() => {
