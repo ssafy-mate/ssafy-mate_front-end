@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -8,6 +8,10 @@ import EditTeamForm from '../components/team/EditTeamForm';
 import Footer from '../components/common/Footer';
 
 const EditTeamPage: React.FC = () => {
+  useEffect(() => {
+    document.title = '팀 정보 수정 | 싸피 메이트';
+  }, []);
+
   return (
     <>
       <Header />

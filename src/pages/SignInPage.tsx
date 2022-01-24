@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -7,6 +7,10 @@ import SignInCard from '../components/signIn/SignInCard';
 import Footer from '../components/common/Footer';
 
 const SignInPage: React.FC = () => {
+  useEffect(() => {
+    document.title = '로그인 | 싸피 메이트';
+  }, []);
+
   return (
     <>
       <Header />

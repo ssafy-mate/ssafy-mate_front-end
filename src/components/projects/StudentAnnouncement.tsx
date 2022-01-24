@@ -518,7 +518,6 @@ const StudentItem = styled.li`
   border: 1px solid #d7e2eb;
   border-radius: 4px;
   box-sizing: border-box;
-  transition: all 0.08s ease-in-out;
 
   @media (max-width: 1199px) {
     width: 47%;
@@ -553,7 +552,7 @@ const ProfileImg = styled.img`
   width: 50px;
   height: 50px;
   border-radius: 4px;
-  object-fit: cover;
+  object-fit: fill;
 
   @media (max-width: 428px) {
     width: 46px;

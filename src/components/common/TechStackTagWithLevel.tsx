@@ -7,7 +7,7 @@ import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { TechStackTagProps } from '../../types/commonType';
+import { TechStackTagProps } from '../../types/commonTypes';
 
 const TechStackTagWithLevel: React.FC<TechStackTagProps> = ({
   id,
@@ -80,7 +80,7 @@ const Img = styled.img`
   width: 24px;
   height: 24px;
   border-radius: 2px;
-  object-fit: cover;
+  object-fit: fill;
 
   @media (max-width: 540px) {
     width: 22px;

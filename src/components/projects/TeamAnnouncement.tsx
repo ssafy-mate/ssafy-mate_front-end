@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { Link } from 'react-router-dom';
+
 import styled from '@emotion/styled';
 
 import WebIcon from '@mui/icons-material/Web';
@@ -20,40 +22,44 @@ const TeamAnnouncement: React.FC = () => {
       </AnnouncementHeader>
       <TeamList>
         <TeamItem>
-          <ItemHeader>
-            <ItemImg
-              src="/images/projects/sample-team_logo1.png"
-              alt="샘플 팀 로고"
-            />
-          </ItemHeader>
-          <ItemBody>
-            <TeamTitle>
-              실제 운영할 서비스 개발을 도전할 분들을 모집합니다.
-            </TeamTitle>
-            <TeamName>
-              데스파시토 <TeamCampus>(서울)</TeamCampus>
-            </TeamName>
-            <TeamStatusList>
-              <TeamStatusItem>
-                <WebIcon />
-                <Job>Front-end</Job> 1 / 3
-              </TeamStatusItem>
-              <TeamStatusItem>
-                <StorageIcon />
-                <Job>Back-end</Job> 2 / 3
-              </TeamStatusItem>
-              <TeamStatusItem>
-                <GroupsIcon />
-                <Job>Total</Job> 3 / 6
-              </TeamStatusItem>
-            </TeamStatusList>
-            <TechStackList>
-              <TeckStackItem>React</TeckStackItem>
-              <TeckStackItem>Redux</TeckStackItem>
-              <TeckStackItem>Spring Boot</TeckStackItem>
-              <TeckStackItem>MySQL</TeckStackItem>
-            </TechStackList>
-          </ItemBody>
+          <TeamLink to="/teams/1">
+            <ItemHeader>
+              <ItemImg
+                src="/images/common/ssafy-mate_logo.png"
+                alt="샘플 팀 로고"
+              />
+            </ItemHeader>
+            <ItemBody>
+              <TeamTitle>
+                실제 운영할 서비스 개발을 도전할 분들을 모집합니다.
+              </TeamTitle>
+              <TeamName>
+                데스파시토 <TeamCampus>(서울)</TeamCampus>
+              </TeamName>
+              <TeamStatusList>
+                <TeamStatusItem>
+                  <WebIcon />
+                  <Job>Front-end</Job> 1 / 3
+                </TeamStatusItem>
+                <TeamStatusItem>
+                  <StorageIcon />
+                  <Job>Back-end</Job> 3 / 3
+                </TeamStatusItem>
+                <TeamStatusItem>
+                  <GroupsIcon />
+                  <Job>Total</Job> 4 / 6
+                </TeamStatusItem>
+              </TeamStatusList>
+              <TechStackList>
+                <TeckStackItem>React</TeckStackItem>
+                <TeckStackItem>Redux</TeckStackItem>
+                <TeckStackItem>Emotion</TeckStackItem>
+                <TeckStackItem>Spring Boot</TeckStackItem>
+                <TeckStackItem>JPA</TeckStackItem>
+                <TeckStackItem>MySQL</TeckStackItem>
+              </TechStackList>
+            </ItemBody>
+          </TeamLink>
         </TeamItem>
         <TeamItem className="full">
           <ItemHeader>
@@ -350,7 +356,7 @@ const TeamList = styled.ul`
   display: flex;
   flex-wrap: wrap;
 
-  @media (max-width: 1015px) {
+  @media (max-width: 1199px) {
     flex-direction: column;
   }
 `;
@@ -368,7 +374,13 @@ const TeamItem = styled.li`
   cursor: pointer;
 
   &:hover {
-    border: 1px solid #3396f4;
+    border: 1px solid #84c0f8;
+    background-color: #f8fbfe;
+
+    & h5 {
+      color: #3396f4;
+      text-decoration: underline;
+    }
   }
   &:nth-of-type(even) {
     margin-left: 16px;
@@ -379,7 +391,7 @@ const TeamItem = styled.li`
     filter: grayscale(80%);
   }
 
-  @media (max-width: 1015px) {
+  @media (max-width: 1199px) {
     width: 100%;
     max-width: 100%;
 
@@ -408,7 +420,7 @@ const ItemImg = styled.img`
   width: 72px;
   height: 72px;
   border-radius: 4px;
-  object-fit: cover;
+  object-fit: fill;
 
   @media (max-width: 575px) {
     width: 40px;
@@ -422,12 +434,13 @@ const ItemBody = styled.div`
 
 const TeamTitle = styled.h5`
   width: 100%;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   font-size: 18px;
   line-height: 1.5;
   color: #263747;
+  transition: all 0.12s ease-in-out;
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     font-size: 16px;
   }
 `;
@@ -435,11 +448,11 @@ const TeamTitle = styled.h5`
 const TeamCampus = styled.span``;
 
 const TeamName = styled.h6`
-  margin-bottom: 4px;
+  margin-bottom: 6px;
   font-size: 14px;
   color: #98a8b9;
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     font-size: 13px;
   }
 `;
@@ -448,7 +461,7 @@ const TeamStatusList = styled.ul`
   display: flex;
   margin-bottom: 6px;
 
-  @media (max-width: 472px) {
+  @media (max-width: 575px) {
     flex-direction: column;
   }
 `;
@@ -456,7 +469,7 @@ const TeamStatusList = styled.ul`
 const TeamStatusItem = styled.li`
   font-size: 14px;
   color: #98a8b9;
-  line-height: 1.5;
+  line-height: 1.6;
 
   svg {
     margin-right: 2px;
@@ -477,14 +490,14 @@ const TeamStatusItem = styled.li`
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 767px) {
     font-size: 13px;
 
     svg {
       font-size: 15px;
     }
   }
-  @media (max-width: 472px) {
+  @media (max-width: 575px) {
     &:not(:last-of-type) {
       &:after {
         content: none;
@@ -516,6 +529,10 @@ const TeckStackItem = styled.li`
   &:last-of-type {
     margin-right: 0;
   }
+`;
+
+const TeamLink = styled(Link)`
+  display: flex;
 `;
 
 export default TeamAnnouncement;

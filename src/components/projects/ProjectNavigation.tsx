@@ -1,6 +1,4 @@
-import React from 'react';
-
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -13,35 +11,60 @@ import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import GroupsIcon from '@mui/icons-material/Groups';
 
 const ProjectNavigation: React.FC = () => {
+  const location = useLocation();
+
   return (
     <NavTabs>
-      <NavItem className="active">
-        <Link to="/projects/specialization/team" css={navLink}>
+      <NavItem
+        className={
+          location.pathname === '/projects/specialization/teams' ||
+          location.pathname === '/info/team/1'
+            ? 'active'
+            : ''
+        }
+      >
+        <NavLink to="/projects/specialization/teams">
           <ContentPasteSearchIcon css={navLinkIcon} />팀 공고
-        </Link>
+        </NavLink>
       </NavItem>
-      <NavItem>
-        <Link to="/projects/specialization/student" css={navLink}>
+      <NavItem
+        className={
+          location.pathname === '/projects/specialization/students'
+            ? 'active'
+            : ''
+        }
+      >
+        <NavLink to="/projects/specialization/students">
           <PersonSearchIcon css={navLinkIcon} />
           교육생 공고
-        </Link>
+        </NavLink>
       </NavItem>
-      <NavItem>
-        <Link to="/" css={navLink}>
+      <NavItem
+        className={location.pathname === '/projects/offers' ? 'active' : ''}
+      >
+        <NavLink to="/projects/offers">
           <VolunteerActivismIcon css={navLinkIcon} />
           받은 제안
-        </Link>
+        </NavLink>
       </NavItem>
-      <NavItem>
-        <Link to="#" css={navLink}>
+      <NavItem
+        className={
+          location.pathname === '/projects/applications' ? 'active' : ''
+        }
+      >
+        <NavLink to="/projects/applications">
           <HowToVoteIcon css={navLinkIcon} />
           지원한 팀
-        </Link>
+        </NavLink>
       </NavItem>
-      <NavItem>
-        <Link to="/projects/team/create" css={navLink}>
+      <NavItem
+        className={
+          location.pathname === '/projects/team/create' ? 'active' : ''
+        }
+      >
+        <NavLink to="/projects/team/create">
           <GroupsIcon css={navLinkIcon} />팀 생성
-        </Link>
+        </NavLink>
       </NavItem>
     </NavTabs>
   );
@@ -69,7 +92,7 @@ const NavItem = styled.li`
   }
 `;
 
-const navLink = css`
+const NavLink = styled(Link)`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -84,7 +107,7 @@ const navLink = css`
   @media (max-width: 414px) {
     font-size: 13px;
   }
-  @media (max-width: 340px) {
+  @media (max-width: 360px) {
     font-size: 12px;
   }
 `;

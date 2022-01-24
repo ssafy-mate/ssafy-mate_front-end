@@ -1,10 +1,15 @@
-export const jobListData = [
+interface Job {
+  id: number;
+  name: string;
+}
+
+export const jobListData: Job[] = [
   {
-    id: 'J1',
+    id: 1,
     name: '프론트엔드 (Front-end)',
   },
   {
-    id: 'J2',
+    id: 2,
     name: '백엔드 (Back-end)',
   },
 ];

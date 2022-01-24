@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { Link } from 'react-router-dom';
+
+import { useMediaQuery } from 'react-responsive';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -10,50 +12,89 @@ import ArticleIcon from '@mui/icons-material/Article';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
+import MenuBar from './MenuBar';
+
+interface MenuListProps {
+  isExpanded: boolean;
+}
+
 const Header: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+  const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const isMobile = useMediaQuery({
+    query: '(max-width: 991px)',
+  });
+
+  const handleExpandMenu = () => {
+    setIsExpanded(!isExpanded);
+  };
 
   return (
     <Container>
       <Wrapper>
-        <Link to="/" css={brand}>
-          <LogoWrapper>
-            <Logo src="/images/common/ssafy-mate_logo.png" alt="SSAFY MATE" />
-          </LogoWrapper>
-          <LogoName>SSAFY MATE</LogoName>
-        </Link>
-        {!isLoggedIn ? (
-          <AuthContainer>
-            <AuthItem>
-              <Link to="/users/sign_in" css={signInLink}>
-                로그인
-              </Link>
-            </AuthItem>
-            <AuthItem>
-              <Link to="/users/sign_up" css={signUpLink}>
-                회원가입
-              </Link>
-            </AuthItem>
-          </AuthContainer>
-        ) : (
-          <AccountContainer>
-            <AccountItem>
-              <Link to="#">
-                <ArticleIcon css={accountLinkIcon} />
-              </Link>
-            </AccountItem>
-            <AccountItem>
-              <Link to="#">
-                <NotificationsIcon css={accountLinkIcon} />
-              </Link>
-            </AccountItem>
-            <AccountItem>
-              <Link to="#">
-                <AccountBoxIcon css={accountLinkIcon} />
-              </Link>
-            </AccountItem>
-          </AccountContainer>
-        )}
+        <BrandWrapper>
+          <Brand to="/">
+            <LogoWrapper>
+              <Logo
+                src="/images/common/ssafy-mate_logo.png"
+                alt="SSAFY MATE 로고 이미지"
+              />
+            </LogoWrapper>
+            <LogoName>SSAFY MATE</LogoName>
+          </Brand>
+          {isMobile ? (
+            <MenuBar isExpanded={isExpanded} onExpandMenu={handleExpandMenu} />
+          ) : null}
+        </BrandWrapper>
+        <MenuList isExpanded={isExpanded}>
+          {!isLoggedIn ? (
+            <>
+              <MenuItem>
+                <PageLink to="/users/sign_in">로그인</PageLink>
+              </MenuItem>
+              <MenuItem>
+                <PageLink to="/users/sign_up">회원가입</PageLink>
+              </MenuItem>
+            </>
+          ) : !isMobile ? (
+            <>
+              <MenuItem>
+                <IconLink to="#">
+                  <ArticleIcon css={icon} />
+                </IconLink>
+              </MenuItem>
+              <MenuItem>
+                <IconLink to="#">
+                  <NotificationsIcon css={icon} />
+                </IconLink>
+              </MenuItem>
+              <MenuItem>
+                <IconLink to="#">
+                  <AccountBoxIcon css={icon} />
+                </IconLink>
+              </MenuItem>
+            </>
+          ) : (
+            <>
+              <MenuItem>
+                <PageLink to="#">계정 관리</PageLink>
+              </MenuItem>
+              <MenuItem>
+                <PageLink to="#">내 프로필</PageLink>
+              </MenuItem>
+              <MenuItem>
+                <PageLink to="#">받은 제안</PageLink>
+              </MenuItem>
+              <MenuItem>
+                <PageLink to="#">지원한 팀</PageLink>
+              </MenuItem>
+              <MenuItem css={line} />
+              <MenuItem>
+                <PageLink to="#">로그아웃</PageLink>
+              </MenuItem>
+            </>
+          )}
+        </MenuList>
       </Wrapper>
     </Container>
   );
@@ -65,7 +106,6 @@ const Container = styled.header`
   left: 0;
   z-index: 10;
   width: 100%;
-  height: 48px;
   background-color: #0d161c;
 `;
 
@@ -74,10 +114,32 @@ const Wrapper = styled.div`
   justify-content: space-between;
   align-items: center;
   max-width: 1200px;
-  height: 100%;
   margin: 0 auto;
-  padding: 0 16px;
+  padding: 6px 16px;
   box-sizing: border-box;
+
+  @media (max-width: 991px) {
+    flex-direction: column;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+`;
+
+const BrandWrapper = styled.div`
+  height: 34px;
+
+  @media (max-width: 991px) {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 6px 0;
+  }
+`;
+
+const Brand = styled(Link)`
+  display: flex;
+  align-items: center;
+  height: inherit;
 `;
 
 const LogoWrapper = styled.div`
@@ -103,27 +165,29 @@ const LogoName = styled.span`
   color: #fff;
 `;
 
-const AuthContainer = styled.ul`
+const MenuList = styled.ul<MenuListProps>`
   display: flex;
-`;
 
-const AuthItem = styled.li`
-  margin-left: 16px;
-`;
-
-const AccountContainer = styled.ul`
-  display: flex;
-`;
-
-const AccountItem = styled.li`
-  margin-left: 16px;
-
-  &:first-of-type {
-    margin-left: 0;
+  @media (max-width: 991px) {
+    overflow-y: hidden;
+    flex-direction: column;
+    width: 100%;
+    max-height: ${(props) => (props.isExpanded ? '100vh' : '0')};
+    box-sizing: border-box;
+    background-color: #0d161c;
+    transition: all 0.35s ease;
   }
 `;
 
-const signInLink = css`
+const MenuItem = styled.li`
+  @media (max-width: 992px) {
+    padding: 12px 4px;
+    box-sizing: border-box;
+  }
+`;
+
+const PageLink = styled(Link)`
+  padding: 4px 8px;
   font-size: 16px;
   font-weight: 500;
   line-height: 1.6;
@@ -134,28 +198,22 @@ const signInLink = css`
   &:hover {
     color: #fff;
   }
+
+  @media (max-width: 991px) {
+    padding: 0;
+    font-size: 15px;
+    line-height: 1.4669;
+  }
 `;
 
-const brand = css`
+const IconLink = styled(Link)`
   display: flex;
   align-items: center;
-  height: inherit;
+  padding: 3px 8px;
+  box-sizing: border-box;
 `;
 
-const signUpLink = css`
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1.6;
-  color: #b2c0cc;
-  text-decoration: none;
-  transition: color 0.08s ease-in-out;
-
-  &:hover {
-    color: #fff;
-  }
-`;
-
-const accountLinkIcon = css`
+const icon = css`
   font-size: 27px;
   color: #b2c0cc;
   transition: color 0.08s ease-in-out;
@@ -163,6 +221,12 @@ const accountLinkIcon = css`
   &:hover {
     color: #fff;
   }
+`;
+
+const line = css`
+  margin: 12px 0;
+  border-top: 0.0625rem solid #172334;
+  padding: 0;
 `;
 
 export default Header;

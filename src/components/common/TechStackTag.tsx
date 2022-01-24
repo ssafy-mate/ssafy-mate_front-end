@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 
 import CloseIcon from '@mui/icons-material/Close';
 
-import { TechStackTagProps } from '../../types/commonType';
+import { TechStackTagProps } from '../../types/commonTypes';
 
 const TechStackTag: React.FC<TechStackTagProps> = ({
   id,
@@ -59,7 +59,7 @@ const Img = styled.img`
   width: 24px;
   height: 24px;
   border-radius: 2px;
-  object-fit: cover;
+  object-fit: fill;
 
   @media (max-width: 540px) {
     width: 22px;
@@ -81,8 +81,8 @@ const DeleteButton = styled.button`
   border: none;
   background-color: transparent;
   color: #f44336;
-  cursor: pointer;
   transition: all 0.12s ease-in-out;
+  cursor: pointer;
 
   &:hover {
     transform: scale(1.15);

@@ -1,5 +1,3 @@
-import React from 'react';
-
 import { Switch, Route } from 'react-router-dom';
 import { ConnectedRouter as Router } from 'connected-react-router';
 
@@ -19,6 +17,8 @@ import ErrorPage from './pages/ErrorPage';
 import HomePage from './pages/HomePage';
 import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
+import UserDetailInfoPage from './pages/UserDetailInfoPage';
+import TeamDetailInfoPage from './pages/TeamDetailInfoPage';
 import CreateTeamPage from './pages/CreateTeamPage';
 import EditTeamPage from './pages/EditTeamPage';
 import CommonProjectPage from './pages/CommonProjectPage';
@@ -37,6 +37,8 @@ const App: React.FC = () => {
           <Route exact path="/" component={HomePage} />
           <Route exact path="/users/sign_in" component={SignInPage} />
           <Route exact path="/users/sign_up" component={SignUpPage} />
+          <Route exact path="/users/:userId" component={UserDetailInfoPage} />
+          <Route exact path="/teams/:teamId" component={TeamDetailInfoPage} />
           <Route
             exact
             path="/projects/team/create"
@@ -46,12 +48,12 @@ const App: React.FC = () => {
           <Route exact path="/projects/common" component={CommonProjectPage} />
           <Route
             exact
-            path="/projects/specialization/team"
+            path="/projects/specialization/teams"
             component={TeamSpecializationProjectPage}
           />
           <Route
             exact
-            path="/projects/specialization/student"
+            path="/projects/specialization/students"
             component={StduentSpecializationProjectPage}
           />
           <Route

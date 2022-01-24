@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect } from 'react';
 
 import styled from '@emotion/styled';
 
@@ -8,6 +8,10 @@ import CreateTeamForm from '../components/team/CreateTeamForm';
 import Footer from '../components/common/Footer';
 
 const CreateTeamPage: React.FC = () => {
+  useEffect(() => {
+    document.title = '팀 생성 | 싸피 메이트';
+  }, []);
+
   return (
     <>
       <Header />
@@ -21,13 +25,15 @@ const CreateTeamPage: React.FC = () => {
 };
 
 const Container = styled.div`
-  margin-top: 80px;
+  max-width: 1200px;
+  margin: 60px auto 0;
   padding: 0 16px;
+  box-sizing: border-box;
 
-  @media (max-width: 580px) {
-    margin-top: 60px;
+  @media (max-width: 767px) {
+    margin-top: 50px;
   }
-  @media (max-width: 414px) {
+  @media (max-width: 575px) {
     margin-top: 40px;
   }
 `;
