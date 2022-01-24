@@ -1,3 +1,5 @@
+import { axiosInstance } from '../utils/axios';
+
 import {
   SsafyAuth,
   SignUpResponse,
@@ -5,7 +7,6 @@ import {
   EmailVerificationCodeConfirmRequest,
   SignUpProfile,
 } from '../types/UserInfomationType';
-import { axiosInstance } from '../utils/axios';
 
 class UserService {
   public static async getSsafyAuth(data: SsafyAuth): Promise<SignUpResponse> {
@@ -15,6 +16,7 @@ class UserService {
         params: data,
       },
     );
+
     return response.data;
   }
 
@@ -25,6 +27,7 @@ class UserService {
       '/api/user/sign-up/verification/email',
       data,
     );
+
     return response.data;
   }
 
@@ -35,6 +38,7 @@ class UserService {
       '/api/user/sign-up/verification/email',
       data,
     );
+
     return response.data;
   }
 
@@ -43,7 +47,9 @@ class UserService {
       '/api/user',
       data,
     );
+
     return response.data;
   }
-} //end for class
+}
+
 export default UserService;
