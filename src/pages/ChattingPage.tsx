@@ -1,11 +1,9 @@
 import React from 'react';
 
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import Header from '../components/common/Header';
-import Footer from '../components/common/Footer';
 import ChattingForm from '../components/chatting/ChattingForm';
 
 const ChattingPage: React.FC = () => {
@@ -15,7 +13,6 @@ const ChattingPage: React.FC = () => {
       <Container>
         <ChattingForm />
       </Container>
-      {/* <Footer /> */}
     </>
   );
 };
