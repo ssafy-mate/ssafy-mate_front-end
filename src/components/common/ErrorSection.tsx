@@ -6,7 +6,11 @@ import CloudOffIcon from '@mui/icons-material/CloudOff';
 import HomeIcon from '@mui/icons-material/Home';
 import AssignmentReturnIcon from '@mui/icons-material/AssignmentReturn';
 
-const ErrorSection: React.FC = () => {
+interface ErrorSectionProps {
+  errorMessage: string;
+}
+
+const ErrorSection: React.FC<ErrorSectionProps> = ({ errorMessage }) => {
   const history = useHistory();
 
   const moveToPreviousPath = () => {
@@ -21,7 +25,7 @@ const ErrorSection: React.FC = () => {
         </ErrorHeader>
         <ErrorBody>
           <Title>요청을 처리하는 도중에 오류가 발생했습니다!</Title>
-          <Contents>토큰이 유효하지 않습니다.</Contents>
+          <Message>{errorMessage}</Message>
         </ErrorBody>
         <ErrorFooter>
           <HomeLink to="/">
@@ -91,7 +95,7 @@ const Title = styled.h1`
   }
 `;
 
-const Contents = styled.p`
+const Message = styled.p`
   font-size: 18px;
   line-height: 1.6;
   text-align: center;
