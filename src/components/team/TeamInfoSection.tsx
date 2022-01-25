@@ -1,225 +1,192 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 import styled from '@emotion/styled';
 
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import ShareIcon from '@mui/icons-material/Share';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import GroupsIcon from '@mui/icons-material/Groups';
-import WebIcon from '@mui/icons-material/Web';
-import StorageIcon from '@mui/icons-material/Storage';
 import FlagIcon from '@mui/icons-material/Flag';
 import SchoolIcon from '@mui/icons-material/School';
 import ComputerIcon from '@mui/icons-material/Computer';
 import StyleIcon from '@mui/icons-material/Style';
 
-import { UserType } from '../../types/userTypes';
+import useTeamDetailInfo from '../../hooks/useTeamDetailInfo';
 
 import RecruitStatusBadge from '../projects/RecruitStatusBadge';
-import RecruitStatusTag from '../projects/RecruitStatusTag';
 import JobDoughnutChart from '../chart/DoughnutChart';
 import TeamTechStackTag from './TeamTechStackTag';
+import MemberItem from './MemberItem';
+import TeamMembersStatusBox from './TeamMembersStatus';
+import ErrorSection from '../common/ErrorSection';
+import SkeletonTeamInfoSection from './SkeletonTeamInfoSection';
+
+type Params = {
+  teamId: string;
+};
 
 const TeamInformationSection: React.FC = () => {
-  const [techStacks, setTechStacks] = useState<string[]>([]);
-  const [members, setMembers] = useState<UserType[]>([]);
+  const { teamId } = useParams<Params>();
+  const { isLoading, teamData, isError, errorMessage } =
+    useTeamDetailInfo(teamId);
 
   useEffect(() => {
-    const techStacksData = [
-      'TypeScript',
-      'Redux',
-      'Redux-Saga',
-      'React-Query',
-      'Emotion',
-      'Spring-Boot',
-      'JPA',
-      'MySQL',
-    ];
+    if (isError) {
+      document.title = `${errorMessage} | 싸피 메이트`;
+    } else {
+      document.title = `${
+        teamData?.teamName ? teamData.teamName : ''
+      } 팀 상세 정보 | 싸피 메이트`;
+    }
+  }, [teamData, isError, errorMessage]);
 
-    setTechStacks(techStacksData);
-  }, []);
+  const isTotalSufficient = useMemo(
+    () =>
+      Number(teamData?.totalRecruitment) <= Number(teamData?.totalHeadcount)
+        ? true
+        : false,
+    [teamData?.totalRecruitment, teamData?.totalHeadcount],
+  );
+
+  const isFrontendSufficient = useMemo(
+    () =>
+      Number(teamData?.frontendRecruitment) <=
+      Number(teamData?.frontendHeadcount)
+        ? true
+        : false,
+    [teamData?.frontendRecruitment, teamData?.frontendHeadcount],
+  );
+
+  const isBackendSufficient = useMemo(
+    () =>
+      Number(teamData?.backendRecruitment) <= Number(teamData?.backendHeadcount)
+        ? true
+        : false,
+    [teamData?.backendRecruitment, teamData?.backendHeadcount],
+  );
+
+  if (isError) {
+    return <ErrorSection errorMessage={errorMessage} />;
+  }
 
   return (
     <Container>
-      <HeadContainer>
-        <TitleBox>
-          <TeamImgWrapper>
-            <TeamImg src="/images/common/ssafy-mate_logo.png" alt="sample" />
-          </TeamImgWrapper>
-          <TeamTitleWrapper>
-            <Notice>실제 운영할 서비스 개발을 도전할 분들을 모집합니다.</Notice>
-            <Row>
-              <TeamName>데스파시토</TeamName>
-              <RecruitStatusBadge isActive={true} />
-            </Row>
-          </TeamTitleWrapper>
-        </TitleBox>
-        <ButtonBox>
-          <ApplicationButton>
-            <BorderColorIcon />
-            <span>지원하기</span>
-          </ApplicationButton>
-          <SharingButton>
-            <ShareIcon />
-            <span>공유하기</span>
-            <ArrowDropDownIcon />
-          </SharingButton>
-        </ButtonBox>
-      </HeadContainer>
-      <BodyContainer>
-        <Contents>
-          <Section>
-            <SubHead>요약 정보</SubHead>
-            <InfoList>
-              <InfoItem>
-                <InfoLabel>
-                  <SchoolIcon />
-                  캠퍼스
-                </InfoLabel>
-                <InfoContent>서울</InfoContent>
-              </InfoItem>
-              <InfoItem>
-                <InfoLabel>
-                  <ComputerIcon />
-                  프로젝트
-                </InfoLabel>
-                <InfoContent>특화 프로젝트</InfoContent>
-              </InfoItem>
-              <InfoItem>
-                <InfoLabel>
-                  <StyleIcon />
-                  프로젝트 트랙
-                </InfoLabel>
-                <InfoContent>빅데이터</InfoContent>
-              </InfoItem>
-              <InfoItem>
-                <InfoLabel>
-                  <FlagIcon />팀 생성자
-                </InfoLabel>
-                <InfoContent>조원빈</InfoContent>
-              </InfoItem>
-            </InfoList>
-          </Section>
-          <Section>
-            <SubHead>소개</SubHead>
-            <Introduction>
-              환상의 호흡으로 프로젝트 진행해 보고 싶습니다. 백엔드는 ...
-              프론트는 ... 이런 식으로 개발 진행하려고 합니다.
-            </Introduction>
-          </Section>
-          <Section>
-            <SubHead>계획 중인 기술 스택</SubHead>
-            <TechStackList>
-              {techStacks.map((techStack, index) => (
-                <TeamTechStackTag key={index} techStackName={techStack} />
-              ))}
-            </TechStackList>
-          </Section>
-        </Contents>
-        <Aside>
-          <SubHead>팀원 모집 현황</SubHead>
-          <MemberList>
-            <MemberItem>
-              <ProfileImgWrapper>
-                <ProfileImg
-                  src="/images/projects/sample-student_profile-img1.jpeg"
-                  alt="샘플 프로필 이미지"
+      {isLoading || !teamData ? (
+        <SkeletonTeamInfoSection />
+      ) : (
+        <>
+          <HeadContainer>
+            <TitleBox>
+              <TeamImgWrapper>
+                <TeamImg
+                  src={teamData.teamImgUrl}
+                  alt={`${teamData.teamName} 팀의 대표 이미지`}
                 />
-              </ProfileImgWrapper>
-              <MemberInfo>
-                <MemberName>
-                  <MemberLink to="/">조원빈</MemberLink>
-                  <FlagIcon />
-                </MemberName>
-                <SsafyInfo>백엔드 (Front-end)</SsafyInfo>
-                <SsafyInfo>Java Track</SsafyInfo>
-              </MemberInfo>
-            </MemberItem>
-            <MemberItem>
-              <ProfileImgWrapper>
-                <ProfileImg
-                  src="/images/projects/sample-student_profile-img3.jpeg"
-                  alt="샘플 프로필 이미지"
-                />
-              </ProfileImgWrapper>
-              <MemberInfo>
-                <MemberName>
-                  <MemberLink to="/">손영배</MemberLink>
-                </MemberName>
-                <SsafyInfo>백엔드 (Back-end)</SsafyInfo>
-                <SsafyInfo>Python Track</SsafyInfo>
-              </MemberInfo>
-            </MemberItem>
-            <MemberItem>
-              <ProfileImgWrapper>
-                <ProfileImg
-                  src="/images/projects/sample-student_profile-img4.jpeg"
-                  alt="샘플 프로필 이미지"
-                />
-              </ProfileImgWrapper>
-              <MemberInfo>
-                <MemberName>
-                  <MemberLink to="/">이정훈</MemberLink>
-                </MemberName>
-                <SsafyInfo>백엔드 (Back-end)</SsafyInfo>
-                <SsafyInfo>Java Track</SsafyInfo>
-              </MemberInfo>
-            </MemberItem>
-            <MemberItem>
-              <ProfileImgWrapper>
-                <ProfileImg
-                  src="/images/projects/sample-student_profile-img5.jpeg"
-                  alt="샘플 프로필 이미지"
-                />
-              </ProfileImgWrapper>
-              <MemberInfo>
-                <MemberName>
-                  <MemberLink to="/">박정환</MemberLink>
-                </MemberName>
-                <SsafyInfo>프론트엔드 (Front-end)</SsafyInfo>
-                <SsafyInfo>Java Track</SsafyInfo>
-              </MemberInfo>
-            </MemberItem>
-          </MemberList>
-          <MembersStatus>
-            <HeadcountList>
-              <HeadcountItem>
-                <HeadcountLabel>
-                  <GroupsIcon />
-                  Total
-                </HeadcountLabel>
-                <HeadcountContent>
-                  <span>4명</span>/<span>6명</span>
-                </HeadcountContent>
-                <RecruitStatusTag isSufficent={false} />
-              </HeadcountItem>
-              <HeadcountItem>
-                <HeadcountLabel>
-                  <WebIcon />
-                  Front-end
-                </HeadcountLabel>
-                <HeadcountContent>
-                  <span>1명</span>/<span>3명</span>
-                </HeadcountContent>
-                <RecruitStatusTag isSufficent={false} />
-              </HeadcountItem>
-              <HeadcountItem>
-                <HeadcountLabel>
-                  <StorageIcon />
-                  Back-end
-                </HeadcountLabel>
-                <HeadcountContent>
-                  <span>3명</span>/<span>3명</span>
-                </HeadcountContent>
-                <RecruitStatusTag isSufficent={true} />
-              </HeadcountItem>
-            </HeadcountList>
-          </MembersStatus>
-          <JobDoughnutChart frontendHeadcount={1} backendHeadcount={3} />
-        </Aside>
-      </BodyContainer>
+              </TeamImgWrapper>
+              <TeamTitleWrapper>
+                <Notice>{teamData.notice}</Notice>
+                <Row>
+                  <TeamName>{teamData.teamName}</TeamName>
+                  <RecruitStatusBadge isRecruiting={!isTotalSufficient} />
+                </Row>
+              </TeamTitleWrapper>
+            </TitleBox>
+            <ButtonBox>
+              <ApplicationButton>
+                <BorderColorIcon />
+                <span>지원하기</span>
+              </ApplicationButton>
+              <SharingButton>
+                <ShareIcon />
+                <span>공유하기</span>
+                <ArrowDropDownIcon />
+              </SharingButton>
+            </ButtonBox>
+          </HeadContainer>
+          <BodyContainer>
+            <Contents>
+              <Section>
+                <SubHead>요약 정보</SubHead>
+                <InfoList>
+                  <InfoItem>
+                    <InfoLabel>
+                      <SchoolIcon />
+                      캠퍼스
+                    </InfoLabel>
+                    <InfoContent>{teamData.campus}</InfoContent>
+                  </InfoItem>
+                  <InfoItem>
+                    <InfoLabel>
+                      <ComputerIcon />
+                      프로젝트
+                    </InfoLabel>
+                    <InfoContent>{teamData.project}</InfoContent>
+                  </InfoItem>
+                  <InfoItem>
+                    <InfoLabel>
+                      <StyleIcon />
+                      프로젝트 트랙
+                    </InfoLabel>
+                    <InfoContent>{teamData.projectTrack}</InfoContent>
+                  </InfoItem>
+                  <InfoItem>
+                    <InfoLabel>
+                      <FlagIcon />팀 생성자
+                    </InfoLabel>
+                    <InfoContent>{teamData.owner.userName}</InfoContent>
+                  </InfoItem>
+                </InfoList>
+              </Section>
+              <Section>
+                <SubHead>소개</SubHead>
+                <Introduction>{teamData.introduction}</Introduction>
+              </Section>
+              <Section>
+                <SubHead>계획 중인 기술 스택</SubHead>
+                <TechStackList>
+                  {teamData.techStacks.map((techStack, index) => (
+                    <TeamTechStackTag
+                      key={index}
+                      techStackName={techStack.techStackName}
+                    />
+                  ))}
+                </TechStackList>
+              </Section>
+            </Contents>
+            <Aside>
+              <SubHead>팀원 모집 현황</SubHead>
+              <MemberList>
+                {teamData.members.map((member) => (
+                  <MemberItem
+                    key={member.userId}
+                    userId={member.userId}
+                    userName={member.userName}
+                    profileImgUrl={member.profileImgUrl}
+                    ssafyTrack={member.ssafyTrack}
+                    job1={member.job1}
+                  />
+                ))}
+              </MemberList>
+              <TeamMembersStatusBox
+                totalRecruitment={teamData.totalRecruitment}
+                totalHeadcount={teamData.totalHeadcount}
+                frontendRecruitment={teamData.frontendRecruitment}
+                frontendHeadcount={teamData.frontendHeadcount}
+                backendRecruitment={teamData.backendRecruitment}
+                backendHeadcount={teamData.backendHeadcount}
+                isTotalSufficient={isTotalSufficient}
+                isFrontendSufficient={isFrontendSufficient}
+                isBackendSufficient={isBackendSufficient}
+              />
+              <JobDoughnutChart
+                frontendHeadcount={teamData.frontendHeadcount}
+                backendHeadcount={teamData.backendHeadcount}
+              />
+            </Aside>
+          </BodyContainer>
+        </>
+      )}
     </Container>
   );
 };
@@ -303,6 +270,37 @@ const Notice = styled.h1`
   }
 `;
 
+const TeamImgWrapper = styled.div`
+  width: 90px;
+  height: 90px;
+  margin-right: 20px;
+  border-radius: 4px;
+  box-shadow: 4px 12px 18px 2px rgb(0 0 0 / 8%);
+
+  @media (max-width: 1199px) {
+    width: 80px;
+    height: 80px;
+  }
+`;
+
+const TeamTitleWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+`;
+
+const TeamImg = styled.img`
+  width: 90px;
+  height: 90px;
+  border-radius: 4px;
+  object-fit: fill;
+
+  @media (max-width: 1199px) {
+    width: 80px;
+    height: 80px;
+  }
+`;
+
 const TeamName = styled.h2`
   margin-right: 20px;
   font-size: 20px;
@@ -362,31 +360,6 @@ const SubHead = styled.h3`
 
 const MemberList = styled.ul`
   box-sizing: border-box;
-`;
-
-const MemberItem = styled.li`
-  display: flex;
-  flex-direction: row;
-  min-width: 340px;
-  margin-bottom: 12px;
-  padding: 14px;
-  border: 1px solid #d7e2eb;
-  border-radius: 4px;
-  box-sizing: border-box;
-  transition: all 0.08s ease-in-out;
-
-  &:hover {
-    border-color: #84c0f8;
-
-    & a {
-      text-decoration: underline;
-      color: #3396f4;
-    }
-  }
-
-  @media (max-width: 575px) {
-    min-width: 100%;
-  }
 `;
 
 const ApplicationButton = styled.button`
@@ -473,178 +446,6 @@ const SharingButton = styled.button`
   }
 `;
 
-const ProfileImgWrapper = styled.div`
-  width: 50px;
-  height: 50px;
-  margin-right: 24px;
-  border-radius: 4px;
-
-  @media (max-width: 991px) {
-    width: 48px;
-    height: 48px;
-  }
-  @media (max-width: 575px) {
-    width: 46px;
-    height: 46px;
-  }
-`;
-
-const ProfileImg = styled.img`
-  width: 50px;
-  height: 50px;
-  border-radius: 4px;
-  object-fit: fill;
-
-  @media (max-width: 991px) {
-    width: 48px;
-    height: 48px;
-  }
-  @media (max-width: 575px) {
-    width: 46px;
-    height: 46px;
-  }
-`;
-
-const MemberInfo = styled.div`
-  margin: auto 0;
-`;
-
-const MemberName = styled.h5`
-  display: flex;
-  align-items: center;
-
-  & svg {
-    height: 18px;
-    color: #3396f4;
-  }
-
-  @media (max-width: 767px) {
-    & svg {
-      height: 17px;
-    }
-  }
-  @media (max-width: 575px) {
-    & svg {
-      height: 15px;
-    }
-  }
-`;
-
-const MemberLink = styled(Link)`
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1.6;
-  color: #263647;
-  transition: all 0.08s ease-in-out;
-  cursor: pointer;
-
-  @media (max-width: 767px) {
-    font-size: 15px;
-  }
-  @media (max-width: 575px) {
-    font-size: 14px;
-  }
-`;
-
-const SsafyInfo = styled.span`
-  font-size: 14px;
-  line-height: 1.5;
-  color: #5f7f90;
-
-  &:first-of-type {
-    &::after {
-      content: '';
-      display: inline-block;
-      width: 1px;
-      height: 10px;
-      margin: 0 6px;
-      background-color: #5f7f90;
-    }
-  }
-
-  @media (max-width: 767px) {
-    font-size: 13px;
-  }
-`;
-
-const MembersStatus = styled.li`
-  display: flex;
-  flex-direction: column;
-  min-width: 340px;
-  margin-bottom: 12px;
-  padding: 14px;
-  border: 1px solid #d7e2eb;
-  border-radius: 4px;
-  box-sizing: border-box;
-  transition: all 0.08s ease-in-out;
-
-  @media (max-width: 575px) {
-    min-width: 100%;
-  }
-`;
-
-const HeadcountList = styled.ul`
-  width: 100%;
-`;
-
-const HeadcountItem = styled.li`
-  overflow: hidden;
-  display: flex;
-  width: 100%;
-  border-bottom: 1px solid #d7e2eb;
-  box-sizing: border-box;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`;
-
-const HeadcountLabel = styled.label`
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  min-width: 100px;
-  padding: 6px 0;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #263647;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  svg {
-    margin-right: 8px;
-    font-size: 18px;
-    line-height: 1.5;
-  }
-
-  @media (max-width: 767px) {
-    font-size: 14px;
-
-    svg {
-      font-size: 16px;
-    }
-  }
-`;
-
-const HeadcountContent = styled.p`
-  overflow: hidden;
-  display: flex;
-  align-items: center;
-  padding: 6px 16px;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #5f7f90;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-
-  & span {
-    &:nth-of-type(1) {
-      margin-right: 6px;
-    }
-    &:nth-of-type(2) {
-      margin-left: 6px;
-    }
-  }
-`;
-
 const InfoList = styled.ul`
   width: 100%;
 `;
@@ -714,37 +515,6 @@ const Introduction = styled.p`
 `;
 
 const TechStackList = styled.ul``;
-
-const TeamImgWrapper = styled.div`
-  width: 90px;
-  height: 90px;
-  margin-right: 20px;
-  border-radius: 4px;
-  box-shadow: 4px 12px 18px 2px rgb(0 0 0 / 8%);
-
-  @media (max-width: 1199px) {
-    width: 80px;
-    height: 80px;
-  }
-`;
-
-const TeamTitleWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-`;
-
-const TeamImg = styled.img`
-  width: 90px;
-  height: 90px;
-  border-radius: 4px;
-  object-fit: fill;
-
-  @media (max-width: 1199px) {
-    width: 80px;
-    height: 80px;
-  }
-`;
 
 const Row = styled.div`
   display: flex;
