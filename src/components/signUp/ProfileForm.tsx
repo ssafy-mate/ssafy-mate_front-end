@@ -240,13 +240,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
 
       UserService.signUp(data)
         .then((res) => {
-          console.log(res);
+          //성공한 경우
         })
         .catch((errors) => {
-          console.log(errors);
+          //실패한 경우
         });
-    } else {
-      console.log('실패');
     }
   };
 
