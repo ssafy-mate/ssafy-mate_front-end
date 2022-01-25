@@ -46,7 +46,7 @@ const ChattingForm: React.FC = () => {
   }, [messageList]);
 
   const onConnected = () => {
-    stompClient.subscribe('/topic/public', onMessageReceived);
+    stompClient.subscribe('/queue/public', onMessageReceived);
 
     // Tell your username to the server
     stompClient.send(
@@ -347,6 +347,7 @@ const MessageBoxLeftContent = styled.div`
   display: flex;
   justify-content: start;
   padding: 4px;
+  contain: content;
 
   & p {
     display: inline-flex;
@@ -358,9 +359,10 @@ const MessageBoxLeftContent = styled.div`
     color: #000;
     white-space: pre-wrap;
     line-height: 150%;
+    word-break: break-all;
   }
 
-  img {
+  & img {
     border: 1px solid #f9f9f9;
     border-radius: 50%;
     width: 36px;
@@ -374,8 +376,9 @@ const MessageBoxRightContent = styled.div`
   display: flex;
   justify-content: flex-end;
   padding: 4px;
+  contain: content;
 
-  p {
+  & p {
     display: inline-flex;
     max-width: 364px;
     margin: 0px;
@@ -385,6 +388,7 @@ const MessageBoxRightContent = styled.div`
     color: #fff;
     white-space: pre-wrap;
     line-height: 150%;
+    word-break: break-all;
   }
 `;
 
