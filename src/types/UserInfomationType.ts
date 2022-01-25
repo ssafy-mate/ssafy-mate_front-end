@@ -23,7 +23,7 @@ export interface SignUpRequest {
   password: string;
 }
 
-interface teckStacks {
+export interface TechStacksWithLevel {
   techStackName: string;
   techStackLevel: string;
 }
@@ -40,7 +40,7 @@ export interface SignUpProfile {
   selfIntroduction: string;
   job1: string;
   job2: string;
-  techStacks: Array<teckStacks>;
+  techStacks: Array<TechStacksWithLevel>;
   githubUrl: string;
   etcUrl: string;
   agreement: boolean;
@@ -70,4 +70,16 @@ export interface SignUp {
   signUpPassword: string;
   signUpCheckPassword: string;
   signUpConfiromButton: string | undefined;
+}
+
+//회원가입 3단계 인자
+export interface ProfileProps {
+  campus: string;
+  ssafyTrack: string;
+  studentNumber: string;
+  studentName: string;
+  signUpStep: number;
+  signUpEmail: string;
+  signUpPassword: string;
+  updateSignUpStep: (signUpStep: number) => void;
 }

@@ -15,10 +15,6 @@ interface SignUpStepperProps {
 const SignUpStepper: React.FC<SignUpStepperProps> = ({ signUpStep }) => {
   const steps = ['교육생 인증', '기본 정보 작성', '프로필 작성'];
 
-  // useEffect(() => {
-  //   console.log(signUpStep)
-  // }, [signUpStep])
-
   return (
     <Box sx={{ width: '100%' }} css={box}>
       <Stepper activeStep={signUpStep} alternativeLabel>

@@ -1,4 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, {
+  FormEventHandler,
+  MouseEventHandler,
+  useEffect,
+  useState,
+} from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -20,22 +25,18 @@ import { TechStack } from '../../types/commonTypes';
 
 import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
 import { finished } from 'stream';
-import { useForm } from 'react-hook-form';
-import { SignUpProfile, SignUpResponse } from '../../types/UserInfomationType';
-import UserService from '../../services/UserService';
-import { exceptDefaultReg } from '../../data/regularExpressionData';
 
-interface Props {
-  campus: string;
-  ssafyTrack: string;
-  studentNumber: string;
-  studentName: string;
-  signUpStep: number;
-  signUpEmail: string;
-  signUpPassword: string;
-  updateSignUpStep: (signUpStep: number) => void;
-}
-const ProfileForm: React.FC<Props> = ({
+import {
+  ProfileProps,
+  SignUpProfile,
+  SignUpResponse,
+  TechStacksWithLevel,
+} from '../../types/UserInfomationType';
+import UserService from '../../services/UserService';
+import { exceptDefaultReg, validUrl } from '../../data/regularExpressionData';
+import { url } from 'inspector';
+
+const ProfileForm: React.FC<ProfileProps> = ({
   campus,
   ssafyTrack,
   studentNumber,
@@ -45,19 +46,46 @@ const ProfileForm: React.FC<Props> = ({
   signUpPassword,
   updateSignUpStep,
 }) => {
-  const {
-    handleSubmit,
-    register,
-    setValue,
-    reset,
-    watch,
-    formState: { errors },
-  } = useForm<SignUpProfile>({ mode: 'onChange' });
+  const [techStacks, setTechStacks] = useState<TechStacksWithLevel[]>([]);
 
+  const updateTeckStacks = (techStacks: Array<TechStacksWithLevel>): void => {
+    setTechStacks(techStacks);
+  };
+
+  const [techStacksError, setTechStacksError] = useState<boolean>(false);
+
+  const updateTechStacksError = (techStacksError: boolean): void => {
+    setTechStacksError(techStacksError);
+  };
   const [profileImg, setProfileImg] = useState(null);
+
   const [previewProgileImg, setPreviewProfileImg] = useState(null);
 
-  const job1 = watch('job1');
+  const [job1, setJob1] = useState<string>('default');
+
+  const [job2, setJob2] = useState<string>('');
+
+  const [selfIntroduction, setSelfIntroduction] = useState<string>('');
+
+  const [githubUrl, setGithubUrl] = useState<string>('');
+
+  const [etcUrl, setEtcUrl] = useState<string>('');
+
+  const [agreement, setAgreement] = useState<boolean>(false);
+
+  const [job1Error, setJob1Error] = useState<boolean>(false);
+
+  const [selfIntroductionError, setSelfIntroductionError] =
+    useState<boolean>(false);
+
+  const [agreementError, setAgreementError] = useState<boolean>(false);
+
+  const [etcUrlPatternError, setEtcUrlPatternError] = useState<boolean>(false);
+
+  const [gitHubUrlPatternError, setGitHubUrlPatternError] =
+    useState<boolean>(false);
+
+  let profileImgformData: any;
 
   const {
     getRootProps,
@@ -97,24 +125,131 @@ const ProfileForm: React.FC<Props> = ({
     //전송해야할 이미지
     reader.readAsDataURL(theImgFile);
     setProfileImg(theImgFile);
-    console.log(theImgFile);
+
+    if (theImgFile !== null) {
+      profileImgformData = new FormData();
+      profileImgformData.append('image', theImgFile);
+    }
   };
 
   const handleClearProfileImg = () => {
     setProfileImg(null);
     setPreviewProfileImg(null);
-    reset({ profileImg: undefined });
   };
 
-  const onSubmit = (data: SignUpProfile) => {
-    SignUpRequest(data);
+  const handleTextAreaEnterKeyPressed = (event: React.KeyboardEvent) => {
+    if (event.code === 'Enter' || event.code === 'NumpadEnter') {
+      if (!event.shiftKey) {
+        event.preventDefault();
+      }
+    }
   };
 
-  const SignUpRequest = async (data: SignUpProfile) => {
-    const response: SignUpResponse = await UserService.signUp(data);
+  const handleTextAreaInput = (
+    event: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    setSelfIntroduction(event.target.value);
+
+    if (event.target.value === '') {
+      setSelfIntroductionError(true);
+    } else {
+      setSelfIntroductionError(false);
+    }
+  };
+
+  const getSignUpInfomation = () => {
+    const SignUpInfomation: SignUpProfile = {
+      campus: campus,
+      ssafyTrack: ssafyTrack,
+      studentNumber: studentNumber,
+      studentName: studentName,
+      email: signUpEmail,
+      password: signUpPassword,
+      profileImg: profileImgformData,
+      selfIntroduction: selfIntroduction,
+      job1: job1,
+      job2: job2,
+      techStacks: techStacks,
+      githubUrl: githubUrl,
+      etcUrl: etcUrl,
+      agreement: agreement,
+    };
+
+    return SignUpInfomation;
+  };
+
+  const signUpClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    event.preventDefault();
+
+    if (validation()) {
+      const data: SignUpProfile = getSignUpInfomation();
+
+      UserService.signUp(data)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((errors) => {
+          console.log(errors);
+        });
+    } else {
+      console.log('실패');
+    }
+  };
+
+  const handleJobSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    event.target.name === 'job1'
+      ? setJob1(event.target.value)
+      : setJob2(event.target.value);
+
+    if (event.target.name === 'job1' && event.target.value === 'default') {
+      setJob1Error(true);
+    } else {
+      setJob1Error(false);
+    }
+  };
+
+  const handleUrlInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    event.target.name === 'githubUrl'
+      ? setGithubUrl(event.target.value)
+      : setEtcUrl(event.target.value);
+  };
+
+  const handleCheckAgreement = (
+    event: React.MouseEvent<HTMLInputElement, MouseEvent>,
+  ) => {
+    if (agreement === false) {
+      setAgreement(true);
+      setAgreementError(false);
+    } else {
+      setAgreement(false);
+      setAgreementError(true);
+    }
+  };
+
+  const validation = () => {
+    if (!selfIntroduction) setSelfIntroductionError(true);
+    if (job1 === 'default') setJob1Error(true);
+    if (techStacks.length < 2) setTechStacksError(true);
+    if (!agreement) setAgreementError(true);
+    if (!validUrl.test(githubUrl)) setGitHubUrlPatternError(true);
+    if (!validUrl.test(etcUrl)) setEtcUrlPatternError(true);
+
+    if (
+      selfIntroduction &&
+      job1 !== 'default' &&
+      techStacks.length >= 2 &&
+      agreement
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   };
   return (
-    <Container onSubmit={handleSubmit(onSubmit)}>
+    <Container>
       <Row>
         <AvatarWrapper>
           {previewProgileImg ? (
@@ -149,10 +284,14 @@ const ProfileForm: React.FC<Props> = ({
           </RequirementLabel>
           <Textarea
             id="self-introduction"
-            {...register('selfIntroduction', {
-              required: true,
-            })}
+            name="selfIntroduction"
+            onKeyPress={handleTextAreaEnterKeyPressed}
+            onChange={handleTextAreaInput}
+            required
           />
+          {selfIntroductionError && (
+            <ErrorSpan>필수 입력 항목입니다.</ErrorSpan>
+          )}
         </InputWrapper>
       </Row>
       <Row>
@@ -160,11 +299,10 @@ const ProfileForm: React.FC<Props> = ({
           <RequirementLabel htmlFor="job1">희망 직무1</RequirementLabel>
           <Select
             id="job1"
-            {...register('job1', {
-              required: true,
-              pattern: exceptDefaultReg,
-            })}
             defaultValue={'default'}
+            name="job1"
+            onChange={handleJobSelect}
+            required
           >
             <option value="default" disabled>
               - 선택 -
@@ -175,12 +313,14 @@ const ProfileForm: React.FC<Props> = ({
               </option>
             ))}
           </Select>
+          {job1Error && <ErrorSpan>필수 선택 사항입니다.</ErrorSpan>}
         </InputWrapper>
+
         <InputWrapper>
           <Label htmlFor="job2">
             희망 직무2 <Em>(선택)</Em>
           </Label>
-          <Select id="job2" {...register('job2')} defaultValue={'default'}>
+          <Select id="job2" defaultValue={'default'} onChange={handleJobSelect}>
             <option value="default">- 선택 -</option>
             {jobListData.map(
               (job) =>
@@ -201,6 +341,7 @@ const ProfileForm: React.FC<Props> = ({
           >
             기술 스택 <Em>(필수 2가지 이상 기입)</Em>
           </RequirementLabel>
+
           <InfoInputWrapper
             ref={setAnchorEl}
             className={focused ? 'focused' : ''}
@@ -228,6 +369,11 @@ const ProfileForm: React.FC<Props> = ({
               )}
             </SearchList>
           ) : null}
+          {techStacksError && (
+            <ErrorSpan>
+              필수 2가지 이상 선택 사항입니다.(상/중/하 선택도 필수입니다.)
+            </ErrorSpan>
+          )}
         </InputWrapper>
         <TechStackList>
           {value.map((option: TechStack, index: number) => (
@@ -235,6 +381,10 @@ const ProfileForm: React.FC<Props> = ({
               id={option.id}
               name={option.name}
               imgUrl={option.imgUrl}
+              techStacks={techStacks}
+              updateTechStacks={updateTeckStacks}
+              techStacksError={techStacksError}
+              updateTechStacksError={updateTechStacksError}
               {...getTagProps({ index })}
             />
           ))}
@@ -244,12 +394,16 @@ const ProfileForm: React.FC<Props> = ({
         <InputWrapper>
           <Label htmlFor="github-url">
             GitHub URL <Em>(선택)</Em>
+            {gitHubUrlPatternError && (
+              <ErrorSpan className="url">유효한 URL이 아닙니다.</ErrorSpan>
+            )}
           </Label>
           <InfoInput
             type="url"
             id="github-url"
-            {...register('githubUrl')}
+            name="githubUrl"
             placeholder="https://github.com/ssafy-mate"
+            onChange={handleUrlInput}
             pattern="https://.*"
           />
         </InputWrapper>
@@ -258,22 +412,28 @@ const ProfileForm: React.FC<Props> = ({
         <InputWrapper>
           <Label htmlFor="etc-url">
             기술 블로그 URL 또는 기타 URL <Em>(선택)</Em>
+            {etcUrlPatternError && (
+              <ErrorSpan className="url">유효한 URL이 아닙니다.</ErrorSpan>
+            )}
           </Label>
           <InfoInput
             type="url"
             id="etc-url"
-            {...register('etcUrl')}
+            name="etcUrl"
             placeholder="https://velog.io/@ssafy-mate"
+            onChange={handleUrlInput}
             pattern="https://.*"
           />
         </InputWrapper>
       </Row>
+
       <Row>
         <CheckBoxWrapper>
           <AgreementCheckBox
             type="checkbox"
             id="sign-up-agreement"
             name="sign-up-agreement"
+            onClick={handleCheckAgreement}
           />
           <CheckBoxLabel htmlFor="sign-up-agreement">
             <AgreementLink href="#" target="_blank" rel="noopener noreferrer">
@@ -287,14 +447,19 @@ const ProfileForm: React.FC<Props> = ({
           </CheckBoxLabel>
         </CheckBoxWrapper>
       </Row>
+      {agreementError && (
+        <ErrorSpan className="agreement">필수 선택 사항입니다.</ErrorSpan>
+      )}
       <Row>
-        <SignUpButton type="submit">계정 만들기</SignUpButton>
+        <SignUpButton onClick={signUpClick} type="button">
+          계정 만들기
+        </SignUpButton>
       </Row>
     </Container>
   );
 };
 
-const Container = styled.form`
+const Container = styled.div`
   width: 100%;
 `;
 
@@ -643,6 +808,22 @@ const techStackRow = css`
 
 const techStackInputWrapper = css`
   position: relative;
+`;
+
+const ErrorSpan = styled.span`
+  padding: 8px 12px;
+  font-weight: 400;
+  font-size: 13px;
+  color: #f44336;
+
+  &.agreement {
+    //padding-left: 20px;
+    margin-left: 10px;
+  }
+
+  &.url {
+    color: #3396f4;
+  }
 `;
 
 export default ProfileForm;

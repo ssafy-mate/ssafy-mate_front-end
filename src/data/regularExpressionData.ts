@@ -12,3 +12,5 @@ export const verificationCodeReg = /^[A-Za-z0-9+]*$/;
 export const passwordReg = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,}$/;
 
 export const requiredFields: string = '필수 입력 항목입니다.';
+
+export const validUrl = /^(https?:\/\/)/;
