@@ -2,8 +2,6 @@ import React, { useState, useEffect } from 'react';
 
 import { useForm } from 'react-hook-form';
 
-import { useHistory } from 'react-router-dom';
-
 import styled from '@emotion/styled';
 import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
 import Snackbar from '@mui/material/Snackbar';
@@ -52,8 +50,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
   //alert 색 다르게
   type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
-
-  const history = useHistory();
 
   //alert 열건지 말건지
   const [statusAlertOpen, setStatusAlertOpen] = useState<boolean>(true);
@@ -111,25 +107,25 @@ const SignUpForm: React.FC<SignUpProps> = ({
   // 이메일 재전송 div 보일지 말지
   const [resendEmail, setResendEmail] = useState<boolean>(false);
 
-  //3분 타이머
-  const [time, setTime] = useState<number>(179);
+  const [minutes, setMinutes] = useState<number>(3);
+  const [seconds, setSeconds] = useState<number>(0);
 
-  //3분 타이머
   useEffect(() => {
-    time > 0 && setTimeout(() => setTime(time - 1), 1000);
-  }, [time]);
-
-  //타이머 mm:ss 형태로 바꾸기
-  const timeFormat = (time: number) => {
-    const m = Math.floor(time / 60).toString();
-    let s = (time % 60).toString();
-
-    if (s.length === 1) {
-      s = `0${s}`;
-    }
-
-    return `${m}:${s}`;
-  };
+    const timer = setInterval(() => {
+      if (seconds > 0) {
+        setSeconds(seconds - 1);
+      }
+      if (seconds === 0) {
+        if (minutes === 0) {
+          clearInterval(timer);
+        } else {
+          setMinutes(minutes - 1);
+          setSeconds(59);
+        }
+      }
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [minutes, seconds]);
 
   //이메일 입력에 따라 이메일 인증 코드 전송 요청 버튼 활성화/비활성화
   useEffect(() => {
@@ -214,16 +210,14 @@ const SignUpForm: React.FC<SignUpProps> = ({
       //인증 코드 입력 창 활성화
       setCodeInputDisabled(false);
 
-      //타이머 3분으로 리셋(통신 시간 고려로 179)
-      setTime(179);
+      //타이머 3분으로 리셋
+      setMinutes(3);
+      setSeconds(0);
     } else if (response.status === 401) {
-      //이미 등록된 이메일인 경우 alert 후
+      //이미 등록된 이메일인 경우 alert
       setStatusAlertSeverity('info');
       setStatusAlertText('이미 가입된 이메일입니다.');
       setStatusAlertOpen(true);
-
-      //로그인 창으로 이동
-      // history.push('/');
     } else if (response.status === 500) {
       //서버에서 이메일 인증 코드 전송을 실패한 경우 alert 표시
       setStatusAlertSeverity('warning');
@@ -358,7 +352,11 @@ const SignUpForm: React.FC<SignUpProps> = ({
                 placeholder="인증코드 8자리 입력"
                 disabled={codeInputDisabled}
               />
-              {!codeInputDisabled && <TimeLimit>{timeFormat(time)}</TimeLimit>}
+              {!codeInputDisabled && (
+                <TimeLimit>
+                  {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
+                </TimeLimit>
+              )}
             </VerificationCodeWrapper>
             <AuthButton
               type="button"
