@@ -1,18 +1,10 @@
-import React, {
-  FormEventHandler,
-  MouseEventHandler,
-  useEffect,
-  useState,
-} from 'react';
+import React, { useState } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import ButtonGroup from '@mui/material/ButtonGroup';
 import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
 import CloseIcon from '@mui/icons-material/Close';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
@@ -24,17 +16,14 @@ import { techStackListData } from '../../data/techStackListData';
 import { TechStack } from '../../types/commonTypes';
 
 import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
-import { finished } from 'stream';
 
 import {
   ProfileProps,
   SignUpProfile,
-  SignUpResponse,
   TechStacksWithLevel,
 } from '../../types/UserInfomationType';
 import UserService from '../../services/UserService';
-import { exceptDefaultReg, validUrl } from '../../data/regularExpressionData';
-import { url } from 'inspector';
+import { validUrl } from '../../data/regularExpressionData';
 
 const ProfileForm: React.FC<ProfileProps> = ({
   campus,
@@ -57,6 +46,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const updateTechStacksError = (techStacksError: boolean): void => {
     setTechStacksError(techStacksError);
   };
+
   const [profileImg, setProfileImg] = useState(null);
 
   const [previewProgileImg, setPreviewProfileImg] = useState(null);
@@ -87,6 +77,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
 
   let profileImgformData: any;
 
+  //사진 업로드
   const {
     getRootProps,
     getInputLabelProps,
@@ -126,6 +117,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
     reader.readAsDataURL(theImgFile);
     setProfileImg(theImgFile);
 
+    //formData로 만들기
     if (theImgFile !== null) {
       profileImgformData = new FormData();
       profileImgformData.append('image', theImgFile);
@@ -136,6 +128,8 @@ const ProfileForm: React.FC<ProfileProps> = ({
     setProfileImg(null);
     setPreviewProfileImg(null);
   };
+
+  //자기 소개
 
   const handleTextAreaEnterKeyPressed = (event: React.KeyboardEvent) => {
     if (event.code === 'Enter' || event.code === 'NumpadEnter') {
@@ -157,6 +151,64 @@ const ProfileForm: React.FC<ProfileProps> = ({
     }
   };
 
+  //희망직무
+  const handleJobSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    event.target.name === 'job1'
+      ? setJob1(event.target.value)
+      : setJob2(event.target.value);
+
+    if (event.target.name === 'job1' && event.target.value === 'default') {
+      setJob1Error(true);
+    } else {
+      setJob1Error(false);
+    }
+  };
+
+  //url
+  const handleUrlInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    event.target.name === 'githubUrl'
+      ? setGithubUrl(event.target.value)
+      : setEtcUrl(event.target.value);
+  };
+
+  //약관 동의
+  const handleCheckAgreement = (
+    event: React.MouseEvent<HTMLInputElement, MouseEvent>,
+  ) => {
+    if (agreement === false) {
+      setAgreement(true);
+      setAgreementError(false);
+    } else {
+      setAgreement(false);
+      setAgreementError(true);
+    }
+  };
+
+  // 계정 만들기
+
+  //최종 유효성 검사
+  const validation = () => {
+    if (!selfIntroduction) setSelfIntroductionError(true);
+    if (job1 === 'default') setJob1Error(true);
+    if (techStacks.length < 2) setTechStacksError(true);
+    if (!agreement) setAgreementError(true);
+    if (!validUrl.test(githubUrl)) setGitHubUrlPatternError(true);
+    if (!validUrl.test(etcUrl)) setEtcUrlPatternError(true);
+
+    if (
+      selfIntroduction &&
+      job1 !== 'default' &&
+      techStacks.length >= 2 &&
+      agreement
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  //전송 데이터 모으기
   const getSignUpInfomation = () => {
     const SignUpInfomation: SignUpProfile = {
       campus: campus,
@@ -174,10 +226,10 @@ const ProfileForm: React.FC<ProfileProps> = ({
       etcUrl: etcUrl,
       agreement: agreement,
     };
-
     return SignUpInfomation;
   };
 
+  //계정 만들기 버튼 클릭시
   const signUpClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
@@ -198,56 +250,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
     }
   };
 
-  const handleJobSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    event.target.name === 'job1'
-      ? setJob1(event.target.value)
-      : setJob2(event.target.value);
-
-    if (event.target.name === 'job1' && event.target.value === 'default') {
-      setJob1Error(true);
-    } else {
-      setJob1Error(false);
-    }
-  };
-
-  const handleUrlInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
-    event.target.name === 'githubUrl'
-      ? setGithubUrl(event.target.value)
-      : setEtcUrl(event.target.value);
-  };
-
-  const handleCheckAgreement = (
-    event: React.MouseEvent<HTMLInputElement, MouseEvent>,
-  ) => {
-    if (agreement === false) {
-      setAgreement(true);
-      setAgreementError(false);
-    } else {
-      setAgreement(false);
-      setAgreementError(true);
-    }
-  };
-
-  const validation = () => {
-    if (!selfIntroduction) setSelfIntroductionError(true);
-    if (job1 === 'default') setJob1Error(true);
-    if (techStacks.length < 2) setTechStacksError(true);
-    if (!agreement) setAgreementError(true);
-    if (!validUrl.test(githubUrl)) setGitHubUrlPatternError(true);
-    if (!validUrl.test(etcUrl)) setEtcUrlPatternError(true);
-
-    if (
-      selfIntroduction &&
-      job1 !== 'default' &&
-      techStacks.length >= 2 &&
-      agreement
-    ) {
-      return true;
-    } else {
-      return false;
-    }
-  };
   return (
     <Container>
       <Row>
