@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import ButtonGroup from '@mui/material/ButtonGroup';
 import Button from '@mui/material/Button';
 
-interface TeamTechStackProps {
+interface UserTechStackTagProps {
   techStackName: string;
   techStackLevel: string;
 }
@@ -13,7 +13,7 @@ interface LevelButtonProps {
   isSelected: boolean;
 }
 
-const UserTechStackTag: React.FC<TeamTechStackProps> = ({
+const UserTechStackTag: React.FC<UserTechStackTagProps> = ({
   techStackName,
   techStackLevel,
 }) => {
