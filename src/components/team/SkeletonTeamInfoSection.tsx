@@ -8,8 +8,8 @@ import Skeleton from '@mui/material/Skeleton';
 
 const SkeletonTeamInfoSection: React.FC = () => {
   const theme = useTheme();
-  const lgMatches = useMediaQuery(theme.breakpoints.up('lg'));
-  const smMatches = useMediaQuery(theme.breakpoints.up('sm'));
+  const extraLargeMedia = useMediaQuery(theme.breakpoints.up('lg'));
+  const smallMedia = useMediaQuery(theme.breakpoints.up('sm'));
 
   return (
     <Container>
@@ -18,21 +18,21 @@ const SkeletonTeamInfoSection: React.FC = () => {
           <TeamImgWrapper>
             <Skeleton
               variant="rectangular"
-              width={lgMatches ? 90 : 80}
-              height={lgMatches ? 90 : 80}
+              width={extraLargeMedia ? 90 : 80}
+              height={extraLargeMedia ? 90 : 80}
             />
           </TeamImgWrapper>
           <TeamTitleWrapper>
             <Skeleton
               variant="text"
-              width={smMatches ? 340 : 180}
-              height={smMatches ? 50 : 40}
+              width={smallMedia ? 340 : 180}
+              height={smallMedia ? 50 : 40}
             />
             <Row>
               <Skeleton
                 variant="text"
-                width={smMatches ? 100 : 80}
-                height={smMatches ? 40 : 30}
+                width={smallMedia ? 100 : 80}
+                height={smallMedia ? 40 : 30}
               />
             </Row>
           </TeamTitleWrapper>
@@ -52,8 +52,8 @@ const SkeletonTeamInfoSection: React.FC = () => {
             <SubHead>
               <Skeleton
                 variant="text"
-                width={smMatches ? 100 : 80}
-                height={smMatches ? 40 : 30}
+                width={smallMedia ? 100 : 80}
+                height={smallMedia ? 40 : 30}
               />
             </SubHead>
             <InfoList>
@@ -61,15 +61,15 @@ const SkeletonTeamInfoSection: React.FC = () => {
                 <InfoLabel>
                   <Skeleton
                     variant="text"
-                    width={smMatches ? 80 : 60}
-                    height={smMatches ? 30 : 20}
+                    width={smallMedia ? 80 : 60}
+                    height={smallMedia ? 30 : 20}
                   />
                 </InfoLabel>
                 <InfoContent>
                   <Skeleton
                     variant="text"
-                    width={smMatches ? 100 : 80}
-                    height={smMatches ? 30 : 20}
+                    width={smallMedia ? 100 : 80}
+                    height={smallMedia ? 30 : 20}
                   />
                 </InfoContent>
               </InfoItem>
@@ -77,15 +77,15 @@ const SkeletonTeamInfoSection: React.FC = () => {
                 <InfoLabel>
                   <Skeleton
                     variant="text"
-                    width={smMatches ? 80 : 60}
-                    height={smMatches ? 30 : 20}
+                    width={smallMedia ? 80 : 60}
+                    height={smallMedia ? 30 : 20}
                   />
                 </InfoLabel>
                 <InfoContent>
                   <Skeleton
                     variant="text"
-                    width={smMatches ? 100 : 80}
-                    height={smMatches ? 30 : 20}
+                    width={smallMedia ? 100 : 80}
+                    height={smallMedia ? 30 : 20}
                   />
                 </InfoContent>
               </InfoItem>
@@ -93,15 +93,15 @@ const SkeletonTeamInfoSection: React.FC = () => {
                 <InfoLabel>
                   <Skeleton
                     variant="text"
-                    width={smMatches ? 80 : 60}
-                    height={smMatches ? 30 : 20}
+                    width={smallMedia ? 80 : 60}
+                    height={smallMedia ? 30 : 20}
                   />
                 </InfoLabel>
                 <InfoContent>
                   <Skeleton
                     variant="text"
-                    width={smMatches ? 100 : 80}
-                    height={smMatches ? 30 : 20}
+                    width={smallMedia ? 100 : 80}
+                    height={smallMedia ? 30 : 20}
                   />
                 </InfoContent>
               </InfoItem>
@@ -109,15 +109,15 @@ const SkeletonTeamInfoSection: React.FC = () => {
                 <InfoLabel>
                   <Skeleton
                     variant="text"
-                    width={smMatches ? 80 : 60}
-                    height={smMatches ? 30 : 20}
+                    width={smallMedia ? 80 : 60}
+                    height={smallMedia ? 30 : 20}
                   />
                 </InfoLabel>
                 <InfoContent>
                   <Skeleton
                     variant="text"
-                    width={smMatches ? 100 : 80}
-                    height={smMatches ? 30 : 20}
+                    width={smallMedia ? 100 : 80}
+                    height={smallMedia ? 30 : 20}
                   />
                 </InfoContent>
               </InfoItem>
@@ -127,20 +127,20 @@ const SkeletonTeamInfoSection: React.FC = () => {
             <SubHead>
               <Skeleton
                 variant="text"
-                width={smMatches ? 100 : 80}
-                height={smMatches ? 40 : 30}
+                width={smallMedia ? 100 : 80}
+                height={smallMedia ? 40 : 30}
               />
             </SubHead>
             <Introduction>
               <Skeleton
                 variant="text"
-                width={smMatches ? 500 : 300}
-                height={smMatches ? 30 : 20}
+                width={'100%'}
+                height={smallMedia ? 30 : 20}
               />
               <Skeleton
                 variant="text"
-                width={smMatches ? 520 : 320}
-                height={smMatches ? 30 : 20}
+                width={'100%'}
+                height={smallMedia ? 30 : 20}
               />
             </Introduction>
           </Section>
@@ -148,25 +148,25 @@ const SkeletonTeamInfoSection: React.FC = () => {
             <SubHead>
               <Skeleton
                 variant="text"
-                width={smMatches ? 120 : 100}
-                height={smMatches ? 40 : 30}
+                width={smallMedia ? 120 : 100}
+                height={smallMedia ? 40 : 30}
               />
             </SubHead>
             <TechStackList>
               <Skeleton
                 variant="text"
                 width={'100%'}
-                height={smMatches ? 44 : 42}
+                height={smallMedia ? 44 : 42}
               />
               <Skeleton
                 variant="text"
                 width={'100%'}
-                height={smMatches ? 44 : 42}
+                height={smallMedia ? 44 : 42}
               />
               <Skeleton
                 variant="text"
                 width={'100%'}
-                height={smMatches ? 44 : 42}
+                height={smallMedia ? 44 : 42}
               />
             </TechStackList>
           </Section>
@@ -175,31 +175,31 @@ const SkeletonTeamInfoSection: React.FC = () => {
           <SubHead>
             <Skeleton
               variant="text"
-              width={smMatches ? 120 : 100}
-              height={smMatches ? 40 : 30}
+              width={smallMedia ? 120 : 100}
+              height={smallMedia ? 40 : 30}
             />
           </SubHead>
           <MemberList>
             <Skeleton
               variant="text"
               width={'100%'}
-              height={smMatches ? 78 : 72}
+              height={smallMedia ? 78 : 72}
             />
             <Skeleton
               variant="text"
               width={'100%'}
-              height={smMatches ? 78 : 72}
+              height={smallMedia ? 78 : 72}
             />
             <Skeleton
               variant="text"
               width={'100%'}
-              height={smMatches ? 78 : 72}
+              height={smallMedia ? 78 : 72}
             />
           </MemberList>
           <Skeleton
             variant="text"
             width={'100%'}
-            height={smMatches ? 300 : 280}
+            height={smallMedia ? 300 : 280}
           />
         </Aside>
       </BodyContainer>
