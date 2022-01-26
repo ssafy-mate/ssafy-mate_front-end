@@ -5,7 +5,7 @@ export const authHandlers = [
   rest.get(
     'http://localhost:3000/api/user/sign-up/verification/ssafy',
     async (request, response, context) => {
-      const status: number = 401;
+      const status: number = 200;
 
       console.log(
         `[GET | /api/user/sign-up/verification/ssafy], ${JSON.stringify(

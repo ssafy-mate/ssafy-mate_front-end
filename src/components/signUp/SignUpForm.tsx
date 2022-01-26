@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useForm } from 'react-hook-form';
 
 import styled from '@emotion/styled';
+
 import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
@@ -13,6 +14,7 @@ import {
   validEmailReg,
   verificationCodeReg,
 } from '../../data/regularExpressionData';
+
 import {
   EmailVerificationCodeConfirmRequest,
   EmailVerificationCodeRequest,
@@ -23,6 +25,8 @@ import {
 
 import UserService from '../../services/UserService';
 
+type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
+
 const SignUpForm: React.FC<SignUpProps> = ({
   signUpEmail,
   updateSignUpEmail,
@@ -31,6 +35,28 @@ const SignUpForm: React.FC<SignUpProps> = ({
   signUpPassword,
   updateSignUpPassword,
 }) => {
+  const [statusAlertOpen, setStatusAlertOpen] = useState<boolean>(true);
+  const [statusAlertSeverity, setStatusAlertSeverity] =
+    useState<Severity>('success');
+  const [statusAlertText, setStatusAlertText] =
+    useState<string>('교육생 인증에 성공했습니다.');
+  const [emailCodeRequestButton, setEmailCodeRequestButton] =
+    useState<boolean>(true);
+  const [codeConfirmButton, setCodeConfirmButton] = useState<boolean>(true);
+  const [codeInputDisabled, setCodeInputDisabled] = useState<boolean>(true);
+  const [emailInputDisabled, setEmailInputDisabled] = useState<boolean>(false);
+  const [codeConfirmButtonText, setCodeConfirmButtonText] =
+    useState<string>('확인');
+  const [verificationCodeButtonText, setVerificationCodeButtonText] =
+    useState<string>('이메일 인증');
+  const [codeVerificationErrorText, setCodeVerificationErrorText] =
+    useState<string>('이메일 인증을 완료해주세요.');
+  const [codeVerificationError, setCodeVerificationError] =
+    useState<boolean>(false);
+  const [resendEmail, setResendEmail] = useState<boolean>(false);
+  const [minutes, setMinutes] = useState<number>(3);
+  const [seconds, setSeconds] = useState<number>(0);
+
   const {
     register,
     handleSubmit,
@@ -40,81 +66,27 @@ const SignUpForm: React.FC<SignUpProps> = ({
     formState: { errors },
   } = useForm<SignUp>({ mode: 'onChange' });
 
-  //상태 올려보내기
   const updateSignUpProps = (data: SignUp) => {
     const { signUpEmail, signUpPassword } = data;
+
     updateSignUpEmail(signUpEmail);
     updateSignUpPassword(signUpPassword);
     updateSignUpStep(2);
   };
 
-  //alert 색 다르게
-  type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
-
-  //alert 열건지 말건지
-  const [statusAlertOpen, setStatusAlertOpen] = useState<boolean>(true);
-
-  //alert 무슨 색으로 열건지
-  const [statusAlertSeverity, setStatusAlertSeverity] =
-    useState<Severity>('success');
-
   const codeConfirmButtonOnChange: string | undefined = watch(
     'signUpConfiromButton',
   );
-
-  //alert 문구 뭐로 할건지
-  const [statusAlertText, setStatusAlertText] =
-    useState<string>('교육생 인증에 성공했습니다.');
-
-  // 이메일 인증 코드 요청하는 버튼 활성화, 비활성화
-  const [emailCodeRequestButton, setEmailCodeRequestButton] =
-    useState<boolean>(true);
-
-  //이메일 인증 코드 확인하는 버튼 활성화 비활성화
-  const [codeConfirmButton, setCodeConfirmButton] = useState<boolean>(true);
-
-  //이메일 인증 코드 입력하는 부분 활성화 비활성화
-  const [codeInputDisabled, setCodeInputDisabled] = useState<boolean>(true);
-
-  //이메일 입력하는 부분 활성화 비활성화
-  const [emailInputDisabled, setEmailInputDisabled] = useState<boolean>(false);
-
-  //이메일 인증 코드 확인하는 버튼 문구
-  const [codeConfirmButtonText, setCodeConfirmButtonText] =
-    useState<string>('확인');
-
-  //이메일 인증 코드 요청하는 버튼 문구
-  const [verificationCodeButtonText, setVerificationCodeButtonText] =
-    useState<string>('이메일 인증');
-
-  // 이메일 적는 input
   const signUpEmailOnChange: string = watch('signUpEmail');
-
-  // 인증코드 적는 input
   const verificationCodeOnChange: string = watch('verificationCode');
-
-  //인증 코드 에러 문구
-  const [codeVerificationErrorText, setCodeVerificationErrorText] =
-    useState<string>('이메일 인증을 완료해주세요.');
-
-  //인증 코드 에러 종류
-  const [codeVerificationError, setCodeVerificationError] =
-    useState<boolean>(false);
-
-  // 비밀번호
   const signUpPasswordOnChange: string = watch('signUpPassword');
-
-  // 이메일 재전송 div 보일지 말지
-  const [resendEmail, setResendEmail] = useState<boolean>(false);
-
-  const [minutes, setMinutes] = useState<number>(3);
-  const [seconds, setSeconds] = useState<number>(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
       if (seconds > 0) {
         setSeconds(seconds - 1);
       }
+
       if (seconds === 0) {
         if (minutes === 0) {
           clearInterval(timer);
@@ -124,36 +96,32 @@ const SignUpForm: React.FC<SignUpProps> = ({
         }
       }
     }, 1000);
+
     return () => clearInterval(timer);
   }, [minutes, seconds]);
 
-  //이메일 입력에 따라 이메일 인증 코드 전송 요청 버튼 활성화/비활성화
+  // 이메일 입력에 따라 이메일 인증 코드 전송 요청 버튼 활성화/비활성화
   useEffect(() => {
     if (errors.signUpEmail) {
-      //이메일 형식 안맞으면 비활성화
       setEmailCodeRequestButton(true);
     } else if (
       signUpEmailOnChange !== undefined &&
       signUpEmailOnChange.length >= 1
     ) {
-      //형식 만족하면 활성화
       setEmailCodeRequestButton(false);
     }
   }, [errors.signUpEmail, signUpEmailOnChange]);
 
-  //이메일 인증 요청 버튼 누르고 난 다음에 다른 이메일로 인증하려고 하는 경우
+  // 이메일 인증 요청 버튼 누르고 난 다음에 다른 이메일로 인증하려고 하는 경우
   useEffect(() => {
-    //사용자 변심으로 이메일 주소 변경해서 활성화됐다면
     if (emailCodeRequestButton === false) {
-      //인증 코드 입력 부분 초기화+ 변수 자체 값 할당 전 상태로 만들기
       setValue('verificationCode', '');
       reset({ verificationCode: undefined });
-      //입력창 비활성화
       setCodeInputDisabled(true);
     }
   }, [setValue, reset, emailCodeRequestButton]);
 
-  //인증 코드 입력 시 유효성 여부에 따라 코드 확인 버튼 활성화 비활성화
+  // 인증 코드 입력 시 유효성 여부에 따라 코드 확인 버튼 활성화 비활성화
   useEffect(() => {
     setCodeVerificationError(false);
 
@@ -167,7 +135,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
     }
   }, [errors.verificationCode, verificationCodeOnChange]);
 
-  //인증 코드 입력에 문제가 있는 경우에 이메일 재전송 버튼 활성화
+  // 인증 코드 입력에 문제가 있는 경우에 이메일 재전송 버튼 활성화
   useEffect(() => {
     if (!codeInputDisabled) {
       setResendEmail(true);
@@ -176,9 +144,30 @@ const SignUpForm: React.FC<SignUpProps> = ({
     }
   }, [codeInputDisabled, codeConfirmButtonOnChange]);
 
-  //이메일 인증 코드 전송 요청 버튼 눌렀을 때, 응답에 따라 동작 변화
+  const resetTimer = () => {
+    setMinutes(3);
+    setSeconds(0);
+  };
+
+  const showAlert = (type: Severity, message: string) => {
+    setStatusAlertSeverity(type);
+    setStatusAlertText(message);
+    setStatusAlertOpen(true);
+  };
+
+  const offEmailCodeInput = () => {
+    setEmailCodeRequestButton(true);
+    setCodeInputDisabled(false);
+  };
+
+  const resetCodeVerificationError = () => {
+    setCodeVerificationError(false);
+    setValue('verificationCode', '');
+    reset({ verificationCode: undefined });
+    setCodeVerificationErrorText('올바른 인증 코드가 아닙니다.');
+  };
+
   const verificationCodeRequest = async () => {
-    //이메일 인증 코드 요청 api
     const data: EmailVerificationCodeRequest = { email: '' };
 
     data.email = signUpEmailOnChange;
@@ -188,54 +177,26 @@ const SignUpForm: React.FC<SignUpProps> = ({
     );
 
     if (response.success) {
-      //인증 코드 만료일 때 재전송인 경우 고려해서
-      setCodeVerificationError(false);
-      // //인증 코드 입력 부분 초기화+ 변수 자체 값 할당 전 상태로 만들기
-      setValue('verificationCode', '');
-      reset({ verificationCode: undefined });
-      //입력창 비활성화
-      setCodeInputDisabled(true);
-      setCodeVerificationErrorText('올바른 인증 코드가 아닙니다.');
-
-      //메일 전송 성공 alert
-      setStatusAlertSeverity('success');
-      setStatusAlertText(response.message);
-      setStatusAlertOpen(true);
-
-      //인증 코드 전송이 성공인 경우 이메일 인증 코드 전송 요청 버튼 비활성화 변경 후
-      setEmailCodeRequestButton(true);
-
-      //인증 코드 입력 창 활성화
-      setCodeInputDisabled(false);
-
-      //타이머 3분으로 리셋
-      setMinutes(3);
-      setSeconds(0);
+      resetCodeVerificationError();
+      showAlert('success', response.message);
+      offEmailCodeInput();
+      resetTimer();
     } else if (response.status === 409) {
-      //이미 등록된 이메일인 경우 alert
-      setStatusAlertSeverity('info');
-      setStatusAlertText(response.message);
-      setStatusAlertOpen(true);
+      showAlert('info', response.message);
     } else if (response.status === 500) {
-      //서버에서 이메일 인증 코드 전송을 실패한 경우 alert 표시
-      setStatusAlertSeverity('warning');
-      setStatusAlertText(response.message);
-      setStatusAlertOpen(true);
-
-      //이메일 전송 요청 버튼을 활성화 후
+      showAlert('warning', response.message);
       setEmailCodeRequestButton(false);
-
-      //재전송 요청 버튼으로 문구 변경
       setVerificationCodeButtonText('이메일 재전송');
     }
   };
 
   const EmailVerificationCodeConfirm = async () => {
-    //인증 코드 확인 api
-    const data: EmailVerificationCodeConfirmRequest = { code: '', email: '' };
+    const data: EmailVerificationCodeConfirmRequest = {
+      code: '',
+      email: '',
+    };
 
     data.email = signUpEmailOnChange;
-
     data.code = verificationCodeOnChange;
 
     const response: SignUpResponse =
@@ -266,17 +227,14 @@ const SignUpForm: React.FC<SignUpProps> = ({
       //확인 버튼 비활성화
       setCodeConfirmButton(true);
     } else if (response.status === 500) {
-      setStatusAlertSeverity('warning');
-      setStatusAlertText(response.message);
-      setStatusAlertOpen(true);
+      showAlert('warning', response.message);
     }
   };
 
-  //alert
   const alertClose = () => {
     setStatusAlertOpen(false);
   };
-  //2단계 form 작성 마무리
+
   const onSubmit = (data: SignUp) => {
     updateSignUpProps(data);
   };
@@ -286,7 +244,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
       {statusAlertOpen && (
         <SsafyAuthSnackBar
           open={statusAlertOpen}
-          autoHideDuration={1500}
+          autoHideDuration={2000}
           onClose={alertClose}
           anchorOrigin={{
             vertical: 'top',
@@ -322,7 +280,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
               placeholder="이메일"
               readOnly={emailInputDisabled}
             />
-
             <AuthButton
               type="button"
               disabled={emailCodeRequestButton}
@@ -335,7 +292,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
             <ErrorSpan>{errors.signUpEmail.message}</ErrorSpan>
           )}
         </InputWrapper>
-
         <InputWrapper>
           <RequirementLabel htmlFor="verification-code">
             인증코드 입력
@@ -378,7 +334,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
               return <ErrorSpan>{codeVerificationErrorText}</ErrorSpan>;
             }
           })()}
-
           {resendEmail && (
             <ResendEmailWrapper>
               <ResendEmailMessageWrapper>
@@ -391,7 +346,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
             </ResendEmailWrapper>
           )}
         </InputWrapper>
-
         <InputWrapper>
           <RequirementLabel htmlFor="signup-password">
             비밀번호 (영문자와 숫자 혼합 최소 6자)
@@ -418,7 +372,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
             </ErrorSpan>
           )}
         </InputWrapper>
-
         <InputWrapper>
           <RequirementLabel htmlFor="signup-check-password">
             비밀번호 확인
@@ -478,6 +431,7 @@ const AuthButton = styled.button`
   &:disabled {
     background-color: #96a0ac;
   }
+
   @media (max-width: 540px) {
     font-size: 12px;
   }
@@ -500,10 +454,10 @@ const NextButton = styled.button`
   &:hover {
     background-color: #2878c3;
   }
-
   &:disabled {
     background-color: #96a0ac;
   }
+
   @media (max-width: 540px) {
     font-size: 15px;
   }
@@ -512,12 +466,13 @@ const NextButton = styled.button`
 const VerificationCodeWrapper = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: center;
   width: 100%;
   height: 100%;
-  align-items: center;
 `;
 
 const InfoInput = styled.input`
+  flex: 1 0 0px;
   width: 100%;
   height: 40px;
   padding: 8px 12px;
@@ -530,7 +485,7 @@ const InfoInput = styled.input`
   line-height: 24px;
   color: #263747;
   transition: all 0.08s ease-in-out;
-  flex: 1 0 0px;
+
   &:hover {
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px#3396f4;
@@ -542,12 +497,9 @@ const InfoInput = styled.input`
     color: #495057;
   }
   &:disabled {
-    /* background-color: #f8f8fa; */
     background-color: #dadce0;
-    /* &:hover {
-      border: 1px solid #dadce0;
-    } */
   }
+
   @media (max-width: 540px) {
     font-size: 13px;
   }
@@ -607,16 +559,18 @@ const ResponseAlert = styled(Alert)`
 `;
 
 const ResendLink = styled.a`
-  text-decoration: underline;
-  font-weight: 500;
   margin-left: 4px;
-  cursor: pointer;
+  font-weight: 500;
+  text-decoration: underline;
   touch-action: manipulation;
+  cursor: pointer;
 `;
+
 const TimeLimit = styled.span`
   margin-right: 10px;
   margin-left: 10px;
 `;
+
 const SsafyAuthSnackBar = styled(Snackbar)`
   height: 20%;
 `;

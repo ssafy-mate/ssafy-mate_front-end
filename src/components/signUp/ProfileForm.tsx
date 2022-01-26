@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -9,6 +9,8 @@ import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
 import CloseIcon from '@mui/icons-material/Close';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import CheckIcon from '@mui/icons-material/Check';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 import { jobListData } from '../../data/jobListData';
 import { techStackListData } from '../../data/techStackListData';
@@ -19,16 +21,14 @@ import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
 
 import {
   ProfileProps,
-  SignUpProfile,
   TechStacksWithLevel,
 } from '../../types/UserInfomationType';
-import UserService from '../../services/UserService';
-import { validUrl } from '../../data/regularExpressionData';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
-import { response } from 'msw';
 
-let signUpFormData = new FormData();
+import UserService from '../../services/UserService';
+
+import { validUrl } from '../../data/regularExpressionData';
+
+type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
 
 const ProfileForm: React.FC<ProfileProps> = ({
   campus,
@@ -41,55 +41,37 @@ const ProfileForm: React.FC<ProfileProps> = ({
   updateSignUpStep,
 }) => {
   const [showError, setShowError] = useState<number>(0);
-
   const [techStacks, setTechStacks] = useState<TechStacksWithLevel[]>([]);
+  const [techStacksError, setTechStacksError] = useState<boolean>(false);
+  const [profileImg, setProfileImg] = useState(null);
+  const [previewProgileImg, setPreviewProfileImg] = useState(null);
+  const [job1, setJob1] = useState<string>('default');
+  const [job2, setJob2] = useState<string>('');
+  const [selfIntroduction, setSelfIntroduction] = useState<string>('');
+  const [githubUrl, setGithubUrl] = useState<string>('');
+  const [etcUrl, setEtcUrl] = useState<string>('');
+  const [agreement, setAgreement] = useState<boolean>(false);
+  const [job1Error, setJob1Error] = useState<boolean>(false);
+  const [selfIntroductionError, setSelfIntroductionError] =
+    useState<boolean>(false);
+  const [agreementError, setAgreementError] = useState<boolean>(false);
+  const [etcUrlPatternError, setEtcUrlPatternError] = useState<boolean>(false);
+  const [gitHubUrlPatternError, setGitHubUrlPatternError] =
+    useState<boolean>(false);
+  const [statusAlertOpen, setStatusAlertOpen] = useState<boolean>(false);
+  const [statusAlertText, setStatusAlertText] = useState<string>('');
+  const [statusAlertSeverity, setStatusAlertSeverity] =
+    useState<Severity>('success');
+
+  const signUpFormData = new FormData();
 
   const updateTeckStacks = (techStacks: Array<TechStacksWithLevel>): void => {
     setTechStacks(techStacks);
   };
 
-  const [techStacksError, setTechStacksError] = useState<boolean>(false);
-
   const updateTechStacksError = (techStacksError: boolean): void => {
     setTechStacksError(techStacksError);
   };
-
-  const [profileImg, setProfileImg] = useState(null);
-
-  const [previewProgileImg, setPreviewProfileImg] = useState(null);
-
-  const [job1, setJob1] = useState<string>('default');
-
-  const [job2, setJob2] = useState<string>('');
-
-  const [selfIntroduction, setSelfIntroduction] = useState<string>('');
-
-  const [githubUrl, setGithubUrl] = useState<string>('');
-
-  const [etcUrl, setEtcUrl] = useState<string>('');
-
-  const [agreement, setAgreement] = useState<boolean>(false);
-
-  const [job1Error, setJob1Error] = useState<boolean>(false);
-
-  const [selfIntroductionError, setSelfIntroductionError] =
-    useState<boolean>(false);
-
-  const [agreementError, setAgreementError] = useState<boolean>(false);
-
-  const [etcUrlPatternError, setEtcUrlPatternError] = useState<boolean>(false);
-
-  const [gitHubUrlPatternError, setGitHubUrlPatternError] =
-    useState<boolean>(false);
-
-  type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
-
-  const [statusAlertSeverity, setStatusAlertSeverity] =
-    useState<Severity>('success');
-
-  const [statusAlertOpen, setStatusAlertOpen] = useState<boolean>(false);
-
-  const [statusAlertText, setStatusAlertText] = useState<string>('');
 
   const {
     getRootProps,
@@ -109,7 +91,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
     getOptionLabel: (option) => option.name,
   });
 
-  //사진 업로드
   const handleChangeProfileImg = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -127,7 +108,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
       setPreviewProfileImg(result);
     };
 
-    //전송해야할 이미지
     reader.readAsDataURL(theImgFile);
     setProfileImg(theImgFile);
 
@@ -139,8 +119,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
     setPreviewProfileImg(null);
     signUpFormData.delete('profileImg');
   };
-
-  //자기 소개
 
   const handleTextAreaEnterKeyPressed = (event: React.KeyboardEvent) => {
     if (event.code === 'Enter' || event.code === 'NumpadEnter') {
@@ -155,27 +133,21 @@ const ProfileForm: React.FC<ProfileProps> = ({
   ) => {
     setSelfIntroduction(event.target.value);
 
-    if (event.target.value === '') {
-      setSelfIntroductionError(true);
-    } else {
-      setSelfIntroductionError(false);
-    }
+    event.target.value === ''
+      ? setSelfIntroductionError(true)
+      : setSelfIntroductionError(false);
   };
 
-  //희망직무
   const handleJobSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     event.target.name === 'job1'
       ? setJob1(event.target.value)
       : setJob2(event.target.value);
 
-    if (event.target.name === 'job1' && event.target.value === 'default') {
-      setJob1Error(true);
-    } else {
-      setJob1Error(false);
-    }
+    event.target.name === 'job1' && event.target.value === 'default'
+      ? setJob1Error(true)
+      : setJob1Error(false);
   };
 
-  //url
   const handleUrlInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
     event.target.name === 'githubUrl'
@@ -183,23 +155,18 @@ const ProfileForm: React.FC<ProfileProps> = ({
       : setEtcUrl(event.target.value);
 
     if (event.target.name === 'githubUrl') {
-      if (!validUrl.test(githubUrl)) {
-        setGitHubUrlPatternError(true);
-      } else {
-        setGitHubUrlPatternError(false);
-      }
+      !validUrl.test(githubUrl)
+        ? setGitHubUrlPatternError(true)
+        : setGitHubUrlPatternError(false);
     }
 
     if (event.target.name === 'etcUrl') {
-      if (!validUrl.test(etcUrl)) {
-        setEtcUrlPatternError(true);
-      } else {
-        setEtcUrlPatternError(false);
-      }
+      !validUrl.test(etcUrl)
+        ? setEtcUrlPatternError(true)
+        : setEtcUrlPatternError(false);
     }
   };
 
-  //약관 동의
   const handleCheckAgreement = (
     event: React.MouseEvent<HTMLInputElement, MouseEvent>,
   ) => {
@@ -212,28 +179,30 @@ const ProfileForm: React.FC<ProfileProps> = ({
     }
   };
 
-  // 계정 만들기
-
-  //최종 유효성 검사
   const validation = () => {
-    if (!selfIntroduction) setSelfIntroductionError(true);
-    if (job1 === 'default') setJob1Error(true);
-    if (techStacks.length < 2) {
-      setTechStacksError(true);
-    } else {
-      setTechStacksError(false);
+    if (!selfIntroduction) {
+      setSelfIntroductionError(true);
     }
-    if (!agreement) setAgreementError(true);
-    if (!validUrl.test(githubUrl)) {
-      setGitHubUrlPatternError(true);
-    } else {
-      setGitHubUrlPatternError(false);
+
+    if (job1 === 'default') {
+      setJob1Error(true);
     }
-    if (!validUrl.test(etcUrl)) {
-      setEtcUrlPatternError(true);
-    } else {
-      setEtcUrlPatternError(false);
+
+    techStacks.length < 2
+      ? setTechStacksError(true)
+      : setTechStacksError(false);
+
+    if (!agreement) {
+      setAgreementError(true);
     }
+
+    !validUrl.test(githubUrl)
+      ? setGitHubUrlPatternError(true)
+      : setGitHubUrlPatternError(false);
+
+    !validUrl.test(etcUrl)
+      ? setEtcUrlPatternError(true)
+      : setEtcUrlPatternError(false);
 
     if (
       selfIntroduction &&
@@ -248,7 +217,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
     }
   };
 
-  //전송 데이터 모으기
   const getSignUpInfomation = () => {
     signUpFormData.append('campus', campus);
     signUpFormData.append('ssafyTrack', ssafyTrack);
@@ -266,23 +234,31 @@ const ProfileForm: React.FC<ProfileProps> = ({
     return signUpFormData;
   };
 
-  //계정 만들기 버튼 클릭시
+  const showAlert = (type: Severity, message: string) => {
+    setStatusAlertSeverity(type);
+    setStatusAlertText(message);
+    setStatusAlertOpen(true);
+  };
+
   const signUpClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.preventDefault();
+
     const data = getSignUpInfomation();
+
     if (validation()) {
-      UserService.signUp(data).then((response) => {
-        if (response.status === 400) {
-          setStatusAlertSeverity('warning');
-        } else if (response.status === 500) {
-          setStatusAlertSeverity('error');
-        } else {
-          setStatusAlertSeverity('success');
+      UserService.signUp(data).then(({ status, message }) => {
+        switch (status) {
+          case 400:
+            showAlert('warning', message);
+            break;
+          case 500:
+            showAlert('error', message);
+            break;
+          default:
+            showAlert('success', message);
         }
-        setStatusAlertText(response.message);
-        setStatusAlertOpen(true);
       });
     }
   };
@@ -296,7 +272,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
       {statusAlertOpen && (
         <SsafyAuthSnackBar
           open={statusAlertOpen}
-          autoHideDuration={1500}
+          autoHideDuration={2000}
           onClose={alertClose}
           anchorOrigin={{
             vertical: 'top',
@@ -373,20 +349,18 @@ const ProfileForm: React.FC<ProfileProps> = ({
               <option value="default" disabled>
                 - 선택 -
               </option>
-              {jobListData.map(
-                (job) =>
-                  job2 !== job.name && (
-                    <option key={job.id} value={job.name}>
-                      {job.name}
-                    </option>
-                  ),
-              )}
+              {jobListData
+                .filter((job) => job.name !== job2)
+                .map((job) => (
+                  <option key={job.id} value={job.name}>
+                    {job.name}
+                  </option>
+                ))}
             </Select>
             {showError === 1 && job1Error && (
               <ErrorSpan>필수 선택 사항입니다.</ErrorSpan>
             )}
           </InputWrapper>
-
           <InputWrapper>
             <Label htmlFor="job2">
               희망 직무2 <Em>(선택)</Em>
@@ -398,14 +372,13 @@ const ProfileForm: React.FC<ProfileProps> = ({
               disabled={job1 === 'default'}
             >
               <option value="default">- 선택 -</option>
-              {jobListData.map(
-                (job) =>
-                  job1 !== job.name && (
-                    <option key={job.id} value={job.name}>
-                      {job.name}
-                    </option>
-                  ),
-              )}
+              {jobListData
+                .filter((job) => job.name !== job1)
+                .map((job) => (
+                  <option key={job.id} value={job.name}>
+                    {job.name}
+                  </option>
+                ))}
             </Select>
           </InputWrapper>
         </Row>
