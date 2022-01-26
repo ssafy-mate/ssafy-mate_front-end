@@ -5,22 +5,24 @@ const ChatList: React.FC = () => {
   return (
     <>
       <ChatListItem>
-        <a href="#">
+        <ChatListItemWrapper>
           <ProfileWrapper>
             <img></img>
           </ProfileWrapper>
           <ContentWrapper>
             <TitleWrapper>
-              <TitleSenderName>호호</TitleSenderName>
+              <TitleSenderName>호호123145</TitleSenderName>
               <TitleSubText>
                 <span>22.01.25</span>
               </TitleSubText>
             </TitleWrapper>
             <DescriptionWrapper>
-              <DescriptionContent>11시에 만나요!</DescriptionContent>
+              <DescriptionContent>
+                11시에 만나요aaaaaaasdfasdfasdaaaaaaaaaaaaaaaaaaaaaa!
+              </DescriptionContent>
             </DescriptionWrapper>
           </ContentWrapper>
-        </a>
+        </ChatListItemWrapper>
       </ChatListItem>
     </>
   );
@@ -33,27 +35,27 @@ const ChatListItem = styled.li`
   width: 300px;
   background-color: #fff;
   border-bottom: 1px solid #dfdfdf;
+  box-sizing: border-box;
   cursor: pointer;
-
-  & a {
-    display: flex;
-    padding: 16px;
-    height: 52px;
-    align-items: center;
-    position: relative;
-    overflow: hidden;
-    background-position: center center;
-    contain: content;
-  }
 
   &:hover {
     background-color: #ebebebce;
   }
 `;
 
+const ChatListItemWrapper = styled.a`
+  overflow: hidden;
+  display: flex;
+  position: relative;
+  height: 80px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  align-items: center;
+`;
+
 const ProfileWrapper = styled.div`
-  margin-right: 8px;
   height: 40px;
+  margin-right: 8px;
 
   img {
     width: 40px;
@@ -80,7 +82,7 @@ const TitleSenderName = styled.span`
   font-weight: bold;
   font-size: 14px;
   letter-spacing: -0.02em;
-  color: #868b94;
+  color: #6d6d6d;
   overflow-x: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -93,16 +95,13 @@ const TitleSubText = styled.div`
   white-space: nowrap;
 `;
 
-const DescriptionWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  height: 20px;
-  color: #3d3d3d;
-`;
+const DescriptionWrapper = styled.div``;
 
 const DescriptionContent = styled.span`
-  font-size: 14px;
   overflow: hidden;
+  width: 100%;
+  font-size: 14px;
+  color: #3d3d3d;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
