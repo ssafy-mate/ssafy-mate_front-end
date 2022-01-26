@@ -18,7 +18,15 @@ interface MenuListProps {
   isExpanded: boolean;
 }
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  offFixed?: boolean;
+}
+
+interface ContainerProps {
+  offFixed?: boolean;
+}
+
+const Header: React.FC<HeaderProps> = ({ offFixed }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const isMobile = useMediaQuery({
@@ -30,7 +38,7 @@ const Header: React.FC = () => {
   };
 
   return (
-    <Container>
+    <Container offFixed={offFixed}>
       <Wrapper>
         <BrandWrapper>
           <Brand to="/">
@@ -100,8 +108,8 @@ const Header: React.FC = () => {
   );
 };
 
-const Container = styled.header`
-  position: fixed;
+const Container = styled.header<ContainerProps>`
+  position: ${(props) => (props.offFixed ? 'relative' : 'fixed')};
   top: 0;
   left: 0;
   z-index: 10;
