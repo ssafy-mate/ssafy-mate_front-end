@@ -1,6 +1,6 @@
 export interface MessageType {
-  userId: number;
-  userName: string;
+  senderId: number;
+  roomId: string;
   content: string;
   sentTime: string;
 }

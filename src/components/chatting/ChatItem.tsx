@@ -11,14 +11,14 @@ const ChatItem: React.FC = () => {
           </ProfileWrapper>
           <ContentWrapper>
             <TitleWrapper>
-              <TitleSenderName>박정환</TitleSenderName>
+              <TitleSenderName>호호</TitleSenderName>
               <TitleSubText>
                 <span>22.01.25</span>
               </TitleSubText>
             </TitleWrapper>
             <DescriptionWrapper>
               <DescriptionContent>
-                11시에 만나11시에 만나11시에 만나11시에 만나
+                내일 역삼역 앞에서 11시에 만나요
               </DescriptionContent>
             </DescriptionWrapper>
           </ContentWrapper>
@@ -30,18 +30,19 @@ const ChatItem: React.FC = () => {
 
 const ChatListItem = styled.li`
   width: 100%;
-  border-bottom: 1px solid #dfdfdf;
+  /* border-bottom: 1px solid #dfdfdf; */
   box-sizing: border-box;
 `;
 
 const ChatListItemWrapper = styled.a`
-  overflow: hidden;
   display: flex;
+  overflow: hidden;
   align-items: center;
   width: 100%;
   height: 80px;
   padding: 0 20px;
   box-sizing: border-box;
+  border-bottom: 1px solid #dfdfdf;
   background-color: #fff;
   cursor: pointer;
 
