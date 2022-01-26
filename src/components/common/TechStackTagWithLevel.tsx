@@ -31,6 +31,7 @@ const TechStackTagWithLevel: React.FC<Props> = ({
 
   const handleStackLevel = (event: React.MouseEvent<HTMLButtonElement>) => {
     const level: string = event.currentTarget.value;
+
     switch (level) {
       case '상':
         setLevel('high');
@@ -44,37 +45,31 @@ const TechStackTagWithLevel: React.FC<Props> = ({
         break;
     }
 
-    // const findStack = techStacks.find((stack) => {
-    //   return stack.techStackName === name;
-    // });
+    const findStack = techStacks.find((stack) => {
+      return stack.techStackName === name;
+    });
 
-    // if (findStack === undefined) {
-    //   techStacks.push({
-    //     techStackName: name,
-    //     techStackLevel: level,
-    //   });
-    // } else {
-    //   findStack.techStackLevel = level;
-    // }
-
-    if (JSON.stringify(techStacks).includes(name)) {
-      techStacks.filter((techStack) => {
-        if (JSON.stringify(techStack).includes(name)) {
-          techStack.techStackLevel = level;
-        }
-      });
-    } else {
+    if (findStack === undefined) {
       techStacks.push({
         techStackName: name,
         techStackLevel: level,
       });
+    } else {
+      findStack.techStackLevel = level;
     }
-    // updateTechStacks(techStacks);
   };
 
   useEffect(() => {
     updateTechStacks(techStacks);
   }, [techStacks, updateTechStacks]);
+
+  useEffect(() => {
+    if (techStacks.length < 2) {
+      updateTechStacksError(true);
+    } else {
+      updateTechStacksError(false);
+    }
+  });
 
   const deleteStack = (event: React.MouseEvent<HTMLButtonElement>) => {
     onDelete(event);

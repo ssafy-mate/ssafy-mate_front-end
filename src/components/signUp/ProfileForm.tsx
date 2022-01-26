@@ -25,6 +25,8 @@ import {
 import UserService from '../../services/UserService';
 import { validUrl } from '../../data/regularExpressionData';
 
+let signUpFormData = new FormData();
+
 const ProfileForm: React.FC<ProfileProps> = ({
   campus,
   ssafyTrack,
@@ -35,6 +37,8 @@ const ProfileForm: React.FC<ProfileProps> = ({
   signUpPassword,
   updateSignUpStep,
 }) => {
+  const [showError, setShowError] = useState<number>(0);
+
   const [techStacks, setTechStacks] = useState<TechStacksWithLevel[]>([]);
 
   const updateTeckStacks = (techStacks: Array<TechStacksWithLevel>): void => {
@@ -75,9 +79,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const [gitHubUrlPatternError, setGitHubUrlPatternError] =
     useState<boolean>(false);
 
-  let profileImgformData: any;
-
-  //사진 업로드
   const {
     getRootProps,
     getInputLabelProps,
@@ -96,6 +97,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
     getOptionLabel: (option) => option.name,
   });
 
+  //사진 업로드
   const handleChangeProfileImg = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -117,16 +119,13 @@ const ProfileForm: React.FC<ProfileProps> = ({
     reader.readAsDataURL(theImgFile);
     setProfileImg(theImgFile);
 
-    //formData로 만들기
-    if (theImgFile !== null) {
-      profileImgformData = new FormData();
-      profileImgformData.append('image', theImgFile);
-    }
+    signUpFormData.append('profileImg', theImgFile);
   };
 
   const handleClearProfileImg = () => {
     setProfileImg(null);
     setPreviewProfileImg(null);
+    signUpFormData.delete('profileImg');
   };
 
   //자기 소개
@@ -170,6 +169,22 @@ const ProfileForm: React.FC<ProfileProps> = ({
     event.target.name === 'githubUrl'
       ? setGithubUrl(event.target.value)
       : setEtcUrl(event.target.value);
+
+    if (event.target.name === 'githubUrl') {
+      if (!validUrl.test(githubUrl)) {
+        setGitHubUrlPatternError(true);
+      } else {
+        setGitHubUrlPatternError(false);
+      }
+    }
+
+    if (event.target.name === 'etcUrl') {
+      if (!validUrl.test(etcUrl)) {
+        setEtcUrlPatternError(true);
+      } else {
+        setEtcUrlPatternError(false);
+      }
+    }
   };
 
   //약관 동의
@@ -191,10 +206,22 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const validation = () => {
     if (!selfIntroduction) setSelfIntroductionError(true);
     if (job1 === 'default') setJob1Error(true);
-    if (techStacks.length < 2) setTechStacksError(true);
+    if (techStacks.length < 2) {
+      setTechStacksError(true);
+    } else {
+      setTechStacksError(false);
+    }
     if (!agreement) setAgreementError(true);
-    if (!validUrl.test(githubUrl)) setGitHubUrlPatternError(true);
-    if (!validUrl.test(etcUrl)) setEtcUrlPatternError(true);
+    if (!validUrl.test(githubUrl)) {
+      setGitHubUrlPatternError(true);
+    } else {
+      setGitHubUrlPatternError(false);
+    }
+    if (!validUrl.test(etcUrl)) {
+      setEtcUrlPatternError(true);
+    } else {
+      setEtcUrlPatternError(false);
+    }
 
     if (
       selfIntroduction &&
@@ -204,29 +231,27 @@ const ProfileForm: React.FC<ProfileProps> = ({
     ) {
       return true;
     } else {
+      setShowError(1);
       return false;
     }
   };
 
   //전송 데이터 모으기
   const getSignUpInfomation = () => {
-    const SignUpInfomation: SignUpProfile = {
-      campus: campus,
-      ssafyTrack: ssafyTrack,
-      studentNumber: studentNumber,
-      studentName: studentName,
-      email: signUpEmail,
-      password: signUpPassword,
-      profileImg: profileImgformData,
-      selfIntroduction: selfIntroduction,
-      job1: job1,
-      job2: job2,
-      techStacks: techStacks,
-      githubUrl: githubUrl,
-      etcUrl: etcUrl,
-      agreement: agreement,
-    };
-    return SignUpInfomation;
+    signUpFormData.append('campus', campus);
+    signUpFormData.append('ssafyTrack', ssafyTrack);
+    signUpFormData.append('studentNumber', studentNumber);
+    signUpFormData.append('email', signUpEmail);
+    signUpFormData.append('password', signUpPassword);
+    signUpFormData.append('selfIntroduction', selfIntroduction);
+    signUpFormData.append('job1', job1);
+    signUpFormData.append('job2', job2);
+    signUpFormData.append('techStacks', JSON.stringify(techStacks));
+    signUpFormData.append('githubUrl', githubUrl);
+    signUpFormData.append('etcUrl', etcUrl);
+    signUpFormData.append('agreement', String(agreement));
+
+    return signUpFormData;
   };
 
   //계정 만들기 버튼 클릭시
@@ -234,13 +259,12 @@ const ProfileForm: React.FC<ProfileProps> = ({
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.preventDefault();
-
+    const data = getSignUpInfomation();
     if (validation()) {
-      const data: SignUpProfile = getSignUpInfomation();
-
       UserService.signUp(data)
         .then((res) => {
           //성공한 경우
+          updateSignUpStep(3);
         })
         .catch((errors) => {
           //실패한 경우
@@ -289,7 +313,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
             onChange={handleTextAreaInput}
             required
           />
-          {selfIntroductionError && (
+          {showError === 1 && selfIntroductionError && (
             <ErrorSpan>필수 입력 항목입니다.</ErrorSpan>
           )}
         </InputWrapper>
@@ -307,20 +331,30 @@ const ProfileForm: React.FC<ProfileProps> = ({
             <option value="default" disabled>
               - 선택 -
             </option>
-            {jobListData.map((job) => (
-              <option key={job.id} value={job.name}>
-                {job.name}
-              </option>
-            ))}
+            {jobListData.map(
+              (job) =>
+                job2 !== job.name && (
+                  <option key={job.id} value={job.name}>
+                    {job.name}
+                  </option>
+                ),
+            )}
           </Select>
-          {job1Error && <ErrorSpan>필수 선택 사항입니다.</ErrorSpan>}
+          {showError === 1 && job1Error && (
+            <ErrorSpan>필수 선택 사항입니다.</ErrorSpan>
+          )}
         </InputWrapper>
 
         <InputWrapper>
           <Label htmlFor="job2">
             희망 직무2 <Em>(선택)</Em>
           </Label>
-          <Select id="job2" defaultValue={'default'} onChange={handleJobSelect}>
+          <Select
+            id="job2"
+            defaultValue={'default'}
+            onChange={handleJobSelect}
+            disabled={job1 === 'default'}
+          >
             <option value="default">- 선택 -</option>
             {jobListData.map(
               (job) =>
@@ -369,7 +403,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
               )}
             </SearchList>
           ) : null}
-          {techStacksError && (
+          {showError === 1 && techStacksError && (
             <ErrorSpan>
               필수 2가지 이상 선택 사항입니다.(상/중/하 선택도 필수입니다.)
             </ErrorSpan>
@@ -394,9 +428,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
         <InputWrapper>
           <Label htmlFor="github-url">
             GitHub URL <Em>(선택)</Em>
-            {gitHubUrlPatternError && (
-              <ErrorSpan className="url">유효한 URL이 아닙니다.</ErrorSpan>
-            )}
+            {githubUrl.length >= 1 &&
+              showError === 1 &&
+              gitHubUrlPatternError && (
+                <ErrorSpan className="url">유효한 URL이 아닙니다.</ErrorSpan>
+              )}
           </Label>
           <InfoInput
             type="url"
@@ -412,7 +448,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
         <InputWrapper>
           <Label htmlFor="etc-url">
             기술 블로그 URL 또는 기타 URL <Em>(선택)</Em>
-            {etcUrlPatternError && (
+            {etcUrl.length >= 1 && showError === 1 && etcUrlPatternError && (
               <ErrorSpan className="url">유효한 URL이 아닙니다.</ErrorSpan>
             )}
           </Label>
@@ -447,7 +483,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
           </CheckBoxLabel>
         </CheckBoxWrapper>
       </Row>
-      {agreementError && (
+      {showError === 1 && agreementError && (
         <ErrorSpan className="agreement">필수 선택 사항입니다.</ErrorSpan>
       )}
       <Row>
@@ -822,7 +858,7 @@ const ErrorSpan = styled.span`
   }
 
   &.url {
-    color: #3396f4;
+    color: #1976d3;
   }
 `;
 

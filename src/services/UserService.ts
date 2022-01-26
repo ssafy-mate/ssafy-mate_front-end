@@ -42,7 +42,7 @@ class UserService {
     return response.data;
   }
 
-  public static async signUp(data: SignUpProfile): Promise<SignUpResponse> {
+  public static async signUp(data: FormData): Promise<SignUpResponse> {
     const response = await axiosInstance.post<SignUpResponse>(
       '/api/user',
       data,

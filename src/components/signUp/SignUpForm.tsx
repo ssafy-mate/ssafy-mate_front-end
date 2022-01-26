@@ -392,7 +392,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
         <InputWrapper>
           <RequirementLabel htmlFor="signup-password">
-            비밀번호 (영문자와 숫자 포함 최소 6자)
+            비밀번호 (영문자와 숫자 혼합 최소 6자)
           </RequirementLabel>
           <InfoInput
             type="password"
@@ -412,7 +412,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
           {(errors.signUpPassword?.type === 'pattern' ||
             errors.signUpPassword?.type === 'minLength') && (
             <ErrorSpan>
-              비밀번호는 영문, 숫자를 포함하여 6자 이상이어야 합니다.
+              비밀번호는 영문, 숫자만을 혼합하여 6자 이상이어야 합니다.
             </ErrorSpan>
           )}
         </InputWrapper>
