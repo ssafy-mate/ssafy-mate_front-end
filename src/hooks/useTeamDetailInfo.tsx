@@ -4,7 +4,7 @@ import { AxiosResponse, AxiosError } from 'axios';
 
 import { TeamMember } from '../types/teamTypes';
 
-import { teamDetailInfoApi } from '../api/teamApi';
+import TeamService from '../services/TeamService';
 
 interface TeamOwner {
   userId: number;
@@ -45,8 +45,8 @@ interface TeamDetailInfoResponse {
 }
 
 const useTeamDetailInfo = (teamId: string) => {
-  const queryFunction = () => teamDetailInfoApi(teamId);
-  const { isLoading, isError, data, error } = useQuery<
+  const queryFunction = () => TeamService.teamDetailInfoApi(teamId);
+  const { isLoading, data, isError, error } = useQuery<
     AxiosResponse<TeamDetailInfoResponse>,
     AxiosError
   >(['teamDetailInfo', teamId], queryFunction, {
@@ -55,8 +55,8 @@ const useTeamDetailInfo = (teamId: string) => {
 
   return {
     isLoading,
-    isError,
     teamData: data?.data.teamData,
+    isError,
     errorMessage: error?.response?.data.message,
   };
 };
