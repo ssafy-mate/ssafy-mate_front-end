@@ -323,7 +323,7 @@ const StudentAnnouncement: React.FC = () => {
             </ProfileImgWrapper>
             <StudentInfo>
               <StudentName>
-                <Link to="/">박정환</Link>
+                <Link to="/users/1">박정환</Link>
               </StudentName>
               <SsafyInfo>서울</SsafyInfo>
               <SsafyInfo>전공자 (Java Track)</SsafyInfo>
@@ -358,7 +358,8 @@ const StudentAnnouncement: React.FC = () => {
                   주요 기술
                 </DetailItemLabel>
                 <DetailItemContent>
-                  React, Redux, TypeScript, Sass
+                  JavaScript, TypeScript, React, Redux, Redux-Saga, React-Query,
+                  Emotion
                 </DetailItemContent>
               </StudentDetailItem>
               <StudentDetailItem>
@@ -380,7 +381,7 @@ const StudentAnnouncement: React.FC = () => {
           </ItemBody>
           <ItemFooter>
             <RequestButton>팀 합류 요청</RequestButton>
-            <Link to="#" css={profileLink}>
+            <Link to="/users/1" css={profileLink}>
               프로필 보기
             </Link>
           </ItemFooter>
