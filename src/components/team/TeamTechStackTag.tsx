@@ -11,7 +11,7 @@ const TeamTechStackTag: React.FC<TeamTechStackTagProps> = ({
     <TagItem>
       <Img
         src={`/images/assets/tech-stack/${techStackName}.png`}
-        alt={techStackName}
+        alt={`${techStackName} 로고 이미지`}
       />
       <Name>{techStackName}</Name>
     </TagItem>
