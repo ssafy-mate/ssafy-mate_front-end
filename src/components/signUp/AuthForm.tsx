@@ -12,7 +12,8 @@ import {
   onlyKoreanReg,
   onlyNumberReg,
   requiredFields,
-} from '../../data/regularExpressionData';
+} from '../../utils/regularExpressionData';
+
 import { campusListData } from '../../data/ssafyData';
 
 import { SignUpResponse, SsafyAuth } from '../../types/UserInfomationType';
