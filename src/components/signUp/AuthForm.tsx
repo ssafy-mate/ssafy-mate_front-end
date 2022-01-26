@@ -93,7 +93,9 @@ const AuthForm: React.FC<Props> = ({
   };
 
   const AuthRequest = async (data: SsafyAuth) => {
-    const response: SignUpResponse = await UserService.getSsafyAuth(data);
+    const response: SignUpResponse = await UserService.getSsafyAuth(
+      data,
+    ).then();
 
     if (response.success) {
       updateSsafyAuthProps(data);
@@ -132,7 +134,6 @@ const AuthForm: React.FC<Props> = ({
           </FailAlert>
         </SsafyAuthSnackBar>
       )}
-
       <Container onSubmit={handleSubmit(onSubmit)}>
         <SsafyInfo>
           <InputWrapper>
@@ -155,7 +156,6 @@ const AuthForm: React.FC<Props> = ({
             </Select>
             {errors.campus && <ErrorSpan>필수 선택 항목입니다.</ErrorSpan>}
           </InputWrapper>
-
           <InputWrapper>
             <RequirementLabel htmlFor="ssafy-track">
               SSAFY 교육 트랙
@@ -177,7 +177,6 @@ const AuthForm: React.FC<Props> = ({
             {errors.ssafyTrack && <ErrorSpan>필수 선택 항목입니다.</ErrorSpan>}
           </InputWrapper>
         </SsafyInfo>
-
         <InputWrapper>
           <RequirementLabel htmlFor="student-number">학번</RequirementLabel>
           <InfoInput
@@ -197,7 +196,6 @@ const AuthForm: React.FC<Props> = ({
             <ErrorSpan>올바른 학번이 아닙니다.</ErrorSpan>
           )}
         </InputWrapper>
-
         <InputWrapper>
           <RequirementLabel htmlFor="student-name">이름</RequirementLabel>
           <InfoInput
@@ -217,7 +215,6 @@ const AuthForm: React.FC<Props> = ({
             </ErrorSpan>
           )}
         </InputWrapper>
-
         <AuthButton type="submit">교육생 인증</AuthButton>
       </Container>
     </>
@@ -384,4 +381,5 @@ const FailAlert = styled(Alert)``;
 const SsafyAuthSnackBar = styled(Snackbar)`
   height: 20%;
 `;
+
 export default AuthForm;
