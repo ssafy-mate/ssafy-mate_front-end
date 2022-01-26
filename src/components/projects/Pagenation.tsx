@@ -10,10 +10,10 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
 const Pagenation: React.FC = () => {
-  const smallView = useMediaQuery({
+  const smallMedia = useMediaQuery({
     query: '(max-width: 575px)',
   });
-  const extraLargeView = useMediaQuery({
+  const extraLargeMedia = useMediaQuery({
     query: '(max-width: 1199px)',
   });
 
@@ -26,7 +26,7 @@ const Pagenation: React.FC = () => {
             variant="outlined"
             shape="rounded"
             css={pagination}
-            size={extraLargeView ? (smallView ? 'small' : 'medium') : 'large'}
+            size={extraLargeMedia ? (smallMedia ? 'small' : 'medium') : 'large'}
           />
         </Stack>
       </Wrapper>
