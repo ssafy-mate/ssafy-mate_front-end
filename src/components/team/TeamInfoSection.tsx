@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 
 import { Link, useParams } from 'react-router-dom';
 
@@ -22,6 +22,7 @@ import JobChart from '../chart/JobChart';
 import RecruitingStatusChart from '../chart/RecruitingStatusChart';
 import ErrorSection from '../common/ErrorSection';
 import SkeletonTeamInfoSection from './SkeletonTeamInfoSection';
+import UserLabel from '../user/UserLabel';
 
 type Params = {
   teamId: string;
@@ -135,7 +136,12 @@ const TeamInformationSection: React.FC = () => {
                     <InfoLabel>
                       <FlagIcon />팀 생성자
                     </InfoLabel>
-                    <InfoContent>{teamData.owner.userName}</InfoContent>
+                    <InfoContent>
+                      <UserLabel
+                        userId={teamData.owner.userId}
+                        userName={teamData.owner.userName}
+                      />
+                    </InfoContent>
                   </InfoItem>
                 </InfoList>
               </Section>
@@ -506,6 +512,17 @@ const InfoContent = styled.p`
   color: #5f7f90;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  & .user-label {
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #5f7f90;
+
+    @media (max-width: 767px) {
+      font-size: 14px;
+    }
+  }
 
   @media (max-width: 767px) {
     font-size: 14px;
