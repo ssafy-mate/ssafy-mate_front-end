@@ -199,9 +199,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
       //메일 전송 성공 alert
       setStatusAlertSeverity('success');
-      setStatusAlertText(
-        '입력한 이메일로 인증 메일을 발송했습니다.\n 이메일에 표시된 인증코드를 입력해주세요',
-      );
+      setStatusAlertText(response.message);
       setStatusAlertOpen(true);
 
       //인증 코드 전송이 성공인 경우 이메일 인증 코드 전송 요청 버튼 비활성화 변경 후
@@ -213,15 +211,15 @@ const SignUpForm: React.FC<SignUpProps> = ({
       //타이머 3분으로 리셋
       setMinutes(3);
       setSeconds(0);
-    } else if (response.status === 401) {
+    } else if (response.status === 409) {
       //이미 등록된 이메일인 경우 alert
       setStatusAlertSeverity('info');
-      setStatusAlertText('이미 가입된 이메일입니다.');
+      setStatusAlertText(response.message);
       setStatusAlertOpen(true);
     } else if (response.status === 500) {
       //서버에서 이메일 인증 코드 전송을 실패한 경우 alert 표시
       setStatusAlertSeverity('warning');
-      setStatusAlertText('이메일 인증 코드 전송에 실패했습니다.');
+      setStatusAlertText(response.message);
       setStatusAlertOpen(true);
 
       //이메일 전송 요청 버튼을 활성화 후
@@ -252,21 +250,25 @@ const SignUpForm: React.FC<SignUpProps> = ({
       setEmailInputDisabled(true);
       setCodeInputDisabled(true);
       setValue('signUpConfiromButton', 'good');
-    } else if (response.status === 401) {
+    } else if (response.status === 400) {
       //올바른 인증 코드가 아닌 경우 error 창
       setCodeVerificationError(true);
-      setCodeVerificationErrorText('올바른 인증 코드가 아닙니다.');
+      setCodeVerificationErrorText(response.message);
       setCodeConfirmButton(true);
     } else if (response.status === 403) {
       //에러문구 표시해주고
       setCodeVerificationError(true);
-      setCodeVerificationErrorText('인증 코드가 만료되었습니다.');
+      setCodeVerificationErrorText(response.message);
 
       //인증 코드 입력 창 막기
       setCodeInputDisabled(true);
 
       //확인 버튼 비활성화
       setCodeConfirmButton(true);
+    } else if (response.status === 500) {
+      setStatusAlertSeverity('warning');
+      setStatusAlertText(response.message);
+      setStatusAlertOpen(true);
     }
   };
 

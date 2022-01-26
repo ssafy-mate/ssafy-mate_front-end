@@ -24,6 +24,9 @@ import {
 } from '../../types/UserInfomationType';
 import UserService from '../../services/UserService';
 import { validUrl } from '../../data/regularExpressionData';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+import { response } from 'msw';
 
 let signUpFormData = new FormData();
 
@@ -78,6 +81,15 @@ const ProfileForm: React.FC<ProfileProps> = ({
 
   const [gitHubUrlPatternError, setGitHubUrlPatternError] =
     useState<boolean>(false);
+
+  type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
+
+  const [statusAlertSeverity, setStatusAlertSeverity] =
+    useState<Severity>('success');
+
+  const [statusAlertOpen, setStatusAlertOpen] = useState<boolean>(false);
+
+  const [statusAlertText, setStatusAlertText] = useState<string>('');
 
   const {
     getRootProps,
@@ -261,237 +273,268 @@ const ProfileForm: React.FC<ProfileProps> = ({
     event.preventDefault();
     const data = getSignUpInfomation();
     if (validation()) {
-      UserService.signUp(data)
-        .then((res) => {
-          //성공한 경우
-          updateSignUpStep(3);
-        })
-        .catch((errors) => {
-          //실패한 경우
-        });
+      UserService.signUp(data).then((response) => {
+        if (response.status === 400) {
+          setStatusAlertSeverity('warning');
+        } else if (response.status === 500) {
+          setStatusAlertSeverity('error');
+        } else {
+          setStatusAlertSeverity('success');
+        }
+        setStatusAlertText(response.message);
+        setStatusAlertOpen(true);
+      });
     }
   };
 
+  const alertClose = () => {
+    setStatusAlertOpen(false);
+  };
+
   return (
-    <Container>
-      <Row>
-        <AvatarWrapper>
-          {previewProgileImg ? (
-            <>
-              <Avatar src={previewProgileImg} css={avatar} />
-              <FileInputWrapper>
-                <FileInputLabel htmlFor="profile-img">
-                  <CloseIcon fontSize="large" onClick={handleClearProfileImg} />
-                </FileInputLabel>
-              </FileInputWrapper>
-            </>
-          ) : (
-            <>
-              <Avatar src="/broken-image.jpg" css={avatar} />
-              <FileInputWrapper>
-                <FileInputLabel htmlFor="profile-img">
-                  <AddAPhotoIcon />
-                </FileInputLabel>
-                <FileInput
-                  type="file"
-                  id="profile-img"
-                  accept="image/*"
-                  onChange={handleChangeProfileImg}
-                />
-              </FileInputWrapper>
-            </>
-          )}
-        </AvatarWrapper>
-        <InputWrapper>
-          <RequirementLabel htmlFor="self-introduction">
-            자기소개
-          </RequirementLabel>
-          <Textarea
-            id="self-introduction"
-            name="selfIntroduction"
-            onKeyPress={handleTextAreaEnterKeyPressed}
-            onChange={handleTextAreaInput}
-            required
-          />
-          {showError === 1 && selfIntroductionError && (
-            <ErrorSpan>필수 입력 항목입니다.</ErrorSpan>
-          )}
-        </InputWrapper>
-      </Row>
-      <Row>
-        <InputWrapper css={rightGap}>
-          <RequirementLabel htmlFor="job1">희망 직무1</RequirementLabel>
-          <Select
-            id="job1"
-            defaultValue={'default'}
-            name="job1"
-            onChange={handleJobSelect}
-            required
+    <>
+      {statusAlertOpen && (
+        <SsafyAuthSnackBar
+          open={statusAlertOpen}
+          autoHideDuration={1500}
+          onClose={alertClose}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          <ResponseAlert
+            onClose={alertClose}
+            severity={statusAlertSeverity}
+            sx={{ width: '100%' }}
           >
-            <option value="default" disabled>
-              - 선택 -
-            </option>
-            {jobListData.map(
-              (job) =>
-                job2 !== job.name && (
-                  <option key={job.id} value={job.name}>
-                    {job.name}
-                  </option>
-                ),
+            {statusAlertText}
+          </ResponseAlert>
+        </SsafyAuthSnackBar>
+      )}
+      <Container>
+        <Row>
+          <AvatarWrapper>
+            {previewProgileImg ? (
+              <>
+                <Avatar src={previewProgileImg} css={avatar} />
+                <FileInputWrapper>
+                  <FileInputLabel htmlFor="profile-img">
+                    <CloseIcon
+                      fontSize="large"
+                      onClick={handleClearProfileImg}
+                    />
+                  </FileInputLabel>
+                </FileInputWrapper>
+              </>
+            ) : (
+              <>
+                <Avatar src="/broken-image.jpg" css={avatar} />
+                <FileInputWrapper>
+                  <FileInputLabel htmlFor="profile-img">
+                    <AddAPhotoIcon />
+                  </FileInputLabel>
+                  <FileInput
+                    type="file"
+                    id="profile-img"
+                    accept="image/*"
+                    onChange={handleChangeProfileImg}
+                  />
+                </FileInputWrapper>
+              </>
             )}
-          </Select>
-          {showError === 1 && job1Error && (
-            <ErrorSpan>필수 선택 사항입니다.</ErrorSpan>
-          )}
-        </InputWrapper>
-
-        <InputWrapper>
-          <Label htmlFor="job2">
-            희망 직무2 <Em>(선택)</Em>
-          </Label>
-          <Select
-            id="job2"
-            defaultValue={'default'}
-            onChange={handleJobSelect}
-            disabled={job1 === 'default'}
-          >
-            <option value="default">- 선택 -</option>
-            {jobListData.map(
-              (job) =>
-                job1 !== job.name && (
-                  <option key={job.id} value={job.name}>
-                    {job.name}
-                  </option>
-                ),
-            )}
-          </Select>
-        </InputWrapper>
-      </Row>
-      <Row css={techStackRow}>
-        <InputWrapper {...getRootProps()} css={techStackInputWrapper}>
-          <RequirementLabel
-            htmlFor="tech-stack-options"
-            {...getInputLabelProps()}
-          >
-            기술 스택 <Em>(필수 2가지 이상 기입)</Em>
-          </RequirementLabel>
-
-          <InfoInputWrapper
-            ref={setAnchorEl}
-            className={focused ? 'focused' : ''}
-          >
-            <InfoInput
-              type="text"
-              id="tech-stack-options"
-              name="tech-stack-options"
-              placeholder="ex) Vue.js, django, Spring Boot, MySQL"
-              {...getInputProps()}
+          </AvatarWrapper>
+          <InputWrapper>
+            <RequirementLabel htmlFor="self-introduction">
+              자기소개
+            </RequirementLabel>
+            <Textarea
+              id="self-introduction"
+              name="selfIntroduction"
+              onKeyPress={handleTextAreaEnterKeyPressed}
+              onChange={handleTextAreaInput}
+              required
             />
-          </InfoInputWrapper>
-          {groupedOptions.length > 0 ? (
-            <SearchList {...getListboxProps()}>
-              {(groupedOptions as typeof techStackListData).map(
-                (option, index) => (
-                  <SearchItem {...getOptionProps({ option, index })}>
-                    <TechStackInfo>
-                      <TechStackImg src={option.imgUrl} alt={option.name} />
-                      {option.name}
-                    </TechStackInfo>
-                    <CheckIcon fontSize="small" />
-                  </SearchItem>
-                ),
+            {showError === 1 && selfIntroductionError && (
+              <ErrorSpan>필수 입력 항목입니다.</ErrorSpan>
+            )}
+          </InputWrapper>
+        </Row>
+        <Row>
+          <InputWrapper css={rightGap}>
+            <RequirementLabel htmlFor="job1">희망 직무1</RequirementLabel>
+            <Select
+              id="job1"
+              defaultValue={'default'}
+              name="job1"
+              onChange={handleJobSelect}
+              required
+            >
+              <option value="default" disabled>
+                - 선택 -
+              </option>
+              {jobListData.map(
+                (job) =>
+                  job2 !== job.name && (
+                    <option key={job.id} value={job.name}>
+                      {job.name}
+                    </option>
+                  ),
               )}
-            </SearchList>
-          ) : null}
-          {showError === 1 && techStacksError && (
-            <ErrorSpan>
-              필수 2가지 이상 선택 사항입니다.(상/중/하 선택도 필수입니다.)
-            </ErrorSpan>
-          )}
-        </InputWrapper>
-        <TechStackList>
-          {value.map((option: TechStack, index: number) => (
-            <TechStackTagWithLevel
-              id={option.id}
-              name={option.name}
-              imgUrl={option.imgUrl}
-              techStacks={techStacks}
-              updateTechStacks={updateTeckStacks}
-              techStacksError={techStacksError}
-              updateTechStacksError={updateTechStacksError}
-              {...getTagProps({ index })}
+            </Select>
+            {showError === 1 && job1Error && (
+              <ErrorSpan>필수 선택 사항입니다.</ErrorSpan>
+            )}
+          </InputWrapper>
+
+          <InputWrapper>
+            <Label htmlFor="job2">
+              희망 직무2 <Em>(선택)</Em>
+            </Label>
+            <Select
+              id="job2"
+              defaultValue={'default'}
+              onChange={handleJobSelect}
+              disabled={job1 === 'default'}
+            >
+              <option value="default">- 선택 -</option>
+              {jobListData.map(
+                (job) =>
+                  job1 !== job.name && (
+                    <option key={job.id} value={job.name}>
+                      {job.name}
+                    </option>
+                  ),
+              )}
+            </Select>
+          </InputWrapper>
+        </Row>
+        <Row css={techStackRow}>
+          <InputWrapper {...getRootProps()} css={techStackInputWrapper}>
+            <RequirementLabel
+              htmlFor="tech-stack-options"
+              {...getInputLabelProps()}
+            >
+              기술 스택 <Em>(필수 2가지 이상 기입)</Em>
+            </RequirementLabel>
+
+            <InfoInputWrapper
+              ref={setAnchorEl}
+              className={focused ? 'focused' : ''}
+            >
+              <InfoInput
+                type="text"
+                id="tech-stack-options"
+                name="tech-stack-options"
+                placeholder="ex) Vue.js, django, Spring Boot, MySQL"
+                {...getInputProps()}
+              />
+            </InfoInputWrapper>
+            {groupedOptions.length > 0 ? (
+              <SearchList {...getListboxProps()}>
+                {(groupedOptions as typeof techStackListData).map(
+                  (option, index) => (
+                    <SearchItem {...getOptionProps({ option, index })}>
+                      <TechStackInfo>
+                        <TechStackImg src={option.imgUrl} alt={option.name} />
+                        {option.name}
+                      </TechStackInfo>
+                      <CheckIcon fontSize="small" />
+                    </SearchItem>
+                  ),
+                )}
+              </SearchList>
+            ) : null}
+            {showError === 1 && techStacksError && (
+              <ErrorSpan>
+                필수 2가지 이상 선택 사항입니다.(상/중/하 선택도 필수입니다.)
+              </ErrorSpan>
+            )}
+          </InputWrapper>
+          <TechStackList>
+            {value.map((option: TechStack, index: number) => (
+              <TechStackTagWithLevel
+                id={option.id}
+                name={option.name}
+                imgUrl={option.imgUrl}
+                techStacks={techStacks}
+                updateTechStacks={updateTeckStacks}
+                techStacksError={techStacksError}
+                updateTechStacksError={updateTechStacksError}
+                {...getTagProps({ index })}
+              />
+            ))}
+          </TechStackList>
+        </Row>
+        <Row>
+          <InputWrapper>
+            <Label htmlFor="github-url">
+              GitHub URL <Em>(선택)</Em>
+              {githubUrl.length >= 1 &&
+                showError === 1 &&
+                gitHubUrlPatternError && (
+                  <ErrorSpan className="url">유효한 URL이 아닙니다.</ErrorSpan>
+                )}
+            </Label>
+            <InfoInput
+              type="url"
+              id="github-url"
+              name="githubUrl"
+              placeholder="https://github.com/ssafy-mate"
+              onChange={handleUrlInput}
+              pattern="https://.*"
             />
-          ))}
-        </TechStackList>
-      </Row>
-      <Row>
-        <InputWrapper>
-          <Label htmlFor="github-url">
-            GitHub URL <Em>(선택)</Em>
-            {githubUrl.length >= 1 &&
-              showError === 1 &&
-              gitHubUrlPatternError && (
+          </InputWrapper>
+        </Row>
+        <Row>
+          <InputWrapper>
+            <Label htmlFor="etc-url">
+              기술 블로그 URL 또는 기타 URL <Em>(선택)</Em>
+              {etcUrl.length >= 1 && showError === 1 && etcUrlPatternError && (
                 <ErrorSpan className="url">유효한 URL이 아닙니다.</ErrorSpan>
               )}
-          </Label>
-          <InfoInput
-            type="url"
-            id="github-url"
-            name="githubUrl"
-            placeholder="https://github.com/ssafy-mate"
-            onChange={handleUrlInput}
-            pattern="https://.*"
-          />
-        </InputWrapper>
-      </Row>
-      <Row>
-        <InputWrapper>
-          <Label htmlFor="etc-url">
-            기술 블로그 URL 또는 기타 URL <Em>(선택)</Em>
-            {etcUrl.length >= 1 && showError === 1 && etcUrlPatternError && (
-              <ErrorSpan className="url">유효한 URL이 아닙니다.</ErrorSpan>
-            )}
-          </Label>
-          <InfoInput
-            type="url"
-            id="etc-url"
-            name="etcUrl"
-            placeholder="https://velog.io/@ssafy-mate"
-            onChange={handleUrlInput}
-            pattern="https://.*"
-          />
-        </InputWrapper>
-      </Row>
+            </Label>
+            <InfoInput
+              type="url"
+              id="etc-url"
+              name="etcUrl"
+              placeholder="https://velog.io/@ssafy-mate"
+              onChange={handleUrlInput}
+              pattern="https://.*"
+            />
+          </InputWrapper>
+        </Row>
 
-      <Row>
-        <CheckBoxWrapper>
-          <AgreementCheckBox
-            type="checkbox"
-            id="sign-up-agreement"
-            name="sign-up-agreement"
-            onClick={handleCheckAgreement}
-          />
-          <CheckBoxLabel htmlFor="sign-up-agreement">
-            <AgreementLink href="#" target="_blank" rel="noopener noreferrer">
-              이용약관
-            </AgreementLink>
-            &nbsp;및&nbsp;
-            <AgreementLink href="#" target="_blank" rel="noopener noreferrer">
-              개인정보 처리방침
-            </AgreementLink>
-            에 동의합니다.
-          </CheckBoxLabel>
-        </CheckBoxWrapper>
-      </Row>
-      {showError === 1 && agreementError && (
-        <ErrorSpan className="agreement">필수 선택 사항입니다.</ErrorSpan>
-      )}
-      <Row>
-        <SignUpButton onClick={signUpClick} type="button">
-          계정 만들기
-        </SignUpButton>
-      </Row>
-    </Container>
+        <Row>
+          <CheckBoxWrapper>
+            <AgreementCheckBox
+              type="checkbox"
+              id="sign-up-agreement"
+              name="sign-up-agreement"
+              onClick={handleCheckAgreement}
+            />
+            <CheckBoxLabel htmlFor="sign-up-agreement">
+              <AgreementLink href="#" target="_blank" rel="noopener noreferrer">
+                이용약관
+              </AgreementLink>
+              &nbsp;및&nbsp;
+              <AgreementLink href="#" target="_blank" rel="noopener noreferrer">
+                개인정보 처리방침
+              </AgreementLink>
+              에 동의합니다.
+            </CheckBoxLabel>
+          </CheckBoxWrapper>
+        </Row>
+        {showError === 1 && agreementError && (
+          <ErrorSpan className="agreement">필수 선택 사항입니다.</ErrorSpan>
+        )}
+        <Row>
+          <SignUpButton onClick={signUpClick} type="button">
+            계정 만들기
+          </SignUpButton>
+        </Row>
+      </Container>
+    </>
   );
 };
 
@@ -860,6 +903,14 @@ const ErrorSpan = styled.span`
   &.url {
     color: #1976d3;
   }
+`;
+
+const SsafyAuthSnackBar = styled(Snackbar)`
+  height: 20%;
+`;
+
+const ResponseAlert = styled(Alert)`
+  white-space: pre-line;
 `;
 
 export default ProfileForm;

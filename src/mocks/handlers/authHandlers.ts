@@ -5,7 +5,7 @@ export const authHandlers = [
   rest.get(
     'http://localhost:3000/api/user/sign-up/verification/ssafy',
     async (request, response, context) => {
-      const status: number = 200;
+      const status: number = 401;
 
       console.log(
         `[GET | /api/user/sign-up/verification/ssafy], ${JSON.stringify(
@@ -17,18 +17,32 @@ export const authHandlers = [
         case 200:
           return response(
             context.json({
-              status: 200,
               success: true,
-              message: '',
+              message: '교육생 인증이 완료되었습니다.',
             }),
           );
-
+        case 401:
+          return response(
+            context.json({
+              status: 401,
+              success: false,
+              message: '해당 교육생 정보가 없습니다.',
+            }),
+          );
+        case 409:
+          return response(
+            context.json({
+              status: 409,
+              success: false,
+              message: '이미 가입된 교육생입니다.',
+            }),
+          );
         case 500:
           return response(
             context.json({
               status: 500,
               success: false,
-              message: '',
+              message: 'Internal Server Error, 교육생 인증 실패',
             }),
           );
       }
@@ -51,15 +65,15 @@ export const authHandlers = [
         case 200:
           return response(
             context.json({
-              status: 200,
               success: true,
-              message: '',
+              message:
+                '입력한 이메일로 인증 메일을 발송했습니다.\n 이메일에 표시된 인증코드를 입력해주세요.',
             }),
           );
-        case 401:
+        case 409:
           return response(
             context.json({
-              status: 401,
+              status: 409,
               success: false,
               message: '이미 등록된 이메일입니다.',
             }),
@@ -90,15 +104,13 @@ export const authHandlers = [
         case 200:
           return response(
             context.json({
-              status: 200,
               success: true,
-              message: '',
             }),
           );
         case 400:
           return response(
             context.json({
-              status: 401,
+              status: 400,
               success: false,
               message: '올바른 인증 코드가 아닙니다.',
             }),
@@ -108,12 +120,21 @@ export const authHandlers = [
             context.json({
               status: 403,
               success: false,
-              message: '입력 유효 시간이 초과되었습니다.',
+              message: '인증코드가 만료되었습니다.',
+            }),
+          );
+        case 500:
+          return response(
+            context.json({
+              status: 500,
+              success: false,
+              message: 'Internal Server Error, 인증 코드 확인 실패',
             }),
           );
       }
     },
   ),
+
   //회원가입 3단계
   rest.post(
     'http://localhost:3000/api/user',
@@ -126,15 +147,21 @@ export const authHandlers = [
         case 200:
           return response(
             context.json({
-              status: 200,
-              success: true,
-              message: '',
+              message: '계정 생성이 완료되었습니다.',
+            }),
+          );
+        case 400:
+          return response(
+            context.json({
+              status: 400,
+              success: false,
+              message: '계정 생성이 실패하였습니다.',
             }),
           );
         case 500:
           return response(
             context.json({
-              status: 403,
+              status: 500,
               success: false,
               message: 'Internal Server Error, 계정 생성 실패',
             }),

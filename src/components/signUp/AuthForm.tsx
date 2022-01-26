@@ -48,7 +48,15 @@ const AuthForm: React.FC<Props> = ({
   updateSignUpStep,
 }) => {
   const [selectedTracks, setSelectedTracks] = useState<SsafyTrack[]>([]);
+
   const [failAlertOpen, setFailAlertOpen] = useState(false);
+
+  const [alertMessage, setAlertMessage] = useState('');
+
+  type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
+
+  const [statusAlertSeverity, setStatusAlertSeverity] =
+    useState<Severity>('success');
 
   const {
     watch,
@@ -88,9 +96,13 @@ const AuthForm: React.FC<Props> = ({
 
     if (response.success) {
       updateSsafyAuthProps(data);
-    } else {
-      setFailAlertOpen(true);
+    } else if (response.status === 401 || response.status === 409) {
+      setStatusAlertSeverity('warning');
+    } else if (response.status === 500) {
+      setStatusAlertSeverity('error');
     }
+    setFailAlertOpen(true);
+    setAlertMessage(response.message);
   };
 
   const alertClose = () => {
@@ -112,10 +124,10 @@ const AuthForm: React.FC<Props> = ({
         >
           <FailAlert
             onClose={alertClose}
-            severity="info"
+            severity={statusAlertSeverity}
             sx={{ width: '100%' }}
           >
-            교육생 인증에 실패했습니다.
+            {alertMessage}
           </FailAlert>
         </SsafyAuthSnackBar>
       )}
