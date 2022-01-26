@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 
-import { userDataList } from '../mockDatabase';
+import { userDataList } from '../database/user';
 
 export const userHandlers = [
   rest.get(

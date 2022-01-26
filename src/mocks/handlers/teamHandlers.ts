@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 
-import { teamDataList } from '../mockDatabase';
+import { teamDataList } from '../database/team';
 
 export const teamHandlers = [
   rest.post(
@@ -46,7 +46,7 @@ export const teamHandlers = [
       const token = request.headers['_headers'].authorization.split(' ')[1];
 
       // 토큰이 유효하지 않을 시
-      if (token !== 't12345678') {
+      if (token !== 't123456789') {
         return response(
           context.status(401),
           context.json({
