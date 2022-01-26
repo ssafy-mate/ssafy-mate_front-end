@@ -1,4 +1,6 @@
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+
+import { Link, useParams } from 'react-router-dom';
 
 import styled from '@emotion/styled';
 
@@ -15,298 +17,264 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import EmailIcon from '@mui/icons-material/Email';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 
+import useUserDetailInfo from '../../hooks/useUserDetailInfo';
+
+import UserLabel from './UserLabel';
 import UserTechStackTag from './UserTechStackTag';
+import SkeletonUserInfoSection from './SkeletonUserInfoSection';
+import ErrorSection from '../common/ErrorSection';
+
+type Params = {
+  userId: string;
+};
 
 const UserInfoSection: React.FC = () => {
-  const tempUserData = {
-    userId: 1,
-    userName: '박정환',
-    userEmail: 'jeonghwan.dev@gmail.com',
-    profileImgUrl: '/images/projects/sample-student_profile-img5.jpeg',
-    campus: '서울',
-    ssafyTrack: 'Java Track',
-    selfIntroduction:
-      '안녕하세요. 개발을 좋아하고 UI/UX 개선을 고민하는 프론트엔드 개발자 박정환입니다.',
-    job1: '프론트엔드 (Front-end)',
-    job2: '',
-    projects: [
-      {
-        id: 1,
-        name: '공통 프로젝트',
-        projectTrack: '웹 기술',
-        projectTeam: {
-          teamId: 1,
-          teamName: '데스파시토',
-        },
-      },
-      {
-        id: 2,
-        name: '특화 프로젝트',
-        projectTrack: '빅데이터',
-        projectTeam: null,
-      },
-      {
-        id: 3,
-        name: '자율 프로젝트',
-        projectTrack: '',
-        projectTeam: null,
-      },
-    ],
-    techStacks: [
-      {
-        id: 1,
-        techStackName: 'JavaScript',
-        techStackLevel: '상',
-      },
-      {
-        id: 2,
-        techStackName: 'TypeScript',
-        techStackLevel: '중',
-      },
-      {
-        id: 3,
-        techStackName: 'React',
-        techStackLevel: '중',
-      },
-      {
-        id: 4,
-        techStackName: 'Redux',
-        techStackLevel: '하',
-      },
-      {
-        id: 5,
-        techStackName: 'Redux-Saga',
-        techStackLevel: '하',
-      },
-      {
-        id: 5,
-        techStackName: 'React-Query',
-        techStackLevel: '하',
-      },
-      {
-        id: 6,
-        techStackName: 'Emotion',
-        techStackLevel: '중',
-      },
-    ],
-    githubUrl: 'https://github.com/JeongHwan-dev',
-    etcUrl: 'https://codingjhj.tistory.com/',
-  };
+  const { userId } = useParams<Params>();
+  const { isLoading, userData, isError, errorMessage } =
+    useUserDetailInfo(userId);
+
+  useEffect(() => {
+    if (isError) {
+      document.title = `${errorMessage} | 싸피 메이트`;
+    } else {
+      document.title = `${
+        userData?.userName ? userData.userName : ''
+      } 교육생 프로필 | 싸피 메이트`;
+    }
+  }, [userData, isError, errorMessage]);
+
+  if (isError) {
+    return <ErrorSection errorMessage={errorMessage} />;
+  }
 
   return (
     <Container>
-      <HeadContainer>
-        <TitleBox>
-          <ProfileImgWrapper>
-            <ProfileImg
-              src={tempUserData.profileImgUrl}
-              alt={`${tempUserData.userName}님의 프로필 이미지`}
-            />
-          </ProfileImgWrapper>
-          <NameWrapper>
-            <Name>{tempUserData.userName}</Name>
-            <Row>
-              <SsafyInfo>
-                <span>{tempUserData.campus}</span>
-                <span>{tempUserData.ssafyTrack}</span>
-              </SsafyInfo>
-            </Row>
-          </NameWrapper>
-        </TitleBox>
-        <ButtonBox>
-          <RequestButton>
-            <VolunteerActivismIcon />
-            <span>팀 합류 요청하기</span>
-          </RequestButton>
-          <SharingButton>
-            <ShareIcon />
-            <span>공유하기</span>
-            <ArrowDropDownIcon />
-          </SharingButton>
-        </ButtonBox>
-      </HeadContainer>
-      <BodyContainer>
-        <Section>
-          <SubHead>요약 정보</SubHead>
-          <InfoList>
-            <InfoRow>
-              <InfoItem>
-                <InfoLabel>
-                  <SchoolIcon />
-                  캠퍼스
-                </InfoLabel>
-                <InfoContent>{tempUserData.campus}</InfoContent>
-              </InfoItem>
-              <InfoItem>
-                <InfoLabel>
-                  <IntegrationInstructionsIcon />
-                  교육 트랙
-                </InfoLabel>
-                <InfoContent>{tempUserData.ssafyTrack}</InfoContent>
-              </InfoItem>
-            </InfoRow>
-            <InfoRow>
-              <InfoItem>
-                <InfoLabel>
-                  <WorkIcon />
-                  희망 직무 1
-                </InfoLabel>
-                <InfoContent>{tempUserData.job1}</InfoContent>
-              </InfoItem>
-              <InfoItem>
-                <InfoLabel>
-                  <WorkOutlineIcon />
-                  희망 직무 2
-                </InfoLabel>
-                <InfoContent>
-                  {tempUserData.job2 ? tempUserData.job2 : '-'}
-                </InfoContent>
-              </InfoItem>
-            </InfoRow>
-            <InfoRow>
-              <InfoItem>
-                <InfoLabel>
-                  <ComputerIcon />
-                  {tempUserData.projects[0].name} 트랙
-                </InfoLabel>
-                <InfoContent>
-                  {tempUserData.projects[0].projectTrack}
-                </InfoContent>
-              </InfoItem>
-              <InfoItem>
-                <InfoLabel>
-                  <GroupsIcon />
-                  {tempUserData.projects[0].name} 팀
-                </InfoLabel>
-                {tempUserData.projects[0].projectTeam ? (
-                  <InnerLink
-                    to={`/teams/${tempUserData.projects[0].projectTeam.teamId}`}
-                  >
-                    {tempUserData.projects[0].projectTeam.teamName}
-                  </InnerLink>
-                ) : (
-                  <InfoContent>-</InfoContent>
+      {isLoading || !userData ? (
+        <SkeletonUserInfoSection />
+      ) : (
+        <>
+          <HeadContainer>
+            <TitleBox>
+              <ProfileImgWrapper>
+                {userData.profileImgUrl && (
+                  <ProfileImg
+                    src={userData.profileImgUrl}
+                    alt={`${userData.userName}님의 프로필 이미지`}
+                  />
                 )}
-              </InfoItem>
-            </InfoRow>
-            <InfoRow>
-              <InfoItem>
-                <InfoLabel>
-                  <ComputerIcon />
-                  {tempUserData.projects[1].name} 트랙
-                </InfoLabel>
-                <InfoContent>
-                  {tempUserData.projects[1].projectTrack}
-                </InfoContent>
-              </InfoItem>
-              <InfoItem>
-                <InfoLabel>
-                  <GroupsIcon />
-                  {tempUserData.projects[1].name} 팀
-                </InfoLabel>
-                {tempUserData.projects[1].projectTeam ? (
-                  <InnerLink
-                    to={`/teams/${tempUserData.projects[1].projectTeam.teamId}`}
-                  >
-                    {tempUserData.projects[1].projectTeam.teamName}
-                  </InnerLink>
-                ) : (
-                  <InfoContent>-</InfoContent>
-                )}
-              </InfoItem>
-            </InfoRow>
-            <InfoRow>
-              <InfoItem>
-                <InfoLabel>
-                  <ComputerIcon />
-                  {tempUserData.projects[2].name} 트랙
-                </InfoLabel>
-                <InfoContent>-</InfoContent>
-              </InfoItem>
-              <InfoItem>
-                <InfoLabel>
-                  <GroupsIcon />
-                  {tempUserData.projects[2].name} 팀
-                </InfoLabel>
-                {tempUserData.projects[2].projectTeam ? (
-                  <InnerLink
-                    to={`/teams/${tempUserData.projects[2].projectTeam.teamId}`}
-                  >
-                    {tempUserData.projects[2].projectTeam.teamName}
-                  </InnerLink>
-                ) : (
-                  <InfoContent>-</InfoContent>
-                )}
-              </InfoItem>
-            </InfoRow>
-            <InfoRow>
-              <InfoItem>
-                <InfoLabel>
-                  <EmailIcon />
-                  Email
-                </InfoLabel>
-                <OuterLink href={`mailto:${tempUserData.userEmail}`}>
-                  {tempUserData.userEmail}
-                </OuterLink>
-              </InfoItem>
-            </InfoRow>
-            <InfoRow>
-              <InfoItem>
-                <InfoLabel>
-                  <GitHubIcon />
-                  GitHub
-                </InfoLabel>
-                {tempUserData.githubUrl ? (
-                  <OuterLink
-                    href={tempUserData.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {tempUserData.githubUrl}
-                  </OuterLink>
-                ) : (
-                  <InfoContent>-</InfoContent>
-                )}
-              </InfoItem>
-            </InfoRow>
-            <InfoRow>
-              <InfoItem>
-                <InfoLabel>
-                  <StorefrontIcon />
-                  기술 블로그 및 기타
-                </InfoLabel>
-                {tempUserData.etcUrl ? (
-                  <OuterLink
-                    href={tempUserData.etcUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {tempUserData.etcUrl}
-                  </OuterLink>
-                ) : (
-                  <InfoContent>-</InfoContent>
-                )}
-              </InfoItem>
-            </InfoRow>
-          </InfoList>
-        </Section>
-        <Section>
-          <SubHead>소개</SubHead>
-          <Introduction>{tempUserData.selfIntroduction}</Introduction>
-        </Section>
-        <Section>
-          <SubHead>기술 스택</SubHead>
-          <TechStackList>
-            {tempUserData.techStacks.map((techStack) => (
-              <UserTechStackTag
-                key={techStack.id}
-                techStackName={techStack.techStackName}
-                techStackLevel={techStack.techStackLevel}
-              />
-            ))}
-          </TechStackList>
-        </Section>
-      </BodyContainer>
+              </ProfileImgWrapper>
+              <NameWrapper>
+                <UserLabel
+                  userId={userData.userId}
+                  userName={userData.userName}
+                  offProfileMenu={true}
+                />
+                <Row>
+                  <SsafyInfo>
+                    <span>{userData.campus}</span>
+                    <span>{userData.ssafyTrack}</span>
+                  </SsafyInfo>
+                </Row>
+              </NameWrapper>
+            </TitleBox>
+            <ButtonBox>
+              <RequestButton>
+                <VolunteerActivismIcon />
+                <span>팀 합류 요청하기</span>
+              </RequestButton>
+              <SharingButton>
+                <ShareIcon />
+                <span>공유하기</span>
+                <ArrowDropDownIcon />
+              </SharingButton>
+            </ButtonBox>
+          </HeadContainer>
+          <BodyContainer>
+            <Section>
+              <SubHead>요약 정보</SubHead>
+              <InfoList>
+                <InfoRow>
+                  <InfoItem>
+                    <InfoLabel>
+                      <SchoolIcon />
+                      캠퍼스
+                    </InfoLabel>
+                    <InfoContent>{userData.campus}</InfoContent>
+                  </InfoItem>
+                  <InfoItem>
+                    <InfoLabel>
+                      <IntegrationInstructionsIcon />
+                      교육 트랙
+                    </InfoLabel>
+                    <InfoContent>{userData.ssafyTrack}</InfoContent>
+                  </InfoItem>
+                </InfoRow>
+                <InfoRow>
+                  <InfoItem>
+                    <InfoLabel>
+                      <WorkIcon />
+                      희망 직무 1
+                    </InfoLabel>
+                    <InfoContent>{userData.job1}</InfoContent>
+                  </InfoItem>
+                  <InfoItem>
+                    <InfoLabel>
+                      <WorkOutlineIcon />
+                      희망 직무 2
+                    </InfoLabel>
+                    <InfoContent>
+                      {userData.job2 !== null ? userData.job2 : '-'}
+                    </InfoContent>
+                  </InfoItem>
+                </InfoRow>
+                <InfoRow>
+                  <InfoItem>
+                    <InfoLabel>
+                      <ComputerIcon />
+                      {userData.projects[0].name} 트랙
+                    </InfoLabel>
+                    <InfoContent>
+                      {userData.projects[0].projectTrack !== null
+                        ? userData.projects[0].projectTrack
+                        : '-'}
+                    </InfoContent>
+                  </InfoItem>
+                  <InfoItem>
+                    <InfoLabel>
+                      <GroupsIcon />
+                      {userData.projects[0].name} 팀
+                    </InfoLabel>
+                    {userData.projects[0].projectTeam ? (
+                      <InnerLink
+                        to={`/teams/${userData.projects[0].projectTeam.teamId}`}
+                      >
+                        {userData.projects[0].projectTeam.teamName}
+                      </InnerLink>
+                    ) : (
+                      <InfoContent>-</InfoContent>
+                    )}
+                  </InfoItem>
+                </InfoRow>
+                <InfoRow>
+                  <InfoItem>
+                    <InfoLabel>
+                      <ComputerIcon />
+                      {userData.projects[1].name} 트랙
+                    </InfoLabel>
+                    <InfoContent>
+                      {userData.projects[1].projectTrack}
+                    </InfoContent>
+                  </InfoItem>
+                  <InfoItem>
+                    <InfoLabel>
+                      <GroupsIcon />
+                      {userData.projects[1].name} 팀
+                    </InfoLabel>
+                    {userData.projects[1].projectTeam ? (
+                      <InnerLink
+                        to={`/teams/${userData.projects[1].projectTeam.teamId}`}
+                      >
+                        {userData.projects[1].projectTeam.teamName}
+                      </InnerLink>
+                    ) : (
+                      <InfoContent>-</InfoContent>
+                    )}
+                  </InfoItem>
+                </InfoRow>
+                <InfoRow>
+                  <InfoItem>
+                    <InfoLabel>
+                      <ComputerIcon />
+                      {userData.projects[2].name} 트랙
+                    </InfoLabel>
+                    <InfoContent>-</InfoContent>
+                  </InfoItem>
+                  <InfoItem>
+                    <InfoLabel>
+                      <GroupsIcon />
+                      {userData.projects[2].name} 팀
+                    </InfoLabel>
+                    {userData.projects[2].projectTeam ? (
+                      <InnerLink
+                        to={`/teams/${userData.projects[2].projectTeam.teamId}`}
+                      >
+                        {userData.projects[2].projectTeam.teamName}
+                      </InnerLink>
+                    ) : (
+                      <InfoContent>-</InfoContent>
+                    )}
+                  </InfoItem>
+                </InfoRow>
+                <InfoRow>
+                  <InfoItem>
+                    <InfoLabel>
+                      <EmailIcon />
+                      Email
+                    </InfoLabel>
+                    <OuterLink href={`mailto:${userData.userEmail}`}>
+                      {userData.userEmail}
+                    </OuterLink>
+                  </InfoItem>
+                </InfoRow>
+                <InfoRow>
+                  <InfoItem>
+                    <InfoLabel>
+                      <GitHubIcon />
+                      GitHub
+                    </InfoLabel>
+                    {userData.githubUrl ? (
+                      <OuterLink
+                        href={userData.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {userData.githubUrl}
+                      </OuterLink>
+                    ) : (
+                      <InfoContent>-</InfoContent>
+                    )}
+                  </InfoItem>
+                </InfoRow>
+                <InfoRow>
+                  <InfoItem>
+                    <InfoLabel>
+                      <StorefrontIcon />
+                      기술 블로그 및 기타
+                    </InfoLabel>
+                    {userData.etcUrl ? (
+                      <OuterLink
+                        href={userData.etcUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {userData.etcUrl}
+                      </OuterLink>
+                    ) : (
+                      <InfoContent>-</InfoContent>
+                    )}
+                  </InfoItem>
+                </InfoRow>
+              </InfoList>
+            </Section>
+            <Section>
+              <SubHead>소개</SubHead>
+              <Introduction>{userData.selfIntroduction}</Introduction>
+            </Section>
+            <Section>
+              <SubHead>기술 스택</SubHead>
+              <TechStackList>
+                {userData.techStacks.map((techStack) => (
+                  <UserTechStackTag
+                    key={techStack.id}
+                    techStackName={techStack.techStackName}
+                    techStackLevel={techStack.techStackLevel}
+                  />
+                ))}
+              </TechStackList>
+            </Section>
+          </BodyContainer>
+        </>
+      )}
     </Container>
   );
 };
@@ -354,6 +322,8 @@ const ProfileImgWrapper = styled.div`
   margin-right: 20px;
   border-radius: 4px;
   box-shadow: 4px 12px 18px 2px rgb(0 0 0 / 8%);
+  background-image: url('/images/assets/basic-profile-img.png');
+  background-size: contain;
 
   @media (max-width: 1199px) {
     width: 80px;
@@ -377,27 +347,27 @@ const NameWrapper = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-`;
 
-const Name = styled.h1`
-  max-width: 640px;
-  font-size: 28px;
-  font-weight: 600;
-  line-height: 1.8;
-  color: #263647;
+  & .user-label {
+    max-width: 640px;
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.8;
+    color: #263647;
 
-  @media (max-width: 1199px) {
-    font-size: 26px;
-  }
-  @media (max-width: 991px) {
-    font-size: 24px;
-  }
-  @media (max-width: 767px) {
-    font-size: 20px;
-    line-height: 1.5;
-  }
-  @media (max-width: 575px) {
-    font-size: 18px;
+    @media (max-width: 1199px) {
+      font-size: 26px;
+    }
+    @media (max-width: 991px) {
+      font-size: 24px;
+    }
+    @media (max-width: 767px) {
+      font-size: 20px;
+      line-height: 1.5;
+    }
+    @media (max-width: 575px) {
+      font-size: 18px;
+    }
   }
 `;
 

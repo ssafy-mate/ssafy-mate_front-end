@@ -17,9 +17,14 @@ import ArticleIcon from '@mui/icons-material/Article';
 interface UserLabelProps {
   userId: number;
   userName: string;
+  offProfileMenu?: boolean;
 }
 
-const UserLabel: React.FC<UserLabelProps> = ({ userId, userName }) => {
+const UserLabel: React.FC<UserLabelProps> = ({
+  userId,
+  userName,
+  offProfileMenu,
+}) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const myId = 1; // 임시 아이디 추후 스토어에서 받아오기
@@ -53,16 +58,18 @@ const UserLabel: React.FC<UserLabelProps> = ({ userId, userName }) => {
           'aria-labelledby': 'basic-button',
         }}
       >
-        <MuiMenuItem>
-          <MenuLink to={`/users/${userId}`}>
-            <ListItemIcon>
-              <ArticleIcon fontSize="small" css={{ color: '#5f7f90' }} />
-            </ListItemIcon>
-            <MenuLabel variant="inherit" noWrap>
-              프로필 보기
-            </MenuLabel>
-          </MenuLink>
-        </MuiMenuItem>
+        {offProfileMenu ? null : (
+          <MuiMenuItem>
+            <MenuLink to={`/users/${userId}`}>
+              <ListItemIcon>
+                <ArticleIcon fontSize="small" css={{ color: '#5f7f90' }} />
+              </ListItemIcon>
+              <MenuLabel variant="inherit" noWrap>
+                프로필 보기
+              </MenuLabel>
+            </MenuLink>
+          </MuiMenuItem>
+        )}
         <MuiMenuItem>
           <MenuLink
             to={`/chatting/${myId < userId ? myId : userId}-${
@@ -83,6 +90,7 @@ const UserLabel: React.FC<UserLabelProps> = ({ userId, userName }) => {
 };
 
 const Label = styled(Button)`
+  display: block;
   min-width: 0;
   padding: 0;
   font-family: 'Spoqa Han Sans Neo', 'sans-serif';

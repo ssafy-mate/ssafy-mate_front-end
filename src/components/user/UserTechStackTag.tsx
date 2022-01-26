@@ -1,3 +1,5 @@
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import Box from '@mui/material/Box';
@@ -7,10 +9,6 @@ import Button from '@mui/material/Button';
 interface UserTechStackTagProps {
   techStackName: string;
   techStackLevel: string;
-}
-
-interface LevelButtonProps {
-  isSelected: boolean;
 }
 
 const UserTechStackTag: React.FC<UserTechStackTagProps> = ({
@@ -40,23 +38,49 @@ const UserTechStackTag: React.FC<UserTechStackTagProps> = ({
           <MuiButtonGroup size="small" aria-label="small button group">
             <LevelButton
               key="low"
-              isSelected={techStackLevel === '하' ? true : false}
               disabled={techStackLevel === '하' ? false : true}
+              css={{
+                'backgroundColor':
+                  techStackLevel === '하' ? '#5babf6' : '#fbfbfb',
+                'color': techStackLevel === '하' ? '#fff' : '#3396f4',
+                '&:hover': {
+                  outline: 'none',
+                  border: 'none',
+                  backgroundColor: '#5babf6',
+                },
+              }}
             >
               하
             </LevelButton>
             <LevelButton
               key="middle"
-              className="selected"
-              isSelected={techStackLevel === '중' ? true : false}
               disabled={techStackLevel === '중' ? false : true}
+              css={{
+                'backgroundColor':
+                  techStackLevel === '중' ? '#5babf6' : '#fbfbfb',
+                'color': techStackLevel === '중' ? '#fff' : '#3396f4',
+                '&:hover': {
+                  outline: 'none',
+                  border: 'none',
+                  backgroundColor: '#5babf6',
+                },
+              }}
             >
               중
             </LevelButton>
             <LevelButton
               key="high"
-              isSelected={techStackLevel === '상' ? true : false}
               disabled={techStackLevel === '상' ? false : true}
+              css={{
+                'backgroundColor':
+                  techStackLevel === '상' ? '#5babf6' : '#fbfbfb',
+                'color': techStackLevel === '상' ? '#fff' : '#3396f4',
+                '&:hover': {
+                  outline: 'none',
+                  border: 'none',
+                  backgroundColor: '#5babf6',
+                },
+              }}
             >
               상
             </LevelButton>
@@ -118,21 +142,14 @@ const MuiButtonGroup = styled(ButtonGroup)`
   margin: 0;
 `;
 
-const LevelButton = styled(Button)<LevelButtonProps>`
+const LevelButton = styled(Button)`
   width: 24px;
   height: 24px;
-  border-color: #5babf6;
-  background-color: ${(props) => (props.isSelected ? '#5babf6' : '#fbfbfb')};
+  border: 1px solid #5babf6;
   box-sizing: border-box;
   font-size: 14px;
   font-weight: 400;
-  color: ${(props) => (props.isSelected ? '#fff' : '#3396f4')};
   cursor: default;
-
-  &:hover {
-    background-color: ${(props) => (props.isSelected ? '#5babf6' : '#fbfbfb')};
-    border: 1px solid #5babf6;
-  }
 
   @media (max-width: 575px) {
     width: 22px;
