@@ -13,7 +13,7 @@ import {
   requiredFields,
   validEmailReg,
   verificationCodeReg,
-} from '../../data/regularExpressionData';
+} from '../../utils/regularExpressionData';
 
 import {
   EmailVerificationCodeConfirmRequest,
@@ -56,7 +56,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
   const [resendEmail, setResendEmail] = useState<boolean>(false);
   const [minutes, setMinutes] = useState<number>(3);
   const [seconds, setSeconds] = useState<number>(0);
-
+  const [showCodeBox, setShowCodeBox] = useState<boolean>(false);
   const {
     register,
     handleSubmit,
@@ -90,6 +90,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
       if (seconds === 0) {
         if (minutes === 0) {
           clearInterval(timer);
+          offCodeInputAndConfirm();
         } else {
           setMinutes(minutes - 1);
           setSeconds(59);
@@ -99,6 +100,16 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
     return () => clearInterval(timer);
   }, [minutes, seconds]);
+
+  const offCodeInputAndConfirm = () => {
+    setCodeInputDisabled(true);
+    setCodeConfirmButton(true);
+  };
+
+  const resetTimer = () => {
+    setMinutes(3);
+    setSeconds(0);
+  };
 
   // 이메일 입력에 따라 이메일 인증 코드 전송 요청 버튼 활성화/비활성화
   useEffect(() => {
@@ -117,7 +128,8 @@ const SignUpForm: React.FC<SignUpProps> = ({
     if (emailCodeRequestButton === false) {
       setValue('verificationCode', '');
       reset({ verificationCode: undefined });
-      setCodeInputDisabled(true);
+      setShowCodeBox(false);
+      offCodeInputAndConfirm();
     }
   }, [setValue, reset, emailCodeRequestButton]);
 
@@ -139,15 +151,10 @@ const SignUpForm: React.FC<SignUpProps> = ({
   useEffect(() => {
     if (!codeInputDisabled) {
       setResendEmail(true);
-    } else if (codeConfirmButtonOnChange === 'good') {
+    } else if (codeConfirmButtonOnChange === 'getAuth') {
       setResendEmail(false);
     }
   }, [codeInputDisabled, codeConfirmButtonOnChange]);
-
-  const resetTimer = () => {
-    setMinutes(3);
-    setSeconds(0);
-  };
 
   const showAlert = (type: Severity, message: string) => {
     setStatusAlertSeverity(type);
@@ -180,6 +187,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
       resetCodeVerificationError();
       showAlert('success', response.message);
       offEmailCodeInput();
+      setShowCodeBox(true);
       resetTimer();
     } else if (response.status === 409) {
       showAlert('info', response.message);
@@ -205,32 +213,27 @@ const SignUpForm: React.FC<SignUpProps> = ({
     if (response.success) {
       //이메일 인증 코드 응답 성공 시 인증 코드 확인 버튼 비활성화
       setCodeConfirmButtonText('인증 완료');
-      setCodeConfirmButton(true);
-
-      //이메일, 인증 코드 입력창 비활성화
+      offCodeInputAndConfirm();
       setEmailInputDisabled(true);
-      setCodeInputDisabled(true);
-      setValue('signUpConfiromButton', 'good');
+      setValue('signUpConfiromButton', 'getAuth');
     } else if (response.status === 400) {
       //올바른 인증 코드가 아닌 경우 error 창
-      setCodeVerificationError(true);
-      setCodeVerificationErrorText(response.message);
+      showAndSetError(true, response.message);
+
       setCodeConfirmButton(true);
     } else if (response.status === 403) {
       //에러문구 표시해주고
-      setCodeVerificationError(true);
-      setCodeVerificationErrorText(response.message);
+      showAndSetError(true, response.message);
 
-      //인증 코드 입력 창 막기
-      setCodeInputDisabled(true);
-
-      //확인 버튼 비활성화
-      setCodeConfirmButton(true);
+      offCodeInputAndConfirm();
     } else if (response.status === 500) {
       showAlert('warning', response.message);
     }
   };
-
+  const showAndSetError = (isError: boolean, errorMessage: string) => {
+    setCodeVerificationError(isError);
+    setCodeVerificationErrorText(errorMessage);
+  };
   const alertClose = () => {
     setStatusAlertOpen(false);
   };
@@ -292,60 +295,65 @@ const SignUpForm: React.FC<SignUpProps> = ({
             <ErrorSpan>{errors.signUpEmail.message}</ErrorSpan>
           )}
         </InputWrapper>
-        <InputWrapper>
-          <RequirementLabel htmlFor="verification-code">
-            인증코드 입력
-          </RequirementLabel>
-          <ButtonWrapper>
-            <VerificationCodeWrapper>
-              <InfoInput
-                type="text"
-                id="verification-code"
-                {...register('verificationCode', {
+
+        {showCodeBox ? (
+          <InputWrapper>
+            <RequirementLabel htmlFor="verification-code">
+              인증코드 입력
+            </RequirementLabel>
+            <ButtonWrapper>
+              <VerificationCodeWrapper>
+                <InfoInput
+                  type="text"
+                  id="verification-code"
+                  {...register('verificationCode', {
+                    required: true,
+                    pattern: verificationCodeReg,
+                    minLength: 8,
+                    maxLength: 8,
+                  })}
+                  placeholder="인증코드 8자리 입력"
+                  disabled={codeInputDisabled}
+                />
+                {!codeInputDisabled && (
+                  <TimeLimit>
+                    {minutes.toString().padStart(2, '0')}:
+                    {seconds.toString().padStart(2, '0')}
+                  </TimeLimit>
+                )}
+              </VerificationCodeWrapper>
+              <AuthButton
+                type="button"
+                onClick={EmailVerificationCodeConfirm}
+                disabled={codeConfirmButton}
+                {...register('signUpConfiromButton', {
                   required: true,
-                  pattern: verificationCodeReg,
-                  minLength: 8,
-                  maxLength: 8,
                 })}
-                placeholder="인증코드 8자리 입력"
-                disabled={codeInputDisabled}
-              />
-              {!codeInputDisabled && (
-                <TimeLimit>
-                  {minutes}:{seconds < 10 ? `0${seconds}` : seconds}
-                </TimeLimit>
-              )}
-            </VerificationCodeWrapper>
-            <AuthButton
-              type="button"
-              onClick={EmailVerificationCodeConfirm}
-              disabled={codeConfirmButton}
-              {...register('signUpConfiromButton', {
-                required: true,
-              })}
-            >
-              {codeConfirmButtonText}
-            </AuthButton>
-          </ButtonWrapper>
-          {(() => {
-            if (codeVerificationError) {
-              return <ErrorSpan>{codeVerificationErrorText}</ErrorSpan>;
-            } else if (errors.verificationCode) {
-              return <ErrorSpan>{codeVerificationErrorText}</ErrorSpan>;
-            }
-          })()}
-          {resendEmail && (
-            <ResendEmailWrapper>
-              <ResendEmailMessageWrapper>
-                <ResendEmailIcon />
-                이메일을 받지 못하셨나요?
-                <ResendLink onClick={verificationCodeRequest}>
-                  이메일 재전송하기
-                </ResendLink>
-              </ResendEmailMessageWrapper>
-            </ResendEmailWrapper>
-          )}
-        </InputWrapper>
+              >
+                {codeConfirmButtonText}
+              </AuthButton>
+            </ButtonWrapper>
+            {(() => {
+              if (codeVerificationError) {
+                return <ErrorSpan>{codeVerificationErrorText}</ErrorSpan>;
+              } else if (errors.verificationCode) {
+                return <ErrorSpan>{codeVerificationErrorText}</ErrorSpan>;
+              }
+            })()}
+            {resendEmail && (
+              <ResendEmailWrapper>
+                <ResendEmailMessageWrapper>
+                  <ResendEmailIcon />
+                  이메일을 받지 못하셨나요?
+                  <ResendLink onClick={verificationCodeRequest}>
+                    이메일 재전송하기
+                  </ResendLink>
+                </ResendEmailMessageWrapper>
+              </ResendEmailWrapper>
+            )}
+          </InputWrapper>
+        ) : null}
+
         <InputWrapper>
           <RequirementLabel htmlFor="signup-password">
             비밀번호 (영문자와 숫자 혼합 최소 6자)

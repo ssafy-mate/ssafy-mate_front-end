@@ -26,7 +26,7 @@ import {
 
 import UserService from '../../services/UserService';
 
-import { validUrl } from '../../data/regularExpressionData';
+import { validUrl } from '../../utils/regularExpressionData';
 
 type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
 
@@ -139,9 +139,12 @@ const ProfileForm: React.FC<ProfileProps> = ({
   };
 
   const handleJobSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    event.target.name === 'job1'
-      ? setJob1(event.target.value)
-      : setJob2(event.target.value);
+    if (event.target.name === 'job1') {
+      setJob1(event.target.value);
+      setJob2('default');
+    } else {
+      setJob2(event.target.value);
+    }
 
     event.target.name === 'job1' && event.target.value === 'default'
       ? setJob1Error(true)
@@ -349,13 +352,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
               <option value="default" disabled>
                 - 선택 -
               </option>
-              {jobListData
-                .filter((job) => job.name !== job2)
-                .map((job) => (
-                  <option key={job.id} value={job.name}>
-                    {job.name}
-                  </option>
-                ))}
+              {jobListData.map((job) => (
+                <option key={job.id} value={job.name}>
+                  {job.name}
+                </option>
+              ))}
             </Select>
             {showError === 1 && job1Error && (
               <ErrorSpan>필수 선택 사항입니다.</ErrorSpan>
