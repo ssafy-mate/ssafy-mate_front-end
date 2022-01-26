@@ -98,9 +98,7 @@ const EditTeamForm: React.FC = () => {
       </Row>
       <Row>
         <InputWrapper>
-          <Label htmlFor="team-self-introduction">
-            팀 소개 <Em>(선택)</Em>
-          </Label>
+          <Label htmlFor="team-self-introduction">팀 소개</Label>
           <Textarea id="team-self-introduction" name="team-self-introduction" />
         </InputWrapper>
       </Row>
@@ -257,7 +255,7 @@ const EditTeamForm: React.FC = () => {
         </InputWrapper>
       </Row>
       <Row>
-        <Link to="/projects/specialization/team" css={cancelButton}>
+        <Link to="/projects/specialization/teams" css={cancelButton}>
           취소하기
         </Link>
         <EditButton>수정하기</EditButton>
