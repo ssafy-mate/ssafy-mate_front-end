@@ -9,7 +9,7 @@ import ChattingForm from '../components/chatting/ChattingForm';
 const ChattingPage: React.FC = () => {
   return (
     <>
-      <Header />
+      <Header offFixed={true} />
       <Container>
         <ChattingForm />
       </Container>

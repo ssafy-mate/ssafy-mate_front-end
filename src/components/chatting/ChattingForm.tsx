@@ -38,6 +38,7 @@ const ChattingForm: React.FC = () => {
 
   useEffect(() => {
     stompClient.connect({}, onConnected);
+
     return () => {
       stompClient.disconnect();
     };
@@ -214,9 +215,8 @@ const ChatContianer = styled.div`
   justify-content: center;
   box-sizing: border-box;
   width: 100%;
-  height: 100vh;
+  height: calc(100vh - 46px);
   background-color: #ffffff;
-  padding-top: 46px;
 
   @media (max-width: 400px) {
     display: flex;
@@ -237,7 +237,7 @@ const ChatListSidebar = styled.nav`
 `;
 
 const ChatList = styled.ul`
-  overflow: hidden;
+  overflow-x: hidden;
   box-sizing: border-box;
 `;
 
@@ -273,7 +273,7 @@ const ChatRoomUserNameBar = styled.div`
   justify-content: space-between;
   align-items: center;
   height: 80px;
-  /* min-height: 81px; */
+  min-height: 80px;
   padding: 0 20px;
   border-bottom: 1px solid #dfdfdf;
   box-sizing: border-box;
@@ -318,7 +318,7 @@ const ChatRoomMessageList = styled.div`
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: rgba(51, 150, 244, 5);
+    background-color: rgba(51, 150, 244, 0.5);
     border-radius: 5px;
   }
 `;
@@ -426,7 +426,7 @@ const ChatTypingWrapper = styled.div`
 
     ::-webkit-scrollbar-thumb {
       border-radius: 5px;
-      background-color: rgba(51, 150, 244, 5);
+      background-color: rgba(51, 150, 244, 0.5);
     }
   }
 
