@@ -9,7 +9,7 @@ import styled from '@emotion/styled';
 
 import SendIcon from '@mui/icons-material/Send';
 
-import ChatList from './ChatList';
+import ChatItem from './ChatItem';
 import { MessageType } from '../../types/messageTypes';
 
 const ChattingForm: React.FC = () => {
@@ -153,13 +153,15 @@ const ChattingForm: React.FC = () => {
 
   return (
     <ChatContianer>
-      <ChatListWrapper>
-        <ChatListSidebar>
-          <ul>
-            <ChatList></ChatList>
-          </ul>
-        </ChatListSidebar>
-      </ChatListWrapper>
+      {/* <ChatListWrapper> */}
+      <ChatListSidebar>
+        <ChatList>
+          <ChatItem />
+          <ChatItem />
+          <ChatItem />
+        </ChatList>
+      </ChatListSidebar>
+      {/* </ChatListWrapper> */}
       <ChatRoomSection>
         <ChatRoomWrapper>
           <ChatRoomMessageWrapper>
@@ -240,27 +242,23 @@ const ChatContianer = styled.div`
   }
 `;
 
-const ChatListWrapper = styled.div`
-  display: flex;
-`;
+// const ChatListWrapper = styled.div`
+//   display: flex;
+// `;
 
 const ChatListSidebar = styled.nav`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   width: 300px;
+  height: 100%;
   border-left: 1px solid #dfdfdf;
+  box-sizing: border-box;
   background-color: #fff;
+`;
 
-  & ul {
-    position: relative;
-    margin: 0px;
-    padding: 0px;
-    height: 100%;
-    list-style: none;
-    overflow: hidden auto;
-    background-color: #fff;
-  }
+const ChatList = styled.ul`
+  overflow: hidden;
 `;
 
 const ChatRoomSection = styled.section`
@@ -292,10 +290,10 @@ const ChatRoomUserNameBar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 84px;
-  min-height: 84px;
+  height: 81px;
   border-bottom: 1px solid #dfdfdf;
   padding: 0px 20px;
+  box-sizing: border-box;
 `;
 
 const ChatRoomHeaderProfile = styled.div`

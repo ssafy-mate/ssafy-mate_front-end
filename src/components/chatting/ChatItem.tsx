@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-const ChatList: React.FC = () => {
+const ChatItem: React.FC = () => {
   return (
     <>
       <ChatListItem>
@@ -11,14 +11,14 @@ const ChatList: React.FC = () => {
           </ProfileWrapper>
           <ContentWrapper>
             <TitleWrapper>
-              <TitleSenderName>호호123145</TitleSenderName>
+              <TitleSenderName>박정환</TitleSenderName>
               <TitleSubText>
                 <span>22.01.25</span>
               </TitleSubText>
             </TitleWrapper>
             <DescriptionWrapper>
               <DescriptionContent>
-                11시에 만나요aaaaaaasdfasdfasdaaaaaaaaaaaaaaaaaaaaaa!
+                11시에 만나11시에 만나11시에 만나11시에 만나
               </DescriptionContent>
             </DescriptionWrapper>
           </ContentWrapper>
@@ -29,28 +29,25 @@ const ChatList: React.FC = () => {
 };
 
 const ChatListItem = styled.li`
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  width: 300px;
-  background-color: #fff;
+  width: 100%;
   border-bottom: 1px solid #dfdfdf;
   box-sizing: border-box;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #ebebebce;
-  }
 `;
 
 const ChatListItemWrapper = styled.a`
   overflow: hidden;
   display: flex;
-  position: relative;
+  align-items: center;
+  width: 100%;
   height: 80px;
   padding: 0 20px;
   box-sizing: border-box;
-  align-items: center;
+  background-color: #fff;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #ebebebce;
+  }
 `;
 
 const ProfileWrapper = styled.div`
@@ -60,30 +57,28 @@ const ProfileWrapper = styled.div`
   img {
     width: 40px;
     height: 40px;
-    border-radius: 50%;
     border: 1px solid #b4b4b4;
+    border-radius: 50%;
   }
 `;
 
 const ContentWrapper = styled.div`
-  flex: 1 0 0%;
-  width: 0x;
+  overflow: hidden;
+  width: 100%;
 `;
 
 const TitleWrapper = styled.div`
   display: flex;
-  align-items: center;
+  width: 100%;
 `;
 
 const TitleSenderName = styled.span`
-  display: flex;
-  align-items: center;
-  height: 20px;
-  font-weight: bold;
-  font-size: 14px;
-  letter-spacing: -0.02em;
-  color: #6d6d6d;
   overflow-x: hidden;
+  max-width: 70px;
+  height: 20px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #6d6d6d;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
@@ -95,15 +90,17 @@ const TitleSubText = styled.div`
   white-space: nowrap;
 `;
 
-const DescriptionWrapper = styled.div``;
-
-const DescriptionContent = styled.span`
+const DescriptionWrapper = styled.div`
   overflow: hidden;
   width: 100%;
+`;
+
+const DescriptionContent = styled.p`
+  overflow: hidden;
   font-size: 14px;
   color: #3d3d3d;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
 
-export default ChatList;
+export default ChatItem;
