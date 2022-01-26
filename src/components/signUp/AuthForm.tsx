@@ -92,18 +92,22 @@ const AuthForm: React.FC<Props> = ({
     AuthRequest(data);
   };
 
+  const showAlert = (type: Severity, message: string) => {
+    setStatusAlertSeverity(type);
+    setAlertMessage(message);
+    setFailAlertOpen(true);
+  };
+
   const AuthRequest = async (data: SsafyAuth) => {
     const response: SignUpResponse = await UserService.getSsafyAuth(data);
 
     if (response.success) {
       updateSsafyAuthProps(data);
     } else if (response.status === 401 || response.status === 409) {
-      setStatusAlertSeverity('warning');
+      showAlert('warning', response.message);
     } else if (response.status === 500) {
-      setStatusAlertSeverity('error');
+      showAlert('error', response.message);
     }
-    setFailAlertOpen(true);
-    setAlertMessage(response.message);
   };
 
   const alertClose = () => {
@@ -116,7 +120,7 @@ const AuthForm: React.FC<Props> = ({
       {failAlertOpen && (
         <SsafyAuthSnackBar
           open={failAlertOpen}
-          autoHideDuration={1500}
+          autoHideDuration={2000}
           onClose={alertClose}
           anchorOrigin={{
             vertical: 'top',
