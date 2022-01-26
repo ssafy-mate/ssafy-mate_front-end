@@ -7,14 +7,14 @@ import { Doughnut } from 'react-chartjs-2';
 
 import { DoughnutChartData } from '../../types/chartTypes';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
-
-interface Props {
+interface JobChartProps {
   frontendHeadcount: number;
   backendHeadcount: number;
 }
 
-const JobDoughnutChart: React.FC<Props> = ({
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+const JobChart: React.FC<JobChartProps> = ({
   frontendHeadcount,
   backendHeadcount,
 }) => {
@@ -23,7 +23,7 @@ const JobDoughnutChart: React.FC<Props> = ({
     datasets: [
       {
         label: '# of Votes',
-        data: [1, 3],
+        data: [frontendHeadcount, backendHeadcount],
         backgroundColor: ['rgba(97, 218, 251, 0.2)', 'rgba(104, 169, 62, 0.2)'],
         borderColor: ['rgba(97, 218, 251, 1)', 'rgba(104, 169, 62, 1)'],
         borderWidth: 1,
@@ -63,4 +63,4 @@ const Container = styled.div`
   box-sizing: border-box;
 `;
 
-export default JobDoughnutChart;
+export default JobChart;

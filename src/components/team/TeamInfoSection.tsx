@@ -14,11 +14,12 @@ import StyleIcon from '@mui/icons-material/Style';
 
 import useTeamDetailInfo from '../../hooks/useTeamDetailInfo';
 
-import RecruitStatusBadge from '../projects/RecruitStatusBadge';
-import JobDoughnutChart from '../chart/DoughnutChart';
 import TeamTechStackTag from './TeamTechStackTag';
 import MemberItem from './MemberItem';
 import TeamMembersStatusBox from './TeamMembersStatus';
+import RecruitStatusBadge from '../projects/RecruitStatusBadge';
+import JobChart from '../chart/JobChart';
+import RecruitingStatusChart from '../chart/RecruitingStatusChart';
 import ErrorSection from '../common/ErrorSection';
 import SkeletonTeamInfoSection from './SkeletonTeamInfoSection';
 
@@ -157,7 +158,7 @@ const TeamInformationSection: React.FC = () => {
             <Aside>
               <SubHead>팀원 모집 현황</SubHead>
               <MemberList>
-                {teamData.members.map((member) => (
+                {teamData.members.map((member, index) => (
                   <MemberItem
                     key={member.userId}
                     userId={member.userId}
@@ -165,6 +166,7 @@ const TeamInformationSection: React.FC = () => {
                     profileImgUrl={member.profileImgUrl}
                     ssafyTrack={member.ssafyTrack}
                     job1={member.job1}
+                    isOwner={index === 0 ? true : false}
                   />
                 ))}
               </MemberList>
@@ -179,10 +181,16 @@ const TeamInformationSection: React.FC = () => {
                 isFrontendSufficient={isFrontendSufficient}
                 isBackendSufficient={isBackendSufficient}
               />
-              <JobDoughnutChart
-                frontendHeadcount={teamData.frontendHeadcount}
-                backendHeadcount={teamData.backendHeadcount}
-              />
+              <ChartsBox>
+                <RecruitingStatusChart
+                  totalRecruitment={teamData.totalRecruitment}
+                  totalHeadcount={teamData.totalHeadcount}
+                />
+                <JobChart
+                  frontendHeadcount={teamData.frontendHeadcount}
+                  backendHeadcount={teamData.backendHeadcount}
+                />
+              </ChartsBox>
             </Aside>
           </BodyContainer>
         </>
@@ -519,6 +527,12 @@ const TechStackList = styled.ul``;
 const Row = styled.div`
   display: flex;
   align-items: center;
+`;
+
+const ChartsBox = styled.div`
+  & div:not(:last-of-type) {
+    margin-bottom: 12px;
+  }
 `;
 
 export default TeamInformationSection;
