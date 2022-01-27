@@ -1,31 +1,38 @@
-import { Link } from 'react-router-dom';
-
 import styled from '@emotion/styled';
 
 import FlagIcon from '@mui/icons-material/Flag';
 
-import { TeamMemberType } from '../../types/teamTypes';
+import { TeamMember } from '../../types/teamTypes';
 
-const TeamMember: React.FC<TeamMemberType> = ({
+import UserLabel from '../user/UserLabel';
+
+interface MemberItemProps extends TeamMember {
+  isOwner: boolean;
+}
+
+const MemberItem: React.FC<MemberItemProps> = ({
   userId,
   userName,
   profileImgUrl,
-  job1,
   ssafyTrack,
+  job1,
+  isOwner,
 }) => {
   return (
     <Item>
       <ProfileImgWrapper>
         <ProfileImg src={profileImgUrl} alt={`${userName}님의 프로필 이미지`} />
       </ProfileImgWrapper>
-      <Contents>
-        <Name>
-          <MemberLink to={`/users/${userId}`}>{userName}</MemberLink>
-          <FlagIcon />
-        </Name>
-        <Info>{job1}</Info>
-        <Info>{ssafyTrack}</Info>
-      </Contents>
+      <MemberInfo>
+        <MemberName>
+          <UserLabel userId={userId} userName={userName} />
+          {isOwner ? <FlagIcon /> : null}
+        </MemberName>
+        <InfoBox>
+          <InfoItem>{job1}</InfoItem>
+          <InfoItem>{ssafyTrack}</InfoItem>
+        </InfoBox>
+      </MemberInfo>
     </Item>
   );
 };
@@ -44,13 +51,13 @@ const Item = styled.li`
   &:hover {
     border-color: #84c0f8;
 
-    & a {
-      text-decoration: underline;
+    & .user-label {
       color: #3396f4;
+      text-decoration: underline;
     }
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     min-width: 100%;
   }
 `;
@@ -61,11 +68,11 @@ const ProfileImgWrapper = styled.div`
   margin-right: 24px;
   border-radius: 4px;
 
-  @media (max-width: 960px) {
+  @media (max-width: 991px) {
     width: 48px;
     height: 48px;
   }
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     width: 46px;
     height: 46px;
   }
@@ -77,21 +84,21 @@ const ProfileImg = styled.img`
   border-radius: 4px;
   object-fit: fill;
 
-  @media (max-width: 960px) {
+  @media (max-width: 991px) {
     width: 48px;
     height: 48px;
   }
-  @media (max-width: 428px) {
+  @media (max-width: 575px) {
     width: 46px;
     height: 46px;
   }
 `;
 
-const Contents = styled.div`
+const MemberInfo = styled.div`
   margin: auto 0;
 `;
 
-const Name = styled.h5`
+const MemberName = styled.h5`
   display: flex;
   align-items: center;
 
@@ -100,35 +107,40 @@ const Name = styled.h5`
     color: #3396f4;
   }
 
-  @media (max-width: 720px) {
+  & .user-label {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: #263647;
+    transition: all 0.08s ease-in-out;
+
+    &:hover {
+      color: #3396f4;
+    }
+
+    @media (max-width: 767px) {
+      font-size: 15px;
+    }
+    @media (max-width: 575px) {
+      font-size: 14px;
+    }
+  }
+
+  @media (max-width: 767px) {
     & svg {
       height: 17px;
     }
   }
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     & svg {
       height: 15px;
     }
   }
 `;
 
-const MemberLink = styled(Link)`
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1.6;
-  color: #263647;
-  transition: all 0.08s ease-in-out;
-  cursor: pointer;
+const InfoBox = styled.div``;
 
-  @media (max-width: 720px) {
-    font-size: 15px;
-  }
-  @media (max-width: 540px) {
-    font-size: 14px;
-  }
-`;
-
-const Info = styled.span`
+const InfoItem = styled.span`
   font-size: 14px;
   line-height: 1.5;
   color: #5f7f90;
@@ -144,9 +156,9 @@ const Info = styled.span`
     }
   }
 
-  @media (max-width: 720px) {
+  @media (max-width: 767px) {
     font-size: 13px;
   }
 `;
 
-export default TeamMember;
+export default MemberItem;

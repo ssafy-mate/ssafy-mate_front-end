@@ -3,6 +3,8 @@ import { ConnectedRouter as Router } from 'connected-react-router';
 
 import { ErrorBoundary } from 'react-error-boundary';
 
+import { ReactQueryDevtools } from 'react-query/devtools';
+
 import { Global } from '@emotion/react';
 
 import reset from './styles/reset';
@@ -65,6 +67,7 @@ const App: React.FC = () => {
           <Route exact path="/chatting/:roomId" component={ChattingPage} />
           <Route component={NotFoundPage} />
         </Switch>
+        <ReactQueryDevtools />
       </Router>
     </ErrorBoundary>
   );

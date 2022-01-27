@@ -1,22 +1,24 @@
 import styled from '@emotion/styled';
 
-interface TeamTechStackProps {
+interface TeamTechStackTagProps {
   techStackName: string;
 }
 
-const TeamTechStack: React.FC<TeamTechStackProps> = ({ techStackName }) => {
+const TeamTechStackTag: React.FC<TeamTechStackTagProps> = ({
+  techStackName,
+}) => {
   return (
-    <Item>
+    <TagItem>
       <Img
         src={`/images/assets/tech-stack/${techStackName}.png`}
-        alt={techStackName}
+        alt={`${techStackName} 로고 이미지`}
       />
       <Name>{techStackName}</Name>
-    </Item>
+    </TagItem>
   );
 };
 
-const Item = styled.li`
+const TagItem = styled.li`
   display: flex;
   align-items: center;
   margin-bottom: 12px;
@@ -29,7 +31,7 @@ const Item = styled.li`
     margin-bottom: 0;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     margin-bottom: 10px;
   }
 `;
@@ -41,7 +43,7 @@ const Img = styled.img`
   border-radius: 2px;
   object-fit: fill;
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     width: 22px;
     height: 22px;
   }
@@ -51,9 +53,9 @@ const Name = styled.span`
   font-size: 14px;
   color: #5f7f90;
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
 
-export default TeamTechStack;
+export default TeamTechStackTag;
