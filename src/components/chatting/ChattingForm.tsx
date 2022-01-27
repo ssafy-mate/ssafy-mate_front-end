@@ -10,7 +10,8 @@ import styled from '@emotion/styled';
 import SendIcon from '@mui/icons-material/Send';
 
 import ChatItem from './ChatItem';
-import { MessageType } from '../../types/messageTypes';
+import { MessageType, ChatRoomType } from '../../types/messageTypes';
+import { axiosInstance } from '../../utils/axios';
 
 const ChattingForm: React.FC = () => {
   const date = new Date();
@@ -18,10 +19,17 @@ const ChattingForm: React.FC = () => {
     senderId: 1,
     roomId: '1-2',
     content: '내일 역삼역 1번 출구에서 11시에 만나요',
-    sentTime: date.toString(),
+    sentTime: date.toLocaleString(),
+    type: 'CHAT',
   };
+
+  const senderId: number = 2;
+
   const [messageList, setMessageList] = useState<MessageType[]>([dummyData]);
+  const [chatRoomList, setChatRoomList] = useState<ChatRoomType[]>();
+  const [entryTime, setEntryTime] = useState(date.toLocaleString());
   const [roomId, setRoomId] = useState<string>('1-2');
+  const [nowPage, setNowPage] = useState<number>(1);
   const messageInputRef = useRef<HTMLTextAreaElement>(null);
   const chatRoomMessageRef = useRef<HTMLDivElement>(null);
 
@@ -33,8 +41,7 @@ const ChattingForm: React.FC = () => {
   );
 
   // send,recive 메시지 숨기기
-  // stompClient.debug = () => {};
-  const senderId: number = 2;
+  stompClient.debug = () => {};
 
   useEffect(() => {
     stompClient.connect({}, onConnected);
@@ -45,16 +52,45 @@ const ChattingForm: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    // 채팅방 목록 불러오기
+    axiosInstance
+      .get(`http://localhost:3000/api/chat/room/${senderId}`)
+      .then((response) => {
+        console.log(response);
+        setChatRoomList(response.data.roomList);
+        console.log(chatRoomList);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  useEffect(() => {
+    // 대화 내용 불러오기
+    // axiosInstance.get(`http://localhost:3000/api/chat/log`);
+  }, []);
+
+  useEffect(() => {
     chatLogScrollDown();
   }, [messageList]);
 
   const onConnected = () => {
     stompClient.subscribe(`/queue/ssafymate/chat/${roomId}`, onMessageReceived);
+
+    stompClient.send(
+      `/app/ssafymate/chat/addUser/${roomId}`,
+      {},
+      JSON.stringify({
+        senderId: senderId,
+        type: 'JOIN',
+        roomId: roomId,
+        content: '',
+        sentTime: entryTime,
+      }),
+    );
   };
 
   const onMessageReceived = (payload: any) => {
     const message = JSON.parse(payload.body);
-    addMessageToList(message);
+    if (message.type !== 'JOIN') addMessageToList(message);
   };
 
   const handleSendMessage = (
@@ -97,6 +133,7 @@ const ChattingForm: React.FC = () => {
       content: messageInputRef.current?.value as string,
       sentTime: date.toLocaleString(),
       roomId: roomId,
+      type: 'CHAT',
     };
 
     return chatMessage;
