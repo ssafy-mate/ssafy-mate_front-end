@@ -179,23 +179,25 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
     data.email = signUpEmailOnChange;
 
-    const response: SignUpResponse = await UserService.getEmailVerificationCode(
-      data,
-    );
-
-    if (response.success) {
-      resetCodeVerificationError();
-      showAlert('success', response.message);
-      offEmailCodeInput();
-      setShowCodeBox(true);
-      resetTimer();
-    } else if (response.status === 409) {
-      showAlert('info', response.message);
-    } else if (response.status === 500) {
-      showAlert('warning', response.message);
-      setEmailCodeRequestButton(false);
-      setVerificationCodeButtonText('이메일 재전송');
-    }
+    await UserService.getEmailVerificationCode(data)
+      .then((response) => {
+        if (response.success) {
+          resetCodeVerificationError();
+          showAlert('success', response.message);
+          offEmailCodeInput();
+          setShowCodeBox(true);
+          resetTimer();
+        } else if (response.status === 409) {
+          showAlert('info', response.message);
+        } else if (response.status === 500) {
+          showAlert('warning', response.message);
+          setEmailCodeRequestButton(false);
+          setVerificationCodeButtonText('이메일 재전송');
+        }
+      })
+      .catch((errors) => {
+        //에러처리
+      });
   };
 
   const EmailVerificationCodeConfirm = async () => {

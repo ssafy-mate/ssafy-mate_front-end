@@ -99,15 +99,19 @@ const AuthForm: React.FC<Props> = ({
   };
 
   const AuthRequest = async (data: SsafyAuth) => {
-    const response: SignUpResponse = await UserService.getSsafyAuth(data);
-
-    if (response.success) {
-      updateSsafyAuthProps(data);
-    } else if (response.status === 401 || response.status === 409) {
-      showAlert('warning', response.message);
-    } else if (response.status === 500) {
-      showAlert('error', response.message);
-    }
+    await UserService.getSsafyAuth(data)
+      .then((response) => {
+        if (response.success) {
+          updateSsafyAuthProps(data);
+        } else if (response.status === 401 || response.status === 409) {
+          showAlert('warning', response.message);
+        } else if (response.status === 500) {
+          showAlert('error', response.message);
+        }
+      })
+      .catch((errors) => {
+        //에러처리
+      });
   };
 
   const alertClose = () => {

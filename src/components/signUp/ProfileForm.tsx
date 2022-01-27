@@ -251,18 +251,22 @@ const ProfileForm: React.FC<ProfileProps> = ({
     const data = getSignUpInfomation();
 
     if (validation()) {
-      UserService.signUp(data).then(({ status, message }) => {
-        switch (status) {
-          case 400:
-            showAlert('warning', message);
-            break;
-          case 500:
-            showAlert('error', message);
-            break;
-          default:
-            showAlert('success', message);
-        }
-      });
+      UserService.signUp(data)
+        .then(({ status, message }) => {
+          switch (status) {
+            case 400:
+              showAlert('warning', message);
+              break;
+            case 500:
+              showAlert('error', message);
+              break;
+            default:
+              showAlert('success', message);
+          }
+        })
+        .catch((errors) => {
+          //에러처리
+        });
     }
   };
 
