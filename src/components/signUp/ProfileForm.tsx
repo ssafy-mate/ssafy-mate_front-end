@@ -110,8 +110,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
 
     reader.readAsDataURL(theImgFile);
     setProfileImg(theImgFile);
-
-    signUpFormData.append('profileImg', theImgFile);
   };
 
   const handleClearProfileImg = () => {
@@ -221,6 +219,9 @@ const ProfileForm: React.FC<ProfileProps> = ({
   };
 
   const getSignUpInfomation = () => {
+    if (profileImg !== null) {
+      signUpFormData.append('profileImg', profileImg);
+    }
     signUpFormData.append('campus', campus);
     signUpFormData.append('ssafyTrack', ssafyTrack);
     signUpFormData.append('studentNumber', studentNumber);
@@ -254,19 +255,20 @@ const ProfileForm: React.FC<ProfileProps> = ({
     if (validation()) {
       AuthService.signUp(data)
         .then(({ status, message }) => {
-          switch (status) {
-            case 400:
-              showAlert('warning', message);
-              break;
-            case 500:
-              showAlert('error', message);
-              break;
-            default:
-              showAlert('success', message);
-          }
+          showAlert('success', message);
         })
-        .catch((errors) => {
-          //에러처리
+        .catch((error) => {
+          if (error.response) {
+            const data = error.response.data;
+            switch (data.status) {
+              case 400:
+                showAlert('warning', data.message);
+                break;
+              case 500:
+                showAlert('error', data.message);
+                break;
+            }
+          }
         });
     }
   };

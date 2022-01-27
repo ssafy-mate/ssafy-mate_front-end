@@ -174,12 +174,12 @@ const SignUpForm: React.FC<SignUpProps> = ({
     setCodeVerificationErrorText('올바른 인증 코드가 아닙니다.');
   };
 
-  const verificationCodeRequest = async () => {
+  const verificationCodeRequest = () => {
     const data: EmailVerificationCodeRequest = { userEmail: '' };
 
     data.userEmail = signUpEmailOnChange;
 
-    await AuthService.getEmailVerificationCode(data)
+    AuthService.getEmailVerificationCode(data)
       .then((response) => {
         if (response.success) {
           resetCodeVerificationError();
@@ -187,20 +187,23 @@ const SignUpForm: React.FC<SignUpProps> = ({
           offEmailCodeInput();
           setShowCodeBox(true);
           resetTimer();
-        } else if (response.status === 409) {
-          showAlert('info', response.message);
-        } else if (response.status === 500) {
-          showAlert('warning', response.message);
-          setEmailCodeRequestButton(false);
-          setVerificationCodeButtonText('이메일 재전송');
         }
       })
-      .catch((errors) => {
-        //에러처리
+      .catch((error) => {
+        if (error.response) {
+          const data = error.response.data;
+          if (data.status === 409) {
+            showAlert('info', data.message);
+          } else if (data.status === 500) {
+            showAlert('warning', data.message);
+            setEmailCodeRequestButton(false);
+            setVerificationCodeButtonText('이메일 재전송');
+          }
+        }
       });
   };
 
-  const EmailVerificationCodeConfirm = async () => {
+  const EmailVerificationCodeConfirm = () => {
     const data: EmailVerificationCodeConfirmRequest = {
       code: '',
       userEmail: '',
@@ -209,28 +212,31 @@ const SignUpForm: React.FC<SignUpProps> = ({
     data.userEmail = signUpEmailOnChange;
     data.code = verificationCodeOnChange;
 
-    const response: SignUpResponse =
-      await AuthService.getEmailVerificationCodeConfirm(data);
+    AuthService.getEmailVerificationCodeConfirm(data)
+      .then((response) => {
+        setCodeConfirmButtonText('인증 완료');
+        offCodeInputAndConfirm();
+        setEmailInputDisabled(true);
+        setValue('signUpConfiromButton', 'getAuth');
+      })
+      .catch((error) => {
+        if (error.response) {
+          const data = error.response.data;
+          if (data.status === 400) {
+            //올바른 인증 코드가 아닌 경우 error 창
+            showAndSetError(true, data.message);
 
-    if (response.success) {
-      //이메일 인증 코드 응답 성공 시 인증 코드 확인 버튼 비활성화
-      setCodeConfirmButtonText('인증 완료');
-      offCodeInputAndConfirm();
-      setEmailInputDisabled(true);
-      setValue('signUpConfiromButton', 'getAuth');
-    } else if (response.status === 400) {
-      //올바른 인증 코드가 아닌 경우 error 창
-      showAndSetError(true, response.message);
+            setCodeConfirmButton(true);
+          } else if (data.status === 403) {
+            //에러문구 표시해주고
+            showAndSetError(true, data.message);
 
-      setCodeConfirmButton(true);
-    } else if (response.status === 403) {
-      //에러문구 표시해주고
-      showAndSetError(true, response.message);
-
-      offCodeInputAndConfirm();
-    } else if (response.status === 500) {
-      showAlert('warning', response.message);
-    }
+            offCodeInputAndConfirm();
+          } else if (data.status === 500) {
+            showAlert('warning', data.message);
+          }
+        }
+      });
   };
   const showAndSetError = (isError: boolean, errorMessage: string) => {
     setCodeVerificationError(isError);
