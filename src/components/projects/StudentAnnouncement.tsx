@@ -35,10 +35,10 @@ const StudentAnnouncement: React.FC = () => {
             </ProfileImgWrapper>
             <StudentInfo>
               <StudentName>
-                <Link to="#">조원빈</Link>
+                <Link to="/users/1">조원빈</Link>
               </StudentName>
               <SsafyInfo>서울</SsafyInfo>
-              <SsafyInfo>전공자 (Java Track)</SsafyInfo>
+              <SsafyInfo>Java Track</SsafyInfo>
             </StudentInfo>
           </ItemHeader>
           <ItemBody>
@@ -92,7 +92,7 @@ const StudentAnnouncement: React.FC = () => {
           </ItemBody>
           <ItemFooter>
             <RequestButton>팀 합류 요청</RequestButton>
-            <Link to="#" css={profileLink}>
+            <Link to="/users/1" css={profileLink}>
               프로필 보기
             </Link>
           </ItemFooter>
@@ -107,7 +107,7 @@ const StudentAnnouncement: React.FC = () => {
             </ProfileImgWrapper>
             <StudentInfo>
               <StudentName>
-                <Link to="/">소정은</Link>
+                <Link to="/users/2">소정은</Link>
               </StudentName>
               <SsafyInfo>서울</SsafyInfo>
               <SsafyInfo>전공자 (Java Track)</SsafyInfo>
@@ -164,7 +164,7 @@ const StudentAnnouncement: React.FC = () => {
           </ItemBody>
           <ItemFooter>
             <RequestButton>팀 합류 요청</RequestButton>
-            <Link to="#" css={profileLink}>
+            <Link to="/users/2" css={profileLink}>
               프로필 보기
             </Link>
           </ItemFooter>
@@ -179,7 +179,7 @@ const StudentAnnouncement: React.FC = () => {
             </ProfileImgWrapper>
             <StudentInfo>
               <StudentName>
-                <Link to="/">손영배</Link>
+                <Link to="/users/3">손영배</Link>
               </StudentName>
               <SsafyInfo>서울</SsafyInfo>
               <SsafyInfo>비전공자 (Python Track)</SsafyInfo>
@@ -236,7 +236,7 @@ const StudentAnnouncement: React.FC = () => {
           </ItemBody>
           <ItemFooter>
             <RequestButton>팀 합류 요청</RequestButton>
-            <Link to="#" css={profileLink}>
+            <Link to="/users/3" css={profileLink}>
               프로필 보기
             </Link>
           </ItemFooter>
@@ -251,7 +251,7 @@ const StudentAnnouncement: React.FC = () => {
             </ProfileImgWrapper>
             <StudentInfo>
               <StudentName>
-                <Link to="/">이정훈</Link>
+                <Link to="/users/4">이정훈</Link>
               </StudentName>
               <SsafyInfo>서울</SsafyInfo>
               <SsafyInfo>전공자 (Java Track)</SsafyInfo>
@@ -308,7 +308,7 @@ const StudentAnnouncement: React.FC = () => {
           </ItemBody>
           <ItemFooter>
             <RequestButton>팀 합류 요청</RequestButton>
-            <Link to="#" css={profileLink}>
+            <Link to="/users/4" css={profileLink}>
               프로필 보기
             </Link>
           </ItemFooter>
@@ -323,7 +323,7 @@ const StudentAnnouncement: React.FC = () => {
             </ProfileImgWrapper>
             <StudentInfo>
               <StudentName>
-                <Link to="/users/1">박정환</Link>
+                <Link to="/users/5">박정환</Link>
               </StudentName>
               <SsafyInfo>서울</SsafyInfo>
               <SsafyInfo>전공자 (Java Track)</SsafyInfo>
@@ -381,7 +381,7 @@ const StudentAnnouncement: React.FC = () => {
           </ItemBody>
           <ItemFooter>
             <RequestButton>팀 합류 요청</RequestButton>
-            <Link to="/users/1" css={profileLink}>
+            <Link to="/users/5" css={profileLink}>
               프로필 보기
             </Link>
           </ItemFooter>
@@ -396,7 +396,7 @@ const StudentAnnouncement: React.FC = () => {
             </ProfileImgWrapper>
             <StudentInfo>
               <StudentName>
-                <Link to="/">이여진</Link>
+                <Link to="/users/6">이여진</Link>
               </StudentName>
               <SsafyInfo>서울</SsafyInfo>
               <SsafyInfo>전공자 (Java Track)</SsafyInfo>
@@ -453,7 +453,7 @@ const StudentAnnouncement: React.FC = () => {
           </ItemBody>
           <ItemFooter>
             <RequestButton>팀 합류 요청</RequestButton>
-            <Link to="#" css={profileLink}>
+            <Link to="/users/6" css={profileLink}>
               프로필 보기
             </Link>
           </ItemFooter>

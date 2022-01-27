@@ -22,24 +22,22 @@ const TeamAnnouncement: React.FC = () => {
       </AnnouncementHeader>
       <TeamList>
         <TeamItem>
-          <TeamLink to="/teams/1">
+          <TeamLink to="/teams/2">
             <ItemHeader>
               <ItemImg
-                src="/images/common/ssafy-mate_logo.png"
+                src="/images/projects/sample-team_logo5.png"
                 alt="샘플 팀 로고"
               />
             </ItemHeader>
             <ItemBody>
-              <TeamTitle>
-                실제 운영할 서비스 개발을 도전할 분들을 모집합니다.
-              </TeamTitle>
+              <TeamTitle>최우수상 수상에 도전할 분들을 모집합니다.</TeamTitle>
               <TeamName>
-                데스파시토 <TeamCampus>(서울)</TeamCampus>
+                하우저 <TeamCampus>(서울)</TeamCampus>
               </TeamName>
               <TeamStatusList>
                 <TeamStatusItem>
                   <WebIcon />
-                  <Job>Front-end</Job> 1 / 3
+                  <Job>Front-end</Job> 2 / 3
                 </TeamStatusItem>
                 <TeamStatusItem>
                   <StorageIcon />
@@ -47,7 +45,7 @@ const TeamAnnouncement: React.FC = () => {
                 </TeamStatusItem>
                 <TeamStatusItem>
                   <GroupsIcon />
-                  <Job>Total</Job> 4 / 6
+                  <Job>Total</Job> 5 / 6
                 </TeamStatusItem>
               </TeamStatusList>
               <TechStackList>
@@ -131,40 +129,46 @@ const TeamAnnouncement: React.FC = () => {
           </ItemBody>
         </TeamItem>
         <TeamItem>
-          <ItemHeader>
-            <ItemImg
-              src="/images/projects/sample-team_logo4.png"
-              alt="샘플 팀 로고"
-            />
-          </ItemHeader>
-          <ItemBody>
-            <TeamTitle>최우수상에 도전하실 분들을 모집합니다.</TeamTitle>
-            <TeamName>
-              크로켓 <TeamCampus>(서울)</TeamCampus>
-            </TeamName>
-            <TeamStatusList>
-              <TeamStatusItem>
-                <WebIcon />
-                <Job>Front-end</Job> 3 / 3
-              </TeamStatusItem>
-              <TeamStatusItem>
-                <StorageIcon />
-                <Job>Back-end</Job> 2 / 3
-              </TeamStatusItem>
-              <TeamStatusItem>
-                <GroupsIcon />
-                <Job>Total</Job> 5 / 6
-              </TeamStatusItem>
-            </TeamStatusList>
-            <TechStackList>
-              <TeckStackItem>React</TeckStackItem>
-              <TeckStackItem>Redux</TeckStackItem>
-              <TeckStackItem>Emotion</TeckStackItem>
-              <TeckStackItem>Spring Boot</TeckStackItem>
-              <TeckStackItem>MySQL</TeckStackItem>
-              <TeckStackItem>Docker</TeckStackItem>
-            </TechStackList>
-          </ItemBody>
+          <TeamLink to="/teams/3">
+            <ItemHeader>
+              <ItemImg
+                src="/images/projects/sample-team_logo4.png"
+                alt="샘플 팀 로고"
+              />
+            </ItemHeader>
+            <ItemBody>
+              <TeamTitle>
+                SSAFY 전용 자소설 닷컴을 개발할 팀원을 모집합니다.
+              </TeamTitle>
+              <TeamName>
+                크로켓 <TeamCampus>(서울)</TeamCampus>
+              </TeamName>
+              <TeamStatusList>
+                <TeamStatusItem>
+                  <WebIcon />
+                  <Job>Front-end</Job> 2 / 2
+                </TeamStatusItem>
+                <TeamStatusItem>
+                  <StorageIcon />
+                  <Job>Back-end</Job> 1 / 4
+                </TeamStatusItem>
+                <TeamStatusItem>
+                  <GroupsIcon />
+                  <Job>Total</Job> 3 / 6
+                </TeamStatusItem>
+              </TeamStatusList>
+              <TechStackList>
+                <TeckStackItem>TypeScript</TeckStackItem>
+                <TeckStackItem>Vue.js</TeckStackItem>
+                <TeckStackItem>Vuex</TeckStackItem>
+                <TeckStackItem>Vuetify</TeckStackItem>
+                <TeckStackItem>django</TeckStackItem>
+                <TeckStackItem>MySQL</TeckStackItem>
+                <TeckStackItem>docker</TeckStackItem>
+                <TeckStackItem>aws</TeckStackItem>
+              </TechStackList>
+            </ItemBody>
+          </TeamLink>
         </TeamItem>
         <TeamItem>
           <ItemHeader>
