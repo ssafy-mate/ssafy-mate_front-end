@@ -5,7 +5,6 @@ import {
   SignUpResponse,
   EmailVerificationCodeRequest,
   EmailVerificationCodeConfirmRequest,
-  SignUpProfile,
 } from '../types/UserInfomationType';
 
 class UserService {

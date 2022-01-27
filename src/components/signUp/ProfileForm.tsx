@@ -224,7 +224,8 @@ const ProfileForm: React.FC<ProfileProps> = ({
     signUpFormData.append('campus', campus);
     signUpFormData.append('ssafyTrack', ssafyTrack);
     signUpFormData.append('studentNumber', studentNumber);
-    signUpFormData.append('email', signUpEmail);
+    signUpFormData.append('userName', studentName);
+    signUpFormData.append('userEmail', signUpEmail);
     signUpFormData.append('password', signUpPassword);
     signUpFormData.append('selfIntroduction', selfIntroduction);
     signUpFormData.append('job1', job1);

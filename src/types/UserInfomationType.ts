@@ -3,18 +3,18 @@ export interface SsafyAuth {
   campus: string;
   ssafyTrack: string;
   studentNumber: string;
-  studentName: string;
+  userName: string;
 }
 
 //회원가입 2단계 이메일 인증 코드 요청
 export interface EmailVerificationCodeRequest {
-  email: string;
+  userEmail: string;
 }
 
 //회원가입 2단계 이메일 인증 코드 확인 요청
 export interface EmailVerificationCodeConfirmRequest {
   code: string;
-  email: string;
+  userEmail: string;
 }
 
 //회원가입 2단계 가입 정보
@@ -33,7 +33,7 @@ export interface SignUpProfile {
   campus: string;
   ssafyTrack: string;
   studentNumber: string;
-  studentName: string;
+  userEmail: string;
   email: string;
   password: string;
   profileImg: any;

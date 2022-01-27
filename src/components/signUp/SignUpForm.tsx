@@ -175,9 +175,9 @@ const SignUpForm: React.FC<SignUpProps> = ({
   };
 
   const verificationCodeRequest = async () => {
-    const data: EmailVerificationCodeRequest = { email: '' };
+    const data: EmailVerificationCodeRequest = { userEmail: '' };
 
-    data.email = signUpEmailOnChange;
+    data.userEmail = signUpEmailOnChange;
 
     await UserService.getEmailVerificationCode(data)
       .then((response) => {
@@ -203,10 +203,10 @@ const SignUpForm: React.FC<SignUpProps> = ({
   const EmailVerificationCodeConfirm = async () => {
     const data: EmailVerificationCodeConfirmRequest = {
       code: '',
-      email: '',
+      userEmail: '',
     };
 
-    data.email = signUpEmailOnChange;
+    data.userEmail = signUpEmailOnChange;
     data.code = verificationCodeOnChange;
 
     const response: SignUpResponse =

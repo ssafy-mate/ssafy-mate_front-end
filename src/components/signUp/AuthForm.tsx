@@ -16,7 +16,7 @@ import {
 
 import { campusListData } from '../../data/ssafyData';
 
-import { SignUpResponse, SsafyAuth } from '../../types/UserInfomationType';
+import { SsafyAuth } from '../../types/UserInfomationType';
 
 interface SsafyTrack {
   id: number;
@@ -79,12 +79,12 @@ const AuthForm: React.FC<Props> = ({
   }, [selectedCampus]);
 
   const updateSsafyAuthProps = (data: SsafyAuth) => {
-    const { campus, ssafyTrack, studentNumber, studentName } = data;
+    const { campus, ssafyTrack, studentNumber, userName } = data;
 
     updateCampus(campus);
     updateSsafyTrack(ssafyTrack);
     updateStudentNumber(studentNumber);
-    updateStudentName(studentName);
+    updateStudentName(userName);
     updateSignUpStep(1);
   };
 
@@ -207,15 +207,15 @@ const AuthForm: React.FC<Props> = ({
           <InfoInput
             type="text"
             id="student-name"
-            {...register('studentName', {
+            {...register('userName', {
               required: true,
               pattern: onlyKoreanReg,
             })}
           />
-          {errors.studentName?.type === 'required' && (
+          {errors.userName?.type === 'required' && (
             <ErrorSpan>{requiredFields}</ErrorSpan>
           )}
-          {errors.studentName?.type === 'pattern' && (
+          {errors.userName?.type === 'pattern' && (
             <ErrorSpan>
               교육생 인증을 위해 이름을 정확하게 입력해주세요.
             </ErrorSpan>
