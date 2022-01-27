@@ -11,12 +11,14 @@ const ProjectsSection: React.FC = () => {
       pageUrl: '/projects/common/teams',
       imgUrl: '/images/projects/common-project_link.png',
       hexColorCode: '#3396f4',
+      trackOptions: ['웹 기술', '웹 디자인', '웹 IoT'],
     },
     {
       projectName: '특화 프로젝트',
       pageUrl: '/projects/specialization/teams',
       imgUrl: '/images/projects/specialization-project_link.png',
       hexColorCode: '#84c0f8',
+      trackOptions: ['인공지능', '빅데이터', '블록체인', 'IoT 제어'],
     },
     {
       projectName: '자율 프로젝트',
@@ -36,6 +38,7 @@ const ProjectsSection: React.FC = () => {
             pageUrl={projectLinkCardData.pageUrl}
             imgUrl={projectLinkCardData.imgUrl}
             hexColorCode={projectLinkCardData.hexColorCode}
+            trackOptions={projectLinkCardData.trackOptions}
           />
         ))}
       </Wrapper>

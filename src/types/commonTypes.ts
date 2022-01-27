@@ -44,6 +44,9 @@ export interface ProjectLinkCardData {
   pageUrl: string;
   imgUrl: string;
   hexColorCode: string;
+  trackOptions?: string[];
 }
 
 export interface ProjectLinkCardProps extends ProjectLinkCardData {}
+
+export type ProjectTrack = string;
