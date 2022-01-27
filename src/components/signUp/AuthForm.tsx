@@ -1,53 +1,233 @@
-import React from 'react';
+import { useEffect, useState } from 'react';
+
+import { useForm } from 'react-hook-form';
 
 import styled from '@emotion/styled';
+import AuthService from '../../services/AuthService';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
-const AuthForm: React.FC = () => {
+import {
+  exceptDefaultReg,
+  onlyKoreanReg,
+  onlyNumberReg,
+  requiredFields,
+} from '../../utils/regularExpressionData';
+
+import { campusListData } from '../../data/ssafyData';
+
+import { SsafyAuth } from '../../types/UserInfomationType';
+
+interface SsafyTrack {
+  id: number;
+  name: string;
+}
+
+interface Props {
+  campus: string;
+  ssafyTrack: string;
+  studentNumber: string;
+  studentName: string;
+  signUpStep: number;
+  updateCampus: (campus: string) => void;
+  updateSsafyTrack: (ssafyTrack: string) => void;
+  updateStudentNumber: (studentNumber: string) => void;
+  updateStudentName: (studentName: string) => void;
+  updateSignUpStep: (signUpStep: number) => void;
+}
+
+const AuthForm: React.FC<Props> = ({
+  campus,
+  updateCampus,
+  ssafyTrack,
+  updateSsafyTrack,
+  studentNumber,
+  updateStudentNumber,
+  studentName,
+  updateStudentName,
+  signUpStep,
+  updateSignUpStep,
+}) => {
+  const [selectedTracks, setSelectedTracks] = useState<SsafyTrack[]>([]);
+
+  const [failAlertOpen, setFailAlertOpen] = useState(false);
+
+  const [alertMessage, setAlertMessage] = useState('');
+
+  type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
+
+  const [statusAlertSeverity, setStatusAlertSeverity] =
+    useState<Severity>('success');
+
+  const {
+    watch,
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<SsafyAuth>({ mode: 'onChange' });
+  const selectedCampus = watch('campus', '');
+
+  useEffect(() => {
+    const selectedCampusIndex = campusListData.findIndex(
+      (campus) => campus.area === selectedCampus,
+    );
+
+    if (selectedCampusIndex > -1) {
+      setSelectedTracks(campusListData[selectedCampusIndex].ssafyTracks);
+    }
+  }, [selectedCampus]);
+
+  const updateSsafyAuthProps = (data: SsafyAuth) => {
+    const { campus, ssafyTrack, studentNumber, userName } = data;
+
+    updateCampus(campus);
+    updateSsafyTrack(ssafyTrack);
+    updateStudentNumber(studentNumber);
+    updateStudentName(userName);
+    updateSignUpStep(1);
+  };
+
+  const onSubmit = (data: SsafyAuth) => {
+    AuthRequest(data);
+  };
+
+  const showAlert = (type: Severity, message: string) => {
+    setStatusAlertSeverity(type);
+    setAlertMessage(message);
+    setFailAlertOpen(true);
+  };
+
+  const AuthRequest = async (data: SsafyAuth) => {
+    await AuthService.getSsafyAuth(data)
+      .then((response) => {
+        if (response.success) {
+          updateSsafyAuthProps(data);
+        } else if (response.status === 401 || response.status === 409) {
+          showAlert('warning', response.message);
+        } else if (response.status === 500) {
+          showAlert('error', response.message);
+        }
+      })
+      .catch((errors) => {
+        //에러처리
+      });
+  };
+
+  const alertClose = () => {
+    setFailAlertOpen(false);
+    reset();
+  };
+
   return (
-    <Container>
-      <SsafyInfo>
+    <>
+      {failAlertOpen && (
+        <SsafyAuthSnackBar
+          open={failAlertOpen}
+          autoHideDuration={2000}
+          onClose={alertClose}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          <FailAlert
+            onClose={alertClose}
+            severity={statusAlertSeverity}
+            sx={{ width: '100%' }}
+          >
+            {alertMessage}
+          </FailAlert>
+        </SsafyAuthSnackBar>
+      )}
+      <Container onSubmit={handleSubmit(onSubmit)}>
+        <SsafyInfo>
+          <InputWrapper>
+            <RequirementLabel htmlFor="campus">캠퍼스</RequirementLabel>
+            <Select
+              id="campus"
+              {...register('campus', {
+                pattern: exceptDefaultReg,
+              })}
+              defaultValue={'default'}
+            >
+              <option value="default" disabled>
+                - 선택 -
+              </option>
+              {campusListData.map((campus) => (
+                <option key={campus.id} value={campus.area}>
+                  {campus.area}
+                </option>
+              ))}
+            </Select>
+            {errors.campus && <ErrorSpan>필수 선택 항목입니다.</ErrorSpan>}
+          </InputWrapper>
+          <InputWrapper>
+            <RequirementLabel htmlFor="ssafy-track">
+              SSAFY 교육 트랙
+            </RequirementLabel>
+            <Select
+              id="ssafy-track"
+              {...register('ssafyTrack', {
+                pattern: exceptDefaultReg,
+              })}
+              defaultValue={'default'}
+            >
+              <option value="default" disabled>
+                - 선택 -
+              </option>
+              {selectedTracks.map((track: SsafyTrack) => (
+                <option key={track.id}>{track.name}</option>
+              ))}
+            </Select>
+            {errors.ssafyTrack && <ErrorSpan>필수 선택 항목입니다.</ErrorSpan>}
+          </InputWrapper>
+        </SsafyInfo>
         <InputWrapper>
-          <RequirementLabel htmlFor="campus">캠퍼스</RequirementLabel>
-          <Select id="campus" name="campus" defaultValue={'default'}>
-            <option value="default" disabled>
-              - 선택 -
-            </option>
-            <option value="서울">서울</option>
-            <option value="대전">대전</option>c
-            <option value="광주">광주</option>
-            <option value="구미">구미</option>
-            <option value="부울경">부울경</option>
-          </Select>
+          <RequirementLabel htmlFor="student-number">학번</RequirementLabel>
+          <InfoInput
+            type="text"
+            id="student-number"
+            {...register('studentNumber', {
+              required: true,
+              pattern: onlyNumberReg,
+              maxLength: 7,
+              minLength: 7,
+            })}
+          />
+          {errors.studentNumber && errors.studentNumber.type === 'required' && (
+            <ErrorSpan>{requiredFields}</ErrorSpan>
+          )}
+          {errors.studentNumber && errors.studentNumber.type !== 'required' && (
+            <ErrorSpan>올바른 학번이 아닙니다.</ErrorSpan>
+          )}
         </InputWrapper>
         <InputWrapper>
-          <RequirementLabel htmlFor="ssafy-track">
-            SSAFY 교육 트랙
-          </RequirementLabel>
-          <Select id="ssafy-track" name="ssafy-track" defaultValue={'default'}>
-            <option value="default" disabled>
-              - 선택 -
-            </option>
-            <option value="Java Track">Java Track</option>
-            <option value="Python Track">Python Track</option>
-            <option value="Embeded Track">Embeded Track</option>
-            <option value="Mobile Track">Mobile Track</option>
-          </Select>
+          <RequirementLabel htmlFor="student-name">이름</RequirementLabel>
+          <InfoInput
+            type="text"
+            id="student-name"
+            {...register('userName', {
+              required: true,
+              pattern: onlyKoreanReg,
+            })}
+          />
+          {errors.userName?.type === 'required' && (
+            <ErrorSpan>{requiredFields}</ErrorSpan>
+          )}
+          {errors.userName?.type === 'pattern' && (
+            <ErrorSpan>
+              교육생 인증을 위해 이름을 정확하게 입력해주세요.
+            </ErrorSpan>
+          )}
         </InputWrapper>
-      </SsafyInfo>
-      <InputWrapper>
-        <RequirementLabel htmlFor="student-number">학번</RequirementLabel>
-        <InfoInput type="text" id="student-number" name="student-number" />
-      </InputWrapper>
-      <InputWrapper>
-        <RequirementLabel htmlFor="student-name">이름</RequirementLabel>
-        <InfoInput type="text" id="student-name" name="student-name" />
-      </InputWrapper>
-      <AuthButton>교육생 인증</AuthButton>
-    </Container>
+        <AuthButton type="submit">교육생 인증</AuthButton>
+      </Container>
+    </>
   );
 };
 
-const Container = styled.div`
+const Container = styled.form`
   width: 100%;
 `;
 
@@ -164,6 +344,9 @@ const AuthButton = styled.button`
     background-color: #2878c3;
   }
 
+  &:disabled {
+    background-color: #96a0ac;
+  }
   @media (max-width: 540px) {
     font-size: 15px;
   }
@@ -190,6 +373,19 @@ const RequirementLabel = styled.label`
   @media (max-width: 540px) {
     font-size: 13px;
   }
+`;
+
+const ErrorSpan = styled.span`
+  padding: 8px 12px;
+  font-weight: 400;
+  font-size: 13px;
+  color: #f44336;
+`;
+
+const FailAlert = styled(Alert)``;
+
+const SsafyAuthSnackBar = styled(Snackbar)`
+  height: 20%;
 `;
 
 export default AuthForm;

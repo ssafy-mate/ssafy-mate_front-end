@@ -38,6 +38,7 @@ export const campusListData: Campus[] = [
         name: 'Python Track',
       },
       {
+
         id: 2,
         name: 'Java Track',
       },

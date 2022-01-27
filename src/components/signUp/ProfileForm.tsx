@@ -1,17 +1,16 @@
-import React from 'react';
+import { useState } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-import ButtonGroup from '@mui/material/ButtonGroup';
 import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
 import CloseIcon from '@mui/icons-material/Close';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import CheckIcon from '@mui/icons-material/Check';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 import { jobListData } from '../../data/jobListData';
 import { techStackListData } from '../../data/techStackListData';
@@ -20,7 +19,60 @@ import { TechStack } from '../../types/commonTypes';
 
 import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
 
-const ProfileForm: React.FC = () => {
+import {
+  ProfileProps,
+  TechStacksWithLevel,
+} from '../../types/UserInfomationType';
+
+import AuthService from '../../services/AuthService';
+
+import { validUrl } from '../../utils/regularExpressionData';
+
+type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
+
+const ProfileForm: React.FC<ProfileProps> = ({
+  campus,
+  ssafyTrack,
+  studentNumber,
+  studentName,
+  signUpStep,
+  signUpEmail,
+  signUpPassword,
+  updateSignUpStep,
+}) => {
+  const [showError, setShowError] = useState<number>(0);
+  const [techStacks, setTechStacks] = useState<TechStacksWithLevel[]>([]);
+  const [techStacksError, setTechStacksError] = useState<boolean>(false);
+  const [profileImg, setProfileImg] = useState(null);
+  const [previewProgileImg, setPreviewProfileImg] = useState(null);
+  const [job1, setJob1] = useState<string>('default');
+  const [job2, setJob2] = useState<string>('');
+  const [selfIntroduction, setSelfIntroduction] = useState<string>('');
+  const [githubUrl, setGithubUrl] = useState<string>('');
+  const [etcUrl, setEtcUrl] = useState<string>('');
+  const [agreement, setAgreement] = useState<boolean>(false);
+  const [job1Error, setJob1Error] = useState<boolean>(false);
+  const [selfIntroductionError, setSelfIntroductionError] =
+    useState<boolean>(false);
+  const [agreementError, setAgreementError] = useState<boolean>(false);
+  const [etcUrlPatternError, setEtcUrlPatternError] = useState<boolean>(false);
+  const [gitHubUrlPatternError, setGitHubUrlPatternError] =
+    useState<boolean>(false);
+  const [statusAlertOpen, setStatusAlertOpen] = useState<boolean>(false);
+  const [statusAlertText, setStatusAlertText] = useState<string>('');
+  const [statusAlertSeverity, setStatusAlertSeverity] =
+    useState<Severity>('success');
+
+  const signUpFormData = new FormData();
+
+  const updateTeckStacks = (techStacks: Array<TechStacksWithLevel>): void => {
+    setTechStacks(techStacks);
+  };
+
+  const updateTechStacksError = (techStacksError: boolean): void => {
+    setTechStacksError(techStacksError);
+  };
+
   const {
     getRootProps,
     getInputLabelProps,
@@ -39,153 +91,429 @@ const ProfileForm: React.FC = () => {
     getOptionLabel: (option) => option.name,
   });
 
+  const handleChangeProfileImg = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const {
+      target: { files },
+    }: any = event;
+    const theImgFile = files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = (finishedEvent) => {
+      const {
+        currentTarget: { result },
+      }: any = finishedEvent;
+
+      setPreviewProfileImg(result);
+    };
+
+    reader.readAsDataURL(theImgFile);
+    setProfileImg(theImgFile);
+
+    signUpFormData.append('profileImg', theImgFile);
+  };
+
+  const handleClearProfileImg = () => {
+    setProfileImg(null);
+    setPreviewProfileImg(null);
+    signUpFormData.delete('profileImg');
+  };
+
+  const handleTextAreaEnterKeyPressed = (event: React.KeyboardEvent) => {
+    if (event.code === 'Enter' || event.code === 'NumpadEnter') {
+      if (!event.shiftKey) {
+        event.preventDefault();
+      }
+    }
+  };
+
+  const handleTextAreaInput = (
+    event: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    setSelfIntroduction(event.target.value);
+
+    event.target.value === ''
+      ? setSelfIntroductionError(true)
+      : setSelfIntroductionError(false);
+  };
+
+  const handleJobSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    if (event.target.name === 'job1') {
+      setJob1(event.target.value);
+      setJob2('default');
+    } else {
+      setJob2(event.target.value);
+    }
+
+    event.target.name === 'job1' && event.target.value === 'default'
+      ? setJob1Error(true)
+      : setJob1Error(false);
+  };
+
+  const handleUrlInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.preventDefault();
+    event.target.name === 'githubUrl'
+      ? setGithubUrl(event.target.value)
+      : setEtcUrl(event.target.value);
+
+    if (event.target.name === 'githubUrl') {
+      !validUrl.test(githubUrl)
+        ? setGitHubUrlPatternError(true)
+        : setGitHubUrlPatternError(false);
+    }
+
+    if (event.target.name === 'etcUrl') {
+      !validUrl.test(etcUrl)
+        ? setEtcUrlPatternError(true)
+        : setEtcUrlPatternError(false);
+    }
+  };
+
+  const handleCheckAgreement = (
+    event: React.MouseEvent<HTMLInputElement, MouseEvent>,
+  ) => {
+    if (agreement === false) {
+      setAgreement(true);
+      setAgreementError(false);
+    } else {
+      setAgreement(false);
+      setAgreementError(true);
+    }
+  };
+
+  const validation = () => {
+    if (!selfIntroduction) {
+      setSelfIntroductionError(true);
+    }
+
+    if (job1 === 'default') {
+      setJob1Error(true);
+    }
+
+    techStacks.length < 2
+      ? setTechStacksError(true)
+      : setTechStacksError(false);
+
+    if (!agreement) {
+      setAgreementError(true);
+    }
+
+    !validUrl.test(githubUrl)
+      ? setGitHubUrlPatternError(true)
+      : setGitHubUrlPatternError(false);
+
+    !validUrl.test(etcUrl)
+      ? setEtcUrlPatternError(true)
+      : setEtcUrlPatternError(false);
+
+    if (
+      selfIntroduction &&
+      job1 !== 'default' &&
+      techStacks.length >= 2 &&
+      agreement
+    ) {
+      return true;
+    } else {
+      setShowError(1);
+      return false;
+    }
+  };
+
+  const getSignUpInfomation = () => {
+    signUpFormData.append('campus', campus);
+    signUpFormData.append('ssafyTrack', ssafyTrack);
+    signUpFormData.append('studentNumber', studentNumber);
+    signUpFormData.append('userName', studentName);
+    signUpFormData.append('userEmail', signUpEmail);
+    signUpFormData.append('password', signUpPassword);
+    signUpFormData.append('selfIntroduction', selfIntroduction);
+    signUpFormData.append('job1', job1);
+    signUpFormData.append('job2', job2);
+    signUpFormData.append('techStacks', JSON.stringify(techStacks));
+    signUpFormData.append('githubUrl', githubUrl);
+    signUpFormData.append('etcUrl', etcUrl);
+    signUpFormData.append('agreement', String(agreement));
+
+    return signUpFormData;
+  };
+
+  const showAlert = (type: Severity, message: string) => {
+    setStatusAlertSeverity(type);
+    setStatusAlertText(message);
+    setStatusAlertOpen(true);
+  };
+
+  const signUpClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    event.preventDefault();
+
+    const data = getSignUpInfomation();
+
+    if (validation()) {
+      AuthService.signUp(data)
+        .then(({ status, message }) => {
+          switch (status) {
+            case 400:
+              showAlert('warning', message);
+              break;
+            case 500:
+              showAlert('error', message);
+              break;
+            default:
+              showAlert('success', message);
+          }
+        })
+        .catch((errors) => {
+          //에러처리
+        });
+    }
+  };
+
+  const alertClose = () => {
+    setStatusAlertOpen(false);
+  };
+
   return (
-    <Container>
-      <Row>
-        <AvatarWrapper>
-          <Avatar src="/broken-image.jpg" css={avatar} />
-          <FileInputWrapper>
-            <FileInputLabel htmlFor="profile-img">
-              <AddAPhotoIcon />
-            </FileInputLabel>
-            <FileInput type="file" id="profile-img" />
-          </FileInputWrapper>
-        </AvatarWrapper>
-        <InputWrapper>
-          <RequirementLabel htmlFor="self-introduction">
-            자기소개
-          </RequirementLabel>
-          <Textarea id="self-introduction" name="self-introduction" />
-        </InputWrapper>
-      </Row>
-      <Row>
-        <InputWrapper css={rightGap}>
-          <RequirementLabel htmlFor="job1">희망 직무1</RequirementLabel>
-          <Select id="job1" name="job1" defaultValue={'default'}>
-            <option value="default" disabled>
-              - 선택 -
-            </option>
-            {jobListData.map((job) => (
-              <option key={job.id} value={job.name}>
-                {job.name}
-              </option>
-            ))}
-          </Select>
-        </InputWrapper>
-        <InputWrapper>
-          <Label htmlFor="job2">
-            희망 직무2 <Em>(선택)</Em>
-          </Label>
-          <Select id="job2" name="job2" defaultValue={'default'}>
-            <option value="default" disabled>
-              - 선택 -
-            </option>
-            {jobListData.map((job) => (
-              <option key={job.id} value={job.name}>
-                {job.name}
-              </option>
-            ))}
-          </Select>
-        </InputWrapper>
-      </Row>
-      <Row css={techStackRow}>
-        <InputWrapper {...getRootProps()} css={techStackInputWrapper}>
-          <RequirementLabel
-            htmlFor="tech-stack-options"
-            {...getInputLabelProps()}
+    <>
+      {statusAlertOpen && (
+        <SsafyAuthSnackBar
+          open={statusAlertOpen}
+          autoHideDuration={2000}
+          onClose={alertClose}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          <ResponseAlert
+            onClose={alertClose}
+            severity={statusAlertSeverity}
+            sx={{ width: '100%' }}
           >
-            기술 스택 <Em>(필수 2가지 이상 기입)</Em>
-          </RequirementLabel>
-          <InfoInputWrapper
-            ref={setAnchorEl}
-            className={focused ? 'focused' : ''}
-          >
+            {statusAlertText}
+          </ResponseAlert>
+        </SsafyAuthSnackBar>
+      )}
+      <Container>
+        <Row>
+          <AvatarWrapper>
+            {previewProgileImg ? (
+              <>
+                <Avatar src={previewProgileImg} css={avatar} />
+                <FileInputWrapper>
+                  <FileInputLabel htmlFor="profile-img">
+                    <CloseIcon
+                      fontSize="large"
+                      onClick={handleClearProfileImg}
+                    />
+                  </FileInputLabel>
+                </FileInputWrapper>
+              </>
+            ) : (
+              <>
+                <Avatar src="/broken-image.jpg" css={avatar} />
+                <FileInputWrapper>
+                  <FileInputLabel htmlFor="profile-img">
+                    <AddAPhotoIcon />
+                  </FileInputLabel>
+                  <FileInput
+                    type="file"
+                    id="profile-img"
+                    accept="image/*"
+                    onChange={handleChangeProfileImg}
+                  />
+                </FileInputWrapper>
+              </>
+            )}
+          </AvatarWrapper>
+          <InputWrapper>
+            <RequirementLabel htmlFor="self-introduction">
+              자기소개
+            </RequirementLabel>
+            <Textarea
+              id="self-introduction"
+              name="selfIntroduction"
+              onKeyPress={handleTextAreaEnterKeyPressed}
+              onChange={handleTextAreaInput}
+              required
+            />
+            {showError === 1 && selfIntroductionError && (
+              <ErrorSpan>필수 입력 항목입니다.</ErrorSpan>
+            )}
+          </InputWrapper>
+        </Row>
+        <Row>
+          <InputWrapper css={rightGap}>
+            <RequirementLabel htmlFor="job1">희망 직무1</RequirementLabel>
+            <Select
+              id="job1"
+              defaultValue={'default'}
+              name="job1"
+              onChange={handleJobSelect}
+              required
+            >
+              <option value="default" disabled>
+                - 선택 -
+              </option>
+              {jobListData.map((job) => (
+                <option key={job.id} value={job.name}>
+                  {job.name}
+                </option>
+              ))}
+            </Select>
+            {showError === 1 && job1Error && (
+              <ErrorSpan>필수 선택 사항입니다.</ErrorSpan>
+            )}
+          </InputWrapper>
+          <InputWrapper>
+            <Label htmlFor="job2">
+              희망 직무2 <Em>(선택)</Em>
+            </Label>
+            <Select
+              id="job2"
+              defaultValue={'default'}
+              onChange={handleJobSelect}
+              disabled={job1 === 'default'}
+            >
+              <option value="default">- 선택 -</option>
+              {jobListData
+                .filter((job) => job.name !== job1)
+                .map((job) => (
+                  <option key={job.id} value={job.name}>
+                    {job.name}
+                  </option>
+                ))}
+            </Select>
+          </InputWrapper>
+        </Row>
+        <Row css={techStackRow}>
+          <InputWrapper {...getRootProps()} css={techStackInputWrapper}>
+            <RequirementLabel
+              htmlFor="tech-stack-options"
+              {...getInputLabelProps()}
+            >
+              기술 스택 <Em>(필수 2가지 이상 기입)</Em>
+            </RequirementLabel>
+
+            <InfoInputWrapper
+              ref={setAnchorEl}
+              className={focused ? 'focused' : ''}
+            >
+              <InfoInput
+                type="text"
+                id="tech-stack-options"
+                name="tech-stack-options"
+                placeholder="ex) Vue.js, django, Spring Boot, MySQL"
+                {...getInputProps()}
+              />
+            </InfoInputWrapper>
+            {groupedOptions.length > 0 ? (
+              <SearchList {...getListboxProps()}>
+                {(groupedOptions as typeof techStackListData).map(
+                  (option, index) => (
+                    <SearchItem {...getOptionProps({ option, index })}>
+                      <TechStackInfo>
+                        <TechStackImg src={option.imgUrl} alt={option.name} />
+                        {option.name}
+                      </TechStackInfo>
+                      <CheckIcon fontSize="small" />
+                    </SearchItem>
+                  ),
+                )}
+              </SearchList>
+            ) : null}
+            {showError === 1 && techStacksError && (
+              <ErrorSpan>
+                필수 2가지 이상 선택 사항입니다.(상/중/하 선택도 필수입니다.)
+              </ErrorSpan>
+            )}
+          </InputWrapper>
+          <TechStackList>
+            {value.map((option: TechStack, index: number) => (
+              <TechStackTagWithLevel
+                id={option.id}
+                name={option.name}
+                imgUrl={option.imgUrl}
+                techStacks={techStacks}
+                updateTechStacks={updateTeckStacks}
+                techStacksError={techStacksError}
+                updateTechStacksError={updateTechStacksError}
+                {...getTagProps({ index })}
+              />
+            ))}
+          </TechStackList>
+        </Row>
+        <Row>
+          <InputWrapper>
+            <Label htmlFor="github-url">
+              GitHub URL <Em>(선택)</Em>
+              {githubUrl.length >= 1 &&
+                showError === 1 &&
+                gitHubUrlPatternError && (
+                  <ErrorSpan className="url">유효한 URL이 아닙니다.</ErrorSpan>
+                )}
+            </Label>
             <InfoInput
-              type="text"
-              id="tech-stack-options"
-              name="tech-stack-options"
-              placeholder="ex) Vue.js, django, Spring Boot, MySQL"
-              {...getInputProps()}
+              type="url"
+              id="github-url"
+              name="githubUrl"
+              placeholder="https://github.com/ssafy-mate"
+              onChange={handleUrlInput}
+              pattern="https://.*"
             />
-          </InfoInputWrapper>
-          {groupedOptions.length > 0 ? (
-            <SearchList {...getListboxProps()}>
-              {(groupedOptions as typeof techStackListData).map(
-                (option, index) => (
-                  <SearchItem {...getOptionProps({ option, index })}>
-                    <TechStackInfo>
-                      <TechStackImg src={option.imgUrl} alt={option.name} />
-                      {option.name}
-                    </TechStackInfo>
-                    <CheckIcon fontSize="small" />
-                  </SearchItem>
-                ),
+          </InputWrapper>
+        </Row>
+        <Row>
+          <InputWrapper>
+            <Label htmlFor="etc-url">
+              기술 블로그 URL 또는 기타 URL <Em>(선택)</Em>
+              {etcUrl.length >= 1 && showError === 1 && etcUrlPatternError && (
+                <ErrorSpan className="url">유효한 URL이 아닙니다.</ErrorSpan>
               )}
-            </SearchList>
-          ) : null}
-        </InputWrapper>
-        <TechStackList>
-          {value.map((option: TechStack, index: number) => (
-            <TechStackTagWithLevel
-              id={option.id}
-              name={option.name}
-              imgUrl={option.imgUrl}
-              {...getTagProps({ index })}
+            </Label>
+            <InfoInput
+              type="url"
+              id="etc-url"
+              name="etcUrl"
+              placeholder="https://velog.io/@ssafy-mate"
+              onChange={handleUrlInput}
+              pattern="https://.*"
             />
-          ))}
-        </TechStackList>
-      </Row>
-      <Row>
-        <InputWrapper>
-          <Label htmlFor="github-url">
-            GitHub URL <Em>(선택)</Em>
-          </Label>
-          <InfoInput
-            type="url"
-            id="github-url"
-            name="github-url"
-            placeholder="https://github.com/ssafy-mate"
-            pattern="https://.*"
-          />
-        </InputWrapper>
-      </Row>
-      <Row>
-        <InputWrapper>
-          <Label htmlFor="etc-url">
-            기술 블로그 URL 또는 기타 URL <Em>(선택)</Em>
-          </Label>
-          <InfoInput
-            type="url"
-            id="etc-url"
-            name="etc-url"
-            placeholder="https://velog.io/@ssafy-mate"
-            pattern="https://.*"
-          />
-        </InputWrapper>
-      </Row>
-      <Row>
-        <CheckBoxWrapper>
-          <AgreementCheckBox
-            type="checkbox"
-            id="sign-up-agreement"
-            name="sign-up-agreement"
-          />
-          <CheckBoxLabel htmlFor="sign-up-agreement">
-            <AgreementLink href="#" target="_blank" rel="noopener noreferrer">
-              이용약관
-            </AgreementLink>
-            &nbsp;및&nbsp;
-            <AgreementLink href="#" target="_blank" rel="noopener noreferrer">
-              개인정보 처리방침
-            </AgreementLink>
-            에 동의합니다.
-          </CheckBoxLabel>
-        </CheckBoxWrapper>
-      </Row>
-      <Row>
-        <SignUpButton>계정 만들기</SignUpButton>
-      </Row>
-    </Container>
+          </InputWrapper>
+        </Row>
+
+        <Row>
+          <CheckBoxWrapper>
+            <AgreementCheckBox
+              type="checkbox"
+              id="sign-up-agreement"
+              name="sign-up-agreement"
+              onClick={handleCheckAgreement}
+            />
+            <CheckBoxLabel htmlFor="sign-up-agreement">
+              <AgreementLink href="#" target="_blank" rel="noopener noreferrer">
+                이용약관
+              </AgreementLink>
+              &nbsp;및&nbsp;
+              <AgreementLink href="#" target="_blank" rel="noopener noreferrer">
+                개인정보 처리방침
+              </AgreementLink>
+              에 동의합니다.
+            </CheckBoxLabel>
+          </CheckBoxWrapper>
+        </Row>
+        {showError === 1 && agreementError && (
+          <ErrorSpan className="agreement">필수 선택 사항입니다.</ErrorSpan>
+        )}
+        <Row>
+          <SignUpButton onClick={signUpClick} type="button">
+            계정 만들기
+          </SignUpButton>
+        </Row>
+      </Container>
+    </>
   );
 };
 
@@ -233,7 +561,20 @@ const CheckBoxWrapper = styled.div`
   display: flex;
   width: 100%;
 `;
-
+const IconButton = styled.button`
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 10;
+  border: none;
+  background-color: transparent;
+  color: #f44336;
+  transition: all 0.12s ease-in-out;
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.15);
+  }
+`;
 const Label = styled.label`
   margin-bottom: 4px;
   font-size: 14px;
@@ -525,6 +866,30 @@ const techStackRow = css`
 
 const techStackInputWrapper = css`
   position: relative;
+`;
+
+const ErrorSpan = styled.span`
+  padding: 8px 12px;
+  font-weight: 400;
+  font-size: 13px;
+  color: #f44336;
+
+  &.agreement {
+    //padding-left: 20px;
+    margin-left: 10px;
+  }
+
+  &.url {
+    color: #1976d3;
+  }
+`;
+
+const SsafyAuthSnackBar = styled(Snackbar)`
+  height: 20%;
+`;
+
+const ResponseAlert = styled(Alert)`
+  white-space: pre-line;
 `;
 
 export default ProfileForm;
