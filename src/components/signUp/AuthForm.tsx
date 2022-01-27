@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import styled from '@emotion/styled';
-import UserService from '../../services/UserService';
+import AuthService from '../../services/AuthService';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
@@ -99,7 +99,7 @@ const AuthForm: React.FC<Props> = ({
   };
 
   const AuthRequest = async (data: SsafyAuth) => {
-    await UserService.getSsafyAuth(data)
+    await AuthService.getSsafyAuth(data)
       .then((response) => {
         if (response.success) {
           updateSsafyAuthProps(data);

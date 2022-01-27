@@ -52,7 +52,7 @@ const Container = styled.main`
 const Wrapper = styled.main`
   display: flex;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: space-around;
   padding: 50px 0;
   box-sizing: border-box;
 

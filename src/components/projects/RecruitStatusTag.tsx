@@ -3,14 +3,16 @@ import styled from '@emotion/styled';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import WarningIcon from '@mui/icons-material/Warning';
 
-interface Props {
-  isSufficent: boolean;
+interface RecruitStatusTagProps {
+  isSufficient: boolean;
 }
 
-const RecruitStatusTag: React.FC<Props> = ({ isSufficent }) => {
+const RecruitStatusTag: React.FC<RecruitStatusTagProps> = ({
+  isSufficient,
+}) => {
   return (
     <Tag>
-      {isSufficent ? (
+      {isSufficient ? (
         <>
           <SufficentIcon />
           <SufficentContent>충족</SufficentContent>

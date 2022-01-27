@@ -24,7 +24,7 @@ import {
   TechStacksWithLevel,
 } from '../../types/UserInfomationType';
 
-import UserService from '../../services/UserService';
+import AuthService from '../../services/AuthService';
 
 import { validUrl } from '../../utils/regularExpressionData';
 
@@ -252,7 +252,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
     const data = getSignUpInfomation();
 
     if (validation()) {
-      UserService.signUp(data)
+      AuthService.signUp(data)
         .then(({ status, message }) => {
           switch (status) {
             case 400:

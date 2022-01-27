@@ -23,7 +23,7 @@ import {
   SignUp,
 } from '../../types/UserInfomationType';
 
-import UserService from '../../services/UserService';
+import AuthService from '../../services/AuthService';
 
 type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
 
@@ -179,7 +179,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
     data.userEmail = signUpEmailOnChange;
 
-    await UserService.getEmailVerificationCode(data)
+    await AuthService.getEmailVerificationCode(data)
       .then((response) => {
         if (response.success) {
           resetCodeVerificationError();
@@ -210,7 +210,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
     data.code = verificationCodeOnChange;
 
     const response: SignUpResponse =
-      await UserService.getEmailVerificationCodeConfirm(data);
+      await AuthService.getEmailVerificationCodeConfirm(data);
 
     if (response.success) {
       //이메일 인증 코드 응답 성공 시 인증 코드 확인 버튼 비활성화

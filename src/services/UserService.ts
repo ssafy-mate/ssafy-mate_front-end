@@ -1,53 +1,16 @@
 import { axiosInstance } from '../utils/axios';
 
-import {
-  SsafyAuth,
-  SignUpResponse,
-  EmailVerificationCodeRequest,
-  EmailVerificationCodeConfirmRequest,
-} from '../types/UserInfomationType';
+const token = 't123456789';
 
 class UserService {
-  public static async getSsafyAuth(data: SsafyAuth): Promise<SignUpResponse> {
-    const response = await axiosInstance.get<SignUpResponse>(
-      '/api/user/sign-up/verification/ssafy',
-      {
-        params: data,
+  public static async userDetailInfoApi(userId: string) {
+    const response = await axiosInstance.get(`/api/auth/user/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
       },
-    );
+    });
 
-    return response.data;
-  }
-
-  public static async getEmailVerificationCode(
-    data: EmailVerificationCodeRequest,
-  ): Promise<SignUpResponse> {
-    const response = await axiosInstance.post<SignUpResponse>(
-      '/api/user/sign-up/verification/email',
-      data,
-    );
-
-    return response.data;
-  }
-
-  public static async getEmailVerificationCodeConfirm(
-    data: EmailVerificationCodeConfirmRequest,
-  ): Promise<SignUpResponse> {
-    const response = await axiosInstance.put<SignUpResponse>(
-      '/api/user/sign-up/verification/email',
-      data,
-    );
-
-    return response.data;
-  }
-
-  public static async signUp(data: FormData): Promise<SignUpResponse> {
-    const response = await axiosInstance.post<SignUpResponse>(
-      '/api/user',
-      data,
-    );
-
-    return response.data;
+    return response;
   }
 }
 
