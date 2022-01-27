@@ -17,8 +17,8 @@ import StyleIcon from '@mui/icons-material/Style';
 
 import RecruitStatusBadge from '../projects/RecruitStatusBadge';
 import RecruitStatusTag from '../projects/RecruitStatusTag';
-import JobDoughnutChart from '../chart/DoughnutChart';
-import TeamTechStack from './TeamTechStack';
+import JobDoughnutChart from '../chart/JobChart';
+import TeamTechStack from './TeamTechStackTag';
 
 import { UserType } from '../../types/userTypes';
 
@@ -52,7 +52,7 @@ const TeamInformationSection: React.FC = () => {
             <Notice>실제 운영할 서비스 개발을 도전할 분들을 모집합니다.</Notice>
             <Row>
               <TeamName>데스파시토</TeamName>
-              <RecruitStatusBadge isActive={true} />
+              <RecruitStatusBadge isRecruiting={true} />
             </Row>
           </TeamTitleWrapper>
         </TitleBox>
@@ -193,7 +193,7 @@ const TeamInformationSection: React.FC = () => {
                 <HeadcountContent>
                   <span>4명</span>/<span>6명</span>
                 </HeadcountContent>
-                <RecruitStatusTag isSufficent={false} />
+                <RecruitStatusTag isSufficient={false} />
               </HeadcountItem>
               <HeadcountItem>
                 <HeadcountLabel>
@@ -203,7 +203,7 @@ const TeamInformationSection: React.FC = () => {
                 <HeadcountContent>
                   <span>1명</span>/<span>3명</span>
                 </HeadcountContent>
-                <RecruitStatusTag isSufficent={false} />
+                <RecruitStatusTag isSufficient={false} />
               </HeadcountItem>
               <HeadcountItem>
                 <HeadcountLabel>
@@ -213,7 +213,7 @@ const TeamInformationSection: React.FC = () => {
                 <HeadcountContent>
                   <span>3명</span>/<span>3명</span>
                 </HeadcountContent>
-                <RecruitStatusTag isSufficent={true} />
+                <RecruitStatusTag isSufficient={true} />
               </HeadcountItem>
             </HeadcountList>
           </MembersStatus>
