@@ -189,7 +189,6 @@ const SignUpLinkBox = styled.div`
       margin-left: 0.25rem;
       vertical-align: top;
       transition: all 0.08s ease-in-out;
-      transition-delay: initial;
     }
     &:hover {
       color: #2878c3;
