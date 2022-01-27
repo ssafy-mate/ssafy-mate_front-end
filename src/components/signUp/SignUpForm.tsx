@@ -18,7 +18,6 @@ import {
 import {
   EmailVerificationCodeConfirmRequest,
   EmailVerificationCodeRequest,
-  SignUpResponse,
   SignUpProps,
   SignUp,
 } from '../../types/UserInfomationType';

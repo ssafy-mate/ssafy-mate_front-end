@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -65,7 +65,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
 
   const signUpFormData = new FormData();
 
-  const updateTeckStacks = (techStacks: Array<TechStacksWithLevel>): void => {
+  const updateTechStacks = (techStacks: Array<TechStacksWithLevel>): void => {
     setTechStacks(techStacks);
   };
 
@@ -277,6 +277,20 @@ const ProfileForm: React.FC<ProfileProps> = ({
     setStatusAlertOpen(false);
   };
 
+  const deleteStack = (event: React.MouseEvent<HTMLDivElement>) => {
+    // const seletedStack = event.currentTarget
+    //   .querySelector('img')
+    //   ?.getAttribute('alt');
+    // if (seletedStack !== null && seletedStack !== undefined) {
+    //   if (JSON.stringify(techStacks).includes(seletedStack)) {
+    //     const findStackIndex = techStacks.findIndex((stack) => {
+    //       return stack.techStackName === seletedStack;
+    //     });
+    //     techStacks.splice(findStackIndex, 1);
+    //   }
+    // }
+  };
+
   return (
     <>
       {statusAlertOpen && (
@@ -411,17 +425,21 @@ const ProfileForm: React.FC<ProfileProps> = ({
                 {...getInputProps()}
               />
             </InfoInputWrapper>
+
             {groupedOptions.length > 0 ? (
               <SearchList {...getListboxProps()}>
                 {(groupedOptions as typeof techStackListData).map(
                   (option, index) => (
-                    <SearchItem {...getOptionProps({ option, index })}>
-                      <TechStackInfo>
-                        <TechStackImg src={option.imgUrl} alt={option.name} />
-                        {option.name}
-                      </TechStackInfo>
-                      <CheckIcon fontSize="small" />
-                    </SearchItem>
+                    <SearchItemInfoWrapper onClick={deleteStack} key={index}>
+                      <SearchItem {...getOptionProps({ option, index })}>
+                        <TechStackInfo>
+                          <TechStackImg src={option.imgUrl} alt={option.name} />
+                          {option.name}
+                        </TechStackInfo>
+
+                        <CheckIcon fontSize="small" />
+                      </SearchItem>
+                    </SearchItemInfoWrapper>
                   ),
                 )}
               </SearchList>
@@ -439,11 +457,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
                 name={option.name}
                 imgUrl={option.imgUrl}
                 techStacks={techStacks}
-                updateTechStacks={updateTeckStacks}
+                updateTechStacks={updateTechStacks}
                 techStacksError={techStacksError}
                 updateTechStacksError={updateTechStacksError}
                 {...getTagProps({ index })}
-              />
+              ></TechStackTagWithLevel>
             ))}
           </TechStackList>
         </Row>
@@ -560,6 +578,10 @@ const InputWrapper = styled.div`
 `;
 
 const CheckBoxWrapper = styled.div`
+  display: flex;
+  width: 100%;
+`;
+const SearchItemInfoWrapper = styled.div`
   display: flex;
   width: 100%;
 `;
