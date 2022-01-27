@@ -45,7 +45,7 @@ interface TeamDetailInfoResponse {
 }
 
 const useTeamDetailInfo = (teamId: string) => {
-  const queryFunction = () => TeamService.teamDetailInfoApi(teamId);
+  const queryFunction = () => TeamService.getTeamDetailInfo(teamId);
   const { isLoading, data, isError, error } = useQuery<
     AxiosResponse<TeamDetailInfoResponse>,
     AxiosError
