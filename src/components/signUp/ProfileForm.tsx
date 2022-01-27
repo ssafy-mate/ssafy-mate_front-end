@@ -13,7 +13,6 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
 import { jobListData } from '../../data/jobListData';
-import { techStackListData } from '../../data/techStackListData';
 
 import { TechStack } from '../../types/commonTypes';
 
@@ -27,6 +26,8 @@ import {
 import AuthService from '../../services/AuthService';
 
 import { validUrl } from '../../utils/regularExpressionData';
+
+import useTechStackList from '../../hooks/useTechStackList';
 
 type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
 
@@ -62,6 +63,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const [statusAlertText, setStatusAlertText] = useState<string>('');
   const [statusAlertSeverity, setStatusAlertSeverity] =
     useState<Severity>('success');
+  const techStackList = useTechStackList();
 
   const signUpFormData = new FormData();
 
@@ -87,7 +89,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
   } = useAutocomplete({
     id: 'search-tech-stack',
     multiple: true,
-    options: techStackListData,
+    options: techStackList,
     getOptionLabel: (option) => option.name,
   });
 
@@ -411,7 +413,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
             </InfoInputWrapper>
             {groupedOptions.length > 0 ? (
               <SearchList {...getListboxProps()}>
-                {(groupedOptions as typeof techStackListData).map(
+                {(groupedOptions as typeof techStackList).map(
                   (option, index) => (
                     <SearchItem {...getOptionProps({ option, index })}>
                       <TechStackInfo>

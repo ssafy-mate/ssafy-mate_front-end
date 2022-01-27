@@ -4,10 +4,12 @@ import { authHandlers } from './handlers/authHandlers';
 import { userHandlers } from './handlers/userHandlers';
 import { teamHandlers } from './handlers/teamHandlers';
 import { chattingHandlers } from './handlers/chattingHandlers';
+import { techStackHandlers } from './handlers/techStackHandlers';
 
 export const worker = setupWorker(
   ...authHandlers,
   ...userHandlers,
   ...teamHandlers,
   ...chattingHandlers,
+  ...techStackHandlers,
 );
