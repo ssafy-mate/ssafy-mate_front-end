@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -276,8 +276,9 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const alertClose = () => {
     setStatusAlertOpen(false);
   };
-
+  const deleteStackInputRef = useRef<HTMLDivElement>(null);
   const deleteStack = (event: React.MouseEvent<HTMLDivElement>) => {
+    // console.log(deleteStackInputRef.current?.children[0].getAttribute('alt'));
     // const seletedStack = event.currentTarget
     //   .querySelector('img')
     //   ?.getAttribute('alt');
@@ -432,7 +433,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
                   (option, index) => (
                     <SearchItemInfoWrapper onClick={deleteStack} key={index}>
                       <SearchItem {...getOptionProps({ option, index })}>
-                        <TechStackInfo>
+                        <TechStackInfo ref={deleteStackInputRef}>
                           <TechStackImg src={option.imgUrl} alt={option.name} />
                           {option.name}
                         </TechStackInfo>
