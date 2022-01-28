@@ -7,12 +7,15 @@ export type ProjectTrack = string;
 
 export interface TechStack {
   id: number;
-  name: string;
-  imgUrl: string;
+  techStackName: string;
+}
+
+export interface TechStackWtihImg extends TechStack {
+  techStackImgUrl: string;
 }
 
 export interface TechStackTagProps
-  extends TechStack,
+  extends TechStackWtihImg,
     ReturnType<AutocompleteGetTagProps> {}
 
 export interface HomeBannerCardData {

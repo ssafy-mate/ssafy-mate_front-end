@@ -93,7 +93,7 @@ const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
 
   const handleOk = () => {
     selectProjectTrack({
-      projectId: 1,
+      projectId: 2,
       projectTrack: selectedProjectTrack,
     });
     console.log(`selectedProjectTrack: ${selectedProjectTrack}`);

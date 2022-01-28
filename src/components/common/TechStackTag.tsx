@@ -8,16 +8,16 @@ import { TechStackTagProps } from '../../types/commonTypes';
 
 const TechStackTag: React.FC<TechStackTagProps> = ({
   id,
-  name,
-  imgUrl,
+  techStackName,
+  techStackImgUrl,
   onDelete,
   ...other
 }) => {
   return (
     <TagItem {...other}>
       <Group>
-        <Img src={imgUrl} alt={name} />
-        <Name>{name}</Name>
+        <Img src={techStackImgUrl} alt={techStackName} />
+        <Name>{techStackName}</Name>
       </Group>
       <Group>
         <DeleteButton onClick={onDelete}>

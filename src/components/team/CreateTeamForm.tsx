@@ -11,7 +11,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 
 import { campusListData, projectListData } from '../../data/ssafyData';
 
-import { TechStack } from '../../types/commonTypes';
+import { TechStackWtihImg } from '../../types/commonTypes';
 
 import TechStackTag from '../common/TechStackTag';
 import useTechStackList from '../../hooks/useTechStackList';
@@ -35,7 +35,7 @@ const CreateTeamForm: React.FC = () => {
     id: 'search-tech-stack',
     multiple: true,
     options: techStackList,
-    getOptionLabel: (option) => option.name,
+    getOptionLabel: (option) => option.techStackName,
   });
 
   const handleChangeTeamImg = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -195,8 +195,11 @@ const CreateTeamForm: React.FC = () => {
               {(groupedOptions as typeof techStackList).map((option, index) => (
                 <SearchItem {...getOptionProps({ option, index })}>
                   <TechStackInfo>
-                    <TechStackImg src={option.imgUrl} alt={option.name} />
-                    {option.name}
+                    <TechStackImg
+                      src={option.techStackImgUrl}
+                      alt={option.techStackName}
+                    />
+                    {option.techStackName}
                   </TechStackInfo>
                   <CheckIcon fontSize="small" />
                 </SearchItem>
@@ -205,11 +208,11 @@ const CreateTeamForm: React.FC = () => {
           ) : null}
         </InputWrapper>
         <TechStackList>
-          {value.map((option: TechStack, index: number) => (
+          {value.map((option: TechStackWtihImg, index: number) => (
             <TechStackTag
               id={option.id}
-              name={option.name}
-              imgUrl={option.imgUrl}
+              techStackName={option.techStackName}
+              techStackImgUrl={option.techStackImgUrl}
               {...getTagProps({ index })}
             />
           ))}

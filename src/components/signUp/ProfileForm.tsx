@@ -14,7 +14,7 @@ import Alert from '@mui/material/Alert';
 
 import { jobListData } from '../../data/jobListData';
 
-import { TechStack } from '../../types/commonTypes';
+import { TechStackWtihImg } from '../../types/commonTypes';
 
 import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
 
@@ -91,7 +91,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
     id: 'search-tech-stack',
     multiple: true,
     options: techStackList,
-    getOptionLabel: (option) => option.name,
+    getOptionLabel: (option) => option.techStackName,
   });
 
   const handleChangeProfileImg = (
@@ -440,8 +440,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
                     <SearchItemInfoWrapper onClick={deleteStack} key={index}>
                       <SearchItem {...getOptionProps({ option, index })}>
                         <TechStackInfo ref={deleteStackInputRef}>
-                          <TechStackImg src={option.imgUrl} alt={option.name} />
-                          {option.name}
+                          <TechStackImg
+                            src={option.techStackImgUrl}
+                            alt={option.techStackName}
+                          />
+                          {option.techStackName}
                         </TechStackInfo>
 
                         <CheckIcon fontSize="small" />
@@ -458,11 +461,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
             )}
           </InputWrapper>
           <TechStackList>
-            {value.map((option: TechStack, index: number) => (
+            {value.map((option: TechStackWtihImg, index: number) => (
               <TechStackTagWithLevel
                 id={option.id}
-                name={option.name}
-                imgUrl={option.imgUrl}
+                techStackName={option.techStackName}
+                techStackImgUrl={option.techStackImgUrl}
                 techStacks={techStacks}
                 updateTechStacks={updateTechStacks}
                 techStacksError={techStacksError}

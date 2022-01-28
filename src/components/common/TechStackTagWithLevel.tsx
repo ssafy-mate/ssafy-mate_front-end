@@ -10,20 +10,21 @@ import CloseIcon from '@mui/icons-material/Close';
 import { TechStackTagProps } from '../../types/commonTypes';
 import { TechStacksWithLevel } from '../../types/UserInfomationType';
 
-interface Props extends TechStackTagProps {
+interface TechStackTagWithLevelProps extends TechStackTagProps {
   techStacks: Array<TechStacksWithLevel>;
   updateTechStacks: (techStacks: Array<TechStacksWithLevel>) => void;
   techStacksError: boolean;
   updateTechStacksError: (techStacksError: boolean) => void;
 }
-const TechStackTagWithLevel: React.FC<Props> = ({
+
+const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
   techStacks,
   updateTechStacks,
   techStacksError,
   updateTechStacksError,
   id,
-  name,
-  imgUrl,
+  techStackName,
+  techStackImgUrl,
   onDelete,
   ...other
 }) => {
@@ -39,24 +40,21 @@ const TechStackTagWithLevel: React.FC<Props> = ({
       case '중':
         setLevel('middle');
         break;
-
       case '하':
         setLevel('low');
         break;
     }
 
-    const findStack = techStacks.find((stack) => {
-      return stack.techStackName === name;
+    const findTechStack = techStacks.find((stack) => {
+      return stack.techStackName === techStackName;
     });
 
-    if (findStack === undefined) {
-      techStacks.push({
-        techStackName: name,
-        techStackLevel: level,
-      });
-    } else {
-      findStack.techStackLevel = level;
-    }
+    findTechStack === undefined
+      ? techStacks.push({
+          techStackName,
+          techStackLevel: level,
+        })
+      : (findTechStack.techStackLevel = level);
   };
 
   useEffect(() => {
@@ -71,21 +69,23 @@ const TechStackTagWithLevel: React.FC<Props> = ({
     }
   });
 
-  const deleteStack = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const deleteSelectedTechStack = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ) => {
     onDelete(event);
 
-    const findStackIndex = techStacks.findIndex((stack) => {
-      return stack.techStackName === name;
-    });
+    const findTechStackIndex = techStacks.findIndex(
+      (stack) => stack.techStackName === techStackName,
+    );
 
-    techStacks.splice(findStackIndex, 1);
+    techStacks.splice(findTechStackIndex, 1);
   };
 
   return (
     <TagItem {...other}>
       <Group>
-        <Img src={imgUrl} alt={name} />
-        <Name>{name}</Name>
+        <Img src={techStackImgUrl} alt={techStackName} />
+        <Name>{techStackName}</Name>
       </Group>
       <Group className="a">
         <Box
@@ -130,7 +130,7 @@ const TechStackTagWithLevel: React.FC<Props> = ({
             </LevelButton>
           </MuiButtonGroup>
         </Box>
-        <DeleteButton onClick={deleteStack}>
+        <DeleteButton onClick={deleteSelectedTechStack}>
           <CloseIcon />
         </DeleteButton>
       </Group>
