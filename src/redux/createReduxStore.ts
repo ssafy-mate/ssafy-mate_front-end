@@ -8,12 +8,22 @@ import reducer from './modules/reducer';
 import rootSaga from './modules/rootSaga';
 
 import history from '../history';
+import TokenService from '../services/TokenService';
 
 const createReduxStore = () => {
+  const token = TokenService.get();
+
   const sagaMiddleWare = createSagaMiddleware();
+
   const store = createStore(
     reducer(history),
-    {},
+    {
+      auth: {
+        token,
+        loading: false,
+        error: null,
+      },
+    },
     composeWithDevTools(
       applyMiddleware(sagaMiddleWare, routerMiddleware(history)),
     ),

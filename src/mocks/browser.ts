@@ -5,6 +5,7 @@ import { userHandlers } from './handlers/userHandlers';
 import { teamHandlers } from './handlers/teamHandlers';
 import { chattingHandlers } from './handlers/chattingHandlers';
 import { techStackHandlers } from './handlers/techStackHandlers';
+import { signInHandlers } from './handlers/signInHandlers';
 
 export const worker = setupWorker(
   ...authHandlers,
@@ -12,4 +13,5 @@ export const worker = setupWorker(
   ...teamHandlers,
   ...chattingHandlers,
   ...techStackHandlers,
+  ...signInHandlers,
 );

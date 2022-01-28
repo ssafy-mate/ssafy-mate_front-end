@@ -1,4 +1,4 @@
-import React from 'react';
+import { useRef } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -6,15 +6,35 @@ import { Link } from 'react-router-dom';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-const SignInCard: React.FC = () => {
+import { LogInRequestType } from '../../types/signInTypes';
+
+interface SigninProps {
+  login: (requestData: LogInRequestType) => void;
+}
+
+const SignInCard: React.FC<SigninProps> = ({ login }) => {
+  const emailRef = useRef<HTMLInputElement | null>(null);
+
+  const passwordRef = useRef<HTMLInputElement | null>(null);
+
+  const loginButtonClick = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    event.preventDefault();
+    const userEmail = emailRef.current!.value;
+    const password = passwordRef.current!.value;
+
+    login({ userEmail, password });
+  };
+
   return (
     <Container>
       <CardHead>로그인</CardHead>
       <SignInForm>
         <SignInLabel>이메일</SignInLabel>
-        <SignInInput placeholder="이메일" />
+        <SignInInput placeholder="이메일" ref={emailRef} />
         <SignInLabel>비밀번호</SignInLabel>
-        <SignInInput placeholder="비밀번호" />
+        <SignInInput type="password" placeholder="비밀번호" ref={passwordRef} />
         <Options>
           <IdSaveCheckBox>
             <IdSaveCheckInput type="checkbox" id="idSave" name="idSave" />
@@ -29,7 +49,7 @@ const SignInCard: React.FC = () => {
             </Link>
           </AccountManagementMenu>
         </Options>
-        <SignInButton>로그인</SignInButton>
+        <SignInButton onClick={loginButtonClick}>로그인</SignInButton>
         <SignUpLinkBox>
           아직 계정이 없으신가요?
           <Link to="/users/sign_up" className="sign-up-link">

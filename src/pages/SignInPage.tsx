@@ -3,19 +3,29 @@ import React, { useEffect } from 'react';
 import styled from '@emotion/styled';
 
 import Header from '../components/common/Header';
-import SignInCard from '../components/signIn/SignInCard';
 import Footer from '../components/common/Footer';
+import SignInContainer from '../containers/SignInContainer';
+import { useSelector } from 'react-redux';
+import { RootState } from '../types/signInTypes';
+import { Redirect } from 'react-router-dom';
 
 const SignInPage: React.FC = () => {
+  const token = useSelector<RootState, string | null>(
+    (state) => state.auth.token,
+  );
+
   useEffect(() => {
     document.title = '로그인 | 싸피 메이트';
   }, []);
 
+  if (token !== null) {
+    return <Redirect to="/" />;
+  }
   return (
     <>
       <Header />
       <Container>
-        <SignInCard />
+        <SignInContainer />
       </Container>
       <Footer />
     </>

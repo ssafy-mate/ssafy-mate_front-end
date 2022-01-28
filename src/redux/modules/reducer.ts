@@ -4,10 +4,12 @@ import { combineReducers } from 'redux';
 
 import { History } from 'history';
 
+import auth from './auth';
 import user from './user';
 
 const reducer = (history: History<unknown>) =>
   combineReducers({
+    auth,
     user,
     router: connectRouter(history),
   });
