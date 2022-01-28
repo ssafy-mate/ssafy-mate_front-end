@@ -26,6 +26,7 @@ import {
 import AuthService from '../../services/AuthService';
 
 import { validUrl } from '../../utils/regularExpressionData';
+import { useHistory } from 'react-router-dom';
 
 import useTechStackList from '../../hooks/useTechStackList';
 
@@ -246,6 +247,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
     setStatusAlertText(message);
     setStatusAlertOpen(true);
   };
+  const history = useHistory();
 
   const signUpClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -258,6 +260,8 @@ const ProfileForm: React.FC<ProfileProps> = ({
       AuthService.signUp(data)
         .then(({ status, message }) => {
           showAlert('success', message);
+          //시뮬레이션
+          history.push('/users/sign_in');
         })
         .catch((error) => {
           if (error.response) {
