@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { Link } from 'react-router-dom';
 
 /** @jsxImportSource @emotion/react */
@@ -6,22 +8,101 @@ import styled from '@emotion/styled';
 
 import { ProjectLinkCardProps } from '../../types/commonTypes';
 
+import ProjectTrackDialog from './ProjectTrackDialog';
+
+import type { ProjectTrack } from '../../types/commonTypes';
+
 const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
   projectName,
   pageUrl,
   imgUrl,
   hexColorCode,
+  trackOptions,
 }) => {
+  const [open, setOpen] = useState(false);
+  const [selectedProjectTrack, setSelectedProjectTrack] =
+    useState<ProjectTrack>('');
+
+  const handleClickListItem = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (newSelectedProjectTrack?: ProjectTrack) => {
+    setOpen(false);
+
+    if (newSelectedProjectTrack) {
+      setSelectedProjectTrack(newSelectedProjectTrack);
+    }
+  };
+
   return (
-    <LinkCard to={pageUrl} css={{ backgroundColor: hexColorCode }}>
-      <LinkCardImg src={imgUrl} alt={`${projectName} 이미지`} />
-      <LinkCardTitle>
-        {projectName}
-        <br />팀 빌딩 바로가기
-      </LinkCardTitle>
-    </LinkCard>
+    <>
+      {trackOptions ? (
+        <>
+          <Card
+            onClick={handleClickListItem}
+            css={{ backgroundColor: hexColorCode }}
+          >
+            <LinkCardImg src={imgUrl} alt={`${projectName} 이미지`} />
+            <LinkCardTitle>
+              {projectName}
+              <br />팀 빌딩 바로가기
+            </LinkCardTitle>
+          </Card>
+          <ProjectTrackDialog
+            id="ringtone-menu"
+            keepMounted
+            open={open}
+            projectName={projectName}
+            selectedProjectTrack={selectedProjectTrack}
+            pageUrl={pageUrl}
+            hexColorCode={hexColorCode}
+            trackOptions={trackOptions}
+            onClose={handleClose}
+          />
+        </>
+      ) : (
+        <>
+          <LinkCard to={pageUrl} css={{ backgroundColor: hexColorCode }}>
+            <LinkCardImg src={imgUrl} alt={`${projectName} 이미지`} />
+            <LinkCardTitle>
+              {projectName}
+              <br />팀 빌딩 바로가기
+            </LinkCardTitle>
+          </LinkCard>
+        </>
+      )}
+    </>
   );
 };
+
+const Card = styled.div`
+  width: 320px;
+  padding: 24px 16px;
+  border: none;
+  border-radius: 6px;
+  box-sizing: border-box;
+  box-shadow: 4px 12px 30px 6px rgb(0 0 0 / 10%);
+  color: #fff;
+  transition: box-shadow 0.26s ease, transform 0.26s ease;
+  cursor: pointer;
+
+  &:hover {
+    box-shadow: 4px 12px 30px 6px rgb(0 0 0 / 26%);
+    transform: translateY(-8px);
+  }
+
+  @media (max-width: 1199px) {
+    width: 300px;
+  }
+  @media (max-width: 991px) {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: space-around;
+    width: 100%;
+    margin-bottom: 18px;
+  }
+`;
 
 const LinkCard = styled(Link)`
   width: 320px;

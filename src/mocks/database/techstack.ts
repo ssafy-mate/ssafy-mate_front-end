@@ -1,4 +1,4 @@
-import { TechStack } from '../types/commonTypes';
+import { TechStack } from '../../types/commonTypes';
 
 export const techStackListData: TechStack[] = [
   {
