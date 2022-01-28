@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -65,7 +65,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
 
   const signUpFormData = new FormData();
 
-  const updateTeckStacks = (techStacks: Array<TechStacksWithLevel>): void => {
+  const updateTechStacks = (techStacks: Array<TechStacksWithLevel>): void => {
     setTechStacks(techStacks);
   };
 
@@ -110,8 +110,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
 
     reader.readAsDataURL(theImgFile);
     setProfileImg(theImgFile);
-
-    signUpFormData.append('profileImg', theImgFile);
   };
 
   const handleClearProfileImg = () => {
@@ -221,6 +219,9 @@ const ProfileForm: React.FC<ProfileProps> = ({
   };
 
   const getSignUpInfomation = () => {
+    if (profileImg !== null) {
+      signUpFormData.append('profileImg', profileImg);
+    }
     signUpFormData.append('campus', campus);
     signUpFormData.append('ssafyTrack', ssafyTrack);
     signUpFormData.append('studentNumber', studentNumber);
@@ -254,25 +255,41 @@ const ProfileForm: React.FC<ProfileProps> = ({
     if (validation()) {
       AuthService.signUp(data)
         .then(({ status, message }) => {
-          switch (status) {
-            case 400:
-              showAlert('warning', message);
-              break;
-            case 500:
-              showAlert('error', message);
-              break;
-            default:
-              showAlert('success', message);
-          }
+          showAlert('success', message);
         })
-        .catch((errors) => {
-          //에러처리
+        .catch((error) => {
+          if (error.response) {
+            const data = error.response.data;
+            switch (data.status) {
+              case 400:
+                showAlert('warning', data.message);
+                break;
+              case 500:
+                showAlert('error', data.message);
+                break;
+            }
+          }
         });
     }
   };
 
   const alertClose = () => {
     setStatusAlertOpen(false);
+  };
+  const deleteStackInputRef = useRef<HTMLDivElement>(null);
+  const deleteStack = (event: React.MouseEvent<HTMLDivElement>) => {
+    // console.log(deleteStackInputRef.current?.children[0].getAttribute('alt'));
+    // const seletedStack = event.currentTarget
+    //   .querySelector('img')
+    //   ?.getAttribute('alt');
+    // if (seletedStack !== null && seletedStack !== undefined) {
+    //   if (JSON.stringify(techStacks).includes(seletedStack)) {
+    //     const findStackIndex = techStacks.findIndex((stack) => {
+    //       return stack.techStackName === seletedStack;
+    //     });
+    //     techStacks.splice(findStackIndex, 1);
+    //   }
+    // }
   };
 
   return (
@@ -409,17 +426,21 @@ const ProfileForm: React.FC<ProfileProps> = ({
                 {...getInputProps()}
               />
             </InfoInputWrapper>
+
             {groupedOptions.length > 0 ? (
               <SearchList {...getListboxProps()}>
                 {(groupedOptions as typeof techStackListData).map(
                   (option, index) => (
-                    <SearchItem {...getOptionProps({ option, index })}>
-                      <TechStackInfo>
-                        <TechStackImg src={option.imgUrl} alt={option.name} />
-                        {option.name}
-                      </TechStackInfo>
-                      <CheckIcon fontSize="small" />
-                    </SearchItem>
+                    <SearchItemInfoWrapper onClick={deleteStack} key={index}>
+                      <SearchItem {...getOptionProps({ option, index })}>
+                        <TechStackInfo ref={deleteStackInputRef}>
+                          <TechStackImg src={option.imgUrl} alt={option.name} />
+                          {option.name}
+                        </TechStackInfo>
+
+                        <CheckIcon fontSize="small" />
+                      </SearchItem>
+                    </SearchItemInfoWrapper>
                   ),
                 )}
               </SearchList>
@@ -437,11 +458,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
                 name={option.name}
                 imgUrl={option.imgUrl}
                 techStacks={techStacks}
-                updateTechStacks={updateTeckStacks}
+                updateTechStacks={updateTechStacks}
                 techStacksError={techStacksError}
                 updateTechStacksError={updateTechStacksError}
                 {...getTagProps({ index })}
-              />
+              ></TechStackTagWithLevel>
             ))}
           </TechStackList>
         </Row>
@@ -558,6 +579,10 @@ const InputWrapper = styled.div`
 `;
 
 const CheckBoxWrapper = styled.div`
+  display: flex;
+  width: 100%;
+`;
+const SearchItemInfoWrapper = styled.div`
   display: flex;
   width: 100%;
 `;

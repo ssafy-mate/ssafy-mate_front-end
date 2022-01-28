@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -13,6 +13,8 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 import MenuBar from './MenuBar';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../types/signInTypes';
 
 interface MenuListProps {
   isExpanded: boolean;
@@ -32,6 +34,16 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
   const isMobile = useMediaQuery({
     query: '(max-width: 991px)',
   });
+
+  const token = useSelector<RootState, string | null>(
+    (state) => state.auth.token,
+  );
+
+  useEffect(() => {
+    if (token !== null) {
+      setIsLoggedIn(true);
+    }
+  }, [token]);
 
   const handleExpandMenu = () => {
     setIsExpanded(!isExpanded);
