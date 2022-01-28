@@ -99,6 +99,10 @@ const AuthForm: React.FC<Props> = ({
   };
 
   const AuthRequest = (data: SsafyAuth) => {
+    // data.campus = encodeURI(encodeURIComponent(data.campus));
+    // data.userName = encodeURI(encodeURIComponent(data.userName));
+    // console.log(decodeURI(decodeURIComponent(data.campus)));
+    // console.log(decodeURI(decodeURIComponent(data.userName)));
     AuthService.getSsafyAuth(data)
       .then((response) => {
         if (response.success) {
@@ -108,6 +112,7 @@ const AuthForm: React.FC<Props> = ({
       .catch((error) => {
         if (error.response) {
           const data = error.response.data;
+          console.log(data);
           if (data.status === 401 || data.status === 409) {
             showAlert('warning', data.message);
           } else if (data.status === 500) {
