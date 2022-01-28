@@ -1,4 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+
+import { useDispatch, useSelector } from 'react-redux';
 
 import styled from '@emotion/styled';
 
@@ -12,6 +14,9 @@ import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
 import type { ProjectTrack } from '../../types/commonTypes';
+import { RootState } from '../../types/commonTypes';
+
+import { selectProjectTrack as selectProjectTrackSagaStart } from '../../redux/modules/user';
 
 interface ConfirmationDialogRawProps {
   id: string;
@@ -37,6 +42,11 @@ interface OptionLabelProps {
   hexColorCode: string;
 }
 
+interface ProjectTrackRequestType {
+  projectId: number;
+  projectTrack: string;
+}
+
 const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
   open,
   projectName,
@@ -51,6 +61,19 @@ const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
     selectedProjectTrackProp,
   );
   const radioGroupRef = useRef<HTMLElement>(null);
+
+  // const loading = useSelector<RootState, boolean>(
+  //   (state) => state.user.loading,
+  // );
+
+  const dispatch = useDispatch();
+
+  const selectProjectTrack = useCallback(
+    (project: ProjectTrackRequestType) => {
+      dispatch(selectProjectTrackSagaStart(project));
+    },
+    [dispatch],
+  );
 
   useEffect(() => {
     if (!open) {
@@ -69,6 +92,11 @@ const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
   };
 
   const handleOk = () => {
+    selectProjectTrack({
+      projectId: 1,
+      projectTrack: selectedProjectTrack,
+    });
+    console.log(`selectedProjectTrack: ${selectedProjectTrack}`);
     onClose(selectedProjectTrack);
   };
 

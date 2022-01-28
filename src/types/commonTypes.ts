@@ -1,4 +1,9 @@
+import { RouterState } from 'connected-react-router';
+import { AnyAction, Reducer } from 'redux';
+
 import { AutocompleteGetTagProps } from '@mui/material';
+
+export type ProjectTrack = string;
 
 export interface TechStack {
   id: number;
@@ -49,4 +54,20 @@ export interface ProjectLinkCardData {
 
 export interface ProjectLinkCardProps extends ProjectLinkCardData {}
 
-export type ProjectTrack = string;
+interface ProjectType {
+  projectId: number;
+  projectName: string;
+  projectTrack?: string | null;
+  team: string | null;
+}
+
+interface UserState {
+  projects: ProjectType[] | null;
+  loading: boolean;
+  error: Error | null;
+}
+
+export interface RootState {
+  user: UserState;
+  router: Reducer<RouterState<unknown>, AnyAction>;
+}
