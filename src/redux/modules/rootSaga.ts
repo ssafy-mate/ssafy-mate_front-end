@@ -5,5 +5,6 @@ import { userSaga } from './user';
 
 function* rootSaga() {
   yield all([authSaga(), userSaga()]);
+}
 
 export default rootSaga;
