@@ -6,10 +6,10 @@ import { Link } from 'react-router-dom';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-import { LogInRequestType } from '../../types/signInTypes';
+import { SignInRequestType } from '../../types/signInTypes';
 
 interface SigninProps {
-  login: (requestData: LogInRequestType) => void;
+  login: (requestData: SignInRequestType) => void;
 }
 
 const SignInCard: React.FC<SigninProps> = ({ login }) => {

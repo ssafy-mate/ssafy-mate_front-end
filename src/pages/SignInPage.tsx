@@ -11,7 +11,7 @@ import { Redirect } from 'react-router-dom';
 
 const SignInPage: React.FC = () => {
   const token = useSelector<RootState, string | null>(
-    (state) => state.auth.token,
+    (state) => state?.auth.token,
   );
 
   useEffect(() => {

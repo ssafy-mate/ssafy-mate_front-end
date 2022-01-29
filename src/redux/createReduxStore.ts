@@ -19,7 +19,14 @@ const createReduxStore = () => {
     reducer(history),
     {
       auth: {
-        token,
+        userId: null,
+        userName: null,
+        userEmail: null,
+        studentNumber: null,
+        campus: null,
+        ssafyTrack: null,
+        token: token,
+        projects: null,
         loading: false,
         error: null,
       },

@@ -38,7 +38,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
 
   const dispatch = useDispatch();
   const token = useSelector<RootState, string | null>(
-    (state) => state.auth.token,
+    (state) => state?.auth.token,
   );
 
   useEffect(() => {
@@ -116,7 +116,9 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
               </MenuItem>
               <MenuItem css={line} />
               <MenuItem>
-                <button onClick={logoutClick}>로그아웃</button>
+                <PageLink to="#" onClick={logoutClick}>
+                  로그아웃
+                </PageLink>
               </MenuItem>
             </>
           )}

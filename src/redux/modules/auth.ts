@@ -5,15 +5,22 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 
 import {
   AuthState,
-  LogInRequestType,
-  LoginResponseSuccess,
+  SignInRequestType,
+  SignInUser,
 } from '../../types/signInTypes';
 
 import SignInService from '../../services/SignInService';
 import TokenService from '../../services/TokenService';
 
 const initialState: AuthState = {
+  userId: null,
+  userName: null,
+  userEmail: null,
+  studentNumber: null,
+  campus: null,
+  ssafyTrack: null,
   token: null,
+  projects: null,
   loading: false,
   error: null,
 };
@@ -27,11 +34,18 @@ export const { pending, success, fail } = createActions(
   { prefix },
 );
 
-const reducer = handleActions<AuthState, string>(
+const reducer = handleActions<AuthState, SignInUser>(
   {
     PENDING: (state) => ({ ...state, loading: true, error: null }),
     SUCCESS: (state, action) => ({
-      token: action.payload,
+      userId: action.payload.userId,
+      userName: action.payload.userName,
+      userEmail: action.payload.userEmail,
+      studentNumber: action.payload.studentNumber,
+      campus: action.payload.campus,
+      ssafyTrack: action.payload.ssafyTrack,
+      token: action.payload.token,
+      projects: action.payload.projects,
       loading: false,
       error: null,
     }),
@@ -50,18 +64,18 @@ export default reducer;
 // saga
 export const { login, logout } = createActions('LOGIN', 'LOGOUT', { prefix });
 
-function* loninSaga(action: Action<LogInRequestType>) {
+function* loninSaga(action: Action<SignInRequestType>) {
   try {
     yield put(pending());
 
-    const data: LoginResponseSuccess = yield call(
-      SignInService.login,
-      action.payload,
-    );
+    const data: SignInUser = yield call(SignInService.login, action.payload);
 
     //localstorage 에 저장 + store에 저장(userId,userEmail,userName,campus,ssafyTrack)
-    TokenService.set(data.token);
-    yield put(success(data.token));
+    if (data.token !== null) {
+      TokenService.set(data.token);
+      yield put(success(data));
+      console.log(JSON.stringify(data));
+    }
 
     //로그인 성공 시 메인 페이지로 이동
     yield put(push('/'));
@@ -74,13 +88,15 @@ function* loninSaga(action: Action<LogInRequestType>) {
 function* logoutSaga() {
   try {
     yield put(pending());
-    const token: string = yield select((state) => state.auth.token);
-    yield call(SignInService.logout, token);
-    TokenService.set(token);
-  } catch (error: any) {
-  } finally {
+    // const token: string = yield select((state) => state.auth.token);
+    // yield call(SignInService.logout, token);
+    // TokenService.set(token);
     TokenService.remove();
     yield put(success(null));
+  } catch (error: any) {
+  } finally {
+    // TokenService.remove();
+    // yield put(success(null));
   }
 }
 
