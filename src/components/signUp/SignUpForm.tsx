@@ -20,7 +20,7 @@ import {
   EmailVerificationCodeRequest,
   SignUpProps,
   SignUp,
-} from '../../types/UserInfomationType';
+} from '../../types/userInfomationTypes';
 
 import AuthService from '../../services/AuthService';
 

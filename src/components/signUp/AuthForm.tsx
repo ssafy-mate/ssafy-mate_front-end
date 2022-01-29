@@ -16,7 +16,7 @@ import {
 
 import { campusListData } from '../../data/ssafyData';
 
-import { SsafyAuth } from '../../types/UserInfomationType';
+import { SsafyAuth } from '../../types/userInfomationTypes';
 
 interface SsafyTrack {
   id: number;

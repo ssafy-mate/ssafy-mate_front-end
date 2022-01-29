@@ -5,7 +5,7 @@ import {
   SignUpResponse,
   EmailVerificationCodeRequest,
   EmailVerificationCodeConfirmRequest,
-} from '../types/UserInfomationType';
+} from '../types/userInfomationTypes';
 
 class AuthService {
   public static async getSsafyAuth(data: SsafyAuth): Promise<SignUpResponse> {

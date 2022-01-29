@@ -22,7 +22,7 @@ import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
 import {
   ProfileProps,
   TechStacksWithLevel,
-} from '../../types/UserInfomationType';
+} from '../../types/userInfomationTypes';
 
 import AuthService from '../../services/AuthService';
 

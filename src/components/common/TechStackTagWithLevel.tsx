@@ -8,7 +8,7 @@ import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 
 import { TechStackTagProps } from '../../types/commonTypes';
-import { TechStacksWithLevel } from '../../types/UserInfomationType';
+import { TechStacksWithLevel } from '../../types/userInfomationTypes';
 
 interface Props extends TechStackTagProps {
   techStacks: Array<TechStacksWithLevel>;

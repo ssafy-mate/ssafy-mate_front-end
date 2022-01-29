@@ -6,7 +6,7 @@ import {
   EmailVerificationCodeConfirmRequest,
   EmailVerificationCodeRequest,
   SignUpProfile,
-} from '../../types/UserInfomationType';
+} from '../../types/userInfomationTypes';
 
 export const authHandlers = [
   // 회원 가입 1단계 교육생 인증
