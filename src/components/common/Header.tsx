@@ -13,8 +13,9 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 import MenuBar from './MenuBar';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../types/signInTypes';
+import { logout } from '../../redux/modules/auth';
 
 interface MenuListProps {
   isExpanded: boolean;
@@ -35,6 +36,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
     query: '(max-width: 991px)',
   });
 
+  const dispatch = useDispatch();
   const token = useSelector<RootState, string | null>(
     (state) => state.auth.token,
   );
@@ -44,6 +46,10 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
       setIsLoggedIn(true);
     }
   }, [token]);
+
+  const logoutClick = () => {
+    dispatch(logout());
+  };
 
   const handleExpandMenu = () => {
     setIsExpanded(!isExpanded);
@@ -110,7 +116,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
               </MenuItem>
               <MenuItem css={line} />
               <MenuItem>
-                <PageLink to="#">로그아웃</PageLink>
+                <button onClick={logoutClick}>로그아웃</button>
               </MenuItem>
             </>
           )}

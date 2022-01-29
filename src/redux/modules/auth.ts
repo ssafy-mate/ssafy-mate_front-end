@@ -1,7 +1,7 @@
 import { push } from 'connected-react-router';
 
 import { Action, createActions, handleActions } from 'redux-actions';
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { call, put, select, takeEvery } from 'redux-saga/effects';
 
 import {
   AuthState,
@@ -71,9 +71,21 @@ function* loninSaga(action: Action<LogInRequestType>) {
   }
 }
 
-function* lonoutSaga() {}
+function* logoutSaga() {
+  try {
+    yield put(pending());
+    const token: string = yield select((state) => state.auth.token);
+    yield call(SignInService.logout, token);
+    TokenService.set(token);
+  } catch (error: any) {
+  } finally {
+    TokenService.remove();
+    yield put(success(null));
+  }
+}
+
 export function* authSaga() {
   yield takeEvery(`${prefix}/LOGIN`, loninSaga);
 
-  yield takeEvery(`${prefix}/LOGOUT`, lonoutSaga);
+  yield takeEvery(`${prefix}/LOGOUT`, logoutSaga);
 }

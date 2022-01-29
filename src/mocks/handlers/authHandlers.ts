@@ -60,12 +60,12 @@ export const authHandlers = [
     },
   ),
   // 회원가입 2단계-1 이메일 인증 코드 전송
-  rest.post(
+  rest.get(
     'http://localhost:3000/api/user/sign-up/verification/email',
-    async (request: any, response, context) => {
-      let data: EmailVerificationCodeRequest = { userEmail: '' };
-      data = request.body;
-      if (data.userEmail === 'already@gmail.com') {
+    async (request, response, context) => {
+      let userEmail = request.url.searchParams.get('userEmail');
+
+      if (userEmail === 'already@gmail.com') {
         return response(
           context.status(409),
           context.json({
@@ -76,7 +76,7 @@ export const authHandlers = [
         );
       }
 
-      if (data.userEmail === 'servererror@gmail.com') {
+      if (userEmail === 'servererror@gmail.com') {
         return response(
           context.status(500),
           context.json({
