@@ -189,6 +189,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
         }
       })
       .catch((error) => {
+        console.log(error.response);
         if (error.response) {
           const data = error.response.data;
           if (data.status === 409) {
@@ -221,7 +222,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
       .catch((error) => {
         if (error.response) {
           const data = error.response.data;
-          if (data.status === 400) {
+          if (data.status === 401) {
             //올바른 인증 코드가 아닌 경우 error 창
             showAndSetError(true, data.message);
 

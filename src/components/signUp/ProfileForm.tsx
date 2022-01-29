@@ -252,7 +252,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
   ) => {
     event.preventDefault();
 
-    const data = getSignUpInfomation();
+    const data: FormData = getSignUpInfomation();
 
     if (validation()) {
       AuthService.signUp(data)
