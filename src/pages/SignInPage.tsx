@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+
+import { Redirect } from 'react-router-dom';
+
+import { useSelector } from 'react-redux';
 
 import styled from '@emotion/styled';
 
-import Header from '../components/common/Header';
-import Footer from '../components/common/Footer';
-import SignInContainer from '../containers/SignInContainer';
-import { useSelector } from 'react-redux';
 import { RootState } from '../types/signInTypes';
-import { Redirect } from 'react-router-dom';
+
+import Header from '../components/common/Header';
+import SignInContainer from '../containers/SignInContainer';
+import Footer from '../components/common/Footer';
 
 const SignInPage: React.FC = () => {
   const token = useSelector<RootState, string | null>(

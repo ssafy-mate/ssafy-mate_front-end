@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
+
+import { useHistory } from 'react-router-dom';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -16,18 +18,16 @@ import { jobListData } from '../../data/jobListData';
 import { techStackListData } from '../../data/techStackListData';
 
 import { TechStack } from '../../types/commonTypes';
-
-import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
-
 import {
   ProfileProps,
   TechStacksWithLevel,
 } from '../../types/userInfomationTypes';
 
+import { validUrl } from '../../utils/regularExpressionData';
+
 import AuthService from '../../services/AuthService';
 
-import { validUrl } from '../../utils/regularExpressionData';
-import { useHistory } from 'react-router-dom';
+import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
 
 type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
 
@@ -41,6 +41,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
   signUpPassword,
   updateSignUpStep,
 }) => {
+  const history = useHistory();
   const [showError, setShowError] = useState<number>(0);
   const [techStacks, setTechStacks] = useState<TechStacksWithLevel[]>([]);
   const [techStacksError, setTechStacksError] = useState<boolean>(false);
@@ -63,6 +64,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const [statusAlertText, setStatusAlertText] = useState<string>('');
   const [statusAlertSeverity, setStatusAlertSeverity] =
     useState<Severity>('success');
+  const deleteStackInputRef = useRef<HTMLDivElement>(null);
 
   const signUpFormData = new FormData();
 
@@ -245,7 +247,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
     setStatusAlertText(message);
     setStatusAlertOpen(true);
   };
-  const history = useHistory();
 
   const signUpClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -258,18 +259,19 @@ const ProfileForm: React.FC<ProfileProps> = ({
       AuthService.signUp(data)
         .then(({ status, message }) => {
           showAlert('success', message);
-          //시뮬레이션
+          // 시뮬레이션
           history.push('/users/sign_in');
         })
         .catch((error) => {
           if (error.response) {
-            const data = error.response.data;
-            switch (data.status) {
+            const { status, message } = error.response.data;
+
+            switch (status) {
               case 400:
-                showAlert('warning', data.message);
+                showAlert('warning', message);
                 break;
               case 500:
-                showAlert('error', data.message);
+                showAlert('error', message);
                 break;
             }
           }
@@ -280,8 +282,8 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const alertClose = () => {
     setStatusAlertOpen(false);
   };
-  const deleteStackInputRef = useRef<HTMLDivElement>(null);
-  const deleteStack = (event: React.MouseEvent<HTMLDivElement>) => {
+
+  const deleteTechStack = (event: React.MouseEvent<HTMLDivElement>) => {
     // console.log(deleteStackInputRef.current?.children[0].getAttribute('alt'));
     // const seletedStack = event.currentTarget
     //   .querySelector('img')
@@ -417,7 +419,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
             >
               기술 스택 <Em>(필수 2가지 이상 기입)</Em>
             </RequirementLabel>
-
             <InfoInputWrapper
               ref={setAnchorEl}
               className={focused ? 'focused' : ''}
@@ -430,18 +431,19 @@ const ProfileForm: React.FC<ProfileProps> = ({
                 {...getInputProps()}
               />
             </InfoInputWrapper>
-
             {groupedOptions.length > 0 ? (
               <SearchList {...getListboxProps()}>
                 {(groupedOptions as typeof techStackListData).map(
                   (option, index) => (
-                    <SearchItemInfoWrapper onClick={deleteStack} key={index}>
+                    <SearchItemInfoWrapper
+                      onClick={deleteTechStack}
+                      key={index}
+                    >
                       <SearchItem {...getOptionProps({ option, index })}>
                         <TechStackInfo ref={deleteStackInputRef}>
                           <TechStackImg src={option.imgUrl} alt={option.name} />
                           {option.name}
                         </TechStackInfo>
-
                         <CheckIcon fontSize="small" />
                       </SearchItem>
                     </SearchItemInfoWrapper>
@@ -586,24 +588,12 @@ const CheckBoxWrapper = styled.div`
   display: flex;
   width: 100%;
 `;
+
 const SearchItemInfoWrapper = styled.div`
   display: flex;
   width: 100%;
 `;
-const IconButton = styled.button`
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 10;
-  border: none;
-  background-color: transparent;
-  color: #f44336;
-  transition: all 0.12s ease-in-out;
-  cursor: pointer;
-  &:hover {
-    transform: scale(1.15);
-  }
-`;
+
 const Label = styled.label`
   margin-bottom: 4px;
   font-size: 14px;
@@ -836,9 +826,9 @@ const SignUpButton = styled.button`
 const TechStackList = styled.ul``;
 
 const TechStackImg = styled.img`
-  margin-right: 6px;
   width: 24px;
   height: 24px;
+  margin-right: 6px;
   border-radius: 2px;
   object-fit: cover;
 
@@ -864,6 +854,28 @@ const FileInputLabel = styled.label`
 
 const FileInput = styled.input`
   display: none;
+`;
+
+const ErrorSpan = styled.span`
+  padding: 8px 12px;
+  font-weight: 400;
+  font-size: 13px;
+  color: #f44336;
+
+  &.agreement {
+    margin-left: 10px;
+  }
+  &.url {
+    color: #1976d3;
+  }
+`;
+
+const SsafyAuthSnackBar = styled(Snackbar)`
+  height: 20%;
+`;
+
+const ResponseAlert = styled(Alert)`
+  white-space: pre-line;
 `;
 
 const avatar = css`
@@ -895,30 +907,6 @@ const techStackRow = css`
 
 const techStackInputWrapper = css`
   position: relative;
-`;
-
-const ErrorSpan = styled.span`
-  padding: 8px 12px;
-  font-weight: 400;
-  font-size: 13px;
-  color: #f44336;
-
-  &.agreement {
-    //padding-left: 20px;
-    margin-left: 10px;
-  }
-
-  &.url {
-    color: #1976d3;
-  }
-`;
-
-const SsafyAuthSnackBar = styled(Snackbar)`
-  height: 20%;
-`;
-
-const ResponseAlert = styled(Alert)`
-  white-space: pre-line;
 `;
 
 export default ProfileForm;

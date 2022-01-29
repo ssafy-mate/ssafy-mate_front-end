@@ -65,21 +65,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
     formState: { errors },
   } = useForm<SignUp>({ mode: 'onChange' });
 
-  const updateSignUpProps = (data: SignUp) => {
-    const { signUpEmail, signUpPassword } = data;
-
-    updateSignUpEmail(signUpEmail);
-    updateSignUpPassword(signUpPassword);
-    updateSignUpStep(2);
-  };
-
-  const codeConfirmButtonOnChange: string | undefined = watch(
-    'signUpConfiromButton',
-  );
-  const signUpEmailOnChange: string = watch('signUpEmail');
-  const verificationCodeOnChange: string = watch('verificationCode');
-  const signUpPasswordOnChange: string = watch('signUpPassword');
-
   useEffect(() => {
     const timer = setInterval(() => {
       if (seconds > 0) {
@@ -99,6 +84,21 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
     return () => clearInterval(timer);
   }, [minutes, seconds]);
+
+  const updateSignUpProps = (data: SignUp) => {
+    const { signUpEmail, signUpPassword } = data;
+
+    updateSignUpEmail(signUpEmail);
+    updateSignUpPassword(signUpPassword);
+    updateSignUpStep(2);
+  };
+
+  const codeConfirmButtonOnChange: string | undefined = watch(
+    'signUpConfiromButton',
+  );
+  const signUpEmailOnChange: string = watch('signUpEmail');
+  const verificationCodeOnChange: string = watch('verificationCode');
+  const signUpPasswordOnChange: string = watch('signUpPassword');
 
   const offCodeInputAndConfirm = () => {
     setCodeInputDisabled(true);
@@ -189,9 +189,9 @@ const SignUpForm: React.FC<SignUpProps> = ({
         }
       })
       .catch((error) => {
-        console.log(error.response);
         if (error.response) {
           const data = error.response.data;
+
           if (data.status === 409) {
             showAlert('info', data.message);
           } else if (data.status === 500) {
@@ -222,15 +222,12 @@ const SignUpForm: React.FC<SignUpProps> = ({
       .catch((error) => {
         if (error.response) {
           const data = error.response.data;
-          if (data.status === 401) {
-            //올바른 인증 코드가 아닌 경우 error 창
-            showAndSetError(true, data.message);
 
+          if (data.status === 401) {
+            showAndSetError(true, data.message);
             setCodeConfirmButton(true);
           } else if (data.status === 403) {
-            //에러문구 표시해주고
             showAndSetError(true, data.message);
-
             offCodeInputAndConfirm();
           } else if (data.status === 500) {
             showAlert('warning', data.message);
@@ -238,10 +235,12 @@ const SignUpForm: React.FC<SignUpProps> = ({
         }
       });
   };
+
   const showAndSetError = (isError: boolean, errorMessage: string) => {
     setCodeVerificationError(isError);
     setCodeVerificationErrorText(errorMessage);
   };
+
   const alertClose = () => {
     setStatusAlertOpen(false);
   };
@@ -303,7 +302,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
             <ErrorSpan>{errors.signUpEmail.message}</ErrorSpan>
           )}
         </InputWrapper>
-
         {showCodeBox ? (
           <InputWrapper>
             <RequirementLabel htmlFor="verification-code">
@@ -361,7 +359,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
             )}
           </InputWrapper>
         ) : null}
-
         <InputWrapper>
           <RequirementLabel htmlFor="signup-password">
             비밀번호 (영문자와 숫자 혼합 최소 6자)

@@ -17,12 +17,6 @@ export interface EmailVerificationCodeConfirmRequest {
   userEmail: string;
 }
 
-//회원가입 2단계 가입 정보
-export interface SignUpRequest {
-  email: string;
-  password: string;
-}
-
 export interface TechStacksWithLevel {
   techStackName: string;
   techStackLevel: string;
@@ -36,13 +30,13 @@ export interface SignUpProfile {
   userEmail: string;
   email: string;
   password: string;
-  profileImg: any;
+  profileImg: any | null;
   selfIntroduction: string;
   job1: string;
-  job2: string;
+  job2: string | null;
   techStacks: Array<TechStacksWithLevel>;
-  githubUrl: string;
-  etcUrl: string;
+  githubUrl: string | null;
+  etcUrl: string | null;
   agreement: boolean;
 }
 

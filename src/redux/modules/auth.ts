@@ -64,7 +64,7 @@ export default reducer;
 // saga
 export const { login, logout } = createActions('LOGIN', 'LOGOUT', { prefix });
 
-function* loninSaga(action: Action<SignInRequestType>) {
+function* loginSaga(action: Action<SignInRequestType>) {
   try {
     yield put(pending());
 
@@ -74,7 +74,6 @@ function* loninSaga(action: Action<SignInRequestType>) {
     if (data.token !== null) {
       TokenService.set(data.token);
       yield put(success(data));
-      console.log(JSON.stringify(data));
     }
 
     //로그인 성공 시 메인 페이지로 이동
@@ -101,7 +100,6 @@ function* logoutSaga() {
 }
 
 export function* authSaga() {
-  yield takeEvery(`${prefix}/LOGIN`, loninSaga);
-
+  yield takeEvery(`${prefix}/LOGIN`, loginSaga);
   yield takeEvery(`${prefix}/LOGOUT`, logoutSaga);
 }

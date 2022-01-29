@@ -35,7 +35,6 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
   const isMobile = useMediaQuery({
     query: '(max-width: 991px)',
   });
-
   const dispatch = useDispatch();
   const token = useSelector<RootState, string | null>(
     (state) => state?.auth.token,
@@ -47,7 +46,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
     }
   }, [token]);
 
-  const logoutClick = () => {
+  const handleClickLogoutButton = () => {
     dispatch(logout());
   };
 
@@ -116,9 +115,9 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
               </MenuItem>
               <MenuItem css={line} />
               <MenuItem>
-                <PageLink to="#" onClick={logoutClick}>
+                <LogoutButton onClick={handleClickLogoutButton}>
                   로그아웃
-                </PageLink>
+                </LogoutButton>
               </MenuItem>
             </>
           )}
@@ -234,6 +233,29 @@ const PageLink = styled(Link)`
   }
 `;
 
+const LogoutButton = styled.button`
+  padding: 4px 8px;
+  background-color: transparent;
+  border: none;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.6;
+  color: #b2c0cc;
+  text-decoration: none;
+  transition: color 0.08s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    color: #fff;
+  }
+
+  @media (max-width: 991px) {
+    padding: 0;
+    font-size: 15px;
+    line-height: 1.4669;
+  }
+`;
+
 const IconLink = styled(Link)`
   display: flex;
   align-items: center;
@@ -253,8 +275,12 @@ const icon = css`
 
 const line = css`
   margin: 12px 0;
-  border-top: 0.0625rem solid #172334;
   padding: 0;
+  border-top: 0.0625rem solid #172334;
+
+  @media (max-width: 992px) {
+    padding: 0;
+  }
 `;
 
 export default Header;
