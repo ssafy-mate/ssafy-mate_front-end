@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -7,6 +7,7 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import { SignInRequestType } from '../../types/signInTypes';
+import { validEmailReg } from '../../utils/regularExpressionData';
 
 interface SigninProps {
   login: (requestData: SignInRequestType) => void;
@@ -17,14 +18,33 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
 
   const passwordRef = useRef<HTMLInputElement | null>(null);
 
+  const [inputEmailError, setInputEmailError] = useState<boolean>(false);
+
+  const [inputPasswordError, setInputPasswordError] = useState<boolean>(false);
+
   const loginButtonClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.preventDefault();
+
     const userEmail = emailRef.current!.value;
+
     const password = passwordRef.current!.value;
 
-    login({ userEmail, password });
+    password === ''
+      ? setInputPasswordError(true)
+      : setInputPasswordError(false);
+
+    if (userEmail === '') {
+      setInputEmailError(true);
+
+      return;
+    } else if (validEmailReg.test(userEmail)) {
+      login({ userEmail, password });
+    } else {
+      setInputEmailError(true);
+      return;
+    }
   };
 
   return (
@@ -32,9 +52,22 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
       <CardHead>로그인</CardHead>
       <SignInForm>
         <SignInLabel>이메일</SignInLabel>
-        <SignInInput placeholder="이메일" ref={emailRef} />
+        <SignInInput
+          placeholder="이메일"
+          ref={emailRef}
+          type="email"
+          required
+          className={inputEmailError ? 'haveError' : ''}
+        />
         <SignInLabel>비밀번호</SignInLabel>
-        <SignInInput type="password" placeholder="비밀번호" ref={passwordRef} />
+        <SignInInput
+          type="password"
+          placeholder="비밀번호"
+          ref={passwordRef}
+          required
+          className={inputPasswordError ? 'haveError' : ''}
+        />
+
         <Options>
           <IdSaveCheckBox>
             <IdSaveCheckInput type="checkbox" id="idSave" name="idSave" />
@@ -49,7 +82,9 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
             </Link>
           </AccountManagementMenu>
         </Options>
-        <SignInButton onClick={loginButtonClick}>로그인</SignInButton>
+        <SignInButton onClick={loginButtonClick} type="button">
+          로그인
+        </SignInButton>
         <SignUpLinkBox>
           아직 계정이 없으신가요?
           <Link to="/users/sign_up" className="sign-up-link">
@@ -132,6 +167,9 @@ const SignInInput = styled.input`
     color: #495057;
   }
 
+  &.haveError {
+    border: 1px solid #f77;
+  }
   @media (max-width: 540px) {
     font-size: 13px;
   }
@@ -250,6 +288,13 @@ const accountLink = css`
   @media (max-width: 540px) {
     font-size: 13px;
   }
+`;
+
+const ErrorSpan = styled.span`
+  padding: 8px 12px;
+  font-weight: 400;
+  font-size: 13px;
+  color: #f44336;
 `;
 
 export default SignInCard;
