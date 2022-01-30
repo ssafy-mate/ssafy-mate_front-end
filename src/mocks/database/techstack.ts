@@ -1,6 +1,6 @@
-import { TechStackWtihImg } from '../../types/commonTypes';
+import { TechStackWithImg } from '../../types/commonTypes';
 
-export const techStackListData: TechStackWtihImg[] = [
+export const techStackListData: TechStackWithImg[] = [
   {
     id: 1,
     techStackName: 'HTML5',

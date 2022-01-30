@@ -318,3 +318,58 @@ export const teamDataList = [
     },
   },
 ];
+
+export const TeamListData = {
+  teams: [
+    {
+      teamId: 1,
+      teamName: '디벨로파시토',
+      teamImgUrl: '/images/common/ssafy-mate_logo.png',
+      campus: '서울',
+      notice: '실제 운영할 서비스 개발을 도전할 분들을 모집합니다.',
+      techStacks: [
+        {
+          id: 1,
+          techStackName: 'HTML5',
+        },
+        {
+          id: 2,
+          techStackName: 'CSS3',
+        },
+      ],
+      totalRecruitment: 6,
+      totalHeadcount: 6,
+      frontendRecruitment: 3,
+      frontendHeadcount: 3,
+      backendRecruitment: 3,
+      backendHeadcount: 3,
+      createDateTime: '2022-01-29',
+    },
+    {
+      teamId: 2,
+      teamName: '싸테코',
+      teamImgUrl: null,
+      campus: '서울',
+      notice: '실제 운영할 서비스 개발을 도전할 분들을 모집합니다.',
+      techStacks: [
+        {
+          id: 1,
+          techStackName: 'HTML5',
+        },
+        {
+          id: 2,
+          techStackName: 'CSS3',
+        },
+      ],
+      totalRecruitment: 6,
+      totalHeadcount: 6,
+      frontendRecruitment: 3,
+      frontendHeadcount: 3,
+      backendRecruitment: 3,
+      backendHeadcount: 3,
+      createDateTime: '2022-01-29',
+    },
+  ],
+  totalPage: 1,
+  nowPage: 1,
+};
