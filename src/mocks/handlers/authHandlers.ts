@@ -4,7 +4,6 @@ import { rest } from 'msw';
 
 import {
   EmailVerificationCodeConfirmRequest,
-  EmailVerificationCodeRequest,
   SignUpProfile,
 } from '../../types/userInfomationTypes';
 
