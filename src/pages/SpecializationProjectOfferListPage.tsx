@@ -5,9 +5,9 @@ import ProjectNavigation from '../components/projects/ProjectNavigation';
 import OfferListSection from '../components/projects/OfferListSection';
 import Footer from '../components/common/Footer';
 
-const OfferListPage: React.FC = () => {
+const SpecializationProjectOfferListPage: React.FC = () => {
   useEffect(() => {
-    document.title = '받은 제안 | 싸피 메이트';
+    document.title = '특화 프로젝트 받은 제안 | 싸피 메이트';
   }, []);
 
   return (
@@ -20,4 +20,4 @@ const OfferListPage: React.FC = () => {
   );
 };
 
-export default OfferListPage;
+export default SpecializationProjectOfferListPage;
