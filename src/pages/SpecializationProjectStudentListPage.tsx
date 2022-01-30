@@ -3,13 +3,13 @@ import { useEffect } from 'react';
 import Header from '../components/common/Header';
 import ProjectNavigation from '../components/projects/ProjectNavigation';
 import ProjectBannerSection from '../components/projects/ProjectBannerSection';
-import TeamFilterForm from '../components/projects/TeamFilterForm';
+import StudentFilterForm from '../components/projects/StudentFilterForm';
+import StudentAnnouncement from '../components/projects/StudentAnnouncement';
 import Footer from '../components/common/Footer';
-import TeamAnnouncement from '../components/projects/TeamAnnouncement';
 
-const TeamSpecializationProjectPage: React.FC = () => {
+const SpecializationProjectStudentListPage: React.FC = () => {
   useEffect(() => {
-    document.title = '특화 프로젝트 팀 공고 | 싸피 메이트';
+    document.title = '특화 프로젝트 교육생 공고 | 싸피 메이트';
   }, []);
 
   return (
@@ -17,11 +17,11 @@ const TeamSpecializationProjectPage: React.FC = () => {
       <Header />
       <ProjectNavigation />
       <ProjectBannerSection />
-      <TeamFilterForm />
-      <TeamAnnouncement />
+      <StudentFilterForm />
+      <StudentAnnouncement />
       <Footer />
     </>
   );
 };
 
-export default TeamSpecializationProjectPage;
+export default SpecializationProjectStudentListPage;
