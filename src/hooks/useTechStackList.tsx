@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 
-import { TechStackWtihImg } from '../types/commonTypes';
+import { TechStackWithImg } from '../types/commonTypes';
 
 import TechStackService from '../services/TechStackService';
 
 const useTechStackList = () => {
-  const [techStackList, setTechStackList] = useState<TechStackWtihImg[]>([]);
+  const [techStackList, setTechStackList] = useState<TechStackWithImg[]>([]);
 
   useEffect(() => {
     async function fetchTechStackList() {

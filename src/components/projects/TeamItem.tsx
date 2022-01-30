@@ -6,23 +6,9 @@ import WebIcon from '@mui/icons-material/Web';
 import StorageIcon from '@mui/icons-material/Storage';
 import GroupsIcon from '@mui/icons-material/Groups';
 
-import { TechStack } from '../../types/commonTypes';
+import { TeamItemType } from '../../types/teamTypes';
 
-interface TeamItemProps {
-  teamId: number;
-  teamName: string;
-  teamImgUrl: string | null;
-  campus: string;
-  notice: string;
-  techStacks: TechStack[];
-  totalRecruitment: number;
-  totalHeadcount: number;
-  frontendRecruitment: number;
-  frontendHeadcount: number;
-  backendRecruitment: number;
-  backendHeadcount: number;
-  createDateTime: string;
-}
+interface TeamItemProps extends TeamItemType {}
 
 const TeamItem: React.FC<TeamItemProps> = ({
   teamId,
@@ -73,9 +59,9 @@ const TeamItem: React.FC<TeamItemProps> = ({
           </TeamStatusList>
           <TechStackList>
             {techStacks.map((techStack) => (
-              <TeckStackItem key={techStack.id}>
+              <TechStackItem key={techStack.id}>
                 {techStack.techStackName}
-              </TeckStackItem>
+              </TechStackItem>
             ))}
           </TechStackList>
         </ItemBody>
@@ -259,7 +245,7 @@ const TechStackList = styled.ul`
   flex-wrap: wrap;
 `;
 
-const TeckStackItem = styled.li`
+const TechStackItem = styled.li`
   display: inline-block;
   margin-right: 4px;
   margin-bottom: 4px;
