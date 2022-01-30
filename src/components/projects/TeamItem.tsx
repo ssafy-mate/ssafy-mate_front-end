@@ -156,6 +156,9 @@ const Notice = styled.h1`
   @media (max-width: 767px) {
     font-size: 16px;
   }
+  @media (max-width: 575px) {
+    font-size: 15px;
+  }
 `;
 
 const TeamName = styled.h2`
