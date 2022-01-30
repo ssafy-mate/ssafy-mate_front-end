@@ -40,9 +40,13 @@ const ProjectNavigation: React.FC = () => {
         </NavLink>
       </NavItem>
       <NavItem
-        className={location.pathname === '/projects/offers' ? 'active' : ''}
+        className={
+          location.pathname === '/projects/specialization/offer_list'
+            ? 'active'
+            : ''
+        }
       >
-        <NavLink to="/projects/offers">
+        <NavLink to="/projects/specialization/offer_list">
           <VolunteerActivismIcon css={navLinkIcon} />
           받은 제안
         </NavLink>
