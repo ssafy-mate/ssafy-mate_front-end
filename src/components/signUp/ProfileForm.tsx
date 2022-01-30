@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { useHistory } from 'react-router-dom';
 
@@ -36,14 +36,15 @@ const ProfileForm: React.FC<ProfileProps> = ({
   ssafyTrack,
   studentNumber,
   studentName,
-  signUpStep,
   signUpEmail,
   signUpPassword,
-  updateSignUpStep,
 }) => {
   const history = useHistory();
   const [showError, setShowError] = useState<number>(0);
   const [techStacks, setTechStacks] = useState<TechStacksWithLevel[]>([]);
+  const [finalTechStacks, setFinalTechStacks] = useState<TechStacksWithLevel[]>(
+    [],
+  );
   const [techStacksError, setTechStacksError] = useState<boolean>(false);
   const [profileImg, setProfileImg] = useState(null);
   const [previewProgileImg, setPreviewProfileImg] = useState(null);
@@ -64,17 +65,8 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const [statusAlertText, setStatusAlertText] = useState<string>('');
   const [statusAlertSeverity, setStatusAlertSeverity] =
     useState<Severity>('success');
-  const deleteStackInputRef = useRef<HTMLDivElement>(null);
 
   const signUpFormData = new FormData();
-
-  const updateTechStacks = (techStacks: Array<TechStacksWithLevel>): void => {
-    setTechStacks(techStacks);
-  };
-
-  const updateTechStacksError = (techStacksError: boolean): void => {
-    setTechStacksError(techStacksError);
-  };
 
   const {
     getRootProps,
@@ -93,6 +85,22 @@ const ProfileForm: React.FC<ProfileProps> = ({
     options: techStackListData,
     getOptionLabel: (option) => option.name,
   });
+
+  useEffect(() => {
+    value.forEach((oneValue) => {
+      if (!JSON.stringify(techStacks).includes(oneValue.name)) {
+        techStacks.push({
+          techStackName: oneValue.name,
+          techStackLevel: '중',
+        });
+        setTechStacks(techStacks);
+      }
+    });
+
+    techStacks.length >= 2
+      ? setTechStacksError(false)
+      : setTechStacksError(true);
+  }, [techStacks, value]);
 
   const handleChangeProfileImg = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -150,6 +158,28 @@ const ProfileForm: React.FC<ProfileProps> = ({
     event.target.name === 'job1' && event.target.value === 'default'
       ? setJob1Error(true)
       : setJob1Error(false);
+  };
+
+  const updateTechStacks = (selectedTechStack: TechStacksWithLevel): void => {
+    const findTechStack = techStacks.find(
+      (techStack) =>
+        techStack.techStackName === selectedTechStack.techStackName,
+    );
+    findTechStack === undefined
+      ? techStacks.push({
+          techStackName: selectedTechStack.techStackName,
+          techStackLevel: selectedTechStack.techStackLevel,
+        })
+      : (findTechStack.techStackLevel = selectedTechStack.techStackLevel);
+    setTechStacks(techStacks);
+  };
+
+  const deleteTechStacks = (seletedTechStackName: string): void => {
+    const findStackIndex = techStacks.findIndex(
+      (techStack) => techStack.techStackName === seletedTechStackName,
+    );
+    findStackIndex >= 0 && techStacks.splice(findStackIndex, 1);
+    setTechStacks(techStacks);
   };
 
   const handleUrlInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -221,6 +251,31 @@ const ProfileForm: React.FC<ProfileProps> = ({
     }
   };
 
+  const compareTechStacks = () => {
+    techStacks.forEach((techStack) => {
+      !JSON.stringify(value).includes(techStack.techStackName) &&
+        deleteTechStacks(techStack.techStackName);
+    });
+
+    makeFinalTechStacks();
+  };
+
+  const makeFinalTechStacks = () => {
+    setFinalTechStacks([]);
+
+    value.forEach((oneValue) => {
+      techStacks.forEach((techStack) => {
+        if (oneValue.name === techStack.techStackName) {
+          finalTechStacks.push({
+            techStackName: oneValue.name,
+            techStackLevel: techStack.techStackLevel,
+          });
+        }
+      });
+    });
+    setTechStacks(finalTechStacks);
+  };
+
   const getSignUpInfomation = () => {
     if (profileImg !== null) {
       signUpFormData.append('profileImg', profileImg);
@@ -253,6 +308,8 @@ const ProfileForm: React.FC<ProfileProps> = ({
   ) => {
     event.preventDefault();
 
+    compareTechStacks();
+
     const data: FormData = getSignUpInfomation();
 
     if (validation()) {
@@ -260,7 +317,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
         .then(({ status, message }) => {
           showAlert('success', message);
           // 시뮬레이션
-          history.push('/users/sign_in');
+          //history.push('/users/sign_in');
         })
         .catch((error) => {
           if (error.response) {
@@ -281,21 +338,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
 
   const alertClose = () => {
     setStatusAlertOpen(false);
-  };
-
-  const deleteTechStack = (event: React.MouseEvent<HTMLDivElement>) => {
-    // console.log(deleteStackInputRef.current?.children[0].getAttribute('alt'));
-    // const seletedStack = event.currentTarget
-    //   .querySelector('img')
-    //   ?.getAttribute('alt');
-    // if (seletedStack !== null && seletedStack !== undefined) {
-    //   if (JSON.stringify(techStacks).includes(seletedStack)) {
-    //     const findStackIndex = techStacks.findIndex((stack) => {
-    //       return stack.techStackName === seletedStack;
-    //     });
-    //     techStacks.splice(findStackIndex, 1);
-    //   }
-    // }
   };
 
   return (
@@ -435,18 +477,13 @@ const ProfileForm: React.FC<ProfileProps> = ({
               <SearchList {...getListboxProps()}>
                 {(groupedOptions as typeof techStackListData).map(
                   (option, index) => (
-                    <SearchItemInfoWrapper
-                      onClick={deleteTechStack}
-                      key={index}
-                    >
-                      <SearchItem {...getOptionProps({ option, index })}>
-                        <TechStackInfo ref={deleteStackInputRef}>
-                          <TechStackImg src={option.imgUrl} alt={option.name} />
-                          {option.name}
-                        </TechStackInfo>
-                        <CheckIcon fontSize="small" />
-                      </SearchItem>
-                    </SearchItemInfoWrapper>
+                    <SearchItem {...getOptionProps({ option, index })}>
+                      <TechStackInfo>
+                        <TechStackImg src={option.imgUrl} alt={option.name} />
+                        {option.name}
+                      </TechStackInfo>
+                      <CheckIcon fontSize="small" />
+                    </SearchItem>
                   ),
                 )}
               </SearchList>
@@ -465,10 +502,9 @@ const ProfileForm: React.FC<ProfileProps> = ({
                 imgUrl={option.imgUrl}
                 techStacks={techStacks}
                 updateTechStacks={updateTechStacks}
-                techStacksError={techStacksError}
-                updateTechStacksError={updateTechStacksError}
+                deleteTechStacks={deleteTechStacks}
                 {...getTagProps({ index })}
-              ></TechStackTagWithLevel>
+              />
             ))}
           </TechStackList>
         </Row>
@@ -585,11 +621,6 @@ const InputWrapper = styled.div`
 `;
 
 const CheckBoxWrapper = styled.div`
-  display: flex;
-  width: 100%;
-`;
-
-const SearchItemInfoWrapper = styled.div`
   display: flex;
   width: 100%;
 `;

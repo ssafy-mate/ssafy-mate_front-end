@@ -89,7 +89,6 @@ function* logoutSaga() {
     yield put(pending());
     // const token: string = yield select((state) => state.auth.token);
     // yield call(SignInService.logout, token);
-    // TokenService.set(token);
     TokenService.remove();
     yield put(success(null));
   } catch (error: any) {

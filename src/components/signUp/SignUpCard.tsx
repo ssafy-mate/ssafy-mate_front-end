@@ -85,8 +85,6 @@ const SignUpCard: React.FC = () => {
                     ssafyTrack={ssafyTrack}
                     studentNumber={studentNumber}
                     studentName={studentName}
-                    signUpStep={signUpStep}
-                    updateSignUpStep={updateSignUpStep}
                     signUpEmail={signUpEmail}
                     signUpPassword={signUpPassword}
                   />

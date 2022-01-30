@@ -72,8 +72,6 @@ export interface ProfileProps {
   ssafyTrack: string;
   studentNumber: string;
   studentName: string;
-  signUpStep: number;
   signUpEmail: string;
   signUpPassword: string;
-  updateSignUpStep: (signUpStep: number) => void;
 }

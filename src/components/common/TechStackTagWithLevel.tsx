@@ -11,10 +11,9 @@ import { TechStackTagProps } from '../../types/commonTypes';
 import { TechStacksWithLevel } from '../../types/userInfomationTypes';
 
 interface TechStackTagWithLevelProps extends TechStackTagProps {
-  techStacks: Array<TechStacksWithLevel>;
-  techStacksError: boolean;
-  updateTechStacks: (techStacks: Array<TechStacksWithLevel>) => void;
-  updateTechStacksError: (techStacksError: boolean) => void;
+  techStacks: TechStacksWithLevel[];
+  updateTechStacks: (techStack: TechStacksWithLevel) => void;
+  deleteTechStacks: (techStackName: string) => void;
 }
 
 const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
@@ -23,58 +22,37 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
   imgUrl,
   onDelete,
   techStacks,
-  techStacksError,
   updateTechStacks,
-  updateTechStacksError,
+  deleteTechStacks,
   ...other
 }) => {
-  const [level, setLevel] = useState('');
+  const [selectedStackLevel, setSelectedStackLevel] = useState<string>('중');
 
   useEffect(() => {
-    updateTechStacks(techStacks);
-  }, [techStacks, updateTechStacks]);
-
-  useEffect(() => {
-    techStacks.length < 2
-      ? updateTechStacksError(true)
-      : updateTechStacksError(false);
-  });
+    techStacks.forEach((techStack) => {
+      if (techStack.techStackName === name) {
+        setSelectedStackLevel(techStack.techStackLevel);
+      }
+    });
+  }, [name, techStacks]);
 
   const handleTechStackLevel = (event: React.MouseEvent<HTMLButtonElement>) => {
-    const level: string = event.currentTarget.value;
+    event.preventDefault();
 
-    switch (level) {
-      case '상':
-        setLevel('high');
-        break;
-      case '중':
-        setLevel('middle');
-        break;
-      case '하':
-        setLevel('low');
-        break;
-    }
+    const updateTechStacklevel: string = event.currentTarget.value;
 
-    const findTechStack = techStacks.find(
-      (techStack) => techStack.techStackName === name,
-    );
+    setSelectedStackLevel(updateTechStacklevel);
 
-    findTechStack === undefined
-      ? techStacks.push({
-          techStackName: name,
-          techStackLevel: level,
-        })
-      : (findTechStack.techStackLevel = level);
+    updateTechStacks({
+      techStackLevel: updateTechStacklevel,
+      techStackName: name,
+    });
   };
 
   const deleteTechStack = (event: React.MouseEvent<HTMLButtonElement>) => {
     onDelete(event);
 
-    const findStackIndex = techStacks.findIndex(
-      (techStack) => techStack.techStackName === name,
-    );
-
-    techStacks.splice(findStackIndex, 1);
+    deleteTechStacks(name);
   };
 
   return (
@@ -102,7 +80,7 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
           >
             <LevelButton
               key="low"
-              className={level === 'low' ? 'selected' : ''}
+              className={selectedStackLevel === '하' ? 'selected' : ''}
               value="하"
               onClick={handleTechStackLevel}
             >
@@ -110,7 +88,7 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
             </LevelButton>
             <LevelButton
               key="middle"
-              className={level === 'middle' ? 'selected' : ''}
+              className={selectedStackLevel === '중' ? 'selected' : ''}
               value="중"
               onClick={handleTechStackLevel}
             >
@@ -118,7 +96,7 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
             </LevelButton>
             <LevelButton
               key="high"
-              className={level === 'high' ? 'selected' : ''}
+              className={selectedStackLevel === '상' ? 'selected' : ''}
               value="상"
               onClick={handleTechStackLevel}
             >
