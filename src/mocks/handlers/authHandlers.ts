@@ -107,9 +107,9 @@ export const authHandlers = [
 
       if (data.code === '00000000') {
         return response(
-          context.status(400),
+          context.status(401),
           context.json({
-            status: 400,
+            status: 401,
             success: false,
             message: '올바른 인증 코드가 아닙니다.',
           }),

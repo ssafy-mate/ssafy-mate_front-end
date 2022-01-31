@@ -81,22 +81,10 @@ const ProfileForm: React.FC<ProfileProps> = ({
   });
 
   useEffect(() => {
-    value.forEach((oneValue) => {
-      if (!JSON.stringify(techStacks).includes(oneValue.name)) {
-        setTechStacks([
-          ...techStacks,
-          {
-            techStackName: oneValue.name,
-            techStackLevel: '중',
-          },
-        ]);
-      }
-    });
-
     techStacks.length >= 2
       ? setTechStacksError(false)
       : setTechStacksError(true);
-  }, [techStacks, value]);
+  }, [techStacks]);
 
   const handleChangeProfileImg = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -179,9 +167,25 @@ const ProfileForm: React.FC<ProfileProps> = ({
 
     const tempTechStacks = [...techStacks];
 
-    findStackIndex >= 0 && tempTechStacks.splice(findStackIndex, 1);
+    if (findStackIndex >= 0) {
+      tempTechStacks.splice(findStackIndex, 1);
+    }
 
     setTechStacks(tempTechStacks);
+  };
+
+  const controlTechStacks = (selectedTechStack: string) => {
+    if (!JSON.stringify(techStacks).includes(selectedTechStack)) {
+      setTechStacks([
+        ...techStacks,
+        {
+          techStackName: selectedTechStack,
+          techStackLevel: '중',
+        },
+      ]);
+    } else {
+      deleteTechStacks(selectedTechStack);
+    }
   };
 
   const handleUrlInput = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -254,32 +258,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
     }
   };
 
-  const compareTechStacks = () => {
-    techStacks.forEach((techStack) => {
-      !JSON.stringify(value).includes(techStack.techStackName) &&
-        deleteTechStacks(techStack.techStackName);
-    });
-
-    makeFinalTechStacks();
-  };
-
-  const makeFinalTechStacks = () => {
-    const tempTechStacks: TechStacksWithLevel[] = [];
-
-    value.forEach((oneValue) => {
-      techStacks.forEach((techStack) => {
-        if (oneValue.name === techStack.techStackName) {
-          tempTechStacks.push({
-            techStackName: oneValue.name,
-            techStackLevel: techStack.techStackLevel,
-          });
-        }
-      });
-    });
-
-    setTechStacks(tempTechStacks);
-  };
-  console.log(techStacks);
   const getSignUpInfomation = () => {
     if (profileImg !== null) {
       signUpFormData.append('profileImg', profileImg);
@@ -310,10 +288,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const signUpClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    event.preventDefault();
-
-    compareTechStacks();
-
     const data: FormData = getSignUpInfomation();
 
     if (validation()) {
@@ -481,21 +455,25 @@ const ProfileForm: React.FC<ProfileProps> = ({
               <SearchList {...getListboxProps()}>
                 {(groupedOptions as typeof techStackListData).map(
                   (option, index) => (
-                    <SearchItem {...getOptionProps({ option, index })}>
-                      <TechStackInfo>
-                        <TechStackImg src={option.imgUrl} alt={option.name} />
-                        {option.name}
-                      </TechStackInfo>
-                      <CheckIcon fontSize="small" />
-                    </SearchItem>
+                    <SearchItemWrapper
+                      onClick={(event) => {
+                        controlTechStacks(option.name);
+                      }}
+                    >
+                      <SearchItem {...getOptionProps({ option, index })}>
+                        <TechStackInfo>
+                          <TechStackImg src={option.imgUrl} alt={option.name} />
+                          {option.name}
+                        </TechStackInfo>
+                        <CheckIcon fontSize="small" />
+                      </SearchItem>
+                    </SearchItemWrapper>
                   ),
                 )}
               </SearchList>
             ) : null}
             {showError === 1 && techStacksError && (
-              <ErrorSpan>
-                필수 2가지 이상 선택 사항입니다.(상/중/하 선택도 필수입니다.)
-              </ErrorSpan>
+              <ErrorSpan>필수 2가지 이상 선택 사항입니다.</ErrorSpan>
             )}
           </InputWrapper>
           <TechStackList>
@@ -807,6 +785,11 @@ const SearchItem = styled.li`
   @media (max-width: 540px) {
     font-size: 13px;
   }
+`;
+
+const SearchItemWrapper = styled.div`
+  height: 100%;
+  width: 100%;
 `;
 
 const TechStackInfo = styled.div`
