@@ -1,4 +1,4 @@
-//회원가입 1단계 가입 정보
+// 회원가입 1단계 가입 정보
 export interface SsafyAuth {
   campus: string;
   ssafyTrack: string;
@@ -6,12 +6,12 @@ export interface SsafyAuth {
   userName: string;
 }
 
-//회원가입 2단계 이메일 인증 코드 요청
+// 회원가입 2단계 이메일 인증 코드 요청
 export interface EmailVerificationCodeRequest {
   userEmail: string;
 }
 
-//회원가입 2단계 이메일 인증 코드 확인 요청
+// 회원가입 2단계 이메일 인증 코드 확인 요청
 export interface EmailVerificationCodeConfirmRequest {
   code: string;
   userEmail: string;
@@ -19,10 +19,12 @@ export interface EmailVerificationCodeConfirmRequest {
 
 export interface TechStacksWithLevel {
   techStackName: string;
-  techStackLevel: string;
+  techStackLevel: techStackLevel;
 }
 
-//회원가입 3단계 프로필 작성
+export type techStackLevel = '상' | '중' | '하';
+
+// 회원가입 3단계 프로필 작성
 export interface SignUpProfile {
   campus: string;
   ssafyTrack: string;
@@ -40,14 +42,14 @@ export interface SignUpProfile {
   agreement: boolean;
 }
 
-//회원가입 모든 단계 응답
+// 회원가입 모든 단계 응답
 export interface SignUpResponse {
   status: number;
   success: boolean;
   message: string;
 }
 
-//회원가입 2단계 인자
+// 회원가입 2단계 인자
 export interface SignUpProps {
   signUpEmail: string;
   signUpPassword: string;
@@ -57,7 +59,7 @@ export interface SignUpProps {
   updateSignUpStep: (signUpStep: number) => void;
 }
 
-//회원가입 2단계 정보
+// 회원가입 2단계 정보
 export interface SignUp {
   signUpEmail: string;
   verificationCode: string;
@@ -66,7 +68,7 @@ export interface SignUp {
   signUpConfiromButton: string | undefined;
 }
 
-//회원가입 3단계 인자
+// 회원가입 3단계 인자
 export interface ProfileProps {
   campus: string;
   ssafyTrack: string;
@@ -75,3 +77,6 @@ export interface ProfileProps {
   signUpEmail: string;
   signUpPassword: string;
 }
+
+// Alert
+export type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;

@@ -8,7 +8,10 @@ import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 
 import { TechStackTagProps } from '../../types/commonTypes';
-import { TechStacksWithLevel } from '../../types/userInfomationTypes';
+import {
+  TechStacksWithLevel,
+  techStackLevel,
+} from '../../types/userInfomationTypes';
 
 interface TechStackTagWithLevelProps extends TechStackTagProps {
   techStacks: TechStacksWithLevel[];
@@ -26,25 +29,37 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
   deleteTechStacks,
   ...other
 }) => {
-  const [selectedStackLevel, setSelectedStackLevel] = useState<string>('중');
+  const [selectedTechStackLevel, setSelectedTechStackLevel] =
+    useState<techStackLevel>('중');
 
   useEffect(() => {
     techStacks.forEach((techStack) => {
       if (techStack.techStackName === name) {
-        setSelectedStackLevel(techStack.techStackLevel);
+        setSelectedTechStackLevel(techStack.techStackLevel);
       }
     });
   }, [name, techStacks]);
 
   const handleTechStackLevel = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
+    switch (event.currentTarget.value) {
+      case '상':
+        updateTechStacklevel('상');
+        break;
+      case '중':
+        updateTechStacklevel('중');
+        break;
+      case '하':
+        updateTechStacklevel('하');
+        break;
+    }
+  };
 
-    const updateTechStacklevel: string = event.currentTarget.value;
-
-    setSelectedStackLevel(updateTechStacklevel);
+  const updateTechStacklevel = (updateTechStackLevel: techStackLevel) => {
+    setSelectedTechStackLevel(updateTechStackLevel);
 
     updateTechStacks({
-      techStackLevel: updateTechStacklevel,
+      techStackLevel: updateTechStackLevel,
       techStackName: name,
     });
   };
@@ -80,7 +95,7 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
           >
             <LevelButton
               key="low"
-              className={selectedStackLevel === '하' ? 'selected' : ''}
+              className={selectedTechStackLevel === '하' ? 'selected' : ''}
               value="하"
               onClick={handleTechStackLevel}
             >
@@ -88,7 +103,7 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
             </LevelButton>
             <LevelButton
               key="middle"
-              className={selectedStackLevel === '중' ? 'selected' : ''}
+              className={selectedTechStackLevel === '중' ? 'selected' : ''}
               value="중"
               onClick={handleTechStackLevel}
             >
@@ -96,7 +111,7 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
             </LevelButton>
             <LevelButton
               key="high"
-              className={selectedStackLevel === '상' ? 'selected' : ''}
+              className={selectedTechStackLevel === '상' ? 'selected' : ''}
               value="상"
               onClick={handleTechStackLevel}
             >

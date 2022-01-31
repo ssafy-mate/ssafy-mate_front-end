@@ -16,7 +16,7 @@ import {
 
 import { campusListData } from '../../data/ssafyData';
 
-import { SsafyAuth } from '../../types/userInfomationTypes';
+import { Severity, SsafyAuth } from '../../types/userInfomationTypes';
 
 interface SsafyTrack {
   id: number;
@@ -53,8 +53,6 @@ const AuthForm: React.FC<Props> = ({
   const [failAlertOpen, setFailAlertOpen] = useState(false);
 
   const [alertMessage, setAlertMessage] = useState('');
-
-  type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
 
   const [statusAlertSeverity, setStatusAlertSeverity] =
     useState<Severity>('success');

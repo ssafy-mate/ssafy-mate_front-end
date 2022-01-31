@@ -5,8 +5,7 @@ export const signInHandlers = [
   rest.post(
     'http://localhost:3000/api/user/sign-in',
     async (request: any, response, context) => {
-      let data: SignInRequestType;
-      data = request.body;
+      const data: SignInRequestType = request.body;
 
       if (data.userEmail === 'nobody@gmail.com') {
         return response(
