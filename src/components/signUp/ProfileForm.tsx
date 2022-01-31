@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { useHistory } from 'react-router-dom';
+import history from '../../history';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -16,20 +16,18 @@ import Alert from '@mui/material/Alert';
 
 import { jobListData } from '../../data/jobListData';
 import { techStackListData } from '../../data/techStackListData';
+import { validUrl } from '../../utils/regularExpressionData';
 
 import { TechStack } from '../../types/commonTypes';
 import {
   ProfileProps,
+  Severity,
   TechStacksWithLevel,
 } from '../../types/userInfomationTypes';
-
-import { validUrl } from '../../utils/regularExpressionData';
 
 import AuthService from '../../services/AuthService';
 
 import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
-
-type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
 
 const ProfileForm: React.FC<ProfileProps> = ({
   campus,
@@ -39,12 +37,8 @@ const ProfileForm: React.FC<ProfileProps> = ({
   signUpEmail,
   signUpPassword,
 }) => {
-  const history = useHistory();
   const [showError, setShowError] = useState<number>(0);
   const [techStacks, setTechStacks] = useState<TechStacksWithLevel[]>([]);
-  const [finalTechStacks, setFinalTechStacks] = useState<TechStacksWithLevel[]>(
-    [],
-  );
   const [techStacksError, setTechStacksError] = useState<boolean>(false);
   const [profileImg, setProfileImg] = useState(null);
   const [previewProgileImg, setPreviewProfileImg] = useState(null);
@@ -89,11 +83,13 @@ const ProfileForm: React.FC<ProfileProps> = ({
   useEffect(() => {
     value.forEach((oneValue) => {
       if (!JSON.stringify(techStacks).includes(oneValue.name)) {
-        techStacks.push({
-          techStackName: oneValue.name,
-          techStackLevel: '중',
-        });
-        setTechStacks(techStacks);
+        setTechStacks([
+          ...techStacks,
+          {
+            techStackName: oneValue.name,
+            techStackLevel: '중',
+          },
+        ]);
       }
     });
 
@@ -161,29 +157,36 @@ const ProfileForm: React.FC<ProfileProps> = ({
   };
 
   const updateTechStacks = (selectedTechStack: TechStacksWithLevel): void => {
-    const findTechStack = techStacks.find(
+    const updateTechStackIndex = techStacks.findIndex(
       (techStack) =>
         techStack.techStackName === selectedTechStack.techStackName,
     );
-    findTechStack === undefined
-      ? techStacks.push({
-          techStackName: selectedTechStack.techStackName,
-          techStackLevel: selectedTechStack.techStackLevel,
-        })
-      : (findTechStack.techStackLevel = selectedTechStack.techStackLevel);
-    setTechStacks(techStacks);
+
+    const tempTechStacks = [...techStacks];
+
+    tempTechStacks[updateTechStackIndex] = {
+      techStackName: selectedTechStack.techStackName,
+      techStackLevel: selectedTechStack.techStackLevel,
+    };
+
+    setTechStacks(tempTechStacks);
   };
 
   const deleteTechStacks = (seletedTechStackName: string): void => {
     const findStackIndex = techStacks.findIndex(
       (techStack) => techStack.techStackName === seletedTechStackName,
     );
-    findStackIndex >= 0 && techStacks.splice(findStackIndex, 1);
-    setTechStacks(techStacks);
+
+    const tempTechStacks = [...techStacks];
+
+    findStackIndex >= 0 && tempTechStacks.splice(findStackIndex, 1);
+
+    setTechStacks(tempTechStacks);
   };
 
   const handleUrlInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
+
     event.target.name === 'githubUrl'
       ? setGithubUrl(event.target.value)
       : setEtcUrl(event.target.value);
@@ -261,21 +264,22 @@ const ProfileForm: React.FC<ProfileProps> = ({
   };
 
   const makeFinalTechStacks = () => {
-    setFinalTechStacks([]);
+    const tempTechStacks: TechStacksWithLevel[] = [];
 
     value.forEach((oneValue) => {
       techStacks.forEach((techStack) => {
         if (oneValue.name === techStack.techStackName) {
-          finalTechStacks.push({
+          tempTechStacks.push({
             techStackName: oneValue.name,
             techStackLevel: techStack.techStackLevel,
           });
         }
       });
     });
-    setTechStacks(finalTechStacks);
-  };
 
+    setTechStacks(tempTechStacks);
+  };
+  console.log(techStacks);
   const getSignUpInfomation = () => {
     if (profileImg !== null) {
       signUpFormData.append('profileImg', profileImg);
@@ -316,8 +320,8 @@ const ProfileForm: React.FC<ProfileProps> = ({
       AuthService.signUp(data)
         .then(({ status, message }) => {
           showAlert('success', message);
-          // 시뮬레이션
-          //history.push('/users/sign_in');
+
+          history.push('/users/sign_in');
         })
         .catch((error) => {
           if (error.response) {
