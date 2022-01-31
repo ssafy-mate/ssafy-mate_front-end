@@ -1,4 +1,4 @@
-import { push } from 'connected-react-router';
+import { go, push } from 'connected-react-router';
 
 import { Action, createActions, handleActions } from 'redux-actions';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
@@ -11,6 +11,7 @@ import {
 
 import SignInService from '../../services/SignInService';
 import TokenService from '../../services/TokenService';
+import history from '../../history';
 
 const initialState: AuthState = {
   userId: null,
@@ -87,14 +88,22 @@ function* loginSaga(action: Action<SignInRequestType>) {
 function* logoutSaga() {
   try {
     yield put(pending());
-    // const token: string = yield select((state) => state.auth.token);
+    //const token: string = yield select((state) => state.auth.token);
     // yield call(SignInService.logout, token);
-    TokenService.remove();
-    yield put(success(null));
-  } catch (error: any) {
-  } finally {
     // TokenService.remove();
     // yield put(success(null));
+    // TokenService.remove();
+    // yield put(success(null));
+  } catch (error: any) {
+  } finally {
+    TokenService.remove();
+    yield put(success(initialState));
+
+    if (history.location.pathname === '/') {
+      yield put(go(0));
+    } else {
+      yield put(push('/'));
+    }
   }
 }
 
