@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -15,85 +15,119 @@ interface SigninProps {
 }
 
 const SignInCard: React.FC<SigninProps> = ({ login }) => {
-  const emailRef = useRef<HTMLInputElement | null>(null);
-
-  const passwordRef = useRef<HTMLInputElement | null>(null);
-
+  const [inputEmail, setInputEmail] = useState<string>('');
+  const [inputPassword, setInputPassword] = useState<string>('');
   const [inputEmailError, setInputEmailError] = useState<boolean>(false);
-
   const [inputPasswordError, setInputPasswordError] = useState<boolean>(false);
+  const [emailVerificaion, setEmailVerificaion] = useState<boolean>(true);
+
+  const handleInputEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputEmail(event.target.value);
+
+    if (inputEmail !== '' && validEmailReg.test(inputEmail)) {
+      setInputEmailError(false);
+      setEmailVerificaion(true);
+    } else {
+      setInputEmailError(true);
+      setEmailVerificaion(false);
+    }
+  };
+
+  const handleInputPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setInputPassword(event.target.value);
+
+    inputPassword === ''
+      ? setInputPasswordError(true)
+      : setInputPasswordError(false);
+  };
 
   const loginButtonClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    event.preventDefault();
-
-    const userEmail = emailRef.current!.value;
-
-    const password = passwordRef.current!.value;
-
-    password === ''
-      ? setInputPasswordError(true)
-      : setInputPasswordError(false);
-
-    if (userEmail === '') {
-      setInputEmailError(true);
-
-      return;
-    } else if (validEmailReg.test(userEmail)) {
-      login({ userEmail, password });
-    } else {
-      setInputEmailError(true);
-      return;
+    if (validation(inputEmail, inputPassword)) {
+      login({ userEmail: inputEmail, password: inputPassword });
     }
   };
 
-  return (
-    <Container>
-      <CardHead>로그인</CardHead>
-      <SignInForm>
-        <SignInLabel>이메일</SignInLabel>
-        <SignInInput
-          placeholder="이메일"
-          ref={emailRef}
-          type="email"
-          required
-          className={inputEmailError ? 'haveError' : ''}
-        />
-        <SignInLabel>비밀번호</SignInLabel>
-        <SignInInput
-          type="password"
-          placeholder="비밀번호"
-          ref={passwordRef}
-          required
-          className={inputPasswordError ? 'haveError' : ''}
-        />
+  const validation = (emailInput: string, passwordInput: string): boolean => {
+    passwordInput === ''
+      ? setInputPasswordError(true)
+      : setInputPasswordError(false);
 
-        <Options>
-          <IdSaveCheckBox>
-            <IdSaveCheckInput type="checkbox" id="idSave" name="idSave" />
-            <IdSaveCheckLabel htmlFor="idSave">아이디 저장</IdSaveCheckLabel>
-          </IdSaveCheckBox>
-          <AccountManagementMenu>
-            <Link to="#" css={accountLink}>
-              아이디 찾기
+    if (emailInput === '') {
+      setInputEmailError(true);
+      setEmailVerificaion(false);
+    } else if (validEmailReg.test(emailInput)) {
+      setInputEmailError(false);
+      setEmailVerificaion(true);
+    } else {
+      setInputEmailError(true);
+      setEmailVerificaion(false);
+    }
+    if (
+      emailInput !== '' &&
+      passwordInput !== '' &&
+      inputEmailError === false
+    ) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  return (
+    <>
+      <Container>
+        <CardHead>로그인</CardHead>
+        <SignInForm>
+          <SignInLabel>이메일</SignInLabel>
+
+          <SignInLabelWrapper>
+            <SignInInput
+              type="email"
+              placeholder="이메일"
+              className={inputEmailError ? 'emailInputError' : ''}
+              required
+              onChange={handleInputEmail}
+            />
+            {!emailVerificaion && (
+              <EmailError>이메일 형식이 올바르지 않습니다.</EmailError>
+            )}
+          </SignInLabelWrapper>
+          <SignInLabel>비밀번호</SignInLabel>
+          <SignInInput
+            type="password"
+            placeholder="비밀번호"
+            className={inputPasswordError ? 'passwordInputError' : ''}
+            required
+            onChange={handleInputPassword}
+          />
+
+          <Options>
+            <IdSaveCheckBox>
+              <IdSaveCheckInput type="checkbox" id="idSave" name="idSave" />
+              <IdSaveCheckLabel htmlFor="idSave">아이디 저장</IdSaveCheckLabel>
+            </IdSaveCheckBox>
+            <AccountManagementMenu>
+              <Link to="#" css={accountLink}>
+                아이디 찾기
+              </Link>
+              <Link to="#" css={accountLink}>
+                비밀번호 찾기
+              </Link>
+            </AccountManagementMenu>
+          </Options>
+          <SignInButton onClick={loginButtonClick} type="button">
+            로그인
+          </SignInButton>
+          <SignUpLinkBox>
+            아직 계정이 없으신가요?
+            <Link to="/users/sign_up" className="sign-up-link">
+              계정 만들기
             </Link>
-            <Link to="#" css={accountLink}>
-              비밀번호 찾기
-            </Link>
-          </AccountManagementMenu>
-        </Options>
-        <SignInButton onClick={loginButtonClick} type="button">
-          로그인
-        </SignInButton>
-        <SignUpLinkBox>
-          아직 계정이 없으신가요?
-          <Link to="/users/sign_up" className="sign-up-link">
-            계정 만들기
-          </Link>
-        </SignUpLinkBox>
-      </SignInForm>
-    </Container>
+          </SignUpLinkBox>
+        </SignInForm>
+      </Container>
+    </>
   );
 };
 
@@ -130,6 +164,7 @@ const SignInForm = styled.form`
   display: flex;
   flex-direction: column;
 `;
+const SignInLabelWrapper = styled.div``;
 
 const SignInLabel = styled.label`
   margin-bottom: 4px;
@@ -140,6 +175,14 @@ const SignInLabel = styled.label`
   @media (max-width: 540px) {
     font-size: 13px;
   }
+`;
+
+const EmailError = styled.label`
+  margin-bottom: 15px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #f77;
+  margin-left: 5px;
 `;
 
 const SignInInput = styled.input`
@@ -161,6 +204,7 @@ const SignInInput = styled.input`
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px#3396f4;
   }
+
   &:focus {
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px #3396f4;
@@ -168,8 +212,15 @@ const SignInInput = styled.input`
     color: #495057;
   }
 
-  &.haveError {
+  &.emailInputError {
+    margin-bottom: 5px;
     border: 1px solid #f77;
+    box-shadow: inset 0 0 0 1px #ff77774d;
+  }
+
+  &.passwordInputError {
+    border: 1px solid #f77;
+    box-shadow: inset 0 0 0 1px #ff77774d;
   }
   @media (max-width: 540px) {
     font-size: 13px;

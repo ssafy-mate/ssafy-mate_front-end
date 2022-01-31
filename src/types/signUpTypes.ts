@@ -37,10 +37,10 @@ export interface EmailVerificationCodeConfirmRequest {
 
 export interface TechStacksWithLevel {
   techStackName: string;
-  techStackLevel: techStackLevel;
+  techStackLevel: TechStackLevel;
 }
 
-export type techStackLevel = '상' | '중' | '하';
+export type TechStackLevel = '상' | '중' | '하';
 
 // 회원가입 3단계 프로필 작성
 export interface SignUpProfile {

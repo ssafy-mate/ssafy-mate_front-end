@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 import styled from '@emotion/styled';
-import AuthService from '../../services/AuthService';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
@@ -11,32 +10,22 @@ import {
   exceptDefaultReg,
   onlyKoreanReg,
   onlyNumberReg,
-  requiredFields,
 } from '../../utils/regularExpressionData';
 
 import { campusListData } from '../../data/ssafyData';
 
-import { Severity, SsafyAuth } from '../../types/userInfomationTypes';
+import {
+  Severity,
+  SsafyAuth,
+  SsafyTrack,
+  SsafyAuthProps,
+} from '../../types/signUpTypes';
 
-interface SsafyTrack {
-  id: number;
-  name: string;
-}
+import AuthService from '../../services/AuthService';
 
-interface Props {
-  campus: string;
-  ssafyTrack: string;
-  studentNumber: string;
-  studentName: string;
-  signUpStep: number;
-  updateCampus: (campus: string) => void;
-  updateSsafyTrack: (ssafyTrack: string) => void;
-  updateStudentNumber: (studentNumber: string) => void;
-  updateStudentName: (studentName: string) => void;
-  updateSignUpStep: (signUpStep: number) => void;
-}
+const requiredFields: string = '필수 입력 항목입니다.';
 
-const AuthForm: React.FC<Props> = ({
+const AuthForm: React.FC<SsafyAuthProps> = ({
   campus,
   updateCampus,
   ssafyTrack,
@@ -50,12 +39,11 @@ const AuthForm: React.FC<Props> = ({
 }) => {
   const [selectedTracks, setSelectedTracks] = useState<SsafyTrack[]>([]);
 
-  const [failAlertOpen, setFailAlertOpen] = useState(false);
+  const [alertOpen, setAlertOpen] = useState<boolean>(false);
 
-  const [alertMessage, setAlertMessage] = useState('');
+  const [alertMessage, setAlertMessage] = useState<string>('');
 
-  const [statusAlertSeverity, setStatusAlertSeverity] =
-    useState<Severity>('success');
+  const [alertSeverity, setAlertSeverity] = useState<Severity>('success');
 
   const {
     watch,
@@ -64,7 +52,19 @@ const AuthForm: React.FC<Props> = ({
     reset,
     formState: { errors },
   } = useForm<SsafyAuth>({ mode: 'onChange' });
+
   const selectedCampus = watch('campus', '');
+
+  const showAlert = (type: Severity, message: string) => {
+    setAlertSeverity(type);
+    setAlertMessage(message);
+    setAlertOpen(true);
+  };
+
+  const alertClose = () => {
+    setAlertOpen(false);
+    reset();
+  };
 
   useEffect(() => {
     const selectedCampusIndex = campusListData.findIndex(
@@ -90,12 +90,6 @@ const AuthForm: React.FC<Props> = ({
     AuthRequest(data);
   };
 
-  const showAlert = (type: Severity, message: string) => {
-    setStatusAlertSeverity(type);
-    setAlertMessage(message);
-    setFailAlertOpen(true);
-  };
-
   const AuthRequest = (data: SsafyAuth) => {
     AuthService.getSsafyAuth(data)
       .then((response) => {
@@ -105,26 +99,22 @@ const AuthForm: React.FC<Props> = ({
       })
       .catch((error) => {
         if (error.response) {
-          const data = error.response.data;
-          if (data.status === 401 || data.status === 409) {
-            showAlert('warning', data.message);
-          } else if (data.status === 500) {
-            showAlert('error', data.message);
+          const { status, message } = error.response.data;
+
+          if (status === 401 || status === 409) {
+            showAlert('warning', message);
+          } else if (status === 500) {
+            showAlert('error', message);
           }
         }
       });
   };
 
-  const alertClose = () => {
-    setFailAlertOpen(false);
-    reset();
-  };
-
   return (
     <>
-      {failAlertOpen && (
+      {alertOpen && (
         <SsafyAuthSnackBar
-          open={failAlertOpen}
+          open={alertOpen}
           autoHideDuration={2000}
           onClose={alertClose}
           anchorOrigin={{
@@ -132,13 +122,13 @@ const AuthForm: React.FC<Props> = ({
             horizontal: 'center',
           }}
         >
-          <FailAlert
+          <Alert
             onClose={alertClose}
-            severity={statusAlertSeverity}
+            severity={alertSeverity}
             sx={{ width: '100%' }}
           >
             {alertMessage}
-          </FailAlert>
+          </Alert>
         </SsafyAuthSnackBar>
       )}
       <Container onSubmit={handleSubmit(onSubmit)}>
@@ -148,9 +138,11 @@ const AuthForm: React.FC<Props> = ({
             <Select
               id="campus"
               {...register('campus', {
+                required: true,
                 pattern: exceptDefaultReg,
               })}
               defaultValue={'default'}
+              className={errors.campus ? 'haveError' : ''}
             >
               <option value="default" disabled>
                 - 선택 -
@@ -170,9 +162,16 @@ const AuthForm: React.FC<Props> = ({
             <Select
               id="ssafy-track"
               {...register('ssafyTrack', {
+                required: true,
                 pattern: exceptDefaultReg,
               })}
               defaultValue={'default'}
+              className={errors.ssafyTrack ? 'haveError' : ''}
+              disabled={
+                selectedCampus === 'default' || selectedCampus === ''
+                  ? true
+                  : false
+              }
             >
               <option value="default" disabled>
                 - 선택 -
@@ -189,12 +188,14 @@ const AuthForm: React.FC<Props> = ({
           <InfoInput
             type="text"
             id="student-number"
+            maxLength={7}
             {...register('studentNumber', {
               required: true,
               pattern: onlyNumberReg,
               maxLength: 7,
               minLength: 7,
             })}
+            className={errors.studentNumber ? 'haveError' : ''}
           />
           {errors.studentNumber && errors.studentNumber.type === 'required' && (
             <ErrorSpan>{requiredFields}</ErrorSpan>
@@ -212,6 +213,7 @@ const AuthForm: React.FC<Props> = ({
               required: true,
               pattern: onlyKoreanReg,
             })}
+            className={errors.userName ? 'haveError' : ''}
           />
           {errors.userName?.type === 'required' && (
             <ErrorSpan>{requiredFields}</ErrorSpan>
@@ -285,11 +287,25 @@ const Select = styled.select`
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px#3396f4;
   }
+
   &:focus {
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px #3396f4;
     background-color: #fff;
     color: #495057;
+  }
+
+  &:disabled {
+    border: 1px solid #d7e2eb;
+    box-shadow: none;
+    background-color: #f7f8fa;
+    color: #d8d4d1;
+    cursor: not-allowed;
+  }
+
+  &.haveError {
+    border: 1px solid #f77;
+    box-shadow: inset 0 0 0 1px #ff77774d;
   }
 
   @media (max-width: 540px) {
@@ -315,11 +331,17 @@ const InfoInput = styled.input`
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px#3396f4;
   }
+
   &:focus {
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px #3396f4;
     background-color: #fff;
     color: #495057;
+  }
+
+  &.haveError {
+    border: 1px solid #f77;
+    box-shadow: inset 0 0 0 1px #ff77774d;
   }
 
   @media (max-width: 540px) {
@@ -382,8 +404,6 @@ const ErrorSpan = styled.span`
   font-size: 13px;
   color: #f44336;
 `;
-
-const FailAlert = styled(Alert)``;
 
 const SsafyAuthSnackBar = styled(Snackbar)`
   height: 20%;

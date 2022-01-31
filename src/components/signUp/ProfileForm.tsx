@@ -16,14 +16,14 @@ import Alert from '@mui/material/Alert';
 
 import { jobListData } from '../../data/jobListData';
 import { techStackListData } from '../../data/techStackListData';
-import { validUrl } from '../../utils/regularExpressionData';
+import { validUrlReg } from '../../utils/regularExpressionData';
 
 import { TechStack } from '../../types/commonTypes';
 import {
   ProfileProps,
   Severity,
   TechStacksWithLevel,
-} from '../../types/userInfomationTypes';
+} from '../../types/signUpTypes';
 
 import AuthService from '../../services/AuthService';
 
@@ -55,10 +55,9 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const [etcUrlPatternError, setEtcUrlPatternError] = useState<boolean>(false);
   const [gitHubUrlPatternError, setGitHubUrlPatternError] =
     useState<boolean>(false);
-  const [statusAlertOpen, setStatusAlertOpen] = useState<boolean>(false);
-  const [statusAlertText, setStatusAlertText] = useState<string>('');
-  const [statusAlertSeverity, setStatusAlertSeverity] =
-    useState<Severity>('success');
+  const [alertOpen, setAlertOpen] = useState<boolean>(false);
+  const [alertText, setAlertText] = useState<string>('');
+  const [alertSeverity, setAlertSeverity] = useState<Severity>('success');
 
   const signUpFormData = new FormData();
 
@@ -79,6 +78,16 @@ const ProfileForm: React.FC<ProfileProps> = ({
     options: techStackListData,
     getOptionLabel: (option) => option.name,
   });
+
+  const showAlert = (type: Severity, message: string) => {
+    setAlertSeverity(type);
+    setAlertText(message);
+    setAlertOpen(true);
+  };
+
+  const alertClose = () => {
+    setAlertOpen(false);
+  };
 
   useEffect(() => {
     techStacks.length >= 2
@@ -196,13 +205,13 @@ const ProfileForm: React.FC<ProfileProps> = ({
       : setEtcUrl(event.target.value);
 
     if (event.target.name === 'githubUrl') {
-      !validUrl.test(githubUrl)
+      !validUrlReg.test(githubUrl)
         ? setGitHubUrlPatternError(true)
         : setGitHubUrlPatternError(false);
     }
 
     if (event.target.name === 'etcUrl') {
-      !validUrl.test(etcUrl)
+      !validUrlReg.test(etcUrl)
         ? setEtcUrlPatternError(true)
         : setEtcUrlPatternError(false);
     }
@@ -220,7 +229,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
     }
   };
 
-  const validation = () => {
+  const validation = (): boolean => {
     if (!selfIntroduction) {
       setSelfIntroductionError(true);
     }
@@ -237,11 +246,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
       setAgreementError(true);
     }
 
-    !validUrl.test(githubUrl)
+    !validUrlReg.test(githubUrl)
       ? setGitHubUrlPatternError(true)
       : setGitHubUrlPatternError(false);
 
-    !validUrl.test(etcUrl)
+    !validUrlReg.test(etcUrl)
       ? setEtcUrlPatternError(true)
       : setEtcUrlPatternError(false);
 
@@ -279,12 +288,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
     return signUpFormData;
   };
 
-  const showAlert = (type: Severity, message: string) => {
-    setStatusAlertSeverity(type);
-    setStatusAlertText(message);
-    setStatusAlertOpen(true);
-  };
-
   const signUpClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
@@ -314,15 +317,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
     }
   };
 
-  const alertClose = () => {
-    setStatusAlertOpen(false);
-  };
-
   return (
     <>
-      {statusAlertOpen && (
+      {alertOpen && (
         <SsafyAuthSnackBar
-          open={statusAlertOpen}
+          open={alertOpen}
           autoHideDuration={2000}
           onClose={alertClose}
           anchorOrigin={{
@@ -332,10 +331,10 @@ const ProfileForm: React.FC<ProfileProps> = ({
         >
           <ResponseAlert
             onClose={alertClose}
-            severity={statusAlertSeverity}
+            severity={alertSeverity}
             sx={{ width: '100%' }}
           >
-            {statusAlertText}
+            {alertText}
           </ResponseAlert>
         </SsafyAuthSnackBar>
       )}
@@ -381,6 +380,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
               onKeyPress={handleTextAreaEnterKeyPressed}
               onChange={handleTextAreaInput}
               required
+              className={selfIntroductionError ? 'haveError' : ''}
             />
             {showError === 1 && selfIntroductionError && (
               <ErrorSpan>필수 입력 항목입니다.</ErrorSpan>
@@ -396,6 +396,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
               name="job1"
               onChange={handleJobSelect}
               required
+              className={job1Error ? 'haveError' : ''}
             >
               <option value="default" disabled>
                 - 선택 -
@@ -418,7 +419,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
               id="job2"
               defaultValue={'default'}
               onChange={handleJobSelect}
-              disabled={job1 === 'default'}
+              disabled={job1 === 'default' ? true : false}
             >
               <option value="default">- 선택 -</option>
               {jobListData
@@ -441,7 +442,10 @@ const ProfileForm: React.FC<ProfileProps> = ({
             </RequirementLabel>
             <InfoInputWrapper
               ref={setAnchorEl}
-              className={focused ? 'focused' : ''}
+              className={
+                (focused ? 'focused' : '') ||
+                (showError === 1 && techStacksError === true ? 'haveError' : '')
+              }
             >
               <InfoInput
                 type="text"
@@ -536,7 +540,9 @@ const ProfileForm: React.FC<ProfileProps> = ({
               id="sign-up-agreement"
               name="sign-up-agreement"
               onClick={handleCheckAgreement}
+              className={agreementError ? 'haveError' : ''}
             />
+
             <CheckBoxLabel htmlFor="sign-up-agreement">
               <AgreementLink href="#" target="_blank" rel="noopener noreferrer">
                 이용약관
@@ -665,6 +671,12 @@ const Textarea = styled.textarea`
   color: #263747;
   transition: all 0.08s ease-in-out;
 
+  &.haveError {
+    border: 1px solid #f77;
+    box-shadow: inset 0 0 0 1px #ff77774d;
+    cursor: pointer;
+  }
+
   @media (max-width: 540px) {
     font-size: 13px;
   }
@@ -693,6 +705,7 @@ const Select = styled.select`
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px#3396f4;
   }
+
   &:focus {
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px #3396f4;
@@ -700,12 +713,41 @@ const Select = styled.select`
     color: #495057;
   }
 
+  &:disabled {
+    border: 1px solid #d7e2eb;
+    box-shadow: none;
+    background-color: #f7f8fa;
+    color: #d8d4d1;
+    cursor: not-allowed;
+  }
+
+  &.haveError {
+    border: 1px solid #f77;
+    box-shadow: inset 0 0 0 1px #ff77774d;
+  }
+
   @media (max-width: 540px) {
     font-size: 13px;
   }
 `;
 
-const InfoInputWrapper = styled.div``;
+const InfoInputWrapper = styled.div`
+  width: 100%;
+  height: 40px;
+  outline: 0;
+  border-radius: 0.25rem;
+  background-color: #fbfbfd;
+  font-size: 16px;
+  line-height: 24px;
+  color: #263747;
+  transition: all 0.08s ease-in-out;
+
+  &.haveError {
+    border-radius: 0.25rem;
+    border: 1px solid #f77;
+    box-shadow: inset 0 0 0 1px #ff77774d;
+  }
+`;
 
 const InfoInput = styled.input`
   width: 100%;
@@ -725,6 +767,7 @@ const InfoInput = styled.input`
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px#3396f4;
   }
+
   &:focus {
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px #3396f4;
@@ -800,6 +843,11 @@ const TechStackInfo = styled.div`
 const AgreementCheckBox = styled.input`
   margin-right: 6px;
   cursor: pointer;
+
+  &.haveError {
+    box-shadow: inset 0 0 0 2px #e44a4c;
+    cursor: pointer;
+  }
 `;
 
 const CheckBoxLabel = styled.label`
@@ -879,6 +927,7 @@ const ErrorSpan = styled.span`
   font-weight: 400;
   font-size: 13px;
   color: #f44336;
+  cursor: pointer;
 
   &.agreement {
     margin-left: 10px;

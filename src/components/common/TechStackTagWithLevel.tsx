@@ -8,10 +8,7 @@ import Button from '@mui/material/Button';
 import CloseIcon from '@mui/icons-material/Close';
 
 import { TechStackTagProps } from '../../types/commonTypes';
-import {
-  TechStacksWithLevel,
-  techStackLevel,
-} from '../../types/userInfomationTypes';
+import { TechStacksWithLevel, TechStackLevel } from '../../types/signUpTypes';
 
 interface TechStackTagWithLevelProps extends TechStackTagProps {
   techStacks: TechStacksWithLevel[];
@@ -30,7 +27,7 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
   ...other
 }) => {
   const [selectedTechStackLevel, setSelectedTechStackLevel] =
-    useState<techStackLevel>('중');
+    useState<TechStackLevel>('중');
 
   useEffect(() => {
     techStacks.forEach((techStack) => {
@@ -55,7 +52,7 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
     }
   };
 
-  const updateTechStacklevel = (updateTechStackLevel: techStackLevel) => {
+  const updateTechStacklevel = (updateTechStackLevel: TechStackLevel) => {
     setSelectedTechStackLevel(updateTechStackLevel);
 
     updateTechStacks({
