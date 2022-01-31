@@ -20,11 +20,10 @@ import {
   EmailVerificationCodeRequest,
   SignUpProps,
   SignUp,
+  Severity,
 } from '../../types/userInfomationTypes';
 
 import AuthService from '../../services/AuthService';
-
-type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
 
 const SignUpForm: React.FC<SignUpProps> = ({
   signUpEmail,
@@ -116,7 +115,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
       setEmailCodeRequestButton(true);
     } else if (
       signUpEmailOnChange !== undefined &&
-      signUpEmailOnChange.length >= 1
+      signUpEmailOnChange.length >= 4
     ) {
       setEmailCodeRequestButton(false);
     }
@@ -178,6 +177,9 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
     data.userEmail = signUpEmailOnChange;
 
+    if (data.userEmail === '' || data.userEmail === undefined) {
+      setEmailCodeRequestButton(true);
+    }
     AuthService.getEmailVerificationCode(data)
       .then((response) => {
         if (response.success) {
@@ -218,6 +220,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
         offCodeInputAndConfirm();
         setEmailInputDisabled(true);
         setValue('signUpConfiromButton', 'getAuth');
+        setShowCodeBox(false);
       })
       .catch((error) => {
         if (error.response) {
