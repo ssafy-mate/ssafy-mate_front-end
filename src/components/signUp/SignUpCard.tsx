@@ -13,9 +13,9 @@ const SignUpCard: React.FC = () => {
   const [ssafyTrack, setSsafyTrack] = useState<string>('');
   const [studentNumber, setStudentNumber] = useState<string>('');
   const [studentName, setStudentName] = useState<string>('');
-  const [signUpStep, setSignUpStep] = useState<number>(0);
   const [signUpEmail, setSignUpEmail] = useState<string>('');
   const [signUpPassword, setSignUpPassword] = useState<string>('');
+  const [signUpStep, setSignUpStep] = useState<number>(0);
 
   const updateCampus = (campus: string): void => {
     setCampus(campus);
@@ -33,15 +33,15 @@ const SignUpCard: React.FC = () => {
     setStudentName(studentName);
   };
 
-  const updateSignUpStep = (signUpStep: number): void => {
-    setSignUpStep(signUpStep);
-  };
-
   const updateSignUpEmail = (signUpEmail: string): void => {
     setSignUpEmail(signUpEmail);
   };
   const updateSignUpPassword = (signUpPassword: string): void => {
     setSignUpPassword(signUpPassword);
+  };
+
+  const updateSignUpStep = (signUpStep: number): void => {
+    setSignUpStep(signUpStep);
   };
 
   return (

@@ -6,6 +6,24 @@ export interface SsafyAuth {
   userName: string;
 }
 
+export interface SsafyTrack {
+  id: number;
+  name: string;
+}
+
+export interface SsafyAuthProps {
+  campus: string;
+  ssafyTrack: string;
+  studentNumber: string;
+  studentName: string;
+  signUpStep: number;
+  updateCampus: (campus: string) => void;
+  updateSsafyTrack: (ssafyTrack: string) => void;
+  updateStudentNumber: (studentNumber: string) => void;
+  updateStudentName: (studentName: string) => void;
+  updateSignUpStep: (signUpStep: number) => void;
+}
+
 // 회원가입 2단계 이메일 인증 코드 요청
 export interface EmailVerificationCodeRequest {
   userEmail: string;

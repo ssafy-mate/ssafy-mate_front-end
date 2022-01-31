@@ -5,7 +5,7 @@ import { rest } from 'msw';
 import {
   EmailVerificationCodeConfirmRequest,
   SignUpProfile,
-} from '../../types/userInfomationTypes';
+} from '../../types/signUpTypes';
 
 export const authHandlers = [
   // 회원 가입 1단계 교육생 인증
