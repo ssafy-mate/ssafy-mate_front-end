@@ -25,7 +25,7 @@ import CreateTeamPage from './pages/CreateTeamPage';
 import EditTeamPage from './pages/EditTeamPage';
 import CommonProjectPage from './pages/CommonProjectPage';
 import SpecializationProjectTeamListPage from './pages/projects/SpecializationProjectTeamListPage';
-import SpecializationProjectStudentListPage from './pages/SpecializationProjectStudentListPage';
+import SpecializationProjectUserListPage from './pages/projects/SpecializationProjectUserListPage';
 import SpecializationProjectOfferListPage from './pages/projects/SpecializationProjectOfferListPage';
 import AutonomyProjectPage from './pages/AutonomyProjectPage';
 import NotFoundPage from './pages/NotFoundPage';
@@ -57,8 +57,8 @@ const App: React.FC = () => {
           />
           <Route
             exact
-            path="/projects/specialization/students"
-            component={SpecializationProjectStudentListPage}
+            path="/projects/specialization/users"
+            component={SpecializationProjectUserListPage}
           />
           <Route
             exact

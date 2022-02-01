@@ -29,12 +29,10 @@ const ProjectNavigation: React.FC = () => {
       </NavItem>
       <NavItem
         className={
-          location.pathname === '/projects/specialization/students'
-            ? 'active'
-            : ''
+          location.pathname === '/projects/specialization/users' ? 'active' : ''
         }
       >
-        <NavLink to="/projects/specialization/students">
+        <NavLink to="/projects/specialization/users">
           <PersonSearchIcon css={navLinkIcon} />
           교육생 공고
         </NavLink>
