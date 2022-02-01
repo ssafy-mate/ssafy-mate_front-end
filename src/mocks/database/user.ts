@@ -928,3 +928,186 @@ export const userDataList = [
     },
   },
 ];
+
+export const userListData = [
+  {
+    userId: 1,
+    userName: '조원빈',
+    profileImgUrl: '/images/projects/sample-student_profile-img1.jpeg',
+    campus: '서울',
+    projectTrack: '빅데이터',
+    ssafyTrack: 'Java Track',
+    techStacks: [
+      {
+        id: 45,
+        techStackName: 'Spring-Boot',
+      },
+      {
+        id: 49,
+        techStackName: 'MySQL',
+      },
+      {
+        id: 58,
+        techStackName: 'Swagger',
+      },
+      {
+        id: 70,
+        techStackName: 'docker',
+      },
+    ],
+    job1: '백엔드 (Back-end)',
+    job2: '프론트엔드 (Front-end)',
+    githubUrl: 'https://github.com/Jo-wonbin',
+    belongToTeam: false,
+  },
+  {
+    userId: 2,
+    userName: '소정은',
+    profileImgUrl: '/images/projects/sample-student_profile-img2.jpeg',
+    campus: '서울',
+    projectTrack: '인공지능',
+    ssafyTrack: 'Java Track',
+    techStacks: [
+      {
+        id: 6,
+        techStackName: 'React',
+      },
+      {
+        id: 11,
+        techStackName: 'Redux',
+      },
+      {
+        id: 16,
+        techStackName: 'Redux-Saga',
+      },
+      {
+        id: 23,
+        techStackName: 'Emotion',
+      },
+    ],
+    job1: '프론트엔드 (Front-end)',
+    job2: '백엔드 (Back-end)',
+    githubUrl: 'https://github.com/sojjeong',
+    belongToTeam: true,
+  },
+  {
+    userId: 3,
+    userName: '손영배',
+    profileImgUrl: '/images/projects/sample-student_profile-img3.jpeg',
+    campus: '서울',
+    projectTrack: '블록체인',
+    ssafyTrack: 'Python Track',
+    techStacks: [
+      {
+        id: 41,
+        techStackName: 'django',
+      },
+      {
+        id: 49,
+        techStackName: 'MySQL',
+      },
+      {
+        id: 5,
+        techStackName: 'Vue.js',
+      },
+      {
+        id: 10,
+        techStackName: 'Vuex',
+      },
+    ],
+    job1: '백엔드 (Back-end)',
+    job2: '프론트엔드 (Front-end)',
+    githubUrl: 'https://github.com/dudqo225',
+    belongToTeam: true,
+  },
+  {
+    userId: 4,
+    userName: '이정훈',
+    profileImgUrl: '/images/projects/sample-student_profile-img4.jpeg',
+    campus: '서울',
+    projectTrack: 'IoT 제어',
+    ssafyTrack: 'Java Track',
+    techStacks: [
+      {
+        id: 45,
+        techStackName: 'Spring-Boot',
+      },
+      {
+        id: 49,
+        techStackName: 'MySQL',
+      },
+      {
+        id: 67,
+        techStackName: 'AWS',
+      },
+      {
+        id: 52,
+        techStackName: 'JPA',
+      },
+    ],
+    job1: '백엔드 (Back-end)',
+    job2: null,
+    githubUrl: 'https://github.com/person003333',
+    belongToTeam: false,
+  },
+  {
+    userId: 5,
+    userName: '박정환',
+    profileImgUrl: '/images/projects/sample-student_profile-img5.jpeg',
+    campus: '서울',
+    projectTrack: '빅데이터',
+    ssafyTrack: 'Java Track',
+    techStacks: [
+      {
+        id: 4,
+        techStackName: 'TypeScript',
+      },
+      {
+        id: 6,
+        techStackName: 'React',
+      },
+      {
+        id: 15,
+        techStackName: 'React-Query',
+      },
+      {
+        id: 23,
+        techStackName: 'Emotion',
+      },
+    ],
+    job1: '프론트엔드 (Front-end)',
+    job2: null,
+    githubUrl: 'https://github.com/JeongHwan-dev',
+    belongToTeam: false,
+  },
+  {
+    userId: 6,
+    userName: '이여진',
+    profileImgUrl: null,
+    campus: '서울',
+    projectTrack: '인공지능',
+    ssafyTrack: 'Java Track',
+    techStacks: [
+      {
+        id: 3,
+        techStackName: 'JavaScript',
+      },
+      {
+        id: 6,
+        techStackName: 'React',
+      },
+      {
+        id: 21,
+        techStackName: 'Sass(SCSS)',
+      },
+      {
+        id: 27,
+        techStackName: 'webpack',
+      },
+    ],
+    job1: '프론트엔드 (Front-end)',
+    job2: null,
+    githubUrl: null,
+    belongToTeam: false,
+  },
+];
