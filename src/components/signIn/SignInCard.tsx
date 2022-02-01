@@ -6,12 +6,12 @@ import { Link } from 'react-router-dom';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-import { SignInRequestType } from '../../types/signInTypes';
+import { SignInRequestTypeWithIdSave } from '../../types/signInTypes';
 
 import { validEmailReg } from '../../utils/regularExpressionData';
 
 interface SigninProps {
-  login: (requestData: SignInRequestType) => void;
+  login: (requestData: SignInRequestTypeWithIdSave) => void;
 }
 
 const SignInCard: React.FC<SigninProps> = ({ login }) => {
@@ -32,14 +32,6 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
 
   const handleIdSave = (event: React.ChangeEvent<HTMLInputElement>) => {
     setIdSaveCheckBox(event.target.checked);
-  };
-
-  const saveUserId = (signInId: string) => {
-    if (idSaveCheckBox) {
-      localStorage.setItem('ssafy-mate-id', signInId);
-    } else {
-      localStorage.removeItem('ssafy-mate-id');
-    }
   };
 
   const handleInputEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,7 +64,11 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     if (validation(inputEmail, inputPassword)) {
-      login({ userEmail: inputEmail, password: inputPassword });
+      login({
+        userEmail: inputEmail,
+        password: inputPassword,
+        IdSave: idSaveCheckBox,
+      });
     }
   };
 
@@ -87,7 +83,6 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
     } else if (validEmailReg.test(emailInput)) {
       setInputEmailError(false);
       setEmailVerificaion(true);
-      saveUserId(emailInput);
     } else {
       setInputEmailError(true);
       setEmailVerificaion(false);
@@ -102,6 +97,7 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
       return false;
     }
   };
+
   return (
     <>
       <Container>

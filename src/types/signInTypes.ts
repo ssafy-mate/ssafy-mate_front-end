@@ -5,6 +5,13 @@ export type SignInRequestType = {
   userEmail: string;
   password: string;
 };
+
+export type SignInRequestTypeWithIdSave = {
+  userEmail: string;
+  password: string;
+  IdSave: boolean;
+};
+
 export interface project {
   projectId: string;
   projectName: string;

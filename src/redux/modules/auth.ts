@@ -5,7 +5,7 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 
 import {
   AuthState,
-  SignInRequestType,
+  SignInRequestTypeWithIdSave,
   SignInUser,
 } from '../../types/signInTypes';
 
@@ -65,16 +65,26 @@ export default reducer;
 // saga
 export const { login, logout } = createActions('LOGIN', 'LOGOUT', { prefix });
 
-function* loginSaga(action: Action<SignInRequestType>) {
+function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
   try {
     yield put(pending());
 
-    const data: SignInUser = yield call(SignInService.login, action.payload);
+    const data: SignInUser = yield call(SignInService.login, {
+      userEmail: action.payload.userEmail,
+      password: action.payload.password,
+    });
 
     //localstorage 에 저장 + store에 저장(userId,userEmail,userName,campus,ssafyTrack)
     if (data.token !== null) {
       TokenService.set(data.token);
       yield put(success(data));
+
+      // 로그인 성공한 경우에만 아이디 로컬 스토리지에 저장
+      if (action.payload.IdSave) {
+        localStorage.setItem('ssafy-mate-id', action.payload.userEmail);
+      } else {
+        localStorage.removeItem('ssafy-mate-id');
+      }
     }
 
     //로그인 성공 시 메인 페이지로 이동

@@ -135,4 +135,10 @@ export const EmailVerificationCodes = [
     code: 'sugarfin',
     timeout: true,
   },
+  {
+    id: 7,
+    userEmail: 'sugarfina637@naver.co',
+    code: 'sugarfin',
+    timeout: false,
+  },
 ];
