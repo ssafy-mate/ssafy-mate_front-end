@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -20,16 +20,43 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
   const [inputEmailError, setInputEmailError] = useState<boolean>(false);
   const [inputPasswordError, setInputPasswordError] = useState<boolean>(false);
   const [emailVerificaion, setEmailVerificaion] = useState<boolean>(true);
+  const [idSaveCheckBox, setIdSaveCheckBox] = useState<boolean>(false);
+  const savedId = localStorage.getItem('ssafy-mate-id');
+
+  useEffect(() => {
+    if (savedId !== null) {
+      setInputEmail(savedId);
+      setIdSaveCheckBox(true);
+    }
+  }, [savedId]);
+
+  const handleIdSave = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setIdSaveCheckBox(event.target.checked);
+  };
+
+  const saveUserId = (signInId: string) => {
+    if (idSaveCheckBox) {
+      localStorage.setItem('ssafy-mate-id', signInId);
+    } else {
+      localStorage.removeItem('ssafy-mate-id');
+    }
+  };
 
   const handleInputEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputEmail(event.target.value);
 
-    if (inputEmail !== '' && validEmailReg.test(inputEmail)) {
+    if (inputEmail !== '') {
       setInputEmailError(false);
-      setEmailVerificaion(true);
     } else {
       setInputEmailError(true);
-      setEmailVerificaion(false);
+    }
+
+    if (!emailVerificaion) {
+      if (validEmailReg.test(inputEmail)) {
+        setEmailVerificaion(true);
+      } else {
+        setEmailVerificaion(false);
+      }
     }
   };
 
@@ -60,6 +87,7 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
     } else if (validEmailReg.test(emailInput)) {
       setInputEmailError(false);
       setEmailVerificaion(true);
+      saveUserId(emailInput);
     } else {
       setInputEmailError(true);
       setEmailVerificaion(false);
@@ -85,9 +113,13 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
             <SignInInput
               type="email"
               placeholder="이메일"
-              className={inputEmailError ? 'emailInputError' : ''}
+              className={
+                (inputEmailError ? 'emailInputError' : '') ||
+                (emailVerificaion ? '' : 'emailInputError')
+              }
               required
               onChange={handleInputEmail}
+              value={inputEmail}
             />
             {!emailVerificaion && (
               <EmailError>이메일 형식이 올바르지 않습니다.</EmailError>
@@ -104,7 +136,13 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
 
           <Options>
             <IdSaveCheckBox>
-              <IdSaveCheckInput type="checkbox" id="idSave" name="idSave" />
+              <IdSaveCheckInput
+                type="checkbox"
+                id="idSave"
+                name="idSave"
+                onChange={handleIdSave}
+                checked={idSaveCheckBox}
+              />
               <IdSaveCheckLabel htmlFor="idSave">아이디 저장</IdSaveCheckLabel>
             </IdSaveCheckBox>
             <AccountManagementMenu>

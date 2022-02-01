@@ -1,4 +1,3 @@
-import { userDataList } from './../database/user';
 import { rest } from 'msw';
 import { SignInRequestType } from '../../types/signInTypes';
 import { SsafyMateMemberList } from '../database/signIn';
