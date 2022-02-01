@@ -52,7 +52,7 @@ const UserItem: React.FC<UserItemProps> = ({
             alt={`${profileImgUrl} 교육생 프로필 사진`}
           />
         </ProfileImgWrapper>
-        <MainInfoList>
+        <MainInfoList className={belongToTeam ? 'belong' : ''}>
           <UserName>
             <UserLabel userId={userId} userName={userName} />
           </UserName>
@@ -60,7 +60,7 @@ const UserItem: React.FC<UserItemProps> = ({
           <MainInfoItem>{ssafyTrack}</MainInfoItem>
         </MainInfoList>
       </ItemHeader>
-      <ItemBody>
+      <ItemBody className={belongToTeam ? 'belong' : ''}>
         <SubInfoList>
           <SubInfoItem>
             <Label>
@@ -115,7 +115,7 @@ const UserItem: React.FC<UserItemProps> = ({
           </SubInfoItem>
         </SubInfoList>
       </ItemBody>
-      <ItemFooter>
+      <ItemFooter className={belongToTeam ? 'belong' : ''}>
         {!belongToTeam && <RequestButton>팀 합류 요청</RequestButton>}
         <ProfileLink to={`/users/${userId}`}>프로필 보기</ProfileLink>
       </ItemFooter>
@@ -126,8 +126,8 @@ const UserItem: React.FC<UserItemProps> = ({
 const Item = styled.li`
   display: flex;
   flex-direction: column;
-  width: 360px;
-  margin: 12px;
+  width: 373px;
+  margin: 8px;
   padding: 16px;
   border: 1px solid #d7e2eb;
   border-radius: 4px;
@@ -137,14 +137,28 @@ const Item = styled.li`
     background-color: #f3f3f3;
   }
 
-  @media (max-width: 1199px) {
-    width: 47%;
-    margin: 1%;
+  &:nth-of-type(1),
+  &:nth-of-type(2),
+  &:nth-of-type(3) {
+    margin-top: 0;
   }
-  @media (max-width: 718px) {
+
+  @media (max-width: 1199px) {
+    width: 49%;
+    margin: 0 0 2% 0;
+
+    &:nth-of-type(even) {
+      margin-left: 2%;
+    }
+  }
+  @media (max-width: 767px) {
     max-width: 100%;
     width: 100%;
-    margin: 0 0 8px 0;
+    margin: 0 0 16px 0;
+
+    &:nth-of-type(even) {
+      margin-left: 0;
+    }
   }
 `;
 
@@ -160,7 +174,7 @@ const ProfileImgWrapper = styled.div`
   margin-right: 24px;
   border-radius: 4px;
 
-  @media (max-width: 428px) {
+  @media (max-width: 575px) {
     width: 46px;
     height: 46px;
   }
@@ -172,7 +186,7 @@ const ProfileImg = styled.img`
   border-radius: 4px;
   object-fit: fill;
 
-  @media (max-width: 428px) {
+  @media (max-width: 575px) {
     width: 46px;
     height: 46px;
   }
@@ -180,6 +194,10 @@ const ProfileImg = styled.img`
 
 const MainInfoList = styled.div`
   margin: auto 0;
+
+  &.belong {
+    filter: grayscale(80%);
+  }
 `;
 
 const UserName = styled.h2`
@@ -212,7 +230,7 @@ const MainInfoItem = styled.span`
     }
   }
 
-  @media (max-width: 428px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -220,6 +238,10 @@ const MainInfoItem = styled.span`
 const ItemBody = styled.div`
   width: 100%;
   margin-bottom: 16px;
+
+  &.belong {
+    filter: grayscale(80%);
+  }
 `;
 
 const SubInfoList = styled.ul`
@@ -234,14 +256,6 @@ const SubInfoItem = styled.li`
   box-sizing: border-box;
   text-overflow: ellipsis;
   white-space: nowrap;
-
-  @media (max-width: 814px) {
-    max-width: 302px;
-  }
-  @media (max-width: 718px) {
-    width: 100%;
-    max-width: 100%;
-  }
 `;
 
 const Label = styled.label`
@@ -262,7 +276,7 @@ const Label = styled.label`
     line-height: 1.5;
   }
 
-  @media (max-width: 428px) {
+  @media (max-width: 575px) {
     font-size: 13px;
 
     svg {
@@ -281,7 +295,7 @@ const Content = styled.p`
   text-overflow: ellipsis;
   white-space: nowrap;
 
-  @media (max-width: 428px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -298,6 +312,10 @@ const GitHubLink = styled.a`
 const ItemFooter = styled.div`
   display: flex;
   justify-content: space-between;
+
+  &.belong {
+    filter: grayscale(80%);
+  }
 `;
 
 const RequestButton = styled.button`
@@ -318,7 +336,7 @@ const RequestButton = styled.button`
     background-color: #2878c3;
   }
 
-  @media (max-width: 428px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -342,7 +360,7 @@ const ProfileLink = styled(Link)`
     background-color: #d1d4da;
   }
 
-  @media (max-width: 428px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;

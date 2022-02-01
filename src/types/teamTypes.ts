@@ -23,7 +23,7 @@ export interface TeamItemType {
   teamImgUrl: string | null;
   campus: string;
   project: string;
-  projectTrack?: string;
+  projectTrack?: string | null;
   notice: string;
   techStacks: TechStack[];
   totalRecruitment: number;
@@ -34,7 +34,6 @@ export interface TeamItemType {
   backendHeadcount: number;
   createDateTime: Date;
   isRecruiting: boolean;
-  message?: string;
 }
 
 export interface TeamListResponse {

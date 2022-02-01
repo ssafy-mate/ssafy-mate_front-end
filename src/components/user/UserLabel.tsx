@@ -92,6 +92,7 @@ const UserLabel: React.FC<UserLabelProps> = ({
 const Label = styled(Button)`
   display: block;
   min-width: 0;
+  margin: 0;
   padding: 0;
   font-family: 'Spoqa Han Sans Neo', 'sans-serif';
   color: #263647;

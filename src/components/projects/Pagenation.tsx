@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 
 import { useMediaQuery } from 'react-responsive';
 
@@ -83,6 +83,7 @@ const pagination = css`
   }
   .MuiPagination-ul button {
     border: none;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
     color: #263747;
   }
 `;

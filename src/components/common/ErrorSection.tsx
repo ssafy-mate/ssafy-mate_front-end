@@ -7,7 +7,7 @@ import HomeIcon from '@mui/icons-material/Home';
 import AssignmentReturnIcon from '@mui/icons-material/AssignmentReturn';
 
 interface ErrorSectionProps {
-  errorMessage: string;
+  errorMessage?: string;
 }
 
 const ErrorSection: React.FC<ErrorSectionProps> = ({ errorMessage }) => {

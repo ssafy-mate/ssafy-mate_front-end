@@ -6,25 +6,25 @@ import { styled as MuiStyled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
-import { TeamListResponse } from '../../types/teamTypes';
+import { UserListResponse } from '../../types/userTypes';
 
 import useQueryString from '../../hooks/useQueryString';
 
-import TeamItem from './TeamItem';
+import UserItem from '../projects/UserItem';
 import EmptyBox from './EmptyBox';
-import SkeletonTeamRecruitmentSection from './skeletonUI/SkeletonTeamRecruitmentSection';
 import ErrorSection from '../common/ErrorSection';
+import SkeletonUserRecruitmentSection from './skeletonUI/SkeletonUserRecruitmentSection';
 
-interface TeamRecruitmentSectionProps {
+interface UserRecruitmentSectionProps {
   isLoading: boolean;
-  data?: TeamListResponse;
+  data?: UserListResponse;
   isError: boolean;
   errorMessage?: string;
   setExclusion: (exclustion: boolean) => void;
   setSort: (sort: string) => void;
 }
 
-const TeamRecruitmentSection: React.FC<TeamRecruitmentSectionProps> = ({
+const UserRecruitmentSection: React.FC<UserRecruitmentSectionProps> = ({
   isLoading,
   data,
   isError,
@@ -36,15 +36,9 @@ const TeamRecruitmentSection: React.FC<TeamRecruitmentSectionProps> = ({
   const [sort, onSetSort] = useQueryString('sort');
 
   useEffect(() => {
-    if (isError) {
-      document.title = `${errorMessage} | 싸피 메이트`;
-    }
-  }, [isError, errorMessage]);
-
-  useEffect(() => {
     onSetExclusion(false);
     onSetSort('recent');
-  }, [onSetExclusion, onSetSort]);
+  });
 
   const handleChangeExclusion = (
     event: React.SyntheticEvent<Element, Event>,
@@ -66,51 +60,45 @@ const TeamRecruitmentSection: React.FC<TeamRecruitmentSectionProps> = ({
   return (
     <>
       {isLoading || !data ? (
-        <SkeletonTeamRecruitmentSection />
+        <SkeletonUserRecruitmentSection />
       ) : (
         <Container>
           <RecruitmentHeader>
             <HeaderLeft>
-              <TotalCount>검색된 팀 총 {data.totalElement}팀</TotalCount>
+              <TotalCount>검색된 교육생 총 {data.totalElement}명</TotalCount>
               <MuiFormControlLabel
                 control={<Android12Switch />}
                 onChange={handleChangeExclusion}
-                label="모집 마감 제외"
+                label="팀에 합류된 교육생 제외"
               />
             </HeaderLeft>
             <HeaderRight>
               <SortSelect onChange={handleChangeSort}>
                 <option value="recent">최신순</option>
-                <option value="headcount">인원순</option>
+                <option value="name">이름순</option>
               </SortSelect>
             </HeaderRight>
           </RecruitmentHeader>
           {data.totalElement === 0 ? (
-            <EmptyBox message={'위의 조건으로 모집 중인 팀이 아직 없습니다.'} />
+            <EmptyBox message="위의 조건으로 팀을 구하고 있는 교육생이 아직 없습니다." />
           ) : (
-            <TeamList>
-              {data?.teams.map((team) => (
-                <TeamItem
-                  key={team.teamId}
-                  teamId={team.teamId}
-                  teamName={team.teamName}
-                  teamImgUrl={team.teamImgUrl}
-                  campus={team.campus}
-                  project={team.project}
-                  projectTrack={team.projectTrack}
-                  notice={team.notice}
-                  techStacks={team.techStacks}
-                  totalRecruitment={team.totalRecruitment}
-                  totalHeadcount={team.totalHeadcount}
-                  frontendRecruitment={team.frontendRecruitment}
-                  frontendHeadcount={team.frontendHeadcount}
-                  backendRecruitment={team.backendRecruitment}
-                  backendHeadcount={team.backendHeadcount}
-                  createDateTime={team.createDateTime}
-                  isRecruiting={team.isRecruiting}
+            <UserList>
+              {data?.users.map((user) => (
+                <UserItem
+                  userId={user.userId}
+                  userName={user.userName}
+                  profileImgUrl={user.profileImgUrl}
+                  campus={user.campus}
+                  projectTrack={user.projectTrack}
+                  ssafyTrack={user.ssafyTrack}
+                  techStacks={user.techStacks}
+                  job1={user.job1}
+                  job2={user.job2}
+                  githubUrl={user.githubUrl}
+                  belongToTeam={user.belongToTeam}
                 />
               ))}
-            </TeamList>
+            </UserList>
           )}
         </Container>
       )}
@@ -145,7 +133,6 @@ const TotalCount = styled.h1`
 `;
 
 const SortSelect = styled.select`
-  height: 32px;
   padding: 0.3125rem 2rem 0.3125rem 1rem;
   border-color: #e9ecf3;
   border-radius: 4px;
@@ -163,13 +150,11 @@ const SortSelect = styled.select`
   cursor: pointer;
 `;
 
-const TeamList = styled.ul`
+const UserList = styled.ul`
   display: flex;
   flex-wrap: wrap;
-
-  @media (max-width: 1199px) {
-    flex-direction: column;
-  }
+  justify-content: center;
+  width: 100%;
 `;
 
 const MuiFormControlLabel = styled(FormControlLabel)`
@@ -214,4 +199,4 @@ const Android12Switch = MuiStyled(Switch)(({ theme }) => ({
   },
 }));
 
-export default TeamRecruitmentSection;
+export default UserRecruitmentSection;

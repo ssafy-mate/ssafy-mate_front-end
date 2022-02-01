@@ -74,3 +74,9 @@ export interface RootState {
   user: UserState;
   router: Reducer<RouterState<unknown>, AnyAction>;
 }
+
+export interface ErrorResponse {
+  status: number;
+  success: boolean;
+  message: string;
+}
