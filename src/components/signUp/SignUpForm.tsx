@@ -42,8 +42,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
   const [codeConfirmButton, setCodeConfirmButton] = useState<boolean>(true);
   const [codeInputDisabled, setCodeInputDisabled] = useState<boolean>(true);
   const [emailInputDisabled, setEmailInputDisabled] = useState<boolean>(false);
-  const [codeConfirmButtonText, setCodeConfirmButtonText] =
-    useState<string>('확인');
   const [verificationCodeButtonText, setVerificationCodeButtonText] =
     useState<string>('이메일 인증');
   const [codeVerificationErrorText, setCodeVerificationErrorText] =
@@ -218,12 +216,9 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
   const EmailVerificationCodeConfirm = () => {
     const data: EmailVerificationCodeConfirmRequest = {
-      code: '',
-      userEmail: '',
+      code: verificationCodeOnChange,
+      userEmail: signUpEmailOnChange,
     };
-
-    data.userEmail = signUpEmailOnChange;
-    data.code = verificationCodeOnChange;
 
     AuthService.getEmailVerificationCodeConfirm(data)
       .then((response) => {
@@ -360,7 +355,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
                   required: true,
                 })}
               >
-                {codeConfirmButtonText}
+                확인
               </AuthButton>
             </ButtonWrapper>
             {(() => {
