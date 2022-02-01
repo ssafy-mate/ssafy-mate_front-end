@@ -15,6 +15,8 @@ const TeamItem: React.FC<TeamItemProps> = ({
   teamName,
   teamImgUrl,
   campus,
+  project,
+  projectTrack,
   notice,
   techStacks,
   totalRecruitment,
@@ -23,49 +25,54 @@ const TeamItem: React.FC<TeamItemProps> = ({
   frontendHeadcount,
   backendRecruitment,
   backendHeadcount,
+  isRecruiting,
 }) => {
   return (
-    <Item>
-      <TeamInfoPageLink to={`/teams/${teamId}`}>
-        <ItemHeader>
-          <TeamImg
-            src={
-              teamImgUrl !== null
-                ? teamImgUrl
-                : '/images/assets/basic-team-logo.png'
-            }
-            alt={`${teamName} 팀 로고`}
-          />
-        </ItemHeader>
-        <ItemBody>
-          <Notice>{notice}</Notice>
-          <TeamName>
-            {teamName}
-            <TeamCampus>{campus}</TeamCampus>
-          </TeamName>
-          <TeamStatusList>
-            <TeamStatusItem>
-              <WebIcon />
-              <Job>Front-end</Job> {frontendHeadcount} / {frontendRecruitment}
-            </TeamStatusItem>
-            <TeamStatusItem>
-              <StorageIcon />
-              <Job>Back-end</Job> {backendHeadcount} / {backendRecruitment}
-            </TeamStatusItem>
-            <TeamStatusItem>
-              <GroupsIcon />
-              <Job>Total</Job> {totalHeadcount} / {totalRecruitment}
-            </TeamStatusItem>
-          </TeamStatusList>
-          <TechStackList>
-            {techStacks.map((techStack) => (
-              <TechStackItem key={techStack.id}>
-                {techStack.techStackName}
-              </TechStackItem>
-            ))}
-          </TechStackList>
-        </ItemBody>
-      </TeamInfoPageLink>
+    <Item className={isRecruiting ? '' : 'full'}>
+      <ItemHeader>
+        <TeamImg
+          src={
+            teamImgUrl !== null
+              ? teamImgUrl
+              : '/images/assets/basic-team-logo.png'
+          }
+          alt={`${teamName} 팀 로고`}
+        />
+      </ItemHeader>
+      <ItemBody>
+        <Link to={`/teams/${teamId}`} className="team-item__info-page-link">
+          <Notice className="team-item__notice">{notice}</Notice>
+        </Link>
+        <MainInfoList>
+          <InfoItem>{teamName}</InfoItem>
+          <InfoItem>{campus}</InfoItem>
+        </MainInfoList>
+        <SubInfoList>
+          <InfoItem>{project}</InfoItem>
+          <InfoItem>{projectTrack}</InfoItem>
+        </SubInfoList>
+        <TeamStatusList>
+          <TeamStatusItem>
+            <WebIcon />
+            <Job>Front-end</Job> {frontendHeadcount} / {frontendRecruitment}
+          </TeamStatusItem>
+          <TeamStatusItem>
+            <StorageIcon />
+            <Job>Back-end</Job> {backendHeadcount} / {backendRecruitment}
+          </TeamStatusItem>
+          <TeamStatusItem>
+            <GroupsIcon />
+            <Job>Total</Job> {totalHeadcount} / {totalRecruitment}
+          </TeamStatusItem>
+        </TeamStatusList>
+        <TechStackList>
+          {techStacks.map((techStack) => (
+            <TechStackItem key={techStack.id}>
+              {techStack.techStackName}
+            </TechStackItem>
+          ))}
+        </TechStackList>
+      </ItemBody>
     </Item>
   );
 };
@@ -80,13 +87,11 @@ const Item = styled.li`
   border-radius: 4px;
   box-sizing: border-box;
   transition: all 0.08s ease-in-out;
-  cursor: pointer;
 
   &:hover {
-    border: 1px solid #84c0f8;
-    background-color: #f8fbfe;
+    border: 1px solid #add5fa;
 
-    & h5 {
+    & .team-item__notice {
       color: #3396f4;
       text-decoration: underline;
     }
@@ -98,6 +103,11 @@ const Item = styled.li`
   &.full {
     background-color: #f3f3f3;
     filter: grayscale(80%);
+
+    &:hover {
+      border: 1px solid #d7e2eb;
+      background-color: #f3f3f3;
+    }
   }
 
   @media (max-width: 1199px) {
@@ -111,10 +121,6 @@ const Item = styled.li`
   @media (max-width: 575px) {
     padding: 16px;
   }
-`;
-
-const TeamInfoPageLink = styled(Link)`
-  display: flex;
 `;
 
 const ItemHeader = styled.div`
@@ -145,13 +151,13 @@ const ItemBody = styled.div`
   box-sizing: border-box;
 `;
 
-const Notice = styled.h1`
+const Notice = styled.h2`
   width: 100%;
   margin-bottom: 6px;
   font-size: 18px;
   line-height: 1.5;
   color: #263747;
-  transition: all 0.12s ease-in-out;
+  transition: all 0.08s ease-in-out;
 
   @media (max-width: 767px) {
     font-size: 16px;
@@ -161,33 +167,41 @@ const Notice = styled.h1`
   }
 `;
 
-const TeamName = styled.h2`
+const MainInfoList = styled.h3`
   display: flex;
   margin-bottom: 6px;
+`;
+
+const SubInfoList = styled.div`
+  display: flex;
+  margin-bottom: 6px;
+`;
+
+const InfoItem = styled.span`
+  display: flex;
   font-size: 14px;
   color: #98a8b9;
+
+  &:not(:first-of-type) {
+    ::before {
+      content: '';
+      display: inline-block;
+      width: 1px;
+      height: 10px;
+      margin: auto 8px;
+      background-color: #98a8b9;
+    }
+  }
 
   @media (max-width: 767px) {
     font-size: 13px;
   }
-`;
-
-const TeamCampus = styled.span`
-  display: flex;
-
-  &::before {
-    content: '';
-    display: inline-block;
-    width: 1px;
-    height: 10px;
-    margin: auto 8px;
-    background-color: #98a8b9;
-  }
-
   @media (max-width: 575px) {
-    &::before {
-      height: 9px;
-      margin: auto 6px;
+    &:not(:first-of-type) {
+      ::before {
+        height: 9px;
+        margin: auto 6px;
+      }
     }
   }
 `;
