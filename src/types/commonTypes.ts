@@ -10,12 +10,12 @@ export interface TechStack {
   techStackName: string;
 }
 
-export interface TechStackWtihImg extends TechStack {
+export interface TechStackWithImg extends TechStack {
   techStackImgUrl: string;
 }
 
 export interface TechStackTagProps
-  extends TechStackWtihImg,
+  extends TechStackWithImg,
     ReturnType<AutocompleteGetTagProps> {}
 
 export interface HomeBannerCardData {

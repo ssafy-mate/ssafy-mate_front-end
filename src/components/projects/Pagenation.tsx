@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { useMediaQuery } from 'react-responsive';
 
@@ -9,13 +9,32 @@ import styled from '@emotion/styled';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
-const Pagenation: React.FC = () => {
+import useQueryString from '../../hooks/useQueryString';
+
+interface PagenationProps {
+  setPage: (page: number) => void;
+}
+
+const Pagenation: React.FC<PagenationProps> = ({ setPage }) => {
   const smallMedia = useMediaQuery({
     query: '(max-width: 575px)',
   });
   const extraLargeMedia = useMediaQuery({
     query: '(max-width: 1199px)',
   });
+  const [page, onSetPage] = useQueryString('page');
+
+  useEffect(() => {
+    onSetPage(1);
+  }, [onSetPage]);
+
+  const handleChangePage = (
+    event: React.ChangeEvent<unknown>,
+    page: number,
+  ): void => {
+    setPage(page);
+    onSetPage(page);
+  };
 
   return (
     <Container>
@@ -26,6 +45,7 @@ const Pagenation: React.FC = () => {
             variant="outlined"
             shape="rounded"
             css={pagination}
+            onChange={handleChangePage}
             size={extraLargeMedia ? (smallMedia ? 'small' : 'medium') : 'large'}
           />
         </Stack>

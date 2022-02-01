@@ -4,13 +4,7 @@ import { useQuery } from 'react-query';
 
 import TeamService from '../services/TeamService';
 
-import { TeamItemType } from '../types/teamTypes';
-
-interface TeamListResponse {
-  teams: TeamItemType[];
-  totalPage: number;
-  nowPage: number;
-}
+import { TeamListResponse } from '../types/teamTypes';
 
 interface TeamListErrorResponse {
   status: number;
@@ -18,12 +12,12 @@ interface TeamListErrorResponse {
   message: string;
 }
 
-const useTeamList = () => {
-  const queryFunction = () => TeamService.getTeamList();
+const useTeamList = (params: object) => {
+  const queryFn = () => TeamService.getTeamList(params);
   const { isLoading, data, isError, error } = useQuery<
     AxiosResponse<TeamListResponse>,
     AxiosError<TeamListErrorResponse>
-  >(['teamList'], queryFunction, {
+  >(['teamList', { params }], queryFn, {
     keepPreviousData: true,
   });
 

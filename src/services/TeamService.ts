@@ -12,6 +12,17 @@ class TeamService {
 
     return response;
   }
+
+  public static async getTeamList(params: object) {
+    const response = await axiosInstance.get(`/api/auth/project/team-list`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params,
+    });
+
+    return response;
+  }
 }
 
 export default TeamService;
