@@ -12,10 +12,11 @@ import Stack from '@mui/material/Stack';
 import useQueryString from '../../hooks/useQueryString';
 
 interface PagenationProps {
+  totalPage: number;
   setPage: (page: number) => void;
 }
 
-const Pagenation: React.FC<PagenationProps> = ({ setPage }) => {
+const Pagenation: React.FC<PagenationProps> = ({ totalPage, setPage }) => {
   const smallMedia = useMediaQuery({
     query: '(max-width: 575px)',
   });
@@ -41,7 +42,7 @@ const Pagenation: React.FC<PagenationProps> = ({ setPage }) => {
       <Wrapper>
         <Stack spacing={2}>
           <Pagination
-            count={20}
+            count={totalPage}
             variant="outlined"
             shape="rounded"
             css={pagination}
@@ -56,7 +57,7 @@ const Pagenation: React.FC<PagenationProps> = ({ setPage }) => {
 
 const Container = styled.div`
   max-width: 1200px;
-  margin-top: 28px;
+  margin: 28px auto 0;
   padding: 0 16px;
   box-sizing: border-box;
 

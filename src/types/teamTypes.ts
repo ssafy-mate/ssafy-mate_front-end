@@ -34,6 +34,7 @@ export interface TeamItemType {
   backendHeadcount: number;
   createDateTime: Date;
   isRecruiting: boolean;
+  message?: string;
 }
 
 export interface TeamListResponse {

@@ -1,14 +1,14 @@
 import { useState, useEffect } from 'react';
 
-import useTeamList from '../hooks/useTeamList';
+import useTeamList from '../../hooks/useTeamList';
 
-import Header from '../components/common/Header';
-import ProjectNavigation from '../components/projects/ProjectNavigation';
-import ProjectBannerSection from '../components/projects/ProjectBannerSection';
-import TeamListSearchForm from '../components/projects/TeamListSearchForm';
-import TeamRecruitmentSection from '../components/projects/TeamRecruitmentSection';
-import Pagenation from '../components/projects/Pagenation';
-import Footer from '../components/common/Footer';
+import Header from '../../components/common/Header';
+import ProjectNavigation from '../../components/projects/ProjectNavigation';
+import ProjectBannerSection from '../../components/projects/ProjectBannerSection';
+import TeamListSearchForm from '../../components/projects/TeamListSearchForm';
+import TeamRecruitmentSection from '../../components/projects/TeamRecruitmentSection';
+import Pagenation from '../../components/projects/Pagenation';
+import Footer from '../../components/common/Footer';
 
 const SpecializationProjectTeamListPage: React.FC = () => {
   const [campus, setCampus] = useState<string>('all');
@@ -56,7 +56,9 @@ const SpecializationProjectTeamListPage: React.FC = () => {
         setExclusion={setExclusion}
         setSort={setSort}
       />
-      <Pagenation setPage={setPage} />
+      {data !== undefined && (
+        <Pagenation totalPage={data.totalPage} setPage={setPage} />
+      )}
       <Footer />
     </>
   );

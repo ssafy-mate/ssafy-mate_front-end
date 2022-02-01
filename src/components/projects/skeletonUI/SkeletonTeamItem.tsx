@@ -98,10 +98,6 @@ const Item = styled.li`
   transition: all 0.08s ease-in-out;
   cursor: pointer;
 
-  &:hover {
-    border: 1px solid #84c0f8;
-    background-color: #f8fbfe;
-  }
   &:nth-of-type(even) {
     margin-left: 16px;
   }

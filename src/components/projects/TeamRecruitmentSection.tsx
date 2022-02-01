@@ -10,8 +10,10 @@ import { TeamListResponse } from '../../types/teamTypes';
 
 import useQueryString from '../../hooks/useQueryString';
 
-import SkeletonTeamRecruitmentSection from './skeletonUI/SkeletonTeamRecruitmentSection';
 import TeamItem from './TeamItem';
+import EmptyBox from './EmptyBox';
+import SkeletonTeamRecruitmentSection from './skeletonUI/SkeletonTeamRecruitmentSection';
+import ErrorSection from '../common/ErrorSection';
 
 interface TeamRecruitmentSectionProps {
   isLoading: boolean;
@@ -57,12 +59,16 @@ const TeamRecruitmentSection: React.FC<TeamRecruitmentSectionProps> = ({
     onSetSort(event.target.value);
   };
 
+  if (isError) {
+    return <ErrorSection errorMessage={errorMessage} />;
+  }
+
   return (
-    <Container>
+    <>
       {isLoading || !data ? (
         <SkeletonTeamRecruitmentSection />
       ) : (
-        <>
+        <Container>
           <RecruitmentHeader>
             <HeaderLeft>
               <TotalCount>검색된 팀 총 {data.totalElement}팀</TotalCount>
@@ -79,32 +85,36 @@ const TeamRecruitmentSection: React.FC<TeamRecruitmentSectionProps> = ({
               </FilterSelect>
             </HeaderRight>
           </RecruitmentHeader>
-          <TeamList>
-            {data?.teams.map((team) => (
-              <TeamItem
-                key={team.teamId}
-                teamId={team.teamId}
-                teamName={team.teamName}
-                teamImgUrl={team.teamImgUrl}
-                campus={team.campus}
-                project={team.project}
-                projectTrack={team.projectTrack}
-                notice={team.notice}
-                techStacks={team.techStacks}
-                totalRecruitment={team.totalRecruitment}
-                totalHeadcount={team.totalHeadcount}
-                frontendRecruitment={team.frontendRecruitment}
-                frontendHeadcount={team.frontendHeadcount}
-                backendRecruitment={team.backendRecruitment}
-                backendHeadcount={team.backendHeadcount}
-                createDateTime={team.createDateTime}
-                isRecruiting={team.isRecruiting}
-              />
-            ))}
-          </TeamList>
-        </>
+          {data.totalElement === 0 ? (
+            <EmptyBox message={'위의 조건으로 모집 중인 팀이 아직 없습니다.'} />
+          ) : (
+            <TeamList>
+              {data?.teams.map((team) => (
+                <TeamItem
+                  key={team.teamId}
+                  teamId={team.teamId}
+                  teamName={team.teamName}
+                  teamImgUrl={team.teamImgUrl}
+                  campus={team.campus}
+                  project={team.project}
+                  projectTrack={team.projectTrack}
+                  notice={team.notice}
+                  techStacks={team.techStacks}
+                  totalRecruitment={team.totalRecruitment}
+                  totalHeadcount={team.totalHeadcount}
+                  frontendRecruitment={team.frontendRecruitment}
+                  frontendHeadcount={team.frontendHeadcount}
+                  backendRecruitment={team.backendRecruitment}
+                  backendHeadcount={team.backendHeadcount}
+                  createDateTime={team.createDateTime}
+                  isRecruiting={team.isRecruiting}
+                />
+              ))}
+            </TeamList>
+          )}
+        </Container>
       )}
-    </Container>
+    </>
   );
 };
 

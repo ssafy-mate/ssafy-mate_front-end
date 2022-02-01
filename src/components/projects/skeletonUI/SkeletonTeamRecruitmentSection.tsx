@@ -6,12 +6,12 @@ import SkeletonTeamItem from './SkeletonTeamItem';
 
 const SkeletonTeamRecruitmentSection: React.FC = () => {
   return (
-    <>
+    <Container>
       <RecruitmentHeader>
         <TotalCount>
           <Skeleton variant="text" width={100} height={35} />
         </TotalCount>
-        <FilterSelect defaultValue={'recent'}>
+        <FilterSelect>
           <option value="recent">최신순</option>
           <option value="headcount">인원순</option>
         </FilterSelect>
@@ -26,9 +26,16 @@ const SkeletonTeamRecruitmentSection: React.FC = () => {
         <SkeletonTeamItem />
         <SkeletonTeamItem />
       </TeamList>
-    </>
+    </Container>
   );
 };
+
+const Container = styled.section`
+  max-width: 1200px;
+  margin: 0 auto 24px;
+  padding: 0 16px;
+  box-sizing: border-box;
+`;
 
 const RecruitmentHeader = styled.div`
   display: flex;
