@@ -37,7 +37,9 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
 
   const handleInputEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputEmailOnChange = event.target.value;
+
     setInputEmail(inputEmailOnChange);
+
     if (showError) {
       if (inputEmailOnChange === '') {
         setInputEmailError(true);
@@ -49,11 +51,16 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
         setInputEmailError(false);
         setEmailVerificaion(false);
       }
+    } else {
+      inputEmailOnChange === ''
+        ? setInputEmailError(true)
+        : setInputEmailError(false);
     }
   };
 
   const handleInputPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputPasswordOnChange = event.target.value;
+
     setInputPassword(inputPasswordOnChange);
 
     inputPasswordOnChange === ''
