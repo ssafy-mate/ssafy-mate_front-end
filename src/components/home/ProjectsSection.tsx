@@ -11,7 +11,6 @@ const ProjectsSection: React.FC = () => {
       pageUrl: '/projects/common/teams',
       imgUrl: '/images/projects/common-project_link.png',
       hexColorCode: '#3396f4',
-      trackOptions: ['웹 기술', '웹 디자인', '웹 IoT'],
     },
     {
       projectName: '특화 프로젝트',
