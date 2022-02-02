@@ -85,9 +85,9 @@ const SignUpForm: React.FC<SignUpProps> = ({
     return () => clearInterval(timer);
   }, [minutes, seconds]);
 
-  const codeConfirmButtonOnChange: string | undefined = watch(
-    'signUpConfiromButton',
-  );
+  // const codeConfirmButtonOnChange: string | undefined = watch(
+  //   'signUpConfiromButton',
+  // );
   const signUpEmailOnChange: string = watch('signUpEmail');
   const verificationCodeOnChange: string = watch('verificationCode');
   const signUpPasswordOnChange: string = watch('signUpPassword');
@@ -159,13 +159,13 @@ const SignUpForm: React.FC<SignUpProps> = ({
   }, [errors.verificationCode, verificationCodeOnChange]);
 
   // 인증 코드 입력에 문제가 있는 경우에 이메일 재전송 버튼 활성화
-  useEffect(() => {
-    if (!codeInputDisabled) {
-      setResendEmail(true);
-    } else if (codeConfirmButtonOnChange === 'getAuth') {
-      setResendEmail(false);
-    }
-  }, [codeInputDisabled, codeConfirmButtonOnChange]);
+  // useEffect(() => {
+  //   if (!codeInputDisabled) {
+  //     setResendEmail(true);
+  //   } else if (codeConfirmButtonOnChange === 'getAuth') {
+  //     setResendEmail(false);
+  //   }
+  // }, [codeInputDisabled, codeConfirmButtonOnChange]);
 
   const offEmailCodeInput = () => {
     setEmailCodeRequestButton(true);
@@ -198,6 +198,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
           offEmailCodeInput();
           setShowCodeBox(true);
           resetTimer();
+          setVerificationCodeButtonText('이메일 인증');
         }
       })
       .catch((error) => {
@@ -228,7 +229,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
         offCodeInputAndConfirm();
         setEmailInputDisabled(true);
         setEmailInputError('');
-        setValue('signUpConfiromButton', 'getAuth');
+        // setValue('signUpConfiromButton', 'getAuth');
         setShowCodeBox(false);
       })
       .catch((error) => {
@@ -345,7 +346,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
                   placeholder="인증코드 8자리 입력"
                   disabled={codeInputDisabled}
                   className={
-                    errors.verificationCode || resendEmail ? 'have-error' : ''
+                    errors.verificationCode ? 'have-error' : 'no-error'
                   }
                 />
                 {!codeInputDisabled && (
@@ -381,17 +382,16 @@ const SignUpForm: React.FC<SignUpProps> = ({
                 );
               }
             })()}
-            {resendEmail && (
-              <ResendEmailWrapper>
-                <ResendEmailMessage>
-                  <ResendEmailIcon />
-                  이메일을 받지 못하셨나요?
-                  <ResendLink onClick={verificationCodeRequest}>
-                    이메일 재전송하기
-                  </ResendLink>
-                </ResendEmailMessage>
-              </ResendEmailWrapper>
-            )}
+
+            <ResendEmailWrapper>
+              <ResendEmailMessage>
+                <ResendEmailIcon />
+                이메일을 받지 못하셨나요?
+                <ResendLink onClick={verificationCodeRequest}>
+                  이메일 재전송하기
+                </ResendLink>
+              </ResendEmailMessage>
+            </ResendEmailWrapper>
           </InputWrapper>
         ) : null}
         <InputWrapper>
@@ -450,8 +450,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
             </ErrorMessageWrapper>
           )}
           {errors.signUpCheckPassword?.type !== 'required' &&
-            (errors.signUpPassword?.type === 'required' ||
-              errors.signUpCheckPassword?.type === 'validate') && (
+            errors.signUpPassword?.type === 'required' && (
               <ErrorMessageWrapper>
                 <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
               </ErrorMessageWrapper>
@@ -537,6 +536,7 @@ const VerificationCodeWrapper = styled.div`
 `;
 
 const InfoInput = styled.input`
+  flex: 1 0 0px;
   width: 100%;
   height: 40px;
   margin-bottom: 16px;
@@ -577,7 +577,9 @@ const InfoInput = styled.input`
     border: 1px solid #f44336;
     box-shadow: inset 0 0 0 1px #ff77774d;
   }
-
+  &.no-error {
+    margin-bottom: 4px;
+  }
   @media (max-width: 575px) {
     font-size: 13px;
   }

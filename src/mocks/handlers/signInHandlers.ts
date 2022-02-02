@@ -7,12 +7,10 @@ export const signInHandlers = [
     'http://localhost:3000/api/user/sign-in',
     async (request: any, response, context) => {
       const data: SignInRequestType = request.body;
-      const { userEmail, password } = data;
+      const { userEmail } = data;
 
       const memberIndex = SsafyMateMemberList.findIndex(
-        (ssafyMember) =>
-          ssafyMember.userData.userEmail === userEmail &&
-          ssafyMember.userData.password === password,
+        (ssafyMember) => ssafyMember.userData.userEmail === userEmail,
       );
 
       if (memberIndex === -1) {
