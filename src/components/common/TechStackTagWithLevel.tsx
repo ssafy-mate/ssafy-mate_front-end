@@ -13,7 +13,7 @@ import { TechStacksWithLevel, TechStackLevel } from '../../types/signUpTypes';
 interface TechStackTagWithLevelProps extends TechStackTagProps {
   techStacks: TechStacksWithLevel[];
   updateTechStacks: (techStack: TechStacksWithLevel) => void;
-  deleteTechStacks: (techStackName: string) => void;
+  deleteTechStacks: (techStackId: number) => void;
 }
 
 const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
@@ -31,11 +31,11 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
 
   useEffect(() => {
     techStacks.forEach((techStack) => {
-      if (techStack.techStackName === techStackName) {
+      if (techStack.techStackCode === id) {
         setSelectedTechStackLevel(techStack.techStackLevel);
       }
     });
-  }, [techStackName, techStacks]);
+  }, [id, techStacks]);
 
   const handleTechStackLevel = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -57,13 +57,13 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
 
     updateTechStacks({
       techStackLevel: updateTechStackLevel,
-      techStackName,
+      techStackCode: id,
     });
   };
 
   const deleteTechStack = (event: React.MouseEvent<HTMLButtonElement>) => {
     onDelete(event);
-    deleteTechStacks(techStackName);
+    deleteTechStacks(id);
   };
 
   return (

@@ -36,7 +36,7 @@ export interface EmailVerificationCodeConfirmRequest {
 }
 
 export interface TechStacksWithLevel {
-  techStackName: string;
+  techStackCode: number;
   techStackLevel: TechStackLevel;
 }
 

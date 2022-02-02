@@ -162,22 +162,22 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const updateTechStacks = (selectedTechStack: TechStacksWithLevel): void => {
     const updateTechStackIndex = techStacks.findIndex(
       (techStack) =>
-        techStack.techStackName === selectedTechStack.techStackName,
+        techStack.techStackCode === selectedTechStack.techStackCode,
     );
 
     const tempTechStacks = [...techStacks];
 
     tempTechStacks[updateTechStackIndex] = {
-      techStackName: selectedTechStack.techStackName,
+      techStackCode: selectedTechStack.techStackCode,
       techStackLevel: selectedTechStack.techStackLevel,
     };
 
     setTechStacks(tempTechStacks);
   };
 
-  const deleteTechStacks = (seletedTechStackName: string): void => {
+  const deleteTechStacks = (seletedTechStackId: number): void => {
     const findStackIndex = techStacks.findIndex(
-      (techStack) => techStack.techStackName === seletedTechStackName,
+      (techStack) => techStack.techStackCode === seletedTechStackId,
     );
 
     const tempTechStacks = [...techStacks];
@@ -189,17 +189,21 @@ const ProfileForm: React.FC<ProfileProps> = ({
     setTechStacks(tempTechStacks);
   };
 
-  const controlTechStacks = (selectedTechStack: string) => {
-    if (!JSON.stringify(techStacks).includes(selectedTechStack)) {
+  const controlTechStacks = (selectedTechStackId: number) => {
+    const findTeckStackId = techStacks.findIndex(
+      (techStack) => techStack.techStackCode === selectedTechStackId,
+    );
+
+    if (findTeckStackId === -1) {
       setTechStacks([
         ...techStacks,
         {
-          techStackName: selectedTechStack,
+          techStackCode: selectedTechStackId,
           techStackLevel: '중',
         },
       ]);
     } else {
-      deleteTechStacks(selectedTechStack);
+      deleteTechStacks(selectedTechStackId);
     }
   };
 
@@ -471,8 +475,9 @@ const ProfileForm: React.FC<ProfileProps> = ({
                 {(groupedOptions as typeof techStackList).map(
                   (option, index) => (
                     <SearchItemWrapper
+                      key={option.id}
                       onClick={() => {
-                        controlTechStacks(option.techStackName);
+                        controlTechStacks(option.id);
                       }}
                     >
                       <SearchItem {...getOptionProps({ option, index })}>
