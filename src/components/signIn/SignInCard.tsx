@@ -19,6 +19,7 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
   const [inputPasswordError, setInputPasswordError] = useState<boolean>(false);
   const [emailVerificaion, setEmailVerificaion] = useState<boolean>(true);
   const [idSaveCheckBox, setIdSaveCheckBox] = useState<boolean>(false);
+  const [showError, setShowError] = useState<boolean>(false);
   const savedId = localStorage.getItem('ssafy-mate-id');
 
   useEffect(() => {
@@ -37,10 +38,18 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
   const handleInputEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputEmailOnChange = event.target.value;
     setInputEmail(inputEmailOnChange);
-
-    inputEmailOnChange === ''
-      ? setInputEmailError(true)
-      : setInputEmailError(false);
+    if (showError) {
+      if (inputEmailOnChange === '') {
+        setInputEmailError(true);
+        setEmailVerificaion(true);
+      } else if (validEmailReg.test(inputEmailOnChange)) {
+        setEmailVerificaion(true);
+        setInputEmailError(false);
+      } else {
+        setInputEmailError(false);
+        setEmailVerificaion(false);
+      }
+    }
   };
 
   const handleInputPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,13 +74,13 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
   };
 
   const validation = (emailInput: string, passwordInput: string): boolean => {
+    setShowError(true);
     passwordInput === ''
       ? setInputPasswordError(true)
       : setInputPasswordError(false);
 
     if (emailInput === '') {
       setInputEmailError(true);
-      setEmailVerificaion(false);
     } else if (validEmailReg.test(emailInput)) {
       setInputEmailError(false);
       setEmailVerificaion(true);
