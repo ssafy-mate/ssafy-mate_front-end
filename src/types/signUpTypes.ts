@@ -12,16 +12,16 @@ export interface SsafyTrack {
 }
 
 export interface SsafyAuthProps {
+  signUpStep: number;
   campus: string;
   ssafyTrack: string;
   studentNumber: string;
   studentName: string;
-  signUpStep: number;
-  updateCampus: (campus: string) => void;
-  updateSsafyTrack: (ssafyTrack: string) => void;
-  updateStudentNumber: (studentNumber: string) => void;
-  updateStudentName: (studentName: string) => void;
-  updateSignUpStep: (signUpStep: number) => void;
+  setSignUpStep: (signUpStep: number) => void;
+  setCampus: (campus: string) => void;
+  setSsafyTrack: (ssafyTrack: string) => void;
+  setStudentNumber: (studentNumber: string) => void;
+  setStudentName: (studentName: string) => void;
 }
 
 // 회원가입 2단계 이메일 인증 코드 요청

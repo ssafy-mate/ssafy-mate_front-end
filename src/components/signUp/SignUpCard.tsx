@@ -9,13 +9,13 @@ import ProfileForm from './ProfileForm';
 import ErrorPage from '../../pages/ErrorPage';
 
 const SignUpCard: React.FC = () => {
+  const [signUpStep, setSignUpStep] = useState<number>(0);
   const [campus, setCampus] = useState<string>('');
   const [ssafyTrack, setSsafyTrack] = useState<string>('');
   const [studentNumber, setStudentNumber] = useState<string>('');
   const [studentName, setStudentName] = useState<string>('');
   const [signUpEmail, setSignUpEmail] = useState<string>('');
   const [signUpPassword, setSignUpPassword] = useState<string>('');
-  const [signUpStep, setSignUpStep] = useState<number>(0);
 
   const updateCampus = (campus: string): void => {
     setCampus(campus);
@@ -36,6 +36,7 @@ const SignUpCard: React.FC = () => {
   const updateSignUpEmail = (signUpEmail: string): void => {
     setSignUpEmail(signUpEmail);
   };
+
   const updateSignUpPassword = (signUpPassword: string): void => {
     setSignUpPassword(signUpPassword);
   };
@@ -55,16 +56,16 @@ const SignUpCard: React.FC = () => {
               case 0:
                 return (
                   <AuthForm
-                    campus={campus}
-                    updateCampus={updateCampus}
-                    ssafyTrack={ssafyTrack}
-                    updateSsafyTrack={updateSsafyTrack}
-                    studentNumber={studentNumber}
-                    updateStudentNumber={updateStudentNumber}
-                    studentName={studentName}
-                    updateStudentName={updateStudentName}
                     signUpStep={signUpStep}
-                    updateSignUpStep={updateSignUpStep}
+                    campus={campus}
+                    ssafyTrack={ssafyTrack}
+                    studentNumber={studentNumber}
+                    studentName={studentName}
+                    setSignUpStep={setSignUpStep}
+                    setCampus={setCampus}
+                    setSsafyTrack={setSsafyTrack}
+                    setStudentName={setStudentName}
+                    setStudentNumber={setStudentNumber}
                   />
                 );
               case 1:
@@ -111,11 +112,10 @@ const Wrapper = styled.div`
   border: 1px solid #d7e2eb;
   border-radius: 6px;
 
-  @media (max-width: 620px) {
+  @media (max-width: 767px) {
     padding: 40px 28px;
   }
-
-  @media (max-width: 414px) {
+  @media (max-width: 575px) {
     padding: 32px 16px;
   }
 `;
@@ -127,7 +127,7 @@ const Head = styled.h3`
   text-align: center;
   color: #263747;
 
-  @media (max-width: 580px) {
+  @media (max-width: 575px) {
     margin-bottom: 40px;
   }
 `;
