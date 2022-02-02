@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 
 import styled from '@emotion/styled';
 
-import Header from '../components/common/Header';
-import ProjectNavigation from '../components/projects/ProjectNavigation';
-import EditTeamForm from '../components/team/EditTeamForm';
-import Footer from '../components/common/Footer';
+import Header from '../../components/common/Header';
+import ProjectNavigation from '../../components/projects/ProjectNavigation';
+import EditTeamForm from '../../components/team/EditTeamForm';
+import Footer from '../../components/common/Footer';
 
-const EditTeamPage: React.FC = () => {
+const TeamEditPage: React.FC = () => {
   useEffect(() => {
     document.title = '팀 정보 수정 | 싸피 메이트';
   }, []);
@@ -36,4 +36,4 @@ const Container = styled.div`
   }
 `;
 
-export default EditTeamPage;
+export default TeamEditPage;

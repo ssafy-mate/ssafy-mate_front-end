@@ -18,7 +18,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
-import useTeamDetailInfo from '../../hooks/useTeamDetailInfo';
+import useTeamInfo from '../../hooks/useTeamInfo';
 
 import UserLabel from '../user/UserLabel';
 import RecruitStatusBadge from '../projects/RecruitStatusBadge';
@@ -36,18 +36,8 @@ type Params = {
 
 const TeamInfoSection: React.FC = () => {
   const { teamId } = useParams<Params>();
-  const { isLoading, teamData, isError, errorMessage } =
-    useTeamDetailInfo(teamId);
-
   const [openApplicationDialog, setOpenApplicationDialog] = useState(false);
-
-  const handleOpenApplicationDialog = () => {
-    setOpenApplicationDialog(true);
-  };
-
-  const handleCloseApplicationDialog = () => {
-    setOpenApplicationDialog(false);
-  };
+  const { isLoading, teamData, isError, errorMessage } = useTeamInfo(teamId);
 
   useEffect(() => {
     if (isError) {
@@ -58,6 +48,14 @@ const TeamInfoSection: React.FC = () => {
       } 팀 상세 정보 | 싸피 메이트`;
     }
   }, [teamData, isError, errorMessage]);
+
+  const handleOpenApplicationDialog = () => {
+    setOpenApplicationDialog(true);
+  };
+
+  const handleCloseApplicationDialog = () => {
+    setOpenApplicationDialog(false);
+  };
 
   const isTotalSufficient = useMemo(
     () =>

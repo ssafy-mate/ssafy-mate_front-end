@@ -11,12 +11,12 @@ import ClearIcon from '@mui/icons-material/Clear';
 
 import { campusListData, projectListData } from '../../data/ssafyData';
 
-import { TechStackWtihImg } from '../../types/commonTypes';
+import { TechStackWithImg } from '../../types/commonTypes';
 
 import TechStackTag from '../common/TechStackTag';
 import useTechStackList from '../../hooks/useTechStackList';
 
-const CreateTeamForm: React.FC = () => {
+const TeamCreateForm: React.FC = () => {
   const [teamImg, setTeamImg] = useState(null);
   const [previewTeamImg, setPreviewTeamImg] = useState(null);
   const techStackList = useTechStackList();
@@ -208,7 +208,7 @@ const CreateTeamForm: React.FC = () => {
           ) : null}
         </InputWrapper>
         <TechStackList>
-          {value.map((option: TechStackWtihImg, index: number) => (
+          {value.map((option: TechStackWithImg, index: number) => (
             <TechStackTag
               id={option.id}
               techStackName={option.techStackName}
@@ -694,4 +694,4 @@ const rightGap = css`
   }
 `;
 
-export default CreateTeamForm;
+export default TeamCreateForm;

@@ -23,7 +23,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
-import useUserDetailInfo from '../../hooks/useUserDetailInfo';
+import useUserInfo from '../../hooks/useUserInfo';
 
 import UserLabel from './UserLabel';
 import UserTechStackTag from './UserTechStackTag';
@@ -37,8 +37,7 @@ type Params = {
 const UserInfoSection: React.FC = () => {
   const [openRequestDialog, setOpenRequestDialog] = useState(false);
   const { userId } = useParams<Params>();
-  const { isLoading, userData, isError, errorMessage } =
-    useUserDetailInfo(userId);
+  const { isLoading, userData, isError, errorMessage } = useUserInfo(userId);
 
   useEffect(() => {
     if (isError) {
