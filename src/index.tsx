@@ -6,7 +6,8 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import { Provider } from 'react-redux';
 
 import createReduxStore from './redux/createReduxStore';
-
+import { persistStore } from 'redux-persist';
+import { PersistGate } from 'redux-persist/integration/react';
 import App from './App';
 
 if (process.env.NODE_ENV === 'development') {
@@ -17,12 +18,15 @@ if (process.env.NODE_ENV === 'development') {
 
 const queryClient = new QueryClient();
 const store = createReduxStore();
+const persistor = persistStore(store);
 
 ReactDOM.render(
   <QueryClientProvider client={queryClient}>
     <React.StrictMode>
       <Provider store={store}>
-        <App />
+        <PersistGate loading={null} persistor={persistor}>
+          <App />
+        </PersistGate>
       </Provider>
     </React.StrictMode>
   </QueryClientProvider>,

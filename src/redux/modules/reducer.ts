@@ -2,11 +2,19 @@ import { connectRouter } from 'connected-react-router';
 
 import { combineReducers } from 'redux';
 
-import { History } from 'history';
+import { persistReducer } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+
+import history from '../../history';
 
 import auth from './auth';
 
-const reducer = (history: History<unknown>) =>
-  combineReducers({ auth, router: connectRouter(history) });
+const persistConfig = {
+  key: 'root',
+  storage,
+  whitelist: ['auth'],
+};
 
-export default reducer;
+const reducer = combineReducers({ auth, router: connectRouter(history) });
+
+export default persistReducer(persistConfig, reducer);

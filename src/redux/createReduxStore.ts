@@ -16,7 +16,7 @@ const createReduxStore = () => {
   const sagaMiddleWare = createSagaMiddleware();
 
   const store = createStore(
-    reducer(history),
+    reducer,
     {
       auth: {
         userId: null,
