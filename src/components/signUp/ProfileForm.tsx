@@ -75,7 +75,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
   } = useAutocomplete({
     id: 'search-tech-stack',
     multiple: true,
-    options: techStackListData,
+    options: techStackList,
     getOptionLabel: (option) => option.name,
   });
 
@@ -463,7 +463,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
             </InfoInputWrapper>
             {groupedOptions.length > 0 ? (
               <SearchList {...getListboxProps()}>
-                {(groupedOptions as typeof techStackListData).map(
+                {(groupedOptions as typeof techStackList).map(
                   (option, index) => (
                     <SearchItemWrapper
                       onClick={(event) => {

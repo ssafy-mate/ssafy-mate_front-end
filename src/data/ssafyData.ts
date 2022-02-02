@@ -38,7 +38,6 @@ export const campusListData: Campus[] = [
         name: 'Python Track',
       },
       {
-
         id: 2,
         name: 'Java Track',
       },
@@ -157,7 +156,7 @@ export const projectListData: Project[] = [
         name: '블록체인',
       },
       {
-        id: 3,
+        id: 4,
         name: 'IoT 제어',
       },
     ],
