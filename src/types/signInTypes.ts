@@ -20,13 +20,14 @@ export interface SignInResponse {
 }
 
 export interface project {
-  projectId: string;
-  projectName: string;
-  projectTrack: string;
+  projectId: number | null;
+  projectName: string | null;
+  projectTrack: string | null;
+  projectTeamId: string | null;
 }
 
 export interface AuthState {
-  userId: string | null;
+  userId: number | null;
   userName: string | null;
   userEmail: string | null;
   studentNumber: string | null;
@@ -34,12 +35,10 @@ export interface AuthState {
   ssafyTrack: string | null;
   token: string | null;
   projects: project[] | null;
-  loading: boolean;
-  error: Error | null;
 }
 
 export interface SignInUser {
-  userId: string | null;
+  userId: number | null;
   userName: string | null;
   userEmail: string | null;
   studentNumber: string | null;

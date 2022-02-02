@@ -27,8 +27,6 @@ const createReduxStore = () => {
         ssafyTrack: null,
         token: token,
         projects: null,
-        loading: false,
-        error: null,
       },
     },
     composeWithDevTools(

@@ -22,8 +22,6 @@ const initialState: AuthState = {
   ssafyTrack: null,
   token: null,
   projects: null,
-  loading: false,
-  error: null,
 };
 
 const prefix = 'ssafy-mate/auth';
@@ -37,7 +35,7 @@ export const { pending, success, fail } = createActions(
 
 const reducer = handleActions<AuthState, SignInUser>(
   {
-    PENDING: (state) => ({ ...state, loading: true, error: null }),
+    PENDING: (state) => ({ ...state }),
     SUCCESS: (state, action) => ({
       userId: action.payload.userId,
       userName: action.payload.userName,
@@ -47,13 +45,9 @@ const reducer = handleActions<AuthState, SignInUser>(
       ssafyTrack: action.payload.ssafyTrack,
       token: action.payload.token,
       projects: action.payload.projects,
-      loading: false,
-      error: null,
     }),
     FAIL: (state, action: any) => ({
       ...state,
-      loading: false,
-      error: action.payload,
     }),
   },
   initialState,
