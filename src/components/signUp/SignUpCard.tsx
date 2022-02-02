@@ -37,8 +37,8 @@ const SignUpCard: React.FC = () => {
                     setSignUpStep={setSignUpStep}
                     setCampus={setCampus}
                     setSsafyTrack={setSsafyTrack}
-                    setStudentName={setStudentName}
                     setStudentNumber={setStudentNumber}
+                    setStudentName={setStudentName}
                   />
                 );
               case 1:

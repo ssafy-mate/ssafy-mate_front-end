@@ -80,7 +80,7 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
     setCampus(campus);
     setSsafyTrack(ssafyTrack);
     setStudentNumber(studentNumber);
-    setStudentNumber(userName);
+    setStudentName(userName);
   };
 
   const onSubmit = (data: SsafyAuth) => {
