@@ -449,16 +449,13 @@ const SignUpForm: React.FC<SignUpProps> = ({
               </ErrorMessage>
             </ErrorMessageWrapper>
           )}
-          {errors.signUpCheckPassword?.type === 'validate' && (
-            <ErrorMessageWrapper>
-              <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
-            </ErrorMessageWrapper>
-          )}
-          {errors.signUpPassword?.type === 'required' && (
-            <ErrorMessageWrapper>
-              <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
-            </ErrorMessageWrapper>
-          )}
+          {errors.signUpCheckPassword?.type !== 'required' &&
+            (errors.signUpPassword?.type === 'required' ||
+              errors.signUpCheckPassword?.type === 'validate') && (
+              <ErrorMessageWrapper>
+                <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
+              </ErrorMessageWrapper>
+            )}
         </InputWrapper>
         <SubmitButton type="submit">기본 정보 작성</SubmitButton>
       </Container>
