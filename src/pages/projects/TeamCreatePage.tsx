@@ -34,7 +34,7 @@ const Container = styled.div`
     margin-top: 50px;
   }
   @media (max-width: 575px) {
-    margin-top: 40px;
+    margin-top: 70px;
   }
 `;
 

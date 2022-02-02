@@ -97,6 +97,10 @@ const Container = styled.section`
   margin: 0 auto 24px;
   padding: 0 16px;
   box-sizing: border-box;
+
+  @media (max-width: 575px) {
+    margin-top: 70px;
+  }
 `;
 
 const Wrapper = styled.div`

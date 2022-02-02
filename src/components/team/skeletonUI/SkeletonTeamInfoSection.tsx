@@ -212,6 +212,10 @@ const Container = styled.section`
   margin: 0 auto;
   padding: 0 16px;
   box-sizing: border-box;
+
+  @media (max-width: 575px) {
+    margin-top: 70px;
+  }
 `;
 
 const HeadContainer = styled.div`
