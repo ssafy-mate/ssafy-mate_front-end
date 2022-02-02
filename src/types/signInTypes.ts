@@ -12,6 +12,13 @@ export type SignInRequestTypeWithIdSave = {
   IdSave: boolean;
 };
 
+export interface SignInResponse {
+  payload: Error | null;
+  status: number;
+  success: boolean;
+  message: string;
+}
+
 export interface project {
   projectId: string;
   projectName: string;
@@ -44,6 +51,7 @@ export interface SignInUser {
   status: number | null;
   success: boolean | null;
 }
+
 export interface RootState {
   auth: AuthState;
 

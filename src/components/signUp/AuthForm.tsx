@@ -139,7 +139,7 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
                 pattern: exceptDefaultReg,
               })}
               defaultValue="default"
-              className={errors.campus ? 'haveError' : ''}
+              className={errors.campus ? 'have-error' : ''}
             >
               <option value="default" disabled>
                 - 선택 -
@@ -165,7 +165,7 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
                 pattern: exceptDefaultReg,
               })}
               defaultValue={'default'}
-              className={errors.ssafyTrack ? 'haveError' : ''}
+              className={errors.ssafyTrack ? 'have-error' : ''}
               disabled={
                 selectedCampus === 'default' || selectedCampus === ''
                   ? true
@@ -198,7 +198,7 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
               maxLength: 7,
               minLength: 7,
             })}
-            className={errors.studentNumber ? 'haveError' : ''}
+            className={errors.studentNumber ? 'have-error' : ''}
           />
           {errors.studentNumber && errors.studentNumber.type === 'required' && (
             <ErrorMessageWrapper>
@@ -220,7 +220,7 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
               required: true,
               pattern: onlyKoreanReg,
             })}
-            className={errors.userName ? 'haveError' : ''}
+            className={errors.userName ? 'have-error' : ''}
           />
           {errors.userName?.type === 'required' && (
             <ErrorMessageWrapper>
@@ -312,7 +312,7 @@ const Select = styled.select`
     cursor: not-allowed;
   }
 
-  &.haveError {
+  &.have-error {
     margin-bottom: 4px;
     border: 1px solid #f77;
     box-shadow: inset 0 0 0 1px #ff77774d;
@@ -350,7 +350,7 @@ const InfoInput = styled.input`
     color: #495057;
   }
 
-  &.haveError {
+  &.have-error {
     margin-bottom: 4px;
     border: 1px solid #f77;
     box-shadow: inset 0 0 0 1px #ff77774d;

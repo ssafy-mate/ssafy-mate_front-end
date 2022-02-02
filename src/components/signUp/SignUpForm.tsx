@@ -292,7 +292,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
                   message: '이메일 형식이 올바르지 않습니다.',
                 },
               })}
-              className={errors.signUpEmail ? 'haveError' : ''}
+              className={errors.signUpEmail ? 'have-error' : ''}
               maxLength={320}
               placeholder="이메일"
               readOnly={emailInputDisabled}
@@ -338,7 +338,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
                   maxLength={8}
                   placeholder="인증코드 8자리 입력"
                   disabled={codeInputDisabled}
-                  className={errors.verificationCode ? 'haveError' : ''}
+                  className={errors.verificationCode ? 'have-error' : ''}
                 />
                 {!codeInputDisabled && (
                   <TimeLimit>
@@ -391,7 +391,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
               pattern: passwordReg,
             })}
             placeholder="비밀번호"
-            className={errors.signUpPassword ? 'haveError' : ''}
+            className={errors.signUpPassword ? 'have-error' : ''}
           />
           {errors.signUpCheckPassword?.type === 'required' &&
             !(
@@ -418,7 +418,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
                 confirmPasswordInput === signUpPasswordOnChange,
             })}
             placeholder="비밀번호 확인"
-            className={errors.signUpCheckPassword ? 'haveError' : ''}
+            className={errors.signUpCheckPassword ? 'have-error' : ''}
           />
           {errors.signUpCheckPassword?.type === 'required' && (
             <ErrorSpan>확인을 위해 비밀번호를 한 번 더 입력해주세요.</ErrorSpan>
@@ -543,7 +543,7 @@ const InfoInput = styled.input`
     box-shadow: none;
     cursor: not-allowed;
   }
-  &.haveError {
+  &.have-error {
     border: 1px solid #f77;
     box-shadow: inset 0 0 0 1px #ff77774d;
   }

@@ -380,7 +380,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
               onKeyPress={handleTextAreaEnterKeyPressed}
               onChange={handleTextAreaInput}
               required
-              className={selfIntroductionError ? 'haveError' : ''}
+              className={selfIntroductionError ? 'have-error' : ''}
             />
             {showError === 1 && selfIntroductionError && (
               <ErrorSpan>필수 입력 항목입니다.</ErrorSpan>
@@ -396,7 +396,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
               name="job1"
               onChange={handleJobSelect}
               required
-              className={job1Error ? 'haveError' : ''}
+              className={job1Error ? 'have-error' : ''}
             >
               <option value="default" disabled>
                 - 선택 -
@@ -444,7 +444,9 @@ const ProfileForm: React.FC<ProfileProps> = ({
               ref={setAnchorEl}
               className={
                 (focused ? 'focused' : '') ||
-                (showError === 1 && techStacksError === true ? 'haveError' : '')
+                (showError === 1 && techStacksError === true
+                  ? 'have-error'
+                  : '')
               }
             >
               <InfoInput
@@ -540,7 +542,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
               id="sign-up-agreement"
               name="sign-up-agreement"
               onClick={handleCheckAgreement}
-              className={agreementError ? 'haveError' : ''}
+              className={agreementError ? 'have-error' : ''}
             />
 
             <CheckBoxLabel htmlFor="sign-up-agreement">
@@ -671,7 +673,7 @@ const Textarea = styled.textarea`
   color: #263747;
   transition: all 0.08s ease-in-out;
 
-  &.haveError {
+  &.have-error {
     border: 1px solid #f77;
     box-shadow: inset 0 0 0 1px #ff77774d;
     cursor: pointer;
@@ -721,7 +723,7 @@ const Select = styled.select`
     cursor: not-allowed;
   }
 
-  &.haveError {
+  &.have-error {
     border: 1px solid #f77;
     box-shadow: inset 0 0 0 1px #ff77774d;
   }
@@ -742,7 +744,7 @@ const InfoInputWrapper = styled.div`
   color: #263747;
   transition: all 0.08s ease-in-out;
 
-  &.haveError {
+  &.have-error {
     border-radius: 0.25rem;
     border: 1px solid #f77;
     box-shadow: inset 0 0 0 1px #ff77774d;
@@ -844,7 +846,7 @@ const AgreementCheckBox = styled.input`
   margin-right: 6px;
   cursor: pointer;
 
-  &.haveError {
+  &.have-error {
     box-shadow: inset 0 0 0 2px #e44a4c;
     cursor: pointer;
   }

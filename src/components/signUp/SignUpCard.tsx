@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 
+import { Redirect } from 'react-router-dom';
+
 import styled from '@emotion/styled';
 
 import SignUpStepper from './SignUpStepper';
 import AuthForm from './AuthForm';
 import SignUpForm from './SignUpForm';
 import ProfileForm from './ProfileForm';
-import ErrorPage from '../../pages/ErrorPage';
 
 const SignUpCard: React.FC = () => {
   const [signUpStep, setSignUpStep] = useState<number>(0);
@@ -63,7 +64,7 @@ const SignUpCard: React.FC = () => {
                   />
                 );
               default:
-                return <ErrorPage />;
+                return <Redirect to="/" />;
             }
           })()}
         </Wrapper>
