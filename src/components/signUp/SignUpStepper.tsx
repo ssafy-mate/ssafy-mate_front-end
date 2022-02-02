@@ -1,5 +1,3 @@
-import React, { useEffect } from 'react';
-
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
@@ -13,12 +11,12 @@ interface SignUpStepperProps {
 }
 
 const SignUpStepper: React.FC<SignUpStepperProps> = ({ signUpStep }) => {
-  const steps = ['교육생 인증', '기본 정보 작성', '프로필 작성'];
+  const labels = ['교육생 인증', '기본 정보 작성', '프로필 작성'];
 
   return (
     <Box sx={{ width: '100%' }} css={box}>
       <Stepper activeStep={signUpStep} alternativeLabel>
-        {steps.map((label) => (
+        {labels.map((label) => (
           <Step key={label} css={step}>
             <StepLabel>{label}</StepLabel>
           </Step>
@@ -44,10 +42,10 @@ const step = css`
   .MuiStepLabel-label {
     font-family: 'Spoqa Han Sans Neo', 'sans-serif';
 
-    @media (max-width: 390px) {
+    @media (max-width: 575px) {
       font-size: 13px;
     }
-    @media (max-width: 370px) {
+    @media (max-width: 349px) {
       font-size: 12px;
     }
   }

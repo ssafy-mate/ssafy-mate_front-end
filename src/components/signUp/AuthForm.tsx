@@ -314,7 +314,7 @@ const Select = styled.select`
 
   &.have-error {
     margin-bottom: 4px;
-    border: 1px solid #f77;
+    border: 1px solid #f44336;
     box-shadow: inset 0 0 0 1px #ff77774d;
   }
 

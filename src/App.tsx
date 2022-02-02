@@ -19,13 +19,14 @@ import ErrorPage from './pages/ErrorPage';
 import HomePage from './pages/HomePage';
 import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
-import UserDetailInfoPage from './pages/UserDetailInfoPage';
-import TeamDetailInfoPage from './pages/TeamDetailInfoPage';
-import CreateTeamPage from './pages/CreateTeamPage';
-import EditTeamPage from './pages/EditTeamPage';
+import UserInfoPage from './pages/users/UserInfoPage';
+import TeamInfoPage from './pages/teams/TeamInfoPage';
+import TeamCreatePage from './pages/projects/TeamCreatePage';
+import TeamEditPage from './pages/projects/TeamEditPage';
 import CommonProjectPage from './pages/CommonProjectPage';
-import TeamSpecializationProjectPage from './pages/TeamSpecializationProjectPage';
-import StduentSpecializationProjectPage from './pages/StduentSpecializationProjectPage';
+import SpecializationProjectTeamListPage from './pages/projects/SpecializationProjectTeamListPage';
+import SpecializationProjectUserListPage from './pages/projects/SpecializationProjectUserListPage';
+import SpecializationProjectOfferListPage from './pages/projects/SpecializationProjectOfferListPage';
 import AutonomyProjectPage from './pages/AutonomyProjectPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ChattingPage from './pages/ChattingPage';
@@ -40,24 +41,29 @@ const App: React.FC = () => {
           <Route exact path="/" component={HomePage} />
           <Route exact path="/users/sign_in" component={SignInPage} />
           <Route exact path="/users/sign_up" component={SignUpPage} />
-          <Route exact path="/users/:userId" component={UserDetailInfoPage} />
-          <Route exact path="/teams/:teamId" component={TeamDetailInfoPage} />
+          <Route exact path="/users/:userId" component={UserInfoPage} />
+          <Route exact path="/teams/:teamId" component={TeamInfoPage} />
           <Route
             exact
             path="/projects/team/create"
-            component={CreateTeamPage}
+            component={TeamCreatePage}
           />
-          <Route exact path="/projects/team/edit" component={EditTeamPage} />
+          <Route exact path="/projects/team/edit" component={TeamEditPage} />
           <Route exact path="/projects/common" component={CommonProjectPage} />
           <Route
             exact
             path="/projects/specialization/teams"
-            component={TeamSpecializationProjectPage}
+            component={SpecializationProjectTeamListPage}
           />
           <Route
             exact
-            path="/projects/specialization/students"
-            component={StduentSpecializationProjectPage}
+            path="/projects/specialization/users"
+            component={SpecializationProjectUserListPage}
+          />
+          <Route
+            exact
+            path="/projects/specialization/offer_list"
+            component={SpecializationProjectOfferListPage}
           />
           <Route
             exact

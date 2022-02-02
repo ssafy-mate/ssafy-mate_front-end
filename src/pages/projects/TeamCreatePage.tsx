@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 
 import styled from '@emotion/styled';
 
-import Header from '../components/common/Header';
-import ProjectNavigation from '../components/projects/ProjectNavigation';
-import CreateTeamForm from '../components/team/CreateTeamForm';
-import Footer from '../components/common/Footer';
+import Header from '../../components/common/Header';
+import ProjectNavigation from '../../components/projects/ProjectNavigation';
+import TeamCreateForm from '../../components/team/TeamCreateForm';
+import Footer from '../../components/common/Footer';
 
 const CreateTeamPage: React.FC = () => {
   useEffect(() => {
@@ -17,7 +17,7 @@ const CreateTeamPage: React.FC = () => {
       <Header />
       <ProjectNavigation />
       <Container>
-        <CreateTeamForm />
+        <TeamCreateForm />
       </Container>
       <Footer />
     </>
@@ -34,7 +34,7 @@ const Container = styled.div`
     margin-top: 50px;
   }
   @media (max-width: 575px) {
-    margin-top: 40px;
+    margin-top: 70px;
   }
 `;
 

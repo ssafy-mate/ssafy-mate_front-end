@@ -40,4 +40,31 @@ export const userHandlers = [
       return response(context.json(userDataList[userIndex]));
     },
   ),
+
+  rest.post(
+    'http://localhost:3000/api/auth/project',
+    async (request, response, context) => {
+      const token = request.headers['_headers'].authorization.split(' ')[1];
+      console.log(token);
+      // 토큰이 유효하지 않을 시
+      if (token !== 't123456789') {
+        return response(
+          context.status(401),
+          context.json({
+            status: 401,
+            success: false,
+            message: '토큰이 유효하지 않습니다.',
+          }),
+        );
+      }
+
+      // 프로젝트 트랙 선택 성공 시
+      return response(
+        context.json({
+          success: true,
+          message: '프로젝트 트랙 선택이 완료되었습니다.',
+        }),
+      );
+    },
+  ),
 ];

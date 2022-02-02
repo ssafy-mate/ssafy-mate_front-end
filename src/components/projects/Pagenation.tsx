@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect } from 'react';
 
 import { useMediaQuery } from 'react-responsive';
 
@@ -9,23 +9,44 @@ import styled from '@emotion/styled';
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
-const Pagenation: React.FC = () => {
+import useQueryString from '../../hooks/useQueryString';
+
+interface PagenationProps {
+  totalPage: number;
+  setPage: (page: number) => void;
+}
+
+const Pagenation: React.FC<PagenationProps> = ({ totalPage, setPage }) => {
   const smallMedia = useMediaQuery({
     query: '(max-width: 575px)',
   });
   const extraLargeMedia = useMediaQuery({
     query: '(max-width: 1199px)',
   });
+  const [page, onSetPage] = useQueryString('page');
+
+  useEffect(() => {
+    onSetPage(1);
+  }, [onSetPage]);
+
+  const handleChangePage = (
+    event: React.ChangeEvent<unknown>,
+    page: number,
+  ): void => {
+    setPage(page);
+    onSetPage(page);
+  };
 
   return (
     <Container>
       <Wrapper>
         <Stack spacing={2}>
           <Pagination
-            count={20}
+            count={totalPage}
             variant="outlined"
             shape="rounded"
             css={pagination}
+            onChange={handleChangePage}
             size={extraLargeMedia ? (smallMedia ? 'small' : 'medium') : 'large'}
           />
         </Stack>
@@ -36,7 +57,7 @@ const Pagenation: React.FC = () => {
 
 const Container = styled.div`
   max-width: 1200px;
-  margin-top: 28px;
+  margin: 28px auto 0;
   padding: 0 16px;
   box-sizing: border-box;
 
@@ -62,6 +83,7 @@ const pagination = css`
   }
   .MuiPagination-ul button {
     border: none;
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
     color: #263747;
   }
 `;

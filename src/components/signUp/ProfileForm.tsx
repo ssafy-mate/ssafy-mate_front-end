@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import history from '../../history';
-
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
@@ -14,19 +12,22 @@ import CheckIcon from '@mui/icons-material/Check';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
-import { jobListData } from '../../data/jobListData';
-import { techStackListData } from '../../data/techStackListData';
-import { validUrlReg } from '../../utils/regularExpressionData';
+import history from '../../history';
 
-import { TechStack } from '../../types/commonTypes';
+import { jobListData } from '../../data/jobListData';
+
+import { TechStackWithImg } from '../../types/commonTypes';
 import {
   ProfileProps,
   Severity,
   TechStacksWithLevel,
 } from '../../types/signUpTypes';
 
+import { validUrlReg } from '../../utils/regularExpressionData';
+
 import AuthService from '../../services/AuthService';
 
+import useTechStackList from '../../hooks/useTechStackList';
 import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
 import { useDispatch } from 'react-redux';
 import { showSsafyMateAlert } from '../../redux/modules/alert';
@@ -61,6 +62,8 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const [alertText, setAlertText] = useState<string>('');
   const [alertSeverity, setAlertSeverity] = useState<Severity>('success');
 
+  const techStackList = useTechStackList();
+
   const signUpFormData = new FormData();
   const dispatch = useDispatch();
 
@@ -78,8 +81,8 @@ const ProfileForm: React.FC<ProfileProps> = ({
   } = useAutocomplete({
     id: 'search-tech-stack',
     multiple: true,
-    options: techStackListData,
-    getOptionLabel: (option) => option.name,
+    options: techStackList,
+    getOptionLabel: (option) => option.techStackName,
   });
 
   const showAlert = (type: Severity, message: string) => {
@@ -465,17 +468,20 @@ const ProfileForm: React.FC<ProfileProps> = ({
             </InfoInputWrapper>
             {groupedOptions.length > 0 ? (
               <SearchList {...getListboxProps()}>
-                {(groupedOptions as typeof techStackListData).map(
+                {(groupedOptions as typeof techStackList).map(
                   (option, index) => (
                     <SearchItemWrapper
-                      onClick={(event) => {
-                        controlTechStacks(option.name);
+                      onClick={() => {
+                        controlTechStacks(option.techStackName);
                       }}
                     >
                       <SearchItem {...getOptionProps({ option, index })}>
                         <TechStackInfo>
-                          <TechStackImg src={option.imgUrl} alt={option.name} />
-                          {option.name}
+                          <TechStackImg
+                            src={option.techStackImgUrl}
+                            alt={option.techStackName}
+                          />
+                          {option.techStackName}
                         </TechStackInfo>
                         <CheckIcon fontSize="small" />
                       </SearchItem>
@@ -491,11 +497,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
             )}
           </InputWrapper>
           <TechStackList>
-            {value.map((option: TechStack, index: number) => (
+            {value.map((option: TechStackWithImg, index: number) => (
               <TechStackTagWithLevel
                 id={option.id}
-                name={option.name}
-                imgUrl={option.imgUrl}
+                techStackName={option.techStackName}
+                techStackImgUrl={option.techStackImgUrl}
                 techStacks={techStacks}
                 updateTechStacks={updateTechStacks}
                 deleteTechStacks={deleteTechStacks}
@@ -681,7 +687,7 @@ const Textarea = styled.textarea`
 
   &.have-error {
     margin-bottom: 4px;
-    border: 1px solid #f77;
+    border: 1px solid #f44336;
     box-shadow: inset 0 0 0 1px #ff77774d;
   }
 
@@ -856,7 +862,7 @@ const AgreementCheckBox = styled.input`
   cursor: pointer;
 
   &.have-error {
-    box-shadow: inset 0 0 0 2px #e44a4c;
+    box-shadow: inset 0 0 0 1px #f44336;
   }
 `;
 

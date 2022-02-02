@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Link, useParams } from 'react-router-dom';
 
@@ -16,12 +16,18 @@ import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import GroupsIcon from '@mui/icons-material/Groups';
 import EmailIcon from '@mui/icons-material/Email';
 import StorefrontIcon from '@mui/icons-material/Storefront';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 
-import useUserDetailInfo from '../../hooks/useUserDetailInfo';
+import useUserInfo from '../../hooks/useUserInfo';
 
 import UserLabel from './UserLabel';
 import UserTechStackTag from './UserTechStackTag';
-import SkeletonUserInfoSection from './SkeletonUserInfoSection';
+import SkeletonUserInfoSection from './skeletonUI/SkeletonUserInfoSection';
 import ErrorSection from '../common/ErrorSection';
 
 type Params = {
@@ -29,9 +35,9 @@ type Params = {
 };
 
 const UserInfoSection: React.FC = () => {
+  const [openRequestDialog, setOpenRequestDialog] = useState(false);
   const { userId } = useParams<Params>();
-  const { isLoading, userData, isError, errorMessage } =
-    useUserDetailInfo(userId);
+  const { isLoading, userData, isError, errorMessage } = useUserInfo(userId);
 
   useEffect(() => {
     if (isError) {
@@ -43,16 +49,24 @@ const UserInfoSection: React.FC = () => {
     }
   }, [userData, isError, errorMessage]);
 
+  const handleOpenRequestDialog = () => {
+    setOpenRequestDialog(true);
+  };
+
+  const handleCloseRequestDialog = () => {
+    setOpenRequestDialog(false);
+  };
+
   if (isError) {
     return <ErrorSection errorMessage={errorMessage} />;
   }
 
   return (
-    <Container>
+    <>
       {isLoading || !userData ? (
         <SkeletonUserInfoSection />
       ) : (
-        <>
+        <Container>
           <HeadContainer>
             <TitleBox>
               <ProfileImgWrapper>
@@ -78,7 +92,7 @@ const UserInfoSection: React.FC = () => {
               </NameWrapper>
             </TitleBox>
             <ButtonBox>
-              <RequestButton>
+              <RequestButton onClick={handleOpenRequestDialog}>
                 <VolunteerActivismIcon />
                 <span>팀 합류 요청하기</span>
               </RequestButton>
@@ -273,9 +287,36 @@ const UserInfoSection: React.FC = () => {
               </TechStackList>
             </Section>
           </BodyContainer>
-        </>
+          <Dialog
+            open={openRequestDialog}
+            onClose={handleCloseRequestDialog}
+            fullWidth={true}
+            maxWidth={'sm'}
+          >
+            <RequestDialogTitle>팀 합류 요청하기</RequestDialogTitle>
+            <DialogContent>
+              <MuiTextField
+                autoFocus
+                margin="dense"
+                id="request-message"
+                label="합류 요청 메시지를 입력해주세요."
+                type="text"
+                variant="standard"
+                fullWidth
+              />
+            </DialogContent>
+            <DialogActions>
+              <DialogButton onClick={handleCloseRequestDialog}>
+                취소
+              </DialogButton>
+              <DialogButton onClick={handleCloseRequestDialog}>
+                보내기
+              </DialogButton>
+            </DialogActions>
+          </Dialog>
+        </Container>
       )}
-    </Container>
+    </>
   );
 };
 
@@ -284,6 +325,10 @@ const Container = styled.section`
   margin: 0 auto;
   padding: 0 16px;
   box-sizing: border-box;
+
+  @media (max-width: 575px) {
+    margin-top: 70px;
+  }
 `;
 
 const HeadContainer = styled.div`
@@ -663,6 +708,41 @@ const InfoItem = styled.div`
   @media (max-width: 991px) {
     border-top: 1px solid #d7e2eb;
   }
+`;
+
+const RequestDialogTitle = styled(DialogTitle)`
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  font-size: 18px;
+  color: #263747;
+
+  @media (max-width: 575px) {
+    font-size: 16px;
+  }
+`;
+
+const MuiTextField = styled(TextField)`
+  & label,
+  & input {
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    font-size: 16px;
+  }
+
+  & input {
+    color: #3396f4;
+  }
+
+  @media (max-width: 575px) {
+    & label,
+    & input {
+      font-size: 14px;
+    }
+  }
+`;
+
+const DialogButton = styled(Button)`
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  color: #3396f4;
+  font-size: 13px;
 `;
 
 export default UserInfoSection;

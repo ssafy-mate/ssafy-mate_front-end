@@ -85,9 +85,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
     return () => clearInterval(timer);
   }, [minutes, seconds]);
 
-  // const codeConfirmButtonOnChange: string | undefined = watch(
-  //   'signUpConfiromButton',
-  // );
   const signUpEmailOnChange: string = watch('signUpEmail');
   const verificationCodeOnChange: string = watch('verificationCode');
   const signUpPasswordOnChange: string = watch('signUpPassword');
@@ -229,7 +226,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
         offCodeInputAndConfirm();
         setEmailInputDisabled(true);
         setEmailInputError('');
-        // setValue('signUpConfiromButton', 'getAuth');
         setShowCodeBox(false);
       })
       .catch((error) => {
@@ -327,7 +323,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
             </ErrorMessageWrapper>
           )}
         </InputWrapper>
-
         {showCodeBox ? (
           <InputWrapper>
             <RequirementLabel htmlFor="verification-code">
@@ -542,7 +537,6 @@ const VerificationCodeWrapper = styled.div`
 `;
 
 const InfoInput = styled.input`
-  flex: 1 0 0px;
   width: 100%;
   height: 40px;
   margin-bottom: 16px;

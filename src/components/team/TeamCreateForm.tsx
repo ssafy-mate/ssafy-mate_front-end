@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -9,16 +9,17 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 
-import { techStackListData } from '../../data/techStackListData';
 import { campusListData, projectListData } from '../../data/ssafyData';
 
-import { TechStack } from '../../types/commonTypes';
+import { TechStackWithImg } from '../../types/commonTypes';
 
 import TechStackTag from '../common/TechStackTag';
+import useTechStackList from '../../hooks/useTechStackList';
 
-const CreateTeamForm: React.FC = () => {
+const TeamCreateForm: React.FC = () => {
   const [teamImg, setTeamImg] = useState(null);
   const [previewTeamImg, setPreviewTeamImg] = useState(null);
+  const techStackList = useTechStackList();
   const {
     getRootProps,
     getInputLabelProps,
@@ -33,8 +34,8 @@ const CreateTeamForm: React.FC = () => {
   } = useAutocomplete({
     id: 'search-tech-stack',
     multiple: true,
-    options: techStackListData,
-    getOptionLabel: (option) => option.name,
+    options: techStackList,
+    getOptionLabel: (option) => option.techStackName,
   });
 
   const handleChangeTeamImg = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -191,26 +192,27 @@ const CreateTeamForm: React.FC = () => {
           </InfoInputWrapper>
           {groupedOptions.length > 0 ? (
             <SearchList {...getListboxProps()}>
-              {(groupedOptions as typeof techStackListData).map(
-                (option, index) => (
-                  <SearchItem {...getOptionProps({ option, index })}>
-                    <TechStackInfo>
-                      <TechStackImg src={option.imgUrl} alt={option.name} />
-                      {option.name}
-                    </TechStackInfo>
-                    <CheckIcon fontSize="small" />
-                  </SearchItem>
-                ),
-              )}
+              {(groupedOptions as typeof techStackList).map((option, index) => (
+                <SearchItem {...getOptionProps({ option, index })}>
+                  <TechStackInfo>
+                    <TechStackImg
+                      src={option.techStackImgUrl}
+                      alt={option.techStackName}
+                    />
+                    {option.techStackName}
+                  </TechStackInfo>
+                  <CheckIcon fontSize="small" />
+                </SearchItem>
+              ))}
             </SearchList>
           ) : null}
         </InputWrapper>
         <TechStackList>
-          {value.map((option: TechStack, index: number) => (
+          {value.map((option: TechStackWithImg, index: number) => (
             <TechStackTag
               id={option.id}
-              name={option.name}
-              imgUrl={option.imgUrl}
+              techStackName={option.techStackName}
+              techStackImgUrl={option.techStackImgUrl}
               {...getTagProps({ index })}
             />
           ))}
@@ -692,4 +694,4 @@ const rightGap = css`
   }
 `;
 
-export default CreateTeamForm;
+export default TeamCreateForm;

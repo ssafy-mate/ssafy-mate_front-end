@@ -1,29 +1,112 @@
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
+import Dialog from '@mui/material/Dialog';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+import type { ProjectTrack } from '../../types/commonTypes';
 import { ProjectLinkCardProps } from '../../types/commonTypes';
+
+import ProjectTrackDialog from './ProjectTrackDialog';
 
 const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
   projectName,
   pageUrl,
   imgUrl,
   hexColorCode,
+  trackOptions,
 }) => {
+  const [open, setOpen] = useState(false);
+  const [openBlockDialog, setOpenBlockDialog] = useState(false);
+  const [selectedProjectTrack, setSelectedProjectTrack] =
+    useState<ProjectTrack>('');
+
+  const handleClickListItem = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (newSelectedProjectTrack?: ProjectTrack) => {
+    setOpen(false);
+
+    if (newSelectedProjectTrack) {
+      setSelectedProjectTrack(newSelectedProjectTrack);
+    }
+  };
+
+  const handleClickOpenBlockDialog = () => {
+    setOpenBlockDialog(true);
+  };
+
+  const handleCloseBlockDialog = () => {
+    setOpenBlockDialog(false);
+  };
+
   return (
-    <LinkCard to={pageUrl} css={{ backgroundColor: hexColorCode }}>
-      <LinkCardImg src={imgUrl} alt={`${projectName} 이미지`} />
-      <LinkCardTitle>
-        {projectName}
-        <br />팀 빌딩 바로가기
-      </LinkCardTitle>
-    </LinkCard>
+    <>
+      {trackOptions ? (
+        <>
+          <Card
+            onClick={handleClickListItem}
+            css={{ backgroundColor: hexColorCode }}
+          >
+            <CardImg src={imgUrl} alt={`${projectName} 이미지`} />
+            <CardTitle>
+              {projectName}
+              <br />팀 빌딩 바로가기
+            </CardTitle>
+          </Card>
+          <ProjectTrackDialog
+            id="ringtone-menu"
+            keepMounted
+            open={open}
+            projectName={projectName}
+            selectedProjectTrack={selectedProjectTrack}
+            pageUrl={pageUrl}
+            hexColorCode={hexColorCode}
+            trackOptions={trackOptions}
+            onClose={handleClose}
+          />
+        </>
+      ) : (
+        <>
+          <Card
+            onClick={handleClickOpenBlockDialog}
+            css={{ backgroundColor: hexColorCode }}
+          >
+            <CardImg src={imgUrl} alt={`${projectName} 이미지`} />
+            <CardTitle>
+              {projectName}
+              <br />팀 빌딩 바로가기
+            </CardTitle>
+          </Card>
+          <Dialog
+            open={openBlockDialog}
+            onClose={handleCloseBlockDialog}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <BlockDialogTitle id="alert-dialog-title">
+              해당 프로젝트 팀 빌딩 기간이 아닙니다.
+            </BlockDialogTitle>
+            <DialogContent>
+              <BlockDialogContentText id="alert-dialog-description">
+                해당 프로젝트 팀 빌딩 기간에 다시 한번 싸피 메이트를 이용해
+                주세요.
+              </BlockDialogContentText>
+            </DialogContent>
+          </Dialog>
+        </>
+      )}
+    </>
   );
 };
 
-const LinkCard = styled(Link)`
+const Card = styled.div`
   width: 320px;
   padding: 24px 16px;
   border: none;
@@ -51,7 +134,7 @@ const LinkCard = styled(Link)`
   }
 `;
 
-const LinkCardImg = styled.img`
+const CardImg = styled.img`
   display: block;
   width: 240px;
   margin: 0 auto 36px;
@@ -65,7 +148,7 @@ const LinkCardImg = styled.img`
   }
 `;
 
-const LinkCardTitle = styled.p`
+const CardTitle = styled.p`
   padding-left: 12px;
   font-size: 24px;
   font-weight: 500;
@@ -77,6 +160,24 @@ const LinkCardTitle = styled.p`
   }
   @media (max-width: 575px) {
     font-size: 20px;
+  }
+`;
+
+const BlockDialogTitle = styled(DialogTitle)`
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  font-size: 18px;
+
+  @media (max-width: 575px) {
+    font-size: 16px;
+  }
+`;
+
+const BlockDialogContentText = styled(DialogContentText)`
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  font-size: 16px;
+
+  @media (max-width: 575px) {
+    font-size: 14px;
   }
 `;
 

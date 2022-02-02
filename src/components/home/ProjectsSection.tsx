@@ -17,6 +17,7 @@ const ProjectsSection: React.FC = () => {
       pageUrl: '/projects/specialization/teams',
       imgUrl: '/images/projects/specialization-project_link.png',
       hexColorCode: '#84c0f8',
+      trackOptions: ['인공지능', '빅데이터', '블록체인', 'IoT 제어'],
     },
     {
       projectName: '자율 프로젝트',
@@ -36,6 +37,7 @@ const ProjectsSection: React.FC = () => {
             pageUrl={projectLinkCardData.pageUrl}
             imgUrl={projectLinkCardData.imgUrl}
             hexColorCode={projectLinkCardData.hexColorCode}
+            trackOptions={projectLinkCardData.trackOptions}
           />
         ))}
       </Wrapper>

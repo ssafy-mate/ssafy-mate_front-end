@@ -36,6 +36,7 @@ export const teamHandlers = [
       }
     },
   ),
+
   rest.get(
     'http://localhost:3000/api/auth/team/:teamId',
     async (request, response, context) => {
