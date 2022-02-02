@@ -46,6 +46,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
     useState<string>('이메일 인증');
   const [codeVerificationErrorText, setCodeVerificationErrorText] =
     useState<string>('이메일 인증을 완료해주세요.');
+  const [emailInputError, setEmailInputError] = useState<string>('');
   const [codeVerificationError, setCodeVerificationError] =
     useState<boolean>(false);
   const [resendEmail, setResendEmail] = useState<boolean>(false);
@@ -71,6 +72,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
       if (seconds === 0) {
         if (minutes === 0) {
           clearInterval(timer);
+          showAndSetError(true, '인증코드가 만료되었습니다.');
           offCodeInputAndConfirm();
         } else {
           setMinutes(minutes - 1);
@@ -245,7 +247,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
       });
   };
 
-  const [emailInputError, setEmailInputError] = useState<string>('');
   const onSubmit = (data: SignUp) => {
     if (emailInputDisabled) {
       updateSignUpProps(data);
@@ -393,7 +394,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
             placeholder="비밀번호"
             className={errors.signUpPassword ? 'have-error' : ''}
           />
-          {errors.signUpCheckPassword?.type === 'required' &&
+          {errors.signUpPassword?.type === 'required' &&
             !(
               errors.signUpPassword?.type === 'pattern' ||
               errors.signUpPassword?.type === 'minLength'
@@ -424,6 +425,9 @@ const SignUpForm: React.FC<SignUpProps> = ({
             <ErrorSpan>확인을 위해 비밀번호를 한 번 더 입력해주세요.</ErrorSpan>
           )}
           {errors.signUpCheckPassword?.type === 'validate' && (
+            <ErrorSpan>비밀번호가 일치하지 않습니다.</ErrorSpan>
+          )}
+          {errors.signUpPassword?.type === 'required' && (
             <ErrorSpan>비밀번호가 일치하지 않습니다.</ErrorSpan>
           )}
         </InputWrapper>
