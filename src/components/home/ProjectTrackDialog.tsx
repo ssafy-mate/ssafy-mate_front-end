@@ -31,15 +31,15 @@ interface ConfirmationDialogRawProps {
 }
 
 interface DialogButtonProps {
-  fontColor: string;
+  fontcolor: string;
 }
 
 interface ProjectTrackTitleProps {
-  hexColorCode: string;
+  hexcolorcode: string;
 }
 
 interface OptionLabelProps {
-  hexColorCode: string;
+  hexcolorcode: string;
 }
 
 interface ProjectTrackRequestType {
@@ -61,10 +61,6 @@ const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
     selectedProjectTrackProp,
   );
   const radioGroupRef = useRef<HTMLElement>(null);
-
-  // const loading = useSelector<RootState, boolean>(
-  //   (state) => state.user.loading,
-  // );
 
   const dispatch = useDispatch();
 
@@ -93,10 +89,9 @@ const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
 
   const handleOk = () => {
     selectProjectTrack({
-      projectId: 1,
+      projectId: 2,
       projectTrack: selectedProjectTrack,
     });
-    console.log(`selectedProjectTrack: ${selectedProjectTrack}`);
     onClose(selectedProjectTrack);
   };
 
@@ -112,7 +107,7 @@ const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
       open={open}
       {...other}
     >
-      <ProjectTrackTitle hexColorCode={hexColorCode}>
+      <ProjectTrackTitle hexcolorcode={hexColorCode}>
         {projectName} 트랙 선택
       </ProjectTrackTitle>
       <DialogContent dividers>
@@ -129,16 +124,16 @@ const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
               value={trackOption}
               control={<Radio />}
               label={trackOption}
-              hexColorCode={hexColorCode}
+              hexcolorcode={hexColorCode}
             />
           ))}
         </RadioGroup>
       </DialogContent>
       <DialogActions>
-        <DialogButton autoFocus onClick={handleCancel} fontColor={'#44576c'}>
+        <DialogButton autoFocus onClick={handleCancel} fontcolor="#44576c">
           취소
         </DialogButton>
-        <DialogButton onClick={handleOk} fontColor={hexColorCode}>
+        <DialogButton onClick={handleOk} fontcolor={hexColorCode}>
           확인
         </DialogButton>
       </DialogActions>
@@ -150,7 +145,7 @@ const ProjectTrackTitle = styled(DialogTitle)<ProjectTrackTitleProps>`
   font-family: 'Spoqa Han Sans Neo', 'sans-serif';
   font-size: 18px;
   color: #fff;
-  background-color: ${(props) => props.hexColorCode};
+  background-color: ${(props) => props.hexcolorcode};
 
   @media (max-width: 575px) {
     font-size: 16px;
@@ -169,14 +164,14 @@ const OptionLabel = styled(FormControlLabel)<OptionLabelProps>`
     }
 
     &:hover {
-      color: ${(props) => props.hexColorCode};
+      color: ${(props) => props.hexcolorcode};
     }
   }
 `;
 
 const DialogButton = styled(Button)<DialogButtonProps>`
   font-family: 'Spoqa Han Sans Neo', 'sans-serif';
-  color: ${(props) => props.fontColor};
+  color: ${(props) => props.fontcolor};
 `;
 
 export default ProjectTrackDialog;

@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import history from '../../history';
-
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
@@ -14,18 +12,22 @@ import CheckIcon from '@mui/icons-material/Check';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
-import { jobListData } from '../../data/jobListData';
-import { techStackListData } from '../../data/techStackListData';
-import { validUrlReg } from '../../utils/regularExpressionData';
+import history from '../../history';
 
-import { TechStack } from '../../types/commonTypes';
+import { jobListData } from '../../data/jobListData';
+
+import { TechStackWithImg } from '../../types/commonTypes';
 import {
   ProfileProps,
   Severity,
   TechStacksWithLevel,
 } from '../../types/signUpTypes';
 
+import { validUrlReg } from '../../utils/regularExpressionData';
+
 import AuthService from '../../services/AuthService';
+
+import useTechStackList from '../../hooks/useTechStackList';
 
 import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
 
@@ -59,6 +61,8 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const [alertText, setAlertText] = useState<string>('');
   const [alertSeverity, setAlertSeverity] = useState<Severity>('success');
 
+  const techStackList = useTechStackList();
+
   const signUpFormData = new FormData();
 
   const {
@@ -76,7 +80,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
     id: 'search-tech-stack',
     multiple: true,
     options: techStackList,
-    getOptionLabel: (option) => option.name,
+    getOptionLabel: (option) => option.techStackName,
   });
 
   const showAlert = (type: Severity, message: string) => {
@@ -466,14 +470,17 @@ const ProfileForm: React.FC<ProfileProps> = ({
                 {(groupedOptions as typeof techStackList).map(
                   (option, index) => (
                     <SearchItemWrapper
-                      onClick={(event) => {
-                        controlTechStacks(option.name);
+                      onClick={() => {
+                        controlTechStacks(option.techStackName);
                       }}
                     >
                       <SearchItem {...getOptionProps({ option, index })}>
                         <TechStackInfo>
-                          <TechStackImg src={option.imgUrl} alt={option.name} />
-                          {option.name}
+                          <TechStackImg
+                            src={option.techStackImgUrl}
+                            alt={option.techStackName}
+                          />
+                          {option.techStackName}
                         </TechStackInfo>
                         <CheckIcon fontSize="small" />
                       </SearchItem>
@@ -489,11 +496,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
             )}
           </InputWrapper>
           <TechStackList>
-            {value.map((option: TechStack, index: number) => (
+            {value.map((option: TechStackWithImg, index: number) => (
               <TechStackTagWithLevel
                 id={option.id}
-                name={option.name}
-                imgUrl={option.imgUrl}
+                techStackName={option.techStackName}
+                techStackImgUrl={option.techStackImgUrl}
                 techStacks={techStacks}
                 updateTechStacks={updateTechStacks}
                 deleteTechStacks={deleteTechStacks}

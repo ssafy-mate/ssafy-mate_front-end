@@ -7,12 +7,15 @@ export type ProjectTrack = string;
 
 export interface TechStack {
   id: number;
-  name: string;
-  imgUrl: string;
+  techStackName: string;
+}
+
+export interface TechStackWithImg extends TechStack {
+  techStackImgUrl: string;
 }
 
 export interface TechStackTagProps
-  extends TechStack,
+  extends TechStackWithImg,
     ReturnType<AutocompleteGetTagProps> {}
 
 export interface HomeBannerCardData {
@@ -70,4 +73,10 @@ interface UserState {
 export interface RootState {
   user: UserState;
   router: Reducer<RouterState<unknown>, AnyAction>;
+}
+
+export interface ErrorResponse {
+  status: number;
+  success: boolean;
+  message: string;
 }

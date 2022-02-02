@@ -3,6 +3,7 @@ import { useQuery } from 'react-query';
 import { AxiosResponse, AxiosError } from 'axios';
 
 import { TeamMember } from '../types/teamTypes';
+import { ErrorResponse } from '../types/commonTypes';
 
 import TeamService from '../services/TeamService';
 
@@ -37,18 +38,15 @@ interface TeamData {
   backendHeadcount: number;
 }
 
-interface TeamDetailInfoResponse {
+interface TeamInfoResponse {
   teamData?: TeamData;
-  status?: number;
-  success?: boolean;
-  message?: string;
 }
 
-const useTeamDetailInfo = (teamId: string) => {
+const useTeamInfo = (teamId: string) => {
   const queryFunction = () => TeamService.getTeamDetailInfo(teamId);
   const { isLoading, data, isError, error } = useQuery<
-    AxiosResponse<TeamDetailInfoResponse>,
-    AxiosError
+    AxiosResponse<TeamInfoResponse>,
+    AxiosError<ErrorResponse>
   >(['teamDetailInfo', teamId], queryFunction, {
     keepPreviousData: true,
   });
@@ -61,4 +59,4 @@ const useTeamDetailInfo = (teamId: string) => {
   };
 };
 
-export default useTeamDetailInfo;
+export default useTeamInfo;

@@ -2,6 +2,8 @@ import { useQuery } from 'react-query';
 
 import { AxiosResponse, AxiosError } from 'axios';
 
+import { ErrorResponse } from '../types/commonTypes';
+
 import UserService from '../services/UserService';
 
 interface UserProjectTeam {
@@ -38,18 +40,15 @@ interface UserData {
   etcUrl: string | null;
 }
 
-interface UserDetailInfoResponse {
-  userData?: UserData;
-  status?: number;
-  success?: string;
-  message?: string;
+interface UserInfoResponse {
+  userData: UserData;
 }
 
-const useUserDetailInfo = (userId: string) => {
+const useUserInfo = (userId: string) => {
   const queryFunction = () => UserService.userDetailInfoApi(userId);
   const { isLoading, data, isError, error } = useQuery<
-    AxiosResponse<UserDetailInfoResponse>,
-    AxiosError
+    AxiosResponse<UserInfoResponse>,
+    AxiosError<ErrorResponse>
   >(['userDetailInfo', userId], queryFunction, {
     keepPreviousData: true,
   });
@@ -62,4 +61,4 @@ const useUserDetailInfo = (userId: string) => {
   };
 };
 
-export default useUserDetailInfo;
+export default useUserInfo;

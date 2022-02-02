@@ -29,20 +29,22 @@ const ProjectNavigation: React.FC = () => {
       </NavItem>
       <NavItem
         className={
-          location.pathname === '/projects/specialization/students'
-            ? 'active'
-            : ''
+          location.pathname === '/projects/specialization/users' ? 'active' : ''
         }
       >
-        <NavLink to="/projects/specialization/students">
+        <NavLink to="/projects/specialization/users">
           <PersonSearchIcon css={navLinkIcon} />
           교육생 공고
         </NavLink>
       </NavItem>
       <NavItem
-        className={location.pathname === '/projects/offers' ? 'active' : ''}
+        className={
+          location.pathname === '/projects/specialization/offer_list'
+            ? 'active'
+            : ''
+        }
       >
-        <NavLink to="/projects/offers">
+        <NavLink to="/projects/specialization/offer_list">
           <VolunteerActivismIcon css={navLinkIcon} />
           받은 제안
         </NavLink>
@@ -75,7 +77,18 @@ const NavTabs = styled.ul`
   justify-content: center;
   margin: 48px 0 24px;
   border-color: #fff;
+  background-color: #fff;
   box-shadow: inset 0 -0.0625rem #d7e2eb;
+
+  @media (max-width: 575px) {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    z-index: 20;
+    width: 100%;
+    margin: 0;
+    border-top: 1px solid #d7e2eb;
+  }
 `;
 
 const NavItem = styled.li`
@@ -86,9 +99,16 @@ const NavItem = styled.li`
   &:hover {
     color: #3396f4;
   }
+
   &.active {
     box-shadow: inset 0 -0.1875rem #3396f4;
     color: #3396f4;
+  }
+
+  @media (max-width: 575px) {
+    &.active {
+      box-shadow: none;
+    }
   }
 `;
 
@@ -101,22 +121,18 @@ const NavLink = styled(Link)`
   font-size: 16px;
   line-height: 1.6;
 
-  @media (max-width: 540px) {
-    font-size: 14px;
-  }
-  @media (max-width: 414px) {
-    font-size: 13px;
-  }
-  @media (max-width: 360px) {
+  @media (max-width: 575px) {
     font-size: 12px;
+    padding: 6px 0;
   }
 `;
 
 const navLinkIcon = css`
   margin-bottom: 4px;
 
-  @media (max-width: 540px) {
-    display: none;
+  @media (max-width: 575px) {
+    margin-bottom: 2px;
+    font-size: 20px;
   }
 `;
 

@@ -18,8 +18,8 @@ interface TechStackTagWithLevelProps extends TechStackTagProps {
 
 const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
   id,
-  name,
-  imgUrl,
+  techStackName,
+  techStackImgUrl,
   onDelete,
   techStacks,
   updateTechStacks,
@@ -31,11 +31,11 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
 
   useEffect(() => {
     techStacks.forEach((techStack) => {
-      if (techStack.techStackName === name) {
+      if (techStack.techStackName === techStackName) {
         setSelectedTechStackLevel(techStack.techStackLevel);
       }
     });
-  }, [name, techStacks]);
+  }, [techStackName, techStacks]);
 
   const handleTechStackLevel = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -57,21 +57,20 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
 
     updateTechStacks({
       techStackLevel: updateTechStackLevel,
-      techStackName: name,
+      techStackName,
     });
   };
 
   const deleteTechStack = (event: React.MouseEvent<HTMLButtonElement>) => {
     onDelete(event);
-
-    deleteTechStacks(name);
+    deleteTechStacks(techStackName);
   };
 
   return (
     <TagItem {...other}>
       <Group>
-        <Img src={imgUrl} alt={name} />
-        <Name>{name}</Name>
+        <Img src={techStackImgUrl} alt={techStackName} />
+        <Name>{techStackName}</Name>
       </Group>
       <Group className="a">
         <Box
@@ -131,7 +130,6 @@ const TagItem = styled.li`
   margin-bottom: 12px;
   padding: 3px 6px;
   box-sizing: border-box;
-
   &:hover {
     border-radius: 0.25rem;
     background-color: #eaf4fd;
@@ -139,7 +137,6 @@ const TagItem = styled.li`
   &:last-of-type {
     margin-bottom: 16px;
   }
-
   @media (max-width: 540px) {
     margin-bottom: 16px;
   }
@@ -156,7 +153,6 @@ const Img = styled.img`
   margin-right: 8px;
   border-radius: 2px;
   object-fit: fill;
-
   @media (max-width: 540px) {
     width: 22px;
     height: 22px;
@@ -166,7 +162,6 @@ const Img = styled.img`
 const Name = styled.h6`
   font-size: 14px;
   color: #5f7f90;
-
   @media (max-width: 540px) {
     font-size: 13px;
   }
@@ -183,11 +178,9 @@ const DeleteButton = styled.button`
   color: #f44336;
   transition: all 0.12s ease-in-out;
   cursor: pointer;
-
   &:hover {
     transform: scale(1.15);
   }
-
   @media (max-width: 540px) {
     svg {
       width: 22px;
@@ -205,7 +198,6 @@ const LevelButton = styled(Button)`
   font-size: 14px;
   font-weight: 400;
   color: #3396f4;
-
   &:hover {
     background-color: #5babf6;
     color: #fff;
@@ -214,7 +206,6 @@ const LevelButton = styled(Button)`
     background-color: #5babf6;
     color: #fff;
   }
-
   @media (max-width: 540px) {
     width: 22px;
     height: 22px;
