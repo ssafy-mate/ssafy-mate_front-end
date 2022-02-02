@@ -24,6 +24,7 @@ const SignInPage: React.FC = () => {
   if (token !== null) {
     return <Redirect to="/" />;
   }
+
   return (
     <>
       <Header />
@@ -39,11 +40,8 @@ const Container = styled.div`
   margin-top: 140px;
   padding: 0 16px;
 
-  @media (max-width: 580px) {
+  @media (max-width: 575px) {
     margin-top: 120px;
-  }
-  @media (max-width: 414px) {
-    margin-top: 100px;
   }
 `;
 

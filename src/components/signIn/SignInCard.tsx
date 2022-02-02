@@ -2,8 +2,6 @@ import { useEffect, useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import { SignInRequestTypeWithIdSave } from '../../types/signInTypes';
@@ -30,25 +28,21 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
     }
   }, [savedId]);
 
-  const handleIdSave = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeIdSaveCheckBox = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     setIdSaveCheckBox(event.target.checked);
   };
 
   const handleInputEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setInputEmail(event.target.value);
 
-    if (inputEmail !== '') {
-      setInputEmailError(false);
-    } else {
-      setInputEmailError(true);
-    }
+    inputEmail !== '' ? setInputEmailError(false) : setInputEmailError(true);
 
     if (!emailVerificaion) {
-      if (validEmailReg.test(inputEmail)) {
-        setEmailVerificaion(true);
-      } else {
-        setEmailVerificaion(false);
-      }
+      validEmailReg.test(inputEmail)
+        ? setEmailVerificaion(true)
+        : setEmailVerificaion(false);
     }
   };
 
@@ -87,6 +81,7 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
       setInputEmailError(true);
       setEmailVerificaion(false);
     }
+
     if (
       emailInput !== '' &&
       passwordInput !== '' &&
@@ -103,51 +98,51 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
       <Container>
         <CardHead>로그인</CardHead>
         <SignInForm>
-          <SignInLabel>이메일</SignInLabel>
-
+          <SignInLabel htmlFor="email">이메일</SignInLabel>
           <SignInLabelWrapper>
             <SignInInput
               type="email"
-              placeholder="이메일"
+              id="email"
               className={
-                (inputEmailError ? 'emailInputError' : '') ||
-                (emailVerificaion ? '' : 'emailInputError')
+                (inputEmailError ? 'email-input-error' : '') ||
+                (emailVerificaion ? '' : 'email-input-error')
               }
-              required
-              onChange={handleInputEmail}
               value={inputEmail}
+              onChange={handleInputEmail}
+              placeholder="이메일"
+              required
             />
             {!emailVerificaion && (
-              <EmailError>이메일 형식이 올바르지 않습니다.</EmailError>
+              <ErrorMessageWrapper>
+                <ErrorMessage>이메일 형식이 올바르지 않습니다.</ErrorMessage>
+              </ErrorMessageWrapper>
             )}
           </SignInLabelWrapper>
-          <SignInLabel>비밀번호</SignInLabel>
+          <SignInLabel htmlFor="password">비밀번호</SignInLabel>
           <SignInInput
             type="password"
-            placeholder="비밀번호"
-            className={inputPasswordError ? 'passwordInputError' : ''}
-            required
+            id="password"
+            className={inputPasswordError ? 'password-input-error' : ''}
             onChange={handleInputPassword}
+            placeholder="비밀번호"
+            required
           />
-
           <Options>
             <IdSaveCheckBox>
               <IdSaveCheckInput
                 type="checkbox"
-                id="idSave"
-                name="idSave"
-                onChange={handleIdSave}
+                id="id-save-check-box"
+                name="id-save-check-box"
+                onChange={handleChangeIdSaveCheckBox}
                 checked={idSaveCheckBox}
               />
-              <IdSaveCheckLabel htmlFor="idSave">아이디 저장</IdSaveCheckLabel>
+              <IdSaveCheckLabel htmlFor="id-save-check-box">
+                아이디 저장
+              </IdSaveCheckLabel>
             </IdSaveCheckBox>
             <AccountManagementMenu>
-              <Link to="#" css={accountLink}>
-                아이디 찾기
-              </Link>
-              <Link to="#" css={accountLink}>
-                비밀번호 찾기
-              </Link>
+              <AccountLink to="#">아이디 찾기</AccountLink>
+              <AccountLink to="#">비밀번호 재설정</AccountLink>
             </AccountManagementMenu>
           </Options>
           <SignInButton onClick={loginButtonClick} type="button">
@@ -174,10 +169,10 @@ const Container = styled.div`
   border-radius: 6px;
   box-sizing: border-box;
 
-  @media (max-width: 580px) {
+  @media (max-width: 767px) {
     padding: 40px 28px;
   }
-  @media (max-width: 414px) {
+  @media (max-width: 575px) {
     padding: 32px 16px;
   }
 `;
@@ -189,7 +184,7 @@ const CardHead = styled.h3`
   text-align: center;
   color: #263747;
 
-  @media (max-width: 580px) {
+  @media (max-width: 575px) {
     margin-bottom: 40px;
   }
 `;
@@ -198,6 +193,7 @@ const SignInForm = styled.form`
   display: flex;
   flex-direction: column;
 `;
+
 const SignInLabelWrapper = styled.div``;
 
 const SignInLabel = styled.label`
@@ -206,17 +202,20 @@ const SignInLabel = styled.label`
   line-height: 1.5;
   color: #263747;
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
 
-const EmailError = styled.label`
-  margin-bottom: 15px;
+const ErrorMessageWrapper = styled.div`
+  margin-bottom: 8px;
+`;
+
+const ErrorMessage = styled.span`
+  margin-left: 6px;
   font-size: 13px;
   line-height: 1.5;
-  color: #f77;
-  margin-left: 5px;
+  color: #f44336;
 `;
 
 const SignInInput = styled.input`
@@ -238,7 +237,6 @@ const SignInInput = styled.input`
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px#3396f4;
   }
-
   &:focus {
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px #3396f4;
@@ -246,17 +244,17 @@ const SignInInput = styled.input`
     color: #495057;
   }
 
-  &.emailInputError {
-    margin-bottom: 5px;
-    border: 1px solid #f77;
+  &.email-input-error {
+    margin-bottom: 4px;
+    border: 1px solid #f44336;
+    box-shadow: inset 0 0 0 1px #ff77774d;
+  }
+  &.password-input-error {
+    border: 1px solid #f44336;
     box-shadow: inset 0 0 0 1px #ff77774d;
   }
 
-  &.passwordInputError {
-    border: 1px solid #f77;
-    box-shadow: inset 0 0 0 1px #ff77774d;
-  }
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -267,28 +265,40 @@ const Options = styled.div`
   align-items: center;
   margin-bottom: 16px;
 
-  @media (max-width: 420px) {
+  @media (max-width: 349px) {
     flex-direction: column;
   }
 `;
 
 const IdSaveCheckBox = styled.div`
-  @media (max-width: 420px) {
+  display: flex;
+  align-items: center;
+  margin: auto 0;
+
+  @media (max-width: 349px) {
     margin-bottom: 8px;
   }
 `;
 
-const IdSaveCheckInput = styled.input``;
+const IdSaveCheckInput = styled.input`
+  @media (max-width: 575px) {
+    font-size: 13px;
+  }
+`;
 
 const IdSaveCheckLabel = styled.label`
   font-size: 14px;
+  line-height: 1.5;
   color: #98a8b9;
   transition: color 0.08s ease-in-out;
   cursor: pointer;
-  line-height: 1.5;
 
   &:hover {
     color: #3396f4;
+  }
+
+  @media (max-width: 575px) {
+    font-size: 13px;
   }
 `;
 
@@ -311,7 +321,7 @@ const SignInButton = styled.button`
     background-color: #2878c3;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 15px;
   }
 `;
@@ -344,12 +354,12 @@ const SignUpLinkBox = styled.div`
     }
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
 
-const accountLink = css`
+const AccountLink = styled(Link)`
   font-size: 14px;
   line-height: 1.5;
   color: #98a8b9;
@@ -371,16 +381,9 @@ const accountLink = css`
     }
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
-`;
-
-const ErrorSpan = styled.span`
-  padding: 8px 12px;
-  font-weight: 400;
-  font-size: 13px;
-  color: #f44336;
 `;
 
 export default SignInCard;
