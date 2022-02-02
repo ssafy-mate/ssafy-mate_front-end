@@ -1,7 +1,15 @@
+import { useState } from 'react';
+
 import { Link } from 'react-router-dom';
 
 import styled from '@emotion/styled';
 
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import WorkIcon from '@mui/icons-material/Work';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
@@ -39,6 +47,16 @@ const UserItem: React.FC<UserItemProps> = ({
   githubUrl,
   belongToTeam,
 }) => {
+  const [openRequestDialog, setOpenRequestDialog] = useState(false);
+
+  const handleOpenRequestDialog = () => {
+    setOpenRequestDialog(true);
+  };
+
+  const handleCloseRequestDialog = () => {
+    setOpenRequestDialog(false);
+  };
+
   return (
     <Item className={belongToTeam ? 'belong' : ''}>
       <ItemHeader>
@@ -116,9 +134,36 @@ const UserItem: React.FC<UserItemProps> = ({
         </SubInfoList>
       </ItemBody>
       <ItemFooter className={belongToTeam ? 'belong' : ''}>
-        {!belongToTeam && <RequestButton>팀 합류 요청</RequestButton>}
+        {!belongToTeam && (
+          <RequestButton onClick={handleOpenRequestDialog}>
+            팀 합류 요청
+          </RequestButton>
+        )}
         <ProfileLink to={`/users/${userId}`}>프로필 보기</ProfileLink>
       </ItemFooter>
+      <Dialog
+        open={openRequestDialog}
+        onClose={handleCloseRequestDialog}
+        fullWidth={true}
+        maxWidth={'sm'}
+      >
+        <RequestDialogTitle>팀 합류 요청하기</RequestDialogTitle>
+        <DialogContent>
+          <MuiTextField
+            autoFocus
+            margin="dense"
+            id="request-message"
+            label="합류 요청 메시지를 입력해주세요."
+            type="text"
+            variant="standard"
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <DialogButton onClick={handleCloseRequestDialog}>취소</DialogButton>
+          <DialogButton onClick={handleCloseRequestDialog}>보내기</DialogButton>
+        </DialogActions>
+      </Dialog>
     </Item>
   );
 };
@@ -363,6 +408,41 @@ const ProfileLink = styled(Link)`
   @media (max-width: 575px) {
     font-size: 13px;
   }
+`;
+
+const RequestDialogTitle = styled(DialogTitle)`
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  font-size: 18px;
+  color: #263747;
+
+  @media (max-width: 575px) {
+    font-size: 16px;
+  }
+`;
+
+const MuiTextField = styled(TextField)`
+  & label,
+  & input {
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    font-size: 16px;
+  }
+
+  & input {
+    color: #3396f4;
+  }
+
+  @media (max-width: 575px) {
+    & label,
+    & input {
+      font-size: 14px;
+    }
+  }
+`;
+
+const DialogButton = styled(Button)`
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  color: #3396f4;
+  font-size: 13px;
 `;
 
 export default UserItem;

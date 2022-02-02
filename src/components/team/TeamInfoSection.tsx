@@ -1,6 +1,6 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 
-import { Link, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import styled from '@emotion/styled';
 
@@ -11,27 +11,43 @@ import FlagIcon from '@mui/icons-material/Flag';
 import SchoolIcon from '@mui/icons-material/School';
 import ComputerIcon from '@mui/icons-material/Computer';
 import StyleIcon from '@mui/icons-material/Style';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 
 import useTeamDetailInfo from '../../hooks/useTeamDetailInfo';
 
+import UserLabel from '../user/UserLabel';
+import RecruitStatusBadge from '../projects/RecruitStatusBadge';
 import TeamTechStackTag from './TeamTechStackTag';
 import MemberItem from './MemberItem';
 import TeamMembersStatusBox from './TeamMembersStatus';
-import RecruitStatusBadge from '../projects/RecruitStatusBadge';
 import JobChart from '../chart/JobChart';
 import RecruitingStatusChart from '../chart/RecruitingStatusChart';
 import ErrorSection from '../common/ErrorSection';
 import SkeletonTeamInfoSection from './SkeletonTeamInfoSection';
-import UserLabel from '../user/UserLabel';
 
 type Params = {
   teamId: string;
 };
 
-const TeamInformationSection: React.FC = () => {
+const TeamInfoSection: React.FC = () => {
   const { teamId } = useParams<Params>();
   const { isLoading, teamData, isError, errorMessage } =
     useTeamDetailInfo(teamId);
+
+  const [openApplicationDialog, setOpenApplicationDialog] = useState(false);
+
+  const handleOpenApplicationDialog = () => {
+    setOpenApplicationDialog(true);
+  };
+
+  const handleCloseApplicationDialog = () => {
+    setOpenApplicationDialog(false);
+  };
 
   useEffect(() => {
     if (isError) {
@@ -95,7 +111,7 @@ const TeamInformationSection: React.FC = () => {
               </TeamTitleWrapper>
             </TitleBox>
             <ButtonBox>
-              <ApplicationButton>
+              <ApplicationButton onClick={handleOpenApplicationDialog}>
                 <BorderColorIcon />
                 <span>지원하기</span>
               </ApplicationButton>
@@ -201,6 +217,33 @@ const TeamInformationSection: React.FC = () => {
           </BodyContainer>
         </>
       )}
+      <Dialog
+        open={openApplicationDialog}
+        onClose={handleCloseApplicationDialog}
+        fullWidth={true}
+        maxWidth={'sm'}
+      >
+        <RequestDialogTitle>팀 합류 지원하기</RequestDialogTitle>
+        <DialogContent>
+          <MuiTextField
+            autoFocus
+            margin="dense"
+            id="application-message"
+            label="합류 지원 메시지를 입력해주세요."
+            type="text"
+            variant="standard"
+            fullWidth
+          />
+        </DialogContent>
+        <DialogActions>
+          <DialogButton onClick={handleCloseApplicationDialog}>
+            취소
+          </DialogButton>
+          <DialogButton onClick={handleCloseApplicationDialog}>
+            보내기
+          </DialogButton>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 };
@@ -552,4 +595,39 @@ const ChartsBox = styled.div`
   }
 `;
 
-export default TeamInformationSection;
+const RequestDialogTitle = styled(DialogTitle)`
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  font-size: 18px;
+  color: #263747;
+
+  @media (max-width: 575px) {
+    font-size: 16px;
+  }
+`;
+
+const MuiTextField = styled(TextField)`
+  & label,
+  & input {
+    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    font-size: 16px;
+  }
+
+  & input {
+    color: #3396f4;
+  }
+
+  @media (max-width: 575px) {
+    & label,
+    & input {
+      font-size: 14px;
+    }
+  }
+`;
+
+const DialogButton = styled(Button)`
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  color: #3396f4;
+  font-size: 13px;
+`;
+
+export default TeamInfoSection;
