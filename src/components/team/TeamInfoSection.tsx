@@ -27,8 +27,8 @@ import MemberItem from './MemberItem';
 import TeamMembersStatusBox from './TeamMembersStatus';
 import JobChart from '../chart/JobChart';
 import RecruitingStatusChart from '../chart/RecruitingStatusChart';
+import SkeletonTeamInfoSection from './skeletonUI/SkeletonTeamInfoSection';
 import ErrorSection from '../common/ErrorSection';
-import SkeletonTeamInfoSection from './SkeletonTeamInfoSection';
 
 type Params = {
   teamId: string;
@@ -89,11 +89,11 @@ const TeamInfoSection: React.FC = () => {
   }
 
   return (
-    <Container>
+    <>
       {isLoading || !teamData ? (
         <SkeletonTeamInfoSection />
       ) : (
-        <>
+        <Container>
           <HeadContainer>
             <TitleBox>
               <TeamImgWrapper>
@@ -215,36 +215,36 @@ const TeamInfoSection: React.FC = () => {
               </ChartsBox>
             </Aside>
           </BodyContainer>
-        </>
+          <Dialog
+            open={openApplicationDialog}
+            onClose={handleCloseApplicationDialog}
+            fullWidth={true}
+            maxWidth={'sm'}
+          >
+            <RequestDialogTitle>팀 합류 지원하기</RequestDialogTitle>
+            <DialogContent>
+              <MuiTextField
+                autoFocus
+                margin="dense"
+                id="application-message"
+                label="합류 지원 메시지를 입력해주세요."
+                type="text"
+                variant="standard"
+                fullWidth
+              />
+            </DialogContent>
+            <DialogActions>
+              <DialogButton onClick={handleCloseApplicationDialog}>
+                취소
+              </DialogButton>
+              <DialogButton onClick={handleCloseApplicationDialog}>
+                보내기
+              </DialogButton>
+            </DialogActions>
+          </Dialog>
+        </Container>
       )}
-      <Dialog
-        open={openApplicationDialog}
-        onClose={handleCloseApplicationDialog}
-        fullWidth={true}
-        maxWidth={'sm'}
-      >
-        <RequestDialogTitle>팀 합류 지원하기</RequestDialogTitle>
-        <DialogContent>
-          <MuiTextField
-            autoFocus
-            margin="dense"
-            id="application-message"
-            label="합류 지원 메시지를 입력해주세요."
-            type="text"
-            variant="standard"
-            fullWidth
-          />
-        </DialogContent>
-        <DialogActions>
-          <DialogButton onClick={handleCloseApplicationDialog}>
-            취소
-          </DialogButton>
-          <DialogButton onClick={handleCloseApplicationDialog}>
-            보내기
-          </DialogButton>
-        </DialogActions>
-      </Dialog>
-    </Container>
+    </>
   );
 };
 

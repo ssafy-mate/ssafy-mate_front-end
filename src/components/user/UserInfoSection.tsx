@@ -27,7 +27,7 @@ import useUserDetailInfo from '../../hooks/useUserDetailInfo';
 
 import UserLabel from './UserLabel';
 import UserTechStackTag from './UserTechStackTag';
-import SkeletonUserInfoSection from './SkeletonUserInfoSection';
+import SkeletonUserInfoSection from './skeletonUI/SkeletonUserInfoSection';
 import ErrorSection from '../common/ErrorSection';
 
 type Params = {
@@ -63,11 +63,11 @@ const UserInfoSection: React.FC = () => {
   }
 
   return (
-    <Container>
+    <>
       {isLoading || !userData ? (
         <SkeletonUserInfoSection />
       ) : (
-        <>
+        <Container>
           <HeadContainer>
             <TitleBox>
               <ProfileImgWrapper>
@@ -288,32 +288,36 @@ const UserInfoSection: React.FC = () => {
               </TechStackList>
             </Section>
           </BodyContainer>
-        </>
+          <Dialog
+            open={openRequestDialog}
+            onClose={handleCloseRequestDialog}
+            fullWidth={true}
+            maxWidth={'sm'}
+          >
+            <RequestDialogTitle>팀 합류 요청하기</RequestDialogTitle>
+            <DialogContent>
+              <MuiTextField
+                autoFocus
+                margin="dense"
+                id="request-message"
+                label="합류 요청 메시지를 입력해주세요."
+                type="text"
+                variant="standard"
+                fullWidth
+              />
+            </DialogContent>
+            <DialogActions>
+              <DialogButton onClick={handleCloseRequestDialog}>
+                취소
+              </DialogButton>
+              <DialogButton onClick={handleCloseRequestDialog}>
+                보내기
+              </DialogButton>
+            </DialogActions>
+          </Dialog>
+        </Container>
       )}
-      <Dialog
-        open={openRequestDialog}
-        onClose={handleCloseRequestDialog}
-        fullWidth={true}
-        maxWidth={'sm'}
-      >
-        <RequestDialogTitle>팀 합류 요청하기</RequestDialogTitle>
-        <DialogContent>
-          <MuiTextField
-            autoFocus
-            margin="dense"
-            id="request-message"
-            label="합류 요청 메시지를 입력해주세요."
-            type="text"
-            variant="standard"
-            fullWidth
-          />
-        </DialogContent>
-        <DialogActions>
-          <DialogButton onClick={handleCloseRequestDialog}>취소</DialogButton>
-          <DialogButton onClick={handleCloseRequestDialog}>보내기</DialogButton>
-        </DialogActions>
-      </Dialog>
-    </Container>
+    </>
   );
 };
 
