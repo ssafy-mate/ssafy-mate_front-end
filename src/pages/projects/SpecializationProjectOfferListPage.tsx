@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 
-import Header from '../components/common/Header';
-import ProjectNavigation from '../components/projects/ProjectNavigation';
-import OfferListSection from '../components/projects/OfferListSection';
-import Footer from '../components/common/Footer';
+import Header from '../../components/common/Header';
+import ProjectNavigation from '../../components/projects/ProjectNavigation';
+import OfferListSection from '../../components/projects/OfferListSection';
+import Footer from '../../components/common/Footer';
 
 const SpecializationProjectOfferListPage: React.FC = () => {
   useEffect(() => {
