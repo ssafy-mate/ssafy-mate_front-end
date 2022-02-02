@@ -26,12 +26,12 @@ import AuthService from '../../services/AuthService';
 import Loading from '../common/Loading';
 
 const SignUpForm: React.FC<SignUpProps> = ({
-  signUpEmail,
-  updateSignUpEmail,
   signUpStep,
-  updateSignUpStep,
+  signUpEmail,
   signUpPassword,
-  updateSignUpPassword,
+  setSignUpStep,
+  setSignUpEmail,
+  setSignUpPassword,
 }) => {
   const [alertOpen, setAlertOpen] = useState<boolean>(true);
   const [alertSeverity, setAlertSeverity] = useState<Severity>('success');
@@ -85,9 +85,9 @@ const SignUpForm: React.FC<SignUpProps> = ({
   const updateSignUpProps = (data: SignUp) => {
     const { signUpEmail, signUpPassword } = data;
 
-    updateSignUpEmail(signUpEmail);
-    updateSignUpPassword(signUpPassword);
-    updateSignUpStep(2);
+    setSignUpStep(2);
+    setSignUpEmail(signUpEmail);
+    setSignUpPassword(signUpPassword);
   };
 
   const codeConfirmButtonOnChange: string | undefined = watch(

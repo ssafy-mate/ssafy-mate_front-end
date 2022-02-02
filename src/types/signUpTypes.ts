@@ -69,12 +69,12 @@ export interface SignUpResponse {
 
 // 회원가입 2단계 인자
 export interface SignUpProps {
+  signUpStep: number;
   signUpEmail: string;
   signUpPassword: string;
-  signUpStep: number;
-  updateSignUpEmail: (email: string) => void;
-  updateSignUpPassword: (password: string) => void;
-  updateSignUpStep: (signUpStep: number) => void;
+  setSignUpStep: (signUpStep: number) => void;
+  setSignUpEmail: (email: string) => void;
+  setSignUpPassword: (password: string) => void;
 }
 
 // 회원가입 2단계 정보

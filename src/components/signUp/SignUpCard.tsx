@@ -17,34 +17,6 @@ const SignUpCard: React.FC = () => {
   const [signUpEmail, setSignUpEmail] = useState<string>('');
   const [signUpPassword, setSignUpPassword] = useState<string>('');
 
-  const updateCampus = (campus: string): void => {
-    setCampus(campus);
-  };
-
-  const updateSsafyTrack = (ssafyTrack: string): void => {
-    setSsafyTrack(ssafyTrack);
-  };
-
-  const updateStudentNumber = (studentNumber: string): void => {
-    setStudentNumber(studentNumber);
-  };
-
-  const updateStudentName = (studentName: string): void => {
-    setStudentName(studentName);
-  };
-
-  const updateSignUpEmail = (signUpEmail: string): void => {
-    setSignUpEmail(signUpEmail);
-  };
-
-  const updateSignUpPassword = (signUpPassword: string): void => {
-    setSignUpPassword(signUpPassword);
-  };
-
-  const updateSignUpStep = (signUpStep: number): void => {
-    setSignUpStep(signUpStep);
-  };
-
   return (
     <>
       <Container>
@@ -71,12 +43,12 @@ const SignUpCard: React.FC = () => {
               case 1:
                 return (
                   <SignUpForm
-                    signUpEmail={signUpEmail}
-                    updateSignUpEmail={updateSignUpEmail}
-                    signUpPassword={signUpPassword}
-                    updateSignUpPassword={updateSignUpPassword}
                     signUpStep={signUpStep}
-                    updateSignUpStep={updateSignUpStep}
+                    signUpEmail={signUpEmail}
+                    signUpPassword={signUpPassword}
+                    setSignUpStep={setSignUpStep}
+                    setSignUpEmail={setSignUpEmail}
+                    setSignUpPassword={setSignUpPassword}
                   />
                 );
               case 2:
