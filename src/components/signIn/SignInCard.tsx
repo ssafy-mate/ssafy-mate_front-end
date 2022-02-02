@@ -1,63 +1,176 @@
-import { useRef } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-import { LogInRequestType } from '../../types/signInTypes';
+import { SignInRequestTypeWithIdSave } from '../../types/signInTypes';
+
+import { validEmailReg } from '../../utils/regularExpressionData';
 
 interface SigninProps {
-  login: (requestData: LogInRequestType) => void;
+  login: (requestData: SignInRequestTypeWithIdSave) => void;
 }
 
 const SignInCard: React.FC<SigninProps> = ({ login }) => {
-  const emailRef = useRef<HTMLInputElement | null>(null);
+  const [inputEmail, setInputEmail] = useState<string>('');
+  const [inputPassword, setInputPassword] = useState<string>('');
+  const [inputEmailError, setInputEmailError] = useState<boolean>(false);
+  const [inputPasswordError, setInputPasswordError] = useState<boolean>(false);
+  const [emailVerificaion, setEmailVerificaion] = useState<boolean>(true);
+  const [idSaveCheckBox, setIdSaveCheckBox] = useState<boolean>(false);
+  const [showError, setShowError] = useState<boolean>(false);
+  const savedId = localStorage.getItem('ssafy-mate-id');
 
-  const passwordRef = useRef<HTMLInputElement | null>(null);
+  useEffect(() => {
+    if (savedId !== null) {
+      setInputEmail(savedId);
+      setIdSaveCheckBox(true);
+    }
+  }, [savedId]);
+
+  const handleChangeIdSaveCheckBox = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setIdSaveCheckBox(event.target.checked);
+  };
+
+  const handleInputEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputEmailOnChange = event.target.value;
+
+    setInputEmail(inputEmailOnChange);
+
+    if (showError) {
+      if (inputEmailOnChange === '') {
+        setInputEmailError(true);
+        setEmailVerificaion(true);
+      } else if (validEmailReg.test(inputEmailOnChange)) {
+        setEmailVerificaion(true);
+        setInputEmailError(false);
+      } else {
+        setInputEmailError(false);
+        setEmailVerificaion(false);
+      }
+    } else {
+      inputEmailOnChange === ''
+        ? setInputEmailError(true)
+        : setInputEmailError(false);
+    }
+  };
+
+  const handleInputPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputPasswordOnChange = event.target.value;
+
+    setInputPassword(inputPasswordOnChange);
+
+    inputPasswordOnChange === ''
+      ? setInputPasswordError(true)
+      : setInputPasswordError(false);
+  };
 
   const loginButtonClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    event.preventDefault();
-    const userEmail = emailRef.current!.value;
-    const password = passwordRef.current!.value;
+    if (validation(inputEmail, inputPassword)) {
+      login({
+        userEmail: inputEmail,
+        password: inputPassword,
+        IdSave: idSaveCheckBox,
+      });
+    }
+  };
 
-    login({ userEmail, password });
+  const validation = (emailInput: string, passwordInput: string): boolean => {
+    setShowError(true);
+    passwordInput === ''
+      ? setInputPasswordError(true)
+      : setInputPasswordError(false);
+
+    if (emailInput === '') {
+      setInputEmailError(true);
+    } else if (validEmailReg.test(emailInput)) {
+      setInputEmailError(false);
+      setEmailVerificaion(true);
+    } else {
+      setInputEmailError(true);
+      setEmailVerificaion(false);
+    }
+
+    if (
+      emailInput !== '' &&
+      passwordInput !== '' &&
+      inputEmailError === false
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   };
 
   return (
-    <Container>
-      <CardHead>로그인</CardHead>
-      <SignInForm>
-        <SignInLabel>이메일</SignInLabel>
-        <SignInInput placeholder="이메일" ref={emailRef} />
-        <SignInLabel>비밀번호</SignInLabel>
-        <SignInInput type="password" placeholder="비밀번호" ref={passwordRef} />
-        <Options>
-          <IdSaveCheckBox>
-            <IdSaveCheckInput type="checkbox" id="idSave" name="idSave" />
-            <IdSaveCheckLabel htmlFor="idSave">아이디 저장</IdSaveCheckLabel>
-          </IdSaveCheckBox>
-          <AccountManagementMenu>
-            <Link to="#" css={accountLink}>
-              아이디 찾기
+    <>
+      <Container>
+        <CardHead>로그인</CardHead>
+        <SignInForm>
+          <SignInLabel htmlFor="email">이메일</SignInLabel>
+          <SignInLabelWrapper>
+            <SignInInput
+              type="email"
+              id="email"
+              className={
+                (emailVerificaion ? '' : 'email-verification-error') ||
+                (inputEmailError ? 'input-error' : '')
+              }
+              value={inputEmail}
+              onChange={handleInputEmail}
+              placeholder="이메일"
+              required
+            />
+            {!emailVerificaion && (
+              <ErrorMessageWrapper>
+                <ErrorMessage>이메일 형식이 올바르지 않습니다.</ErrorMessage>
+              </ErrorMessageWrapper>
+            )}
+          </SignInLabelWrapper>
+          <SignInLabel htmlFor="password">비밀번호</SignInLabel>
+          <SignInInput
+            type="password"
+            id="password"
+            className={inputPasswordError ? 'input-error' : ''}
+            onChange={handleInputPassword}
+            placeholder="비밀번호"
+            required
+          />
+          <Options>
+            <IdSaveCheckBox>
+              <IdSaveCheckInput
+                type="checkbox"
+                id="id-save-check-box"
+                name="id-save-check-box"
+                onChange={handleChangeIdSaveCheckBox}
+                checked={idSaveCheckBox}
+              />
+              <IdSaveCheckLabel htmlFor="id-save-check-box">
+                아이디 저장
+              </IdSaveCheckLabel>
+            </IdSaveCheckBox>
+            <AccountManagementMenu>
+              <AccountLink to="#">아이디 찾기</AccountLink>
+              <AccountLink to="#">비밀번호 재설정</AccountLink>
+            </AccountManagementMenu>
+          </Options>
+          <SignInButton onClick={loginButtonClick} type="button">
+            로그인
+          </SignInButton>
+          <SignUpLinkBox>
+            아직 계정이 없으신가요?
+            <Link to="/users/sign_up" className="sign-up-link">
+              계정 만들기
             </Link>
-            <Link to="#" css={accountLink}>
-              비밀번호 찾기
-            </Link>
-          </AccountManagementMenu>
-        </Options>
-        <SignInButton onClick={loginButtonClick}>로그인</SignInButton>
-        <SignUpLinkBox>
-          아직 계정이 없으신가요?
-          <Link to="/users/sign_up" className="sign-up-link">
-            계정 만들기
-          </Link>
-        </SignUpLinkBox>
-      </SignInForm>
-    </Container>
+          </SignUpLinkBox>
+        </SignInForm>
+      </Container>
+    </>
   );
 };
 
@@ -70,10 +183,10 @@ const Container = styled.div`
   border-radius: 6px;
   box-sizing: border-box;
 
-  @media (max-width: 580px) {
+  @media (max-width: 767px) {
     padding: 40px 28px;
   }
-  @media (max-width: 414px) {
+  @media (max-width: 575px) {
     padding: 32px 16px;
   }
 `;
@@ -85,7 +198,7 @@ const CardHead = styled.h3`
   text-align: center;
   color: #263747;
 
-  @media (max-width: 580px) {
+  @media (max-width: 575px) {
     margin-bottom: 40px;
   }
 `;
@@ -95,15 +208,28 @@ const SignInForm = styled.form`
   flex-direction: column;
 `;
 
+const SignInLabelWrapper = styled.div``;
+
 const SignInLabel = styled.label`
   margin-bottom: 4px;
   font-size: 14px;
   line-height: 1.5;
   color: #263747;
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
+`;
+
+const ErrorMessageWrapper = styled.div`
+  margin-bottom: 8px;
+`;
+
+const ErrorMessage = styled.span`
+  padding-left: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #f44336;
 `;
 
 const SignInInput = styled.input`
@@ -132,7 +258,18 @@ const SignInInput = styled.input`
     color: #495057;
   }
 
-  @media (max-width: 540px) {
+  &.input-error {
+    border: 1px solid #f44336;
+    box-shadow: inset 0 0 0 1px #ff77774d;
+  }
+
+  &.email-verification-error {
+    margin-bottom: 4px;
+    border: 1px solid #f44336;
+    box-shadow: inset 0 0 0 1px #ff77774d;
+  }
+
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -143,28 +280,40 @@ const Options = styled.div`
   align-items: center;
   margin-bottom: 16px;
 
-  @media (max-width: 420px) {
+  @media (max-width: 349px) {
     flex-direction: column;
   }
 `;
 
 const IdSaveCheckBox = styled.div`
-  @media (max-width: 420px) {
+  display: flex;
+  align-items: center;
+  margin: auto 0;
+
+  @media (max-width: 349px) {
     margin-bottom: 8px;
   }
 `;
 
-const IdSaveCheckInput = styled.input``;
+const IdSaveCheckInput = styled.input`
+  @media (max-width: 575px) {
+    font-size: 13px;
+  }
+`;
 
 const IdSaveCheckLabel = styled.label`
   font-size: 14px;
+  line-height: 1.5;
   color: #98a8b9;
   transition: color 0.08s ease-in-out;
   cursor: pointer;
-  line-height: 1.5;
 
   &:hover {
     color: #3396f4;
+  }
+
+  @media (max-width: 575px) {
+    font-size: 13px;
   }
 `;
 
@@ -187,7 +336,7 @@ const SignInButton = styled.button`
     background-color: #2878c3;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 15px;
   }
 `;
@@ -220,12 +369,12 @@ const SignUpLinkBox = styled.div`
     }
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
 
-const accountLink = css`
+const AccountLink = styled(Link)`
   font-size: 14px;
   line-height: 1.5;
   color: #98a8b9;
@@ -247,7 +396,7 @@ const accountLink = css`
     }
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;

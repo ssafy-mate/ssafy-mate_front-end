@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
+
+import history from '../../history';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -13,34 +15,27 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
 import { jobListData } from '../../data/jobListData';
+import { techStackListData } from '../../data/techStackListData';
+import { validUrlReg } from '../../utils/regularExpressionData';
 
 import { TechStack } from '../../types/commonTypes';
-
-import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
-
 import {
   ProfileProps,
+  Severity,
   TechStacksWithLevel,
-} from '../../types/UserInfomationType';
+} from '../../types/signUpTypes';
 
 import AuthService from '../../services/AuthService';
 
-import { validUrl } from '../../utils/regularExpressionData';
-import { useHistory } from 'react-router-dom';
-
-import useTechStackList from '../../hooks/useTechStackList';
-
-type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;
+import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
 
 const ProfileForm: React.FC<ProfileProps> = ({
   campus,
   ssafyTrack,
   studentNumber,
   studentName,
-  signUpStep,
   signUpEmail,
   signUpPassword,
-  updateSignUpStep,
 }) => {
   const [showError, setShowError] = useState<number>(0);
   const [techStacks, setTechStacks] = useState<TechStacksWithLevel[]>([]);
@@ -60,21 +55,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const [etcUrlPatternError, setEtcUrlPatternError] = useState<boolean>(false);
   const [gitHubUrlPatternError, setGitHubUrlPatternError] =
     useState<boolean>(false);
-  const [statusAlertOpen, setStatusAlertOpen] = useState<boolean>(false);
-  const [statusAlertText, setStatusAlertText] = useState<string>('');
-  const [statusAlertSeverity, setStatusAlertSeverity] =
-    useState<Severity>('success');
-  const techStackList = useTechStackList();
+  const [alertOpen, setAlertOpen] = useState<boolean>(false);
+  const [alertText, setAlertText] = useState<string>('');
+  const [alertSeverity, setAlertSeverity] = useState<Severity>('success');
 
   const signUpFormData = new FormData();
-
-  const updateTechStacks = (techStacks: Array<TechStacksWithLevel>): void => {
-    setTechStacks(techStacks);
-  };
-
-  const updateTechStacksError = (techStacksError: boolean): void => {
-    setTechStacksError(techStacksError);
-  };
 
   const {
     getRootProps,
@@ -93,6 +78,22 @@ const ProfileForm: React.FC<ProfileProps> = ({
     options: techStackList,
     getOptionLabel: (option) => option.name,
   });
+
+  const showAlert = (type: Severity, message: string) => {
+    setAlertSeverity(type);
+    setAlertText(message);
+    setAlertOpen(true);
+  };
+
+  const alertClose = () => {
+    setAlertOpen(false);
+  };
+
+  useEffect(() => {
+    techStacks.length >= 2
+      ? setTechStacksError(false)
+      : setTechStacksError(true);
+  }, [techStacks]);
 
   const handleChangeProfileImg = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -152,20 +153,65 @@ const ProfileForm: React.FC<ProfileProps> = ({
       : setJob1Error(false);
   };
 
+  const updateTechStacks = (selectedTechStack: TechStacksWithLevel): void => {
+    const updateTechStackIndex = techStacks.findIndex(
+      (techStack) =>
+        techStack.techStackName === selectedTechStack.techStackName,
+    );
+
+    const tempTechStacks = [...techStacks];
+
+    tempTechStacks[updateTechStackIndex] = {
+      techStackName: selectedTechStack.techStackName,
+      techStackLevel: selectedTechStack.techStackLevel,
+    };
+
+    setTechStacks(tempTechStacks);
+  };
+
+  const deleteTechStacks = (seletedTechStackName: string): void => {
+    const findStackIndex = techStacks.findIndex(
+      (techStack) => techStack.techStackName === seletedTechStackName,
+    );
+
+    const tempTechStacks = [...techStacks];
+
+    if (findStackIndex >= 0) {
+      tempTechStacks.splice(findStackIndex, 1);
+    }
+
+    setTechStacks(tempTechStacks);
+  };
+
+  const controlTechStacks = (selectedTechStack: string) => {
+    if (!JSON.stringify(techStacks).includes(selectedTechStack)) {
+      setTechStacks([
+        ...techStacks,
+        {
+          techStackName: selectedTechStack,
+          techStackLevel: '중',
+        },
+      ]);
+    } else {
+      deleteTechStacks(selectedTechStack);
+    }
+  };
+
   const handleUrlInput = (event: React.ChangeEvent<HTMLInputElement>) => {
     event.preventDefault();
+
     event.target.name === 'githubUrl'
       ? setGithubUrl(event.target.value)
       : setEtcUrl(event.target.value);
 
     if (event.target.name === 'githubUrl') {
-      !validUrl.test(githubUrl)
+      !validUrlReg.test(githubUrl)
         ? setGitHubUrlPatternError(true)
         : setGitHubUrlPatternError(false);
     }
 
     if (event.target.name === 'etcUrl') {
-      !validUrl.test(etcUrl)
+      !validUrlReg.test(etcUrl)
         ? setEtcUrlPatternError(true)
         : setEtcUrlPatternError(false);
     }
@@ -183,7 +229,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
     }
   };
 
-  const validation = () => {
+  const validation = (): boolean => {
     if (!selfIntroduction) {
       setSelfIntroductionError(true);
     }
@@ -200,11 +246,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
       setAgreementError(true);
     }
 
-    !validUrl.test(githubUrl)
+    !validUrlReg.test(githubUrl)
       ? setGitHubUrlPatternError(true)
       : setGitHubUrlPatternError(false);
 
-    !validUrl.test(etcUrl)
+    !validUrlReg.test(etcUrl)
       ? setEtcUrlPatternError(true)
       : setEtcUrlPatternError(false);
 
@@ -242,36 +288,28 @@ const ProfileForm: React.FC<ProfileProps> = ({
     return signUpFormData;
   };
 
-  const showAlert = (type: Severity, message: string) => {
-    setStatusAlertSeverity(type);
-    setStatusAlertText(message);
-    setStatusAlertOpen(true);
-  };
-  const history = useHistory();
-
   const signUpClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    event.preventDefault();
-
-    const data = getSignUpInfomation();
+    const data: FormData = getSignUpInfomation();
 
     if (validation()) {
       AuthService.signUp(data)
         .then(({ status, message }) => {
           showAlert('success', message);
-          //시뮬레이션
+
           history.push('/users/sign_in');
         })
         .catch((error) => {
           if (error.response) {
-            const data = error.response.data;
-            switch (data.status) {
+            const { status, message } = error.response.data;
+
+            switch (status) {
               case 400:
-                showAlert('warning', data.message);
+                showAlert('warning', message);
                 break;
               case 500:
-                showAlert('error', data.message);
+                showAlert('error', message);
                 break;
             }
           }
@@ -279,30 +317,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
     }
   };
 
-  const alertClose = () => {
-    setStatusAlertOpen(false);
-  };
-  const deleteStackInputRef = useRef<HTMLDivElement>(null);
-  const deleteStack = (event: React.MouseEvent<HTMLDivElement>) => {
-    // console.log(deleteStackInputRef.current?.children[0].getAttribute('alt'));
-    // const seletedStack = event.currentTarget
-    //   .querySelector('img')
-    //   ?.getAttribute('alt');
-    // if (seletedStack !== null && seletedStack !== undefined) {
-    //   if (JSON.stringify(techStacks).includes(seletedStack)) {
-    //     const findStackIndex = techStacks.findIndex((stack) => {
-    //       return stack.techStackName === seletedStack;
-    //     });
-    //     techStacks.splice(findStackIndex, 1);
-    //   }
-    // }
-  };
-
   return (
     <>
-      {statusAlertOpen && (
+      {alertOpen && (
         <SsafyAuthSnackBar
-          open={statusAlertOpen}
+          open={alertOpen}
           autoHideDuration={2000}
           onClose={alertClose}
           anchorOrigin={{
@@ -312,10 +331,10 @@ const ProfileForm: React.FC<ProfileProps> = ({
         >
           <ResponseAlert
             onClose={alertClose}
-            severity={statusAlertSeverity}
+            severity={alertSeverity}
             sx={{ width: '100%' }}
           >
-            {statusAlertText}
+            {alertText}
           </ResponseAlert>
         </SsafyAuthSnackBar>
       )}
@@ -361,9 +380,12 @@ const ProfileForm: React.FC<ProfileProps> = ({
               onKeyPress={handleTextAreaEnterKeyPressed}
               onChange={handleTextAreaInput}
               required
+              className={selfIntroductionError ? 'have-error' : ''}
             />
             {showError === 1 && selfIntroductionError && (
-              <ErrorSpan>필수 입력 항목입니다.</ErrorSpan>
+              <ErrorMessageWrapper>
+                <ErrorMessage>필수 입력 항목입니다.</ErrorMessage>
+              </ErrorMessageWrapper>
             )}
           </InputWrapper>
         </Row>
@@ -376,6 +398,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
               name="job1"
               onChange={handleJobSelect}
               required
+              className={job1Error ? 'have-error' : ''}
             >
               <option value="default" disabled>
                 - 선택 -
@@ -387,7 +410,9 @@ const ProfileForm: React.FC<ProfileProps> = ({
               ))}
             </Select>
             {showError === 1 && job1Error && (
-              <ErrorSpan>필수 선택 사항입니다.</ErrorSpan>
+              <ErrorMessageWrapper>
+                <ErrorMessage>필수 선택 사항입니다.</ErrorMessage>
+              </ErrorMessageWrapper>
             )}
           </InputWrapper>
           <InputWrapper>
@@ -398,7 +423,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
               id="job2"
               defaultValue={'default'}
               onChange={handleJobSelect}
-              disabled={job1 === 'default'}
+              disabled={job1 === 'default' ? true : false}
             >
               <option value="default">- 선택 -</option>
               {jobListData
@@ -419,10 +444,14 @@ const ProfileForm: React.FC<ProfileProps> = ({
             >
               기술 스택 <Em>(필수 2가지 이상 기입)</Em>
             </RequirementLabel>
-
             <InfoInputWrapper
               ref={setAnchorEl}
-              className={focused ? 'focused' : ''}
+              className={
+                (focused ? 'focused' : '') ||
+                (showError === 1 && techStacksError === true
+                  ? 'have-error'
+                  : '')
+              }
             >
               <InfoInput
                 type="text"
@@ -432,29 +461,31 @@ const ProfileForm: React.FC<ProfileProps> = ({
                 {...getInputProps()}
               />
             </InfoInputWrapper>
-
             {groupedOptions.length > 0 ? (
               <SearchList {...getListboxProps()}>
                 {(groupedOptions as typeof techStackList).map(
                   (option, index) => (
-                    <SearchItemInfoWrapper onClick={deleteStack} key={index}>
+                    <SearchItemWrapper
+                      onClick={(event) => {
+                        controlTechStacks(option.name);
+                      }}
+                    >
                       <SearchItem {...getOptionProps({ option, index })}>
-                        <TechStackInfo ref={deleteStackInputRef}>
+                        <TechStackInfo>
                           <TechStackImg src={option.imgUrl} alt={option.name} />
                           {option.name}
                         </TechStackInfo>
-
                         <CheckIcon fontSize="small" />
                       </SearchItem>
-                    </SearchItemInfoWrapper>
+                    </SearchItemWrapper>
                   ),
                 )}
               </SearchList>
             ) : null}
             {showError === 1 && techStacksError && (
-              <ErrorSpan>
-                필수 2가지 이상 선택 사항입니다.(상/중/하 선택도 필수입니다.)
-              </ErrorSpan>
+              <ErrorMessageWrapper>
+                <ErrorMessage>필수 2가지 이상 선택 사항입니다.</ErrorMessage>
+              </ErrorMessageWrapper>
             )}
           </InputWrapper>
           <TechStackList>
@@ -465,10 +496,9 @@ const ProfileForm: React.FC<ProfileProps> = ({
                 imgUrl={option.imgUrl}
                 techStacks={techStacks}
                 updateTechStacks={updateTechStacks}
-                techStacksError={techStacksError}
-                updateTechStacksError={updateTechStacksError}
+                deleteTechStacks={deleteTechStacks}
                 {...getTagProps({ index })}
-              ></TechStackTagWithLevel>
+              />
             ))}
           </TechStackList>
         </Row>
@@ -479,7 +509,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
               {githubUrl.length >= 1 &&
                 showError === 1 &&
                 gitHubUrlPatternError && (
-                  <ErrorSpan className="url">유효한 URL이 아닙니다.</ErrorSpan>
+                  <ErrorMessageWrapper>
+                    <ErrorMessage className="url">
+                      유효한 URL이 아닙니다.
+                    </ErrorMessage>
+                  </ErrorMessageWrapper>
                 )}
             </Label>
             <InfoInput
@@ -489,6 +523,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
               placeholder="https://github.com/ssafy-mate"
               onChange={handleUrlInput}
               pattern="https://.*"
+              css={{ marginBottom: '16px' }}
             />
           </InputWrapper>
         </Row>
@@ -497,7 +532,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
             <Label htmlFor="etc-url">
               기술 블로그 URL 또는 기타 URL <Em>(선택)</Em>
               {etcUrl.length >= 1 && showError === 1 && etcUrlPatternError && (
-                <ErrorSpan className="url">유효한 URL이 아닙니다.</ErrorSpan>
+                <ErrorMessageWrapper>
+                  <ErrorMessage className="url">
+                    유효한 URL이 아닙니다.
+                  </ErrorMessage>
+                </ErrorMessageWrapper>
               )}
             </Label>
             <InfoInput
@@ -507,10 +546,10 @@ const ProfileForm: React.FC<ProfileProps> = ({
               placeholder="https://velog.io/@ssafy-mate"
               onChange={handleUrlInput}
               pattern="https://.*"
+              css={{ marginBottom: '16px' }}
             />
           </InputWrapper>
         </Row>
-
         <Row>
           <CheckBoxWrapper>
             <AgreementCheckBox
@@ -518,6 +557,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
               id="sign-up-agreement"
               name="sign-up-agreement"
               onClick={handleCheckAgreement}
+              className={agreementError ? 'have-error' : ''}
             />
             <CheckBoxLabel htmlFor="sign-up-agreement">
               <AgreementLink href="#" target="_blank" rel="noopener noreferrer">
@@ -531,9 +571,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
             </CheckBoxLabel>
           </CheckBoxWrapper>
         </Row>
-        {showError === 1 && agreementError && (
-          <ErrorSpan className="agreement">필수 선택 사항입니다.</ErrorSpan>
-        )}
         <Row>
           <SignUpButton onClick={signUpClick} type="button">
             계정 만들기
@@ -555,7 +592,7 @@ const Row = styled.div`
     margin-bottom: 12px;
   }
 
-  @media (max-width: 441px) {
+  @media (max-width: 575px) {
     &:nth-of-type(2) {
       flex-direction: column;
     }
@@ -565,10 +602,7 @@ const Row = styled.div`
 const AvatarWrapper = styled.div`
   margin: auto 32px;
 
-  @media (max-width: 540px) {
-    margin: auto 24px auto 0;
-  }
-  @media (max-width: 414px) {
+  @media (max-width: 575px) {
     margin: auto 16px auto 0;
   }
 `;
@@ -581,38 +615,20 @@ const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-bottom: 16px;
 `;
 
 const CheckBoxWrapper = styled.div`
   display: flex;
   width: 100%;
 `;
-const SearchItemInfoWrapper = styled.div`
-  display: flex;
-  width: 100%;
-`;
-const IconButton = styled.button`
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 10;
-  border: none;
-  background-color: transparent;
-  color: #f44336;
-  transition: all 0.12s ease-in-out;
-  cursor: pointer;
-  &:hover {
-    transform: scale(1.15);
-  }
-`;
+
 const Label = styled.label`
   margin-bottom: 4px;
   font-size: 14px;
   line-height: 1.5;
   color: #263747;
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -635,7 +651,7 @@ const RequirementLabel = styled.label`
     color: #f44336;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -643,15 +659,12 @@ const RequirementLabel = styled.label`
 const Em = styled.em`
   font-size: 13px;
   color: #3396f4;
-
-  @media (max-width: 540px) {
-    font-size: 12px;
-  }
 `;
 
 const Textarea = styled.textarea`
   width: 100%;
   height: 100px;
+  margin-bottom: 16px;
   padding: 8px 12px;
   outline: 0;
   border: 1px solid #d7e2eb;
@@ -664,7 +677,13 @@ const Textarea = styled.textarea`
   color: #263747;
   transition: all 0.08s ease-in-out;
 
-  @media (max-width: 540px) {
+  &.have-error {
+    margin-bottom: 4px;
+    border: 1px solid #f77;
+    box-shadow: inset 0 0 0 1px #ff77774d;
+  }
+
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -672,6 +691,7 @@ const Textarea = styled.textarea`
 const Select = styled.select`
   width: 100%;
   height: 40px;
+  margin-bottom: 16px;
   padding: 8px 12px;
   outline: 0;
   border: 1px solid #d7e2eb;
@@ -692,6 +712,7 @@ const Select = styled.select`
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px#3396f4;
   }
+
   &:focus {
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px #3396f4;
@@ -699,12 +720,44 @@ const Select = styled.select`
     color: #495057;
   }
 
-  @media (max-width: 540px) {
+  &:disabled {
+    border: 1px solid #d7e2eb;
+    box-shadow: none;
+    background-color: #f7f8fa;
+    color: #d8d4d1;
+    cursor: not-allowed;
+  }
+
+  &.have-error {
+    margin-bottom: 4px;
+    border: 1px solid #f44336;
+    box-shadow: inset 0 0 0 1px #ff77774d;
+  }
+
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
 
-const InfoInputWrapper = styled.div``;
+const InfoInputWrapper = styled.div`
+  width: 100%;
+  height: 40px;
+  margin-bottom: 16px;
+  outline: 0;
+  border-radius: 0.25rem;
+  background-color: #fbfbfd;
+  font-size: 16px;
+  line-height: 24px;
+  color: #263747;
+  transition: all 0.08s ease-in-out;
+
+  &.have-error {
+    margin-bottom: 4px;
+    border-radius: 0.25rem;
+    border: 1px solid #f44336;
+    box-shadow: inset 0 0 0 1px #ff77774d;
+  }
+`;
 
 const InfoInput = styled.input`
   width: 100%;
@@ -731,7 +784,7 @@ const InfoInput = styled.input`
     color: #495057;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -781,9 +834,14 @@ const SearchItem = styled.li`
     }
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
+`;
+
+const SearchItemWrapper = styled.div`
+  height: 100%;
+  width: 100%;
 `;
 
 const TechStackInfo = styled.div`
@@ -794,6 +852,10 @@ const TechStackInfo = styled.div`
 const AgreementCheckBox = styled.input`
   margin-right: 6px;
   cursor: pointer;
+
+  &.have-error {
+    box-shadow: inset 0 0 0 2px #e44a4c;
+  }
 `;
 
 const CheckBoxLabel = styled.label`
@@ -802,7 +864,7 @@ const CheckBoxLabel = styled.label`
   line-height: 1.5;
   color: #98a8b9;
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -830,7 +892,7 @@ const SignUpButton = styled.button`
     background-color: #2878c3;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 15px;
   }
 `;
@@ -838,18 +900,13 @@ const SignUpButton = styled.button`
 const TechStackList = styled.ul``;
 
 const TechStackImg = styled.img`
-  margin-right: 6px;
   width: 24px;
   height: 24px;
+  margin-right: 6px;
   border-radius: 2px;
-  object-fit: cover;
+  object-fit: fill;
 
-  @media (max-width: 540px) {
-    width: 22px;
-    height: 22px;
-  }
-
-  @media (max-width: 348px) {
+  @media (max-width: 575px) {
     width: 18px;
     height: 18px;
   }
@@ -868,12 +925,31 @@ const FileInput = styled.input`
   display: none;
 `;
 
+const ErrorMessageWrapper = styled.div`
+  margin-bottom: 8px;
+`;
+
+const ErrorMessage = styled.span`
+  padding-left: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #f44336;
+`;
+
+const SsafyAuthSnackBar = styled(Snackbar)`
+  height: 20%;
+`;
+
+const ResponseAlert = styled(Alert)`
+  white-space: pre-line;
+`;
+
 const avatar = css`
   width: 100px;
   height: 100px;
   background-color: #abb7c6;
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     width: 90px;
     height: 90px;
   }
@@ -882,11 +958,10 @@ const avatar = css`
 const rightGap = css`
   margin-right: 12px;
 
-  @media (max-width: 540px) {
+  @media (max-width: 767px) {
     margin-right: 6px;
   }
-
-  @media (max-width: 441px) {
+  @media (max-width: 575px) {
     margin-right: 0px;
   }
 `;
@@ -897,30 +972,6 @@ const techStackRow = css`
 
 const techStackInputWrapper = css`
   position: relative;
-`;
-
-const ErrorSpan = styled.span`
-  padding: 8px 12px;
-  font-weight: 400;
-  font-size: 13px;
-  color: #f44336;
-
-  &.agreement {
-    //padding-left: 20px;
-    margin-left: 10px;
-  }
-
-  &.url {
-    color: #1976d3;
-  }
-`;
-
-const SsafyAuthSnackBar = styled(Snackbar)`
-  height: 20%;
-`;
-
-const ResponseAlert = styled(Alert)`
-  white-space: pre-line;
 `;
 
 export default ProfileForm;

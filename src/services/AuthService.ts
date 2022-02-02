@@ -5,7 +5,7 @@ import {
   SignUpResponse,
   EmailVerificationCodeRequest,
   EmailVerificationCodeConfirmRequest,
-} from '../types/UserInfomationType';
+} from '../types/signUpTypes';
 
 class AuthService {
   public static async getSsafyAuth(data: SsafyAuth): Promise<SignUpResponse> {
@@ -22,9 +22,11 @@ class AuthService {
   public static async getEmailVerificationCode(
     data: EmailVerificationCodeRequest,
   ): Promise<SignUpResponse> {
-    const response = await axiosInstance.post<SignUpResponse>(
+    const response = await axiosInstance.get<SignUpResponse>(
       '/api/user/sign-up/verification/email',
-      data,
+      {
+        params: data,
+      },
     );
 
     return response.data;

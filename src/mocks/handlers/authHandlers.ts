@@ -1,22 +1,46 @@
-import { alreadyMember, nonSsafy, authError } from './../database/auth';
-
 import { rest } from 'msw';
 
 import {
+  EmailVerificationCodes,
+  SsafyStudentDataList,
+} from './../database/auth';
+
+import {
   EmailVerificationCodeConfirmRequest,
-  EmailVerificationCodeRequest,
   SignUpProfile,
-} from '../../types/UserInfomationType';
+} from '../../types/signUpTypes';
+
+interface Student {
+  id: number | null;
+  campus: string;
+  studentName: string;
+  studentNumber: string;
+  userEmail: string | null;
+}
 
 export const authHandlers = [
   // 회원 가입 1단계 교육생 인증
   rest.get(
     'http://localhost:3000/api/user/sign-up/verification/ssafy',
     async (request, response, context) => {
-      const userName = request.url.searchParams.get('userName');
+      const studentNumber = request.url.searchParams.get('studentNumber');
+      const studentName = request.url.searchParams.get('studentNumber');
+      let student: Student = {
+        id: -1,
+        campus: '',
+        studentName: '',
+        studentNumber: '',
+        userEmail: null,
+      };
 
-      // 교육생 정보가 없는 경우(이름 : 비싸피)
-      if (userName === nonSsafy.userName) {
+      SsafyStudentDataList.forEach((ssafyStudent) => {
+        if (ssafyStudent.studentNumber === studentNumber) {
+          student = ssafyStudent;
+        }
+      });
+
+      // 교육생 정보가 없는 경우
+      if (student.id === -1) {
         return response(
           context.status(401),
           context.json({
@@ -27,8 +51,8 @@ export const authHandlers = [
         );
       }
 
-      // 이미 가입된 교육생(이름 : 싸피인)
-      if (userName === alreadyMember.userName) {
+      // 이미 가입된 교육생
+      if (student.userEmail !== null) {
         return response(
           context.status(409),
           context.json({
@@ -39,8 +63,8 @@ export const authHandlers = [
         );
       }
 
-      // 싸피 교육생이 맞는 경우(이름 : 서버오류)
-      if (userName === authError.userName) {
+      // 서버 오류
+      if (studentName === '서버오류') {
         return response(
           context.status(500),
           context.json({
@@ -59,13 +83,18 @@ export const authHandlers = [
       );
     },
   ),
+
   // 회원가입 2단계-1 이메일 인증 코드 전송
-  rest.post(
+  rest.get(
     'http://localhost:3000/api/user/sign-up/verification/email',
-    async (request: any, response, context) => {
-      let data: EmailVerificationCodeRequest = { userEmail: '' };
-      data = request.body;
-      if (data.userEmail === 'already@gmail.com') {
+    async (request, response, context) => {
+      const userEmail = request.url.searchParams.get('userEmail');
+
+      const emailIndex = SsafyStudentDataList.findIndex(
+        (ssafyStudent) => ssafyStudent.userEmail === userEmail,
+      );
+
+      if (emailIndex !== -1) {
         return response(
           context.status(409),
           context.json({
@@ -76,7 +105,7 @@ export const authHandlers = [
         );
       }
 
-      if (data.userEmail === 'servererror@gmail.com') {
+      if (userEmail === 'servererror@gmail.com') {
         return response(
           context.status(500),
           context.json({
@@ -96,28 +125,34 @@ export const authHandlers = [
       );
     },
   ),
+
   // 회원가입 2단계-2 이메일 인증 코드 확인
   rest.put(
     'http://localhost:3000/api/user/sign-up/verification/email',
     async (request: any, response, context) => {
-      let data: EmailVerificationCodeConfirmRequest = {
-        code: '',
-        userEmail: '',
-      };
-      data = request.body;
+      const data: EmailVerificationCodeConfirmRequest = request.body;
+      const { code, userEmail } = data;
+      const CodeIndex = EmailVerificationCodes.findIndex(
+        (verificationCode) =>
+          verificationCode.code === code &&
+          verificationCode.userEmail === userEmail,
+      );
 
-      if (data.code === '00000000') {
+      if (CodeIndex === -1 && code !== '55555555') {
         return response(
-          context.status(400),
+          context.status(401),
           context.json({
-            status: 400,
+            status: 401,
             success: false,
             message: '올바른 인증 코드가 아닙니다.',
           }),
         );
       }
-
-      if (data.code === '44444444') {
+      if (
+        CodeIndex >= 0 &&
+        EmailVerificationCodes[CodeIndex].timeout &&
+        code !== '55555555'
+      ) {
         return response(
           context.status(403),
           context.json({
@@ -127,8 +162,7 @@ export const authHandlers = [
           }),
         );
       }
-
-      if (data.code === '55555555') {
+      if (code === '55555555') {
         return response(
           context.status(500),
           context.json({
@@ -138,7 +172,6 @@ export const authHandlers = [
           }),
         );
       }
-
       return response(
         context.json({
           success: true,
@@ -151,10 +184,10 @@ export const authHandlers = [
   rest.post(
     'http://localhost:3000/api/user',
     async (request: any, response, context) => {
-      let data: SignUpProfile;
-      data = request.body;
+      const data: SignUpProfile = request.body;
+      const { selfIntroduction } = data;
 
-      if (data.selfIntroduction === '실패') {
+      if (selfIntroduction === '실패') {
         return response(
           context.status(400),
           context.json({
@@ -164,7 +197,7 @@ export const authHandlers = [
           }),
         );
       }
-      if (data.selfIntroduction === '서버실패') {
+      if (selfIntroduction === '서버실패') {
         return response(
           context.status(500),
           context.json({

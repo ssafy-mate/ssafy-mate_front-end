@@ -1,48 +1,22 @@
 import React, { useState } from 'react';
 
+import { Redirect } from 'react-router-dom';
+
 import styled from '@emotion/styled';
 
 import SignUpStepper from './SignUpStepper';
 import AuthForm from './AuthForm';
 import SignUpForm from './SignUpForm';
 import ProfileForm from './ProfileForm';
-import ErrorPage from '../../pages/ErrorPage';
 
 const SignUpCard: React.FC = () => {
+  const [signUpStep, setSignUpStep] = useState<number>(0);
   const [campus, setCampus] = useState<string>('');
   const [ssafyTrack, setSsafyTrack] = useState<string>('');
   const [studentNumber, setStudentNumber] = useState<string>('');
   const [studentName, setStudentName] = useState<string>('');
-  const [signUpStep, setSignUpStep] = useState<number>(0);
   const [signUpEmail, setSignUpEmail] = useState<string>('');
   const [signUpPassword, setSignUpPassword] = useState<string>('');
-
-  const updateCampus = (campus: string): void => {
-    setCampus(campus);
-  };
-
-  const updateSsafyTrack = (ssafyTrack: string): void => {
-    setSsafyTrack(ssafyTrack);
-  };
-
-  const updateStudentNumber = (studentNumber: string): void => {
-    setStudentNumber(studentNumber);
-  };
-
-  const updateStudentName = (studentName: string): void => {
-    setStudentName(studentName);
-  };
-
-  const updateSignUpStep = (signUpStep: number): void => {
-    setSignUpStep(signUpStep);
-  };
-
-  const updateSignUpEmail = (signUpEmail: string): void => {
-    setSignUpEmail(signUpEmail);
-  };
-  const updateSignUpPassword = (signUpPassword: string): void => {
-    setSignUpPassword(signUpPassword);
-  };
 
   return (
     <>
@@ -55,27 +29,27 @@ const SignUpCard: React.FC = () => {
               case 0:
                 return (
                   <AuthForm
-                    campus={campus}
-                    updateCampus={updateCampus}
-                    ssafyTrack={ssafyTrack}
-                    updateSsafyTrack={updateSsafyTrack}
-                    studentNumber={studentNumber}
-                    updateStudentNumber={updateStudentNumber}
-                    studentName={studentName}
-                    updateStudentName={updateStudentName}
                     signUpStep={signUpStep}
-                    updateSignUpStep={updateSignUpStep}
+                    campus={campus}
+                    ssafyTrack={ssafyTrack}
+                    studentNumber={studentNumber}
+                    studentName={studentName}
+                    setSignUpStep={setSignUpStep}
+                    setCampus={setCampus}
+                    setSsafyTrack={setSsafyTrack}
+                    setStudentNumber={setStudentNumber}
+                    setStudentName={setStudentName}
                   />
                 );
               case 1:
                 return (
                   <SignUpForm
-                    signUpEmail={signUpEmail}
-                    updateSignUpEmail={updateSignUpEmail}
-                    signUpPassword={signUpPassword}
-                    updateSignUpPassword={updateSignUpPassword}
                     signUpStep={signUpStep}
-                    updateSignUpStep={updateSignUpStep}
+                    signUpEmail={signUpEmail}
+                    signUpPassword={signUpPassword}
+                    setSignUpStep={setSignUpStep}
+                    setSignUpEmail={setSignUpEmail}
+                    setSignUpPassword={setSignUpPassword}
                   />
                 );
               case 2:
@@ -85,14 +59,12 @@ const SignUpCard: React.FC = () => {
                     ssafyTrack={ssafyTrack}
                     studentNumber={studentNumber}
                     studentName={studentName}
-                    signUpStep={signUpStep}
-                    updateSignUpStep={updateSignUpStep}
                     signUpEmail={signUpEmail}
                     signUpPassword={signUpPassword}
                   />
                 );
               default:
-                return <ErrorPage />;
+                return <Redirect to="/" />;
             }
           })()}
         </Wrapper>
@@ -113,11 +85,10 @@ const Wrapper = styled.div`
   border: 1px solid #d7e2eb;
   border-radius: 6px;
 
-  @media (max-width: 620px) {
+  @media (max-width: 767px) {
     padding: 40px 28px;
   }
-
-  @media (max-width: 414px) {
+  @media (max-width: 575px) {
     padding: 32px 16px;
   }
 `;
@@ -129,7 +100,7 @@ const Head = styled.h3`
   text-align: center;
   color: #263747;
 
-  @media (max-width: 580px) {
+  @media (max-width: 575px) {
     margin-bottom: 40px;
   }
 `;

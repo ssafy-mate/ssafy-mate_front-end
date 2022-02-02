@@ -16,12 +16,17 @@ const createReduxStore = () => {
   const sagaMiddleWare = createSagaMiddleware();
 
   const store = createStore(
-    reducer(history),
+    reducer,
     {
       auth: {
-        token,
-        loading: false,
-        error: null,
+        userId: null,
+        userName: null,
+        userEmail: null,
+        studentNumber: null,
+        campus: null,
+        ssafyTrack: null,
+        token: token,
+        projects: null,
       },
     },
     composeWithDevTools(

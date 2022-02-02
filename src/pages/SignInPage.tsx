@@ -1,17 +1,20 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+
+import { Redirect } from 'react-router-dom';
+
+import { useSelector } from 'react-redux';
 
 import styled from '@emotion/styled';
 
-import Header from '../components/common/Header';
-import Footer from '../components/common/Footer';
-import SignInContainer from '../containers/SignInContainer';
-import { useSelector } from 'react-redux';
 import { RootState } from '../types/signInTypes';
-import { Redirect } from 'react-router-dom';
+
+import Header from '../components/common/Header';
+import SignInContainer from '../containers/SignInContainer';
+import Footer from '../components/common/Footer';
 
 const SignInPage: React.FC = () => {
   const token = useSelector<RootState, string | null>(
-    (state) => state.auth.token,
+    (state) => state?.auth.token,
   );
 
   useEffect(() => {
@@ -21,6 +24,7 @@ const SignInPage: React.FC = () => {
   if (token !== null) {
     return <Redirect to="/" />;
   }
+
   return (
     <>
       <Header />
@@ -36,11 +40,8 @@ const Container = styled.div`
   margin-top: 140px;
   padding: 0 16px;
 
-  @media (max-width: 580px) {
+  @media (max-width: 575px) {
     margin-top: 120px;
-  }
-  @media (max-width: 414px) {
-    margin-top: 100px;
   }
 `;
 

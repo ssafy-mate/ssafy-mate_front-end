@@ -1,14 +1,19 @@
 import { rest } from 'msw';
-import { LogInRequestType } from '../../types/signInTypes';
+import { SignInRequestType } from '../../types/signInTypes';
+import { SsafyMateMemberList } from '../database/signIn';
 
 export const signInHandlers = [
   rest.post(
     'http://localhost:3000/api/user/sign-in',
     async (request: any, response, context) => {
-      let data: LogInRequestType;
-      data = request.body;
+      const data: SignInRequestType = request.body;
+      const { userEmail } = data;
 
-      if (data.userEmail === 'no@gmail.com') {
+      const memberIndex = SsafyMateMemberList.findIndex(
+        (ssafyMember) => ssafyMember.userData.userEmail === userEmail,
+      );
+
+      if (memberIndex === -1) {
         return response(
           context.status(401),
           context.json({
@@ -19,12 +24,12 @@ export const signInHandlers = [
         );
       }
 
-      return response(
-        context.json({
-          token: 'ad123sdafgfa0asdfas12390',
-          message: '로그인하였습니다.',
-        }),
-      );
+      return response(context.json(SsafyMateMemberList[memberIndex].userData));
     },
+  ),
+
+  rest.delete(
+    'http://localhost:3000/',
+    async (request, response, context) => {},
   ),
 ];
