@@ -378,10 +378,10 @@ const AuthButton = styled.button`
   &:hover {
     background-color: #2878c3;
   }
-
   &:disabled {
     background-color: #96a0ac;
   }
+
   @media (max-width: 540px) {
     font-size: 15px;
   }
@@ -415,7 +415,7 @@ const ErrorMessageWrapper = styled.div`
 `;
 
 const ErrorMessage = styled.span`
-  margin-left: 6px;
+  padding-left: 6px;
   font-size: 13px;
   line-height: 1.5;
   color: #f44336;

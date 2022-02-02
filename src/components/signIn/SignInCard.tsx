@@ -226,7 +226,7 @@ const ErrorMessageWrapper = styled.div`
 `;
 
 const ErrorMessage = styled.span`
-  margin-left: 6px;
+  padding-left: 6px;
   font-size: 13px;
   line-height: 1.5;
   color: #f44336;

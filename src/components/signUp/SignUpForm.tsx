@@ -54,6 +54,8 @@ const SignUpForm: React.FC<SignUpProps> = ({
   const [seconds, setSeconds] = useState<number>(0);
   const [showCodeBox, setShowCodeBox] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [emailInputError, setEmailInputError] = useState<string>('');
+
   const {
     register,
     handleSubmit,
@@ -84,6 +86,13 @@ const SignUpForm: React.FC<SignUpProps> = ({
     return () => clearInterval(timer);
   }, [minutes, seconds]);
 
+  const codeConfirmButtonOnChange: string | undefined = watch(
+    'signUpConfiromButton',
+  );
+  const signUpEmailOnChange: string = watch('signUpEmail');
+  const verificationCodeOnChange: string = watch('verificationCode');
+  const signUpPasswordOnChange: string = watch('signUpPassword');
+
   const updateSignUpProps = (data: SignUp) => {
     const { signUpEmail, signUpPassword } = data;
 
@@ -91,13 +100,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
     setSignUpEmail(signUpEmail);
     setSignUpPassword(signUpPassword);
   };
-
-  const codeConfirmButtonOnChange: string | undefined = watch(
-    'signUpConfiromButton',
-  );
-  const signUpEmailOnChange: string = watch('signUpEmail');
-  const verificationCodeOnChange: string = watch('verificationCode');
-  const signUpPasswordOnChange: string = watch('signUpPassword');
 
   const resetTimer = () => {
     setMinutes(3);
@@ -279,7 +281,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
       <Container onSubmit={handleSubmit(onSubmit)}>
         <InputWrapper>
           <RequirementLabel htmlFor="signup-email">이메일</RequirementLabel>
-          <ButtonWrapper>
+          <EmailInputWrapper>
             <InfoInput
               type="email"
               id="signup-email"
@@ -311,12 +313,16 @@ const SignUpForm: React.FC<SignUpProps> = ({
                 {verificationCodeButtonText}
               </AuthButton>
             )}
-          </ButtonWrapper>
+          </EmailInputWrapper>
           {errors.signUpEmail && (
-            <ErrorSpan>{errors.signUpEmail.message}</ErrorSpan>
+            <ErrorMessageWrapper>
+              <ErrorMessage>{errors.signUpEmail.message}</ErrorMessage>
+            </ErrorMessageWrapper>
           )}
           {!errors.signUpEmail && emailInputError !== '' && (
-            <ErrorSpan>{emailInputError}</ErrorSpan>
+            <ErrorMessageWrapper>
+              <ErrorMessage>{emailInputError}</ErrorMessage>
+            </ErrorMessageWrapper>
           )}
         </InputWrapper>
 
@@ -325,7 +331,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
             <RequirementLabel htmlFor="verification-code">
               인증코드 입력
             </RequirementLabel>
-            <ButtonWrapper>
+            <EmailInputWrapper>
               <VerificationCodeWrapper>
                 <InfoInput
                   type="text"
@@ -339,7 +345,9 @@ const SignUpForm: React.FC<SignUpProps> = ({
                   maxLength={8}
                   placeholder="인증코드 8자리 입력"
                   disabled={codeInputDisabled}
-                  className={errors.verificationCode ? 'have-error' : ''}
+                  className={
+                    errors.verificationCode || resendEmail ? 'have-error' : ''
+                  }
                 />
                 {!codeInputDisabled && (
                   <TimeLimit>
@@ -358,30 +366,38 @@ const SignUpForm: React.FC<SignUpProps> = ({
               >
                 확인
               </AuthButton>
-            </ButtonWrapper>
+            </EmailInputWrapper>
             {(() => {
               if (codeVerificationError) {
-                return <ErrorSpan>{codeVerificationErrorText}</ErrorSpan>;
+                return (
+                  <ErrorMessageWrapper>
+                    <ErrorMessage>{codeVerificationErrorText}</ErrorMessage>
+                  </ErrorMessageWrapper>
+                );
               } else if (errors.verificationCode) {
-                return <ErrorSpan>{codeVerificationErrorText}</ErrorSpan>;
+                return (
+                  <ErrorMessageWrapper>
+                    <ErrorMessage>{codeVerificationErrorText}</ErrorMessage>
+                  </ErrorMessageWrapper>
+                );
               }
             })()}
             {resendEmail && (
               <ResendEmailWrapper>
-                <ResendEmailMessageWrapper>
+                <ResendEmailMessage>
                   <ResendEmailIcon />
                   이메일을 받지 못하셨나요?
                   <ResendLink onClick={verificationCodeRequest}>
                     이메일 재전송하기
                   </ResendLink>
-                </ResendEmailMessageWrapper>
+                </ResendEmailMessage>
               </ResendEmailWrapper>
             )}
           </InputWrapper>
         ) : null}
         <InputWrapper>
           <RequirementLabel htmlFor="signup-password">
-            비밀번호 (영문자와 숫자 혼합 최소 6자)
+            비밀번호 (영문자와 숫자 포함 최소 6자)
           </RequirementLabel>
           <InfoInput
             type="password"
@@ -398,12 +414,18 @@ const SignUpForm: React.FC<SignUpProps> = ({
             !(
               errors.signUpPassword?.type === 'pattern' ||
               errors.signUpPassword?.type === 'minLength'
-            ) && <ErrorSpan>필수 입력 항목입니다.</ErrorSpan>}
+            ) && (
+              <ErrorMessageWrapper>
+                <ErrorMessage>필수 입력 항목입니다.</ErrorMessage>
+              </ErrorMessageWrapper>
+            )}
           {(errors.signUpPassword?.type === 'pattern' ||
             errors.signUpPassword?.type === 'minLength') && (
-            <ErrorSpan>
-              비밀번호는 영문, 숫자만을 혼합하여 6자 이상이어야 합니다.
-            </ErrorSpan>
+            <ErrorMessageWrapper>
+              <ErrorMessage>
+                비밀번호는 영문, 숫자만을 혼합하여 6자 이상이어야 합니다.
+              </ErrorMessage>
+            </ErrorMessageWrapper>
           )}
         </InputWrapper>
         <InputWrapper>
@@ -422,16 +444,22 @@ const SignUpForm: React.FC<SignUpProps> = ({
             className={errors.signUpCheckPassword ? 'have-error' : ''}
           />
           {errors.signUpCheckPassword?.type === 'required' && (
-            <ErrorSpan>확인을 위해 비밀번호를 한 번 더 입력해주세요.</ErrorSpan>
+            <ErrorMessageWrapper>
+              <ErrorMessage>
+                확인을 위해 비밀번호를 한 번 더 입력해주세요.
+              </ErrorMessage>
+            </ErrorMessageWrapper>
           )}
           {errors.signUpCheckPassword?.type === 'validate' && (
-            <ErrorSpan>비밀번호가 일치하지 않습니다.</ErrorSpan>
+            <ErrorMessageWrapper>
+              <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
+            </ErrorMessageWrapper>
           )}
           {errors.signUpPassword?.type === 'required' && (
             <ErrorSpan>비밀번호가 일치하지 않습니다.</ErrorSpan>
           )}
         </InputWrapper>
-        <NextButton type="submit">기본 정보 작성</NextButton>
+        <SubmitButton type="submit">기본 정보 작성</SubmitButton>
       </Container>
     </>
   );
@@ -445,15 +473,14 @@ const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-bottom: 16px;
 `;
 
-const ButtonWrapper = styled.div`
+const EmailInputWrapper = styled.div`
   display: flex;
 `;
 
 const AuthButton = styled.button`
-  width: 100px;
+  width: 120px;
   height: 40px;
   margin-left: 8px;
   border: none;
@@ -472,12 +499,12 @@ const AuthButton = styled.button`
     cursor: not-allowed;
   }
 
-  @media (max-width: 540px) {
-    font-size: 12px;
+  @media (max-width: 575px) {
+    font-size: 13px;
   }
 `;
 
-const NextButton = styled.button`
+const SubmitButton = styled.button`
   width: 100%;
   height: 40px;
   margin-top: 24px;
@@ -498,7 +525,7 @@ const NextButton = styled.button`
     background-color: #96a0ac;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 15px;
   }
 `;
@@ -512,9 +539,9 @@ const VerificationCodeWrapper = styled.div`
 `;
 
 const InfoInput = styled.input`
-  flex: 1 0 0px;
   width: 100%;
   height: 40px;
+  margin-bottom: 16px;
   padding: 8px 12px;
   outline: 0;
   border: 1px solid #d7e2eb;
@@ -548,11 +575,12 @@ const InfoInput = styled.input`
     cursor: not-allowed;
   }
   &.have-error {
-    border: 1px solid #f77;
+    margin-bottom: 4px;
+    border: 1px solid #f44336;
     box-shadow: inset 0 0 0 1px #ff77774d;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -575,35 +603,45 @@ const RequirementLabel = styled.label`
     color: #f44336;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
 
-const ErrorSpan = styled.span`
-  padding: 8px 12px;
-  font-weight: 400;
+const ErrorMessageWrapper = styled.div`
+  margin-bottom: 8px;
+`;
+
+const ErrorMessage = styled.span`
+  padding-left: 6px;
   font-size: 13px;
+  line-height: 1.5;
   color: #f44336;
 `;
 
 const ResendEmailWrapper = styled.div`
   display: block;
-  margin-top: 6px;
+  margin-bottom: 12px;
 `;
 
-const ResendEmailMessageWrapper = styled.div`
+const ResendEmailMessage = styled.div`
   display: flex;
   -webkit-box-align: center;
   align-items: center;
-  font-size: 12px;
+  padding-left: 6px;
+  font-size: 13px;
+  line-height: 1.5;
   color: rgb(130, 140, 148);
+
+  @media (max-width: 349px) {
+    font-size: 12px;
+  }
 `;
 
 const ResendEmailIcon = styled(ForwardToInboxIcon)`
   margin-right: 4px;
-  width: 14px;
-  height: 14px;
+  width: 16px;
+  height: 16px;
 `;
 
 const ResponseAlert = styled(Alert)`
@@ -619,9 +657,14 @@ const ResendLink = styled.a`
 `;
 
 const TimeLimit = styled.span`
-  margin-right: 10px;
-  margin-left: 10px;
-  color: #f77;
+  margin-bottom: 4px;
+  margin-left: 8px;
+  font-size: 14px;
+  color: #f44336;
+
+  @media (max-width: 575px) {
+    font-size: 13px;
+  }
 `;
 
 const SignUpSnackBar = styled(Snackbar)`
@@ -638,7 +681,7 @@ const LoadingWrapper = styled.div`
   transition: background-color 0.08s ease-in-out;
   cursor: wait;
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 12px;
   }
 `;
