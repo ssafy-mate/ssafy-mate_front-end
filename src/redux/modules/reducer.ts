@@ -1,17 +1,15 @@
 import { connectRouter } from 'connected-react-router';
 
-// import { History } from 'history';
-
 import { combineReducers } from 'redux';
 
 import { persistReducer } from 'redux-persist';
 
 import storage from 'redux-persist/lib/storage';
 
+import history from '../../history';
+
 import auth from './auth';
 import user from './user';
-
-import history from '../../history';
 
 const persistConfig = {
   key: 'root',
