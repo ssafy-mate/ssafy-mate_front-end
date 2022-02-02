@@ -383,7 +383,9 @@ const ProfileForm: React.FC<ProfileProps> = ({
               className={selfIntroductionError ? 'have-error' : ''}
             />
             {showError === 1 && selfIntroductionError && (
-              <ErrorSpan>필수 입력 항목입니다.</ErrorSpan>
+              <ErrorMessageWrapper>
+                <ErrorMessage>필수 입력 항목입니다.</ErrorMessage>
+              </ErrorMessageWrapper>
             )}
           </InputWrapper>
         </Row>
@@ -408,7 +410,9 @@ const ProfileForm: React.FC<ProfileProps> = ({
               ))}
             </Select>
             {showError === 1 && job1Error && (
-              <ErrorSpan>필수 선택 사항입니다.</ErrorSpan>
+              <ErrorMessageWrapper>
+                <ErrorMessage>필수 선택 사항입니다.</ErrorMessage>
+              </ErrorMessageWrapper>
             )}
           </InputWrapper>
           <InputWrapper>
@@ -479,7 +483,9 @@ const ProfileForm: React.FC<ProfileProps> = ({
               </SearchList>
             ) : null}
             {showError === 1 && techStacksError && (
-              <ErrorSpan>필수 2가지 이상 선택 사항입니다.</ErrorSpan>
+              <ErrorMessageWrapper>
+                <ErrorMessage>필수 2가지 이상 선택 사항입니다.</ErrorMessage>
+              </ErrorMessageWrapper>
             )}
           </InputWrapper>
           <TechStackList>
@@ -503,7 +509,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
               {githubUrl.length >= 1 &&
                 showError === 1 &&
                 gitHubUrlPatternError && (
-                  <ErrorSpan className="url">유효한 URL이 아닙니다.</ErrorSpan>
+                  <ErrorMessageWrapper>
+                    <ErrorMessage className="url">
+                      유효한 URL이 아닙니다.
+                    </ErrorMessage>
+                  </ErrorMessageWrapper>
                 )}
             </Label>
             <InfoInput
@@ -513,6 +523,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
               placeholder="https://github.com/ssafy-mate"
               onChange={handleUrlInput}
               pattern="https://.*"
+              css={{ marginBottom: '16px' }}
             />
           </InputWrapper>
         </Row>
@@ -521,7 +532,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
             <Label htmlFor="etc-url">
               기술 블로그 URL 또는 기타 URL <Em>(선택)</Em>
               {etcUrl.length >= 1 && showError === 1 && etcUrlPatternError && (
-                <ErrorSpan className="url">유효한 URL이 아닙니다.</ErrorSpan>
+                <ErrorMessageWrapper>
+                  <ErrorMessage className="url">
+                    유효한 URL이 아닙니다.
+                  </ErrorMessage>
+                </ErrorMessageWrapper>
               )}
             </Label>
             <InfoInput
@@ -531,10 +546,10 @@ const ProfileForm: React.FC<ProfileProps> = ({
               placeholder="https://velog.io/@ssafy-mate"
               onChange={handleUrlInput}
               pattern="https://.*"
+              css={{ marginBottom: '16px' }}
             />
           </InputWrapper>
         </Row>
-
         <Row>
           <CheckBoxWrapper>
             <AgreementCheckBox
@@ -544,7 +559,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
               onClick={handleCheckAgreement}
               className={agreementError ? 'have-error' : ''}
             />
-
             <CheckBoxLabel htmlFor="sign-up-agreement">
               <AgreementLink href="#" target="_blank" rel="noopener noreferrer">
                 이용약관
@@ -557,9 +571,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
             </CheckBoxLabel>
           </CheckBoxWrapper>
         </Row>
-        {showError === 1 && agreementError && (
-          <ErrorSpan className="agreement">필수 선택 사항입니다.</ErrorSpan>
-        )}
         <Row>
           <SignUpButton onClick={signUpClick} type="button">
             계정 만들기
@@ -581,7 +592,7 @@ const Row = styled.div`
     margin-bottom: 12px;
   }
 
-  @media (max-width: 441px) {
+  @media (max-width: 575px) {
     &:nth-of-type(2) {
       flex-direction: column;
     }
@@ -591,10 +602,7 @@ const Row = styled.div`
 const AvatarWrapper = styled.div`
   margin: auto 32px;
 
-  @media (max-width: 540px) {
-    margin: auto 24px auto 0;
-  }
-  @media (max-width: 414px) {
+  @media (max-width: 575px) {
     margin: auto 16px auto 0;
   }
 `;
@@ -607,7 +615,6 @@ const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-bottom: 16px;
 `;
 
 const CheckBoxWrapper = styled.div`
@@ -621,7 +628,7 @@ const Label = styled.label`
   line-height: 1.5;
   color: #263747;
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -644,7 +651,7 @@ const RequirementLabel = styled.label`
     color: #f44336;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -652,15 +659,12 @@ const RequirementLabel = styled.label`
 const Em = styled.em`
   font-size: 13px;
   color: #3396f4;
-
-  @media (max-width: 540px) {
-    font-size: 12px;
-  }
 `;
 
 const Textarea = styled.textarea`
   width: 100%;
   height: 100px;
+  margin-bottom: 16px;
   padding: 8px 12px;
   outline: 0;
   border: 1px solid #d7e2eb;
@@ -674,12 +678,12 @@ const Textarea = styled.textarea`
   transition: all 0.08s ease-in-out;
 
   &.have-error {
+    margin-bottom: 4px;
     border: 1px solid #f77;
     box-shadow: inset 0 0 0 1px #ff77774d;
-    cursor: pointer;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -687,6 +691,7 @@ const Textarea = styled.textarea`
 const Select = styled.select`
   width: 100%;
   height: 40px;
+  margin-bottom: 16px;
   padding: 8px 12px;
   outline: 0;
   border: 1px solid #d7e2eb;
@@ -724,11 +729,12 @@ const Select = styled.select`
   }
 
   &.have-error {
-    border: 1px solid #f77;
+    margin-bottom: 4px;
+    border: 1px solid #f44336;
     box-shadow: inset 0 0 0 1px #ff77774d;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -736,6 +742,7 @@ const Select = styled.select`
 const InfoInputWrapper = styled.div`
   width: 100%;
   height: 40px;
+  margin-bottom: 16px;
   outline: 0;
   border-radius: 0.25rem;
   background-color: #fbfbfd;
@@ -745,8 +752,9 @@ const InfoInputWrapper = styled.div`
   transition: all 0.08s ease-in-out;
 
   &.have-error {
+    margin-bottom: 4px;
     border-radius: 0.25rem;
-    border: 1px solid #f77;
+    border: 1px solid #f44336;
     box-shadow: inset 0 0 0 1px #ff77774d;
   }
 `;
@@ -769,7 +777,6 @@ const InfoInput = styled.input`
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px#3396f4;
   }
-
   &:focus {
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px #3396f4;
@@ -777,7 +784,7 @@ const InfoInput = styled.input`
     color: #495057;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -827,7 +834,7 @@ const SearchItem = styled.li`
     }
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -848,7 +855,6 @@ const AgreementCheckBox = styled.input`
 
   &.have-error {
     box-shadow: inset 0 0 0 2px #e44a4c;
-    cursor: pointer;
   }
 `;
 
@@ -858,7 +864,7 @@ const CheckBoxLabel = styled.label`
   line-height: 1.5;
   color: #98a8b9;
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -886,7 +892,7 @@ const SignUpButton = styled.button`
     background-color: #2878c3;
   }
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     font-size: 15px;
   }
 `;
@@ -898,14 +904,9 @@ const TechStackImg = styled.img`
   height: 24px;
   margin-right: 6px;
   border-radius: 2px;
-  object-fit: cover;
+  object-fit: fill;
 
-  @media (max-width: 540px) {
-    width: 22px;
-    height: 22px;
-  }
-
-  @media (max-width: 348px) {
+  @media (max-width: 575px) {
     width: 18px;
     height: 18px;
   }
@@ -924,19 +925,15 @@ const FileInput = styled.input`
   display: none;
 `;
 
-const ErrorSpan = styled.span`
-  padding: 8px 12px;
-  font-weight: 400;
-  font-size: 13px;
-  color: #f44336;
-  cursor: pointer;
+const ErrorMessageWrapper = styled.div`
+  margin-bottom: 8px;
+`;
 
-  &.agreement {
-    margin-left: 10px;
-  }
-  &.url {
-    color: #1976d3;
-  }
+const ErrorMessage = styled.span`
+  padding-left: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #f44336;
 `;
 
 const SsafyAuthSnackBar = styled(Snackbar)`
@@ -952,7 +949,7 @@ const avatar = css`
   height: 100px;
   background-color: #abb7c6;
 
-  @media (max-width: 540px) {
+  @media (max-width: 575px) {
     width: 90px;
     height: 90px;
   }
@@ -961,11 +958,10 @@ const avatar = css`
 const rightGap = css`
   margin-right: 12px;
 
-  @media (max-width: 540px) {
+  @media (max-width: 767px) {
     margin-right: 6px;
   }
-
-  @media (max-width: 441px) {
+  @media (max-width: 575px) {
     margin-right: 0px;
   }
 `;
