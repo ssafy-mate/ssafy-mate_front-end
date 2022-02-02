@@ -54,7 +54,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
   const [seconds, setSeconds] = useState<number>(0);
   const [showCodeBox, setShowCodeBox] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [emailInputError, setEmailInputError] = useState<string>('');
 
   const {
     register,
@@ -456,7 +455,9 @@ const SignUpForm: React.FC<SignUpProps> = ({
             </ErrorMessageWrapper>
           )}
           {errors.signUpPassword?.type === 'required' && (
-            <ErrorSpan>비밀번호가 일치하지 않습니다.</ErrorSpan>
+            <ErrorMessageWrapper>
+              <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
+            </ErrorMessageWrapper>
           )}
         </InputWrapper>
         <SubmitButton type="submit">기본 정보 작성</SubmitButton>
