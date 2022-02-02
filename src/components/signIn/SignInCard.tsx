@@ -35,21 +35,19 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
   };
 
   const handleInputEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputEmail(event.target.value);
+    const inputEmailOnChange = event.target.value;
+    setInputEmail(inputEmailOnChange);
 
-    inputEmail !== '' ? setInputEmailError(false) : setInputEmailError(true);
-
-    if (!emailVerificaion) {
-      validEmailReg.test(inputEmail)
-        ? setEmailVerificaion(true)
-        : setEmailVerificaion(false);
-    }
+    inputEmailOnChange === ''
+      ? setInputEmailError(true)
+      : setInputEmailError(false);
   };
 
   const handleInputPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputPassword(event.target.value);
+    const inputPasswordOnChange = event.target.value;
+    setInputPassword(inputPasswordOnChange);
 
-    inputPassword === ''
+    inputPasswordOnChange === ''
       ? setInputPasswordError(true)
       : setInputPasswordError(false);
   };
@@ -104,8 +102,8 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
               type="email"
               id="email"
               className={
-                (inputEmailError ? 'email-input-error' : '') ||
-                (emailVerificaion ? '' : 'email-input-error')
+                (emailVerificaion ? '' : 'email-verification-error') ||
+                (inputEmailError ? 'input-error' : '')
               }
               value={inputEmail}
               onChange={handleInputEmail}
@@ -122,7 +120,7 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
           <SignInInput
             type="password"
             id="password"
-            className={inputPasswordError ? 'password-input-error' : ''}
+            className={inputPasswordError ? 'input-error' : ''}
             onChange={handleInputPassword}
             placeholder="비밀번호"
             required
@@ -244,12 +242,13 @@ const SignInInput = styled.input`
     color: #495057;
   }
 
-  &.email-input-error {
-    margin-bottom: 4px;
+  &.input-error {
     border: 1px solid #f44336;
     box-shadow: inset 0 0 0 1px #ff77774d;
   }
-  &.password-input-error {
+
+  &.email-verification-error {
+    margin-bottom: 4px;
     border: 1px solid #f44336;
     box-shadow: inset 0 0 0 1px #ff77774d;
   }
