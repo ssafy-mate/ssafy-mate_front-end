@@ -28,6 +28,8 @@ import {
 import AuthService from '../../services/AuthService';
 
 import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
+import { useDispatch } from 'react-redux';
+import { showSsafyMateAlert } from '../../redux/modules/alert';
 
 const ProfileForm: React.FC<ProfileProps> = ({
   campus,
@@ -60,6 +62,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const [alertSeverity, setAlertSeverity] = useState<Severity>('success');
 
   const signUpFormData = new FormData();
+  const dispatch = useDispatch();
 
   const {
     getRootProps,
@@ -296,8 +299,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
     if (validation()) {
       AuthService.signUp(data)
         .then(({ status, message }) => {
-          showAlert('success', message);
-
+          dispatch(showSsafyMateAlert(true, message, 'success'));
           history.push('/users/sign_in');
         })
         .catch((error) => {

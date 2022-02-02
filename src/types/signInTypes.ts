@@ -1,5 +1,6 @@
 import { RouterState } from 'connected-react-router';
 import { AnyAction, Reducer } from 'redux';
+import { Severity } from './signUpTypes';
 
 export type SignInRequestType = {
   userEmail: string;
@@ -35,6 +36,8 @@ export interface AuthState {
   ssafyTrack: string | null;
   token: string | null;
   projects: project[] | null;
+  message: string | null;
+  error: Error | null;
 }
 
 export interface SignInUser {
@@ -46,13 +49,24 @@ export interface SignInUser {
   ssafyTrack: string | null;
   token: string | null;
   projects: project[] | null;
-  message: string | null;
+  message: string;
   status: number | null;
   success: boolean | null;
+  error: Error | null;
 }
 
 export interface RootState {
   auth: AuthState;
-
+  controlAlert: alertState | string;
   router: Reducer<RouterState<unknown>, AnyAction>;
+}
+
+export const SHOW_ALERT = 'SHOW_ALERT';
+
+export const HIDE_ALERT = 'HIDE_ALERT';
+
+export interface alertState {
+  show: boolean;
+  text: string | null;
+  type: Severity;
 }

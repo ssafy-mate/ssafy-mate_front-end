@@ -295,7 +295,9 @@ const SignUpForm: React.FC<SignUpProps> = ({
                   message: '이메일 형식이 올바르지 않습니다.',
                 },
               })}
-              className={errors.signUpEmail ? 'have-error' : ''}
+              className={
+                errors.signUpEmail || emailInputError !== '' ? 'have-error' : ''
+              }
               maxLength={320}
               placeholder="이메일"
               readOnly={emailInputDisabled}
@@ -440,7 +442,11 @@ const SignUpForm: React.FC<SignUpProps> = ({
                 confirmPasswordInput === signUpPasswordOnChange,
             })}
             placeholder="비밀번호 확인"
-            className={errors.signUpCheckPassword ? 'have-error' : ''}
+            className={
+              errors.signUpCheckPassword || errors.signUpPassword
+                ? 'have-error'
+                : ''
+            }
           />
           {errors.signUpCheckPassword?.type === 'required' && (
             <ErrorMessageWrapper>
