@@ -1,5 +1,5 @@
 import { rest } from 'msw';
-import { SignInRequestType } from '../../types/signInTypes';
+import { SignInRequestType } from '../../types/authTypes';
 import { SsafyMateMemberList } from '../database/signIn';
 
 export const signInHandlers = [

@@ -14,7 +14,7 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 import MenuBar from './MenuBar';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../types/signInTypes';
+import { RootState } from '../../types/authTypes';
 import { logout } from '../../redux/modules/auth';
 import SsafyMateAlert from '../signIn/Alert';
 

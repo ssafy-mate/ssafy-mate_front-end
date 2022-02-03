@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 import styled from '@emotion/styled';
 
-import { RootState } from '../types/signInTypes';
+import { RootState } from '../types/authTypes';
 
 import Header from '../components/common/Header';
 import SignInContainer from '../containers/SignInContainer';

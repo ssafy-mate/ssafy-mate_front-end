@@ -7,7 +7,7 @@ import {
   AuthState,
   SignInRequestTypeWithIdSave,
   SignInUser,
-} from '../../types/signInTypes';
+} from '../../types/authTypes';
 
 import SignInService from '../../services/SignInService';
 import TokenService from '../../services/TokenService';
@@ -108,7 +108,8 @@ function* logoutSaga() {
   } catch (error: any) {
   } finally {
     TokenService.remove();
-    yield put(success(initialState));
+
+    //yield put(success(initialState));
 
     if (history.location.pathname === '/') {
       yield put(go(0));

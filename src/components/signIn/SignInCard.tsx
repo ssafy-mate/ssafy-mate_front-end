@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import styled from '@emotion/styled';
 
-import { SignInRequestTypeWithIdSave } from '../../types/signInTypes';
+import { SignInRequestTypeWithIdSave } from '../../types/authTypes';
 
 import { validEmailReg } from '../../utils/regularExpressionData';
 

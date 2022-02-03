@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 
 import { Alert, Snackbar } from '@mui/material';
-import { alertState } from '../../types/signInTypes';
+import { alertState } from '../../types/authTypes';
 import { useDispatch } from 'react-redux';
 import { showSsafyMateAlert } from '../../redux/modules/alert';
 

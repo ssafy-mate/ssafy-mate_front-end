@@ -70,3 +70,24 @@ export interface alertState {
   text: string | null;
   type: Severity;
 }
+
+//아이디 찾기, 비밀번호 재설정
+export interface IdAndPasswordResponse {
+  status: string | null;
+  success: boolean;
+  message: string;
+}
+
+export interface emailForNewPassword {
+  userEmail: string;
+}
+
+export interface CodeConfirmForNewPassword {
+  code: string;
+  userEmail: string;
+}
+
+export interface NewPassword {
+  userEmail: string;
+  password: string;
+}
