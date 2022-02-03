@@ -113,25 +113,23 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
         <CardHead>로그인</CardHead>
         <SignInForm>
           <SignInLabel htmlFor="email">이메일</SignInLabel>
-          <SignInLabelWrapper>
-            <SignInInput
-              type="email"
-              id="email"
-              className={
-                (emailVerificaion ? '' : 'email-verification-error') ||
-                (inputEmailError ? 'input-error' : '')
-              }
-              value={inputEmail}
-              onChange={handleInputEmail}
-              placeholder="이메일"
-              required
-            />
-            {!emailVerificaion && (
-              <ErrorMessageWrapper>
-                <ErrorMessage>이메일 형식이 올바르지 않습니다.</ErrorMessage>
-              </ErrorMessageWrapper>
-            )}
-          </SignInLabelWrapper>
+          <SignInInput
+            type="email"
+            id="email"
+            className={
+              (emailVerificaion ? '' : 'email-verification-error') ||
+              (inputEmailError ? 'input-error' : '')
+            }
+            value={inputEmail}
+            onChange={handleInputEmail}
+            placeholder="이메일"
+            required
+          />
+          {!emailVerificaion && (
+            <ErrorMessageWrapper>
+              <ErrorMessage>이메일 형식이 올바르지 않습니다.</ErrorMessage>
+            </ErrorMessageWrapper>
+          )}
           <SignInLabel htmlFor="password">비밀번호</SignInLabel>
           <SignInInput
             type="password"
@@ -156,7 +154,9 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
             </IdSaveCheckBox>
             <AccountManagementMenu>
               <AccountLink to="#">아이디 찾기</AccountLink>
-              <AccountLink to="#">비밀번호 재설정</AccountLink>
+              <AccountLink to="/users/password/new">
+                비밀번호 재설정
+              </AccountLink>
             </AccountManagementMenu>
           </Options>
           <SignInButton onClick={loginButtonClick} type="button">
@@ -207,8 +207,6 @@ const SignInForm = styled.form`
   display: flex;
   flex-direction: column;
 `;
-
-const SignInLabelWrapper = styled.div``;
 
 const SignInLabel = styled.label`
   margin-bottom: 4px;
