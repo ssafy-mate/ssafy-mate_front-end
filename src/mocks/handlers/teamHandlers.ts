@@ -38,7 +38,7 @@ export const teamHandlers = [
   ),
 
   rest.get(
-    'http://localhost:3000/api/auth/team/:teamId',
+    'http://localhost:3000/api/auth/team/info/:teamId',
     async (request, response, context) => {
       const { teamId } = request.params;
       const teamIndex = teamDataList.findIndex(
@@ -47,7 +47,7 @@ export const teamHandlers = [
       const token = request.headers['_headers'].authorization.split(' ')[1];
 
       // 토큰이 유효하지 않을 시
-      if (token !== 't123456789') {
+      if (token === null) {
         return response(
           context.status(401),
           context.json({

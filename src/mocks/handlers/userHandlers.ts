@@ -4,7 +4,7 @@ import { userDataList } from '../database/user';
 
 export const userHandlers = [
   rest.get(
-    'http://localhost:3000/api/auth/user/:userId',
+    'http://localhost:3000/api/auth/user/info/:userId',
     async (request, response, context) => {
       const { userId } = request.params;
       const userIndex = userDataList.findIndex(
@@ -13,7 +13,7 @@ export const userHandlers = [
       const token = request.headers['_headers'].authorization.split(' ')[1];
 
       // 토큰이 유효하지 않을 시
-      if (token !== 't123456789') {
+      if (token === null) {
         return response(
           context.status(401),
           context.json({
@@ -42,12 +42,12 @@ export const userHandlers = [
   ),
 
   rest.post(
-    'http://localhost:3000/api/auth/project',
+    'http://localhost:3000/api/auth/user/project/track',
     async (request, response, context) => {
       const token = request.headers['_headers'].authorization.split(' ')[1];
-      console.log(token);
+
       // 토큰이 유효하지 않을 시
-      if (token !== 't123456789') {
+      if (token === null) {
         return response(
           context.status(401),
           context.json({
@@ -63,6 +63,50 @@ export const userHandlers = [
         context.json({
           success: true,
           message: '프로젝트 트랙 선택이 완료되었습니다.',
+        }),
+      );
+    },
+  ),
+
+  rest.get(
+    'http://localhost:3000/api/auth/user/projects',
+    async (request, response, context) => {
+      const token = request.headers['_headers'].authorization.split(' ')[1];
+
+      console.log('token', token);
+      if (token === null) {
+        return response(
+          context.status(401),
+          context.json({
+            status: 401,
+            success: false,
+            message: '토큰이 유효하지 않습니다.',
+          }),
+        );
+      }
+
+      return response(
+        context.json({
+          projects: [
+            {
+              projectId: 1,
+              projectName: '공통 프로젝트',
+              projectTrack: '웹 기술',
+              projectTeamId: 1,
+            },
+            {
+              projectId: 2,
+              projectName: '특화 프로젝트',
+              projectTrack: '빅데이터',
+              projectTeamId: null,
+            },
+            {
+              projectId: 3,
+              projectName: '자율 프로젝트',
+              projectTrack: null,
+              projectTeamId: null,
+            },
+          ],
         }),
       );
     },
