@@ -1,5 +1,9 @@
 import { useState } from 'react';
 
+import { push } from 'connected-react-router';
+
+import { useDispatch } from 'react-redux';
+
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
@@ -12,9 +16,12 @@ import DialogTitle from '@mui/material/DialogTitle';
 import type { ProjectTrack } from '../../types/commonTypes';
 import { ProjectLinkCardProps } from '../../types/commonTypes';
 
+import useProjectTrack from '../../hooks/useProjectTrack';
+
 import ProjectTrackDialog from './ProjectTrackDialog';
 
 const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
+  projectId,
   projectName,
   pageUrl,
   imgUrl,
@@ -25,9 +32,11 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
   const [openBlockDialog, setOpenBlockDialog] = useState(false);
   const [selectedProjectTrack, setSelectedProjectTrack] =
     useState<ProjectTrack>('');
+  const projectTrack: string | null = useProjectTrack(projectId);
+  const dispatch = useDispatch();
 
-  const handleClickListItem = () => {
-    setOpen(true);
+  const handleClickCardItem = () => {
+    projectTrack ? dispatch(push(pageUrl)) : setOpen(true);
   };
 
   const handleClose = (newSelectedProjectTrack?: ProjectTrack) => {
@@ -51,7 +60,7 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
       {trackOptions ? (
         <>
           <Card
-            onClick={handleClickListItem}
+            onClick={handleClickCardItem}
             css={{ backgroundColor: hexColorCode }}
           >
             <CardImg src={imgUrl} alt={`${projectName} 이미지`} />

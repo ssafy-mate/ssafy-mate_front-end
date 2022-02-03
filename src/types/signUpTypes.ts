@@ -1,3 +1,5 @@
+import { TechStackWithImg } from './commonTypes';
+
 // 회원가입 1단계 가입 정보
 export interface SsafyAuth {
   campus: string;

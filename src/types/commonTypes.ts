@@ -48,6 +48,7 @@ export interface ProjectBannerSlideData extends ProjectBannerCardData {
 }
 
 export interface ProjectLinkCardData {
+  projectId: number;
   projectName: string;
   pageUrl: string;
   imgUrl: string;
@@ -60,7 +61,7 @@ export interface ProjectLinkCardProps extends ProjectLinkCardData {}
 interface ProjectType {
   projectId: number;
   projectName: string;
-  projectTrack?: string | null;
+  projectTrack: string | null;
   team: string | null;
 }
 
@@ -68,11 +69,6 @@ interface UserState {
   projects: ProjectType[] | null;
   loading: boolean;
   error: Error | null;
-}
-
-export interface RootState {
-  user: UserState;
-  router: Reducer<RouterState<unknown>, AnyAction>;
 }
 
 export interface ErrorResponse {

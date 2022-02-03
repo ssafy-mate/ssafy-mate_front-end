@@ -1,6 +1,6 @@
 import { axiosInstance } from './../utils/axios';
 
-import { SignInRequestType, SignInUser } from '../types/signInTypes';
+import { SignInRequestType, SignInUser } from '../types/authTypes';
 
 class SignInService {
   public static async login(

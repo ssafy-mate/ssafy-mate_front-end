@@ -1,17 +1,27 @@
 import { go, push } from 'connected-react-router';
 
 import { Action, createActions, handleActions } from 'redux-actions';
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
 import {
   AuthState,
   SignInRequestTypeWithIdSave,
   SignInUser,
-} from '../../types/signInTypes';
+  ProjectsState,
+  Project,
+} from '../../types/authTypes';
+
+import history from '../../history';
 
 import SignInService from '../../services/SignInService';
 import TokenService from '../../services/TokenService';
-import history from '../../history';
+import UserService from '../../services/UserService';
+import PersistReducerService from '../../services/PersistReducerService';
+
+interface ProjectTrackRequestType {
+  projectId: number;
+  projectTrack: string;
+}
 
 const initialState: AuthState = {
   userId: null,
@@ -20,23 +30,33 @@ const initialState: AuthState = {
   studentNumber: null,
   campus: null,
   ssafyTrack: null,
-  token: null,
   projects: null,
+  token: null,
+  loading: false,
+  error: null,
 };
 
 const prefix = 'ssafy-mate/auth';
 
-export const { pending, success, fail } = createActions(
+export const { pending, success, updateProjects, fail } = createActions(
   'PENDING',
   'SUCCESS',
+  'UPDATE_PROJECTS',
   'FAIL',
-  { prefix },
+  {
+    prefix,
+  },
 );
 
-const reducer = handleActions<AuthState, SignInUser>(
+const reducer = handleActions<AuthState, SignInUser, ProjectsState>(
   {
-    PENDING: (state) => ({ ...state }),
+    PENDING: (state) => ({
+      ...state,
+      loading: true,
+      error: null,
+    }),
     SUCCESS: (state, action) => ({
+      ...state,
       userId: action.payload.userId,
       userName: action.payload.userName,
       userEmail: action.payload.userEmail,
@@ -45,9 +65,19 @@ const reducer = handleActions<AuthState, SignInUser>(
       ssafyTrack: action.payload.ssafyTrack,
       token: action.payload.token,
       projects: action.payload.projects,
+      loading: false,
+      error: null,
+    }),
+    UPDATE_PROJECTS: (state, action) => ({
+      ...state,
+      projects: action.payload.projects,
+      loading: false,
+      error: null,
     }),
     FAIL: (state, action: any) => ({
       ...state,
+      loading: false,
+      error: action.payload,
     }),
   },
   initialState,
@@ -57,7 +87,12 @@ const reducer = handleActions<AuthState, SignInUser>(
 export default reducer;
 
 // saga
-export const { login, logout } = createActions('LOGIN', 'LOGOUT', { prefix });
+export const { login, logout, selectProjectTrack } = createActions(
+  'LOGIN',
+  'LOGOUT',
+  'SELECT_PROJECT_TRACK',
+  { prefix },
+);
 
 function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
   try {
@@ -85,7 +120,9 @@ function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
     yield put(push('/'));
   } catch (error: any) {
     //에러처리 -> alert로 변경
-    yield put(fail(new Error(error?.response?.data?.error || 'UNKNOWN ERROR')));
+    yield put(
+      fail(new Error(error?.response?.data?.errorMessage || 'UNKNOWN ERROR')),
+    );
   }
 }
 
@@ -101,6 +138,7 @@ function* logoutSaga() {
   } catch (error: any) {
   } finally {
     TokenService.remove();
+    PersistReducerService.remove();
     yield put(success(initialState));
 
     if (history.location.pathname === '/') {
@@ -111,7 +149,27 @@ function* logoutSaga() {
   }
 }
 
+function* selectProjectTrackSaga(action: Action<ProjectTrackRequestType>) {
+  try {
+    yield put(pending());
+
+    const token: string = yield select((state) => state.auth.token);
+
+    yield call(UserService.selectProjectTrack, token, action.payload);
+
+    const projects: Project[] = yield call(UserService.getUserProjects, token);
+
+    yield put(updateProjects(projects));
+    yield put(push('/projects/specialization/teams'));
+  } catch (error: any) {
+    yield put(
+      fail(new Error(error?.response?.data?.errorMessage || 'UNKNOWN ERROR')),
+    );
+  }
+}
+
 export function* authSaga() {
   yield takeEvery(`${prefix}/LOGIN`, loginSaga);
   yield takeEvery(`${prefix}/LOGOUT`, logoutSaga);
+  yield takeLatest(`${prefix}/SELECT_PROJECT_TRACK`, selectProjectTrackSaga);
 }

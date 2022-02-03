@@ -1,6 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { Link } from 'react-router-dom';
+
+import { useDispatch, useSelector } from 'react-redux';
 
 import { useMediaQuery } from 'react-responsive';
 
@@ -12,10 +14,11 @@ import ArticleIcon from '@mui/icons-material/Article';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
-import MenuBar from './MenuBar';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../types/signInTypes';
+import { RootState } from '../../types/authTypes';
+
 import { logout } from '../../redux/modules/auth';
+
+import MenuBar from './MenuBar';
 
 interface MenuListProps {
   isExpanded: boolean;

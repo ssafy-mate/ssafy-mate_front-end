@@ -19,7 +19,7 @@ export interface SignInResponse {
   message: string;
 }
 
-export interface project {
+export interface Project {
   projectId: number | null;
   projectName: string | null;
   projectTrack: string | null;
@@ -33,8 +33,10 @@ export interface AuthState {
   studentNumber: string | null;
   campus: string | null;
   ssafyTrack: string | null;
+  projects: Project[] | null;
   token: string | null;
-  projects: project[] | null;
+  loading: boolean;
+  error: Error | null;
 }
 
 export interface SignInUser {
@@ -45,14 +47,17 @@ export interface SignInUser {
   campus: string | null;
   ssafyTrack: string | null;
   token: string | null;
-  projects: project[] | null;
+  projects: Project[] | null;
   message: string | null;
   status: number | null;
   success: boolean | null;
 }
 
+export interface ProjectsState {
+  projects: Project[];
+}
+
 export interface RootState {
   auth: AuthState;
-
   router: Reducer<RouterState<unknown>, AnyAction>;
 }
