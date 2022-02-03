@@ -122,8 +122,8 @@ const NavLink = styled(Link)`
   line-height: 1.6;
 
   @media (max-width: 575px) {
-    font-size: 12px;
-    padding: 6px 0;
+    padding: 7px 0;
+    font-size: 9px;
   }
 `;
 
@@ -131,8 +131,8 @@ const navLinkIcon = css`
   margin-bottom: 4px;
 
   @media (max-width: 575px) {
-    margin-bottom: 2px;
-    font-size: 20px;
+    margin-bottom: 3px;
+    font-size: 22px;
   }
 `;
 

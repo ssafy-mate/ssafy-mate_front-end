@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+import { useMediaQuery } from 'react-responsive';
+
 import useUserList from '../../hooks/useUserList';
 
 import Header from '../../components/common/Header';
@@ -34,6 +36,10 @@ const SpecializationProjectUserListPage: React.FC = () => {
     page,
   });
 
+  const smallMedia = useMediaQuery({
+    query: '(max-width: 575px)',
+  });
+
   useEffect(() => {
     document.title = '특화 프로젝트 교육생 공고 | 싸피 메이트';
   }, []);
@@ -62,7 +68,7 @@ const SpecializationProjectUserListPage: React.FC = () => {
       {data !== undefined && (
         <Pagenation totalPage={data.totalPage} setPage={setPage} />
       )}
-      <Footer />
+      {!smallMedia && <Footer />}
     </>
   );
 };

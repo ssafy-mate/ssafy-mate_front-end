@@ -67,11 +67,12 @@ const OfferListSection: React.FC = () => {
 const Container = styled.section`
   max-width: 800px;
   margin: 0 auto 24px;
-  padding: 16px;
+  padding: 0 16px;
   box-sizing: border-box;
 
   @media (max-width: 575px) {
     margin-top: 70px;
+    margin-bottom: 90px;
   }
 `;
 

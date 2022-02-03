@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 
+import { useMediaQuery } from 'react-responsive';
+
 import useTeamList from '../../hooks/useTeamList';
 
 import Header from '../../components/common/Header';
@@ -20,6 +22,7 @@ const SpecializationProjectTeamListPage: React.FC = () => {
   const [exclusion, setExclusion] = useState<boolean>(false);
   const [sort, setSort] = useState<string>('recent');
   const [page, setPage] = useState<number>(1);
+
   const { isLoading, data, isError, errorMessage } = useTeamList({
     campus,
     project,
@@ -30,6 +33,10 @@ const SpecializationProjectTeamListPage: React.FC = () => {
     exclusion,
     sort,
     page,
+  });
+
+  const smallMedia = useMediaQuery({
+    query: '(max-width: 575px)',
   });
 
   useEffect(() => {
@@ -59,7 +66,7 @@ const SpecializationProjectTeamListPage: React.FC = () => {
       {data !== undefined && (
         <Pagenation totalPage={data.totalPage} setPage={setPage} />
       )}
-      <Footer />
+      {!smallMedia && <Footer />}
     </>
   );
 };
