@@ -23,6 +23,10 @@ const SpecializationProjectTeamListPage: React.FC = () => {
   const [sort, setSort] = useState<string>('recent');
   const [page, setPage] = useState<number>(1);
 
+  const smallMedia = useMediaQuery({
+    query: '(max-width: 575px)',
+  });
+
   const { isLoading, data, isError, errorMessage } = useTeamList({
     campus,
     project,
@@ -33,10 +37,6 @@ const SpecializationProjectTeamListPage: React.FC = () => {
     exclusion,
     sort,
     page,
-  });
-
-  const smallMedia = useMediaQuery({
-    query: '(max-width: 575px)',
   });
 
   useEffect(() => {

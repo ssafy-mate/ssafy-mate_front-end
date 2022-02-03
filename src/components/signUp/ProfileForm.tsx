@@ -27,8 +27,6 @@ import { validUrlReg } from '../../utils/regularExpressionData';
 
 import AuthService from '../../services/AuthService';
 
-import { techStackListData } from '../../mocks/database/techstack';
-
 import useTechStackList from '../../hooks/useTechStackList';
 import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
 
@@ -62,7 +60,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const [alertText, setAlertText] = useState<string>('');
   const [alertSeverity, setAlertSeverity] = useState<Severity>('success');
 
-  const signUpFormData = new FormData();
+  const techStackList: TechStackWithImg[] = useTechStackList();
 
   const {
     getRootProps,
@@ -78,9 +76,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
   } = useAutocomplete({
     id: 'search-tech-stack',
     multiple: true,
-    options: techStackListData,
+    options: techStackList,
     getOptionLabel: (option) => option.techStackName,
   });
+
+  const signUpFormData = new FormData();
 
   const showAlert = (type: Severity, message: string) => {
     setAlertSeverity(type);
@@ -466,7 +466,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
             </InfoInputWrapper>
             {groupedOptions.length > 0 ? (
               <SearchList {...getListboxProps()}>
-                {(groupedOptions as typeof techStackListData).map(
+                {(groupedOptions as typeof techStackList).map(
                   (option, index) => (
                     <SearchItemWrapper
                       onClick={() => {
