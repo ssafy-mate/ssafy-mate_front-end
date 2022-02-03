@@ -7,6 +7,8 @@ import { ErrorResponse } from '../types/commonTypes';
 
 import TeamService from '../services/TeamService';
 
+import useToken from './useToken';
+
 interface TeamOwner {
   userId: number;
   userName: string;
@@ -43,7 +45,8 @@ interface TeamInfoResponse {
 }
 
 const useTeamInfo = (teamId: string) => {
-  const queryFunction = () => TeamService.getTeamDetailInfo(teamId);
+  const token: string | null = useToken();
+  const queryFunction = () => TeamService.getTeamInfo(token, teamId);
   const { isLoading, data, isError, error } = useQuery<
     AxiosResponse<TeamInfoResponse>,
     AxiosError<ErrorResponse>
