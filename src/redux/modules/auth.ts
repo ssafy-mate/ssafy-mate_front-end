@@ -76,9 +76,13 @@ function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
 
     if (data.token !== null) {
       TokenService.set(data.token);
+
       yield put(success(data));
+
       const message: string = yield select((state) => state.auth.message);
+
       yield put(showSsafyMateAlert(true, message, 'success'));
+
       if (action.payload.IdSave) {
         localStorage.setItem('ssafy-mate-id', action.payload.userEmail);
       } else {
@@ -107,9 +111,12 @@ function* logoutSaga() {
     // yield put(success(null));
   } catch (error: any) {
   } finally {
+    yield put(showSsafyMateAlert(true, '로그아웃 되었습니다.', 'success'));
+
+    localStorage.removeItem('persist:root');
     TokenService.remove();
 
-    //yield put(success(initialState));
+    yield put(success(initialState));
 
     if (history.location.pathname === '/') {
       yield put(go(0));

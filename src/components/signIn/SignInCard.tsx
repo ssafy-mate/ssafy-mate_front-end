@@ -71,6 +71,7 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
   const loginButtonClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
+    event.preventDefault();
     if (validation(inputEmail, inputPassword)) {
       login({
         userEmail: inputEmail,
@@ -99,7 +100,7 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
     if (
       emailInput !== '' &&
       passwordInput !== '' &&
-      inputEmailError === false
+      validEmailReg.test(emailInput)
     ) {
       return true;
     } else {
@@ -153,7 +154,7 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
               </IdSaveCheckLabel>
             </IdSaveCheckBox>
             <AccountManagementMenu>
-              <AccountLink to="#">아이디 찾기</AccountLink>
+              <AccountLink to="/users/find/id">아이디 찾기</AccountLink>
               <AccountLink to="/users/password/new">
                 비밀번호 재설정
               </AccountLink>
