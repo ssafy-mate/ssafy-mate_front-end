@@ -24,6 +24,8 @@ import styled from '@emotion/styled';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import SendIcon from '@mui/icons-material/Send';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
+import useTextArea from '../../hooks/useTextArea';
+import axios from 'axios';
 
 const localUrl = 'http://localhost:3000';
 
@@ -38,158 +40,103 @@ type userParams = {
 const ChattingForm: React.FC = () => {
   const date = new Date();
   const userToken = useToken(); // 유저 토큰
-  // const [socket] = useSocket();
+  const [socket] = useSocket();
+
   const { roomId } = useParams<roomParams>();
+  //   const { userId } = useParams<userParams>();
+  //   console.log(`roomId : ${roomId} / userId : ${userId}`);
 
-  console.log(roomId);
+  // const [numberUserId, setNunberUserId] = useState(Number(userId));
+  const [myId, setMyId] = useState(2); // 내 아이디
+  const [userId, setUserId] = useState(1); // 상대방 아이디
 
-  const [senderId, setSenderId] = useState<number>(2);
   const [messageList, setMessageList] = useState<MessageRequestType[]>([]);
   const [chatRoomList, setChatRoomList] = useState<ChatRoomResponseType[]>();
   const [entryTime, setEntryTime] = useState(date.toLocaleString());
   const [nowPage, setNowPage] = useState<number>(1);
+  const [chat, onChangeChat, setChat] = useTextArea('');
 
   const messageInputRef = useRef<HTMLTextAreaElement>(null);
   const chatRoomMessageRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<Scrollbars>(null);
 
-  // 기존 대화 내역 불러오기 - 인피니티 스크롤용
-  // const {
-  //   data: chatData,
-  //   mutate: mutateChat,
-  //   setSize,
-  // } = useSWRInfinite<ChatRoomListRequestType>(
-  //   (index) => `/api/chat/room/${senderId}`,
-  //   fetcherGet,
-  //   {
-  //     onSuccess(data) {
-  //       if (data?.length === 1) {
-  //         setTimeout(() => {
-  //           scrollbarRef.current?.scrollToBottom();
-  //         }, 100);
-  //       }
-  //     },
-  //   },
-  // );
+  // 채팅 목록 불러오기 - 아직 작동 안함
+  const { data: roomData, mutate: mutateRoom } =
+    useSWR<ChatRoomListRequestType>(`/api/chat/room/${myId}`, fetcherGet);
 
-  // 대화 내용 불러오기 - 일반
-  const { data: chatData, mutate: mutateChat } =
-    useSWR<ChatRoomListRequestType>(`/api/chat/room/${senderId}`, fetcherGet);
+  //   console.log(`chatList : ${roomData}`);
 
-  /*
-  useEffect(() => {
-    // 채팅방 목록 불러오기
-    axiosInstance
-      .get(`http://localhost:3000/api/chat/room/${senderId}`)
-      .then((response) => {
-        console.log(response);
-        setChatRoomList(response.data);
-      })
-      .catch((error) => console.log(error));
-  }, []);
+  // 대화 내용 불러오기
+  const { data: chatData, mutate: mutateChat } = useSWR<ChatLogResponseType>(
+    `/api/chat/log/${roomId}`,
+    fetcherGet,
+  );
 
-  useEffect(() => {
-    getChatLog();
-  }, []);
-
-  const getChatLog = async () => {
-    const chatLog = await axiosInstance.get<ChatLogResponseType>(
-      `http://localhost:3000/api/chat/log`,
-      {
-        params: {
-          userId1: 1,
-          userId2: 2,
-          nowPage: 1,
-          entryTime: entryTime,
-        },
-      },
-    );
-
-    chatLog.data.contentList.map((log, index) => {
-      const sentTime = dayjs(log.sentTime).toString();
-      const message = {
-        senderId: log.senderId,
+  // 내가 메시지를 보내거나, 서버 챗 데이터 변경이 일어났을 때 발동하는 콜백
+  // 서버로 메시지 정보 post 요청
+  const onSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
+      const params: MessageRequestType = {
         roomId: roomId,
-        content: log.content,
-        sentTime: sentTime,
-      };
-      addMessageToList(message);
-    });
-  };
-  */
-
-  useEffect(() => {
-    chatLogScrollDown();
-  }, [messageList]);
-
-  const handleSendMessage = (
-    event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent,
-  ) => {
-    event.preventDefault();
-    const messageContent = messageInputRef.current?.value.trim();
-
-    if (messageContent) {
-      const curMessage = makeMessageFormat(senderId);
-      const params = {
-        roomId: roomId,
-        senderId: 1,
-        content: curMessage,
-        sentTime: date.toLocaleString(),
+        content: chat,
+        senderId: myId,
+        sentTime: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
       };
 
-      axiosInstance
-        .post(`/api/chat`, params)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
+      if (chat.trim() && chatData) {
+        axiosInstance
+          .post(`/api/chat`, params)
+          .then((response) => {
+            console.log(`onSumbit response : ${response}`);
+            setChat('');
+          })
+          .catch((error) => {
+            console.log(`onSumbit error : ${error}`);
+          });
+      }
+    },
+    [chat, roomId, myId, chatData, setChat],
+  );
+
+  // onMessage 메시지 받으면 작동하는 콜백
+  const onMessage = useCallback((data: MessageRequestType) => {
+    // roomId 중 하나가 상대것인지 검사 => 일단 임시로 내, 상대방 아이디 셋팅
+    // 상대방이 보낸 데이터를 chatData.contetnList 에 넣으면
+    // onSubmit에서 콜백이 변경된 데이터를 감지해 호출됨
+    if (data.senderId === userId && myId !== userId) {
+      mutateChat((chatData) => {
+        const chatLog = {
+          id: 1,
+          content: data.content,
+          userName: '손영배',
+          sentTime: data.sentTime,
+          senderId: data.senderId,
+        };
+        chatData?.contentList.unshift(chatLog);
+        return chatData;
+      }, false).then(() => {
+        console.log(`onMessage callback 성공`);
+      });
     }
-    messageInputInitialize();
-  };
+  }, []);
 
-  const onMessage = useCallback(() => {}, []);
+  // 소켓 on 달아두는 곳
+  useEffect(() => {
+    socket?.on('message', onMessage);
+    return () => {
+      socket?.off('message', onMessage);
+    };
+  }, [socket, onMessage]);
 
-  // useEffect(() => {
-  //   socket?.on('dm', onMessage);
-  //   return () => {
-  //     socket?.off('dm', onMessage);
-  //   };
-  // }, [socket, onMessage]);
-
-  // console.log(messageList);
-
+  // 엔터 누르면 onSubmit 호출
   const handleMessageSendKeyPress = (event: React.KeyboardEvent) => {
     if (event.code === 'Enter' || event.code === 'NumpadEnter') {
       if (!event.shiftKey) {
         event.preventDefault();
-        try {
-          handleSendMessage(event);
-        } catch {
-          const curMessage = makeMessageFormat(senderId);
-          addMessageToList(curMessage);
-          messageInputInitialize();
-        }
+        onSubmit(event);
       }
     }
-  };
-
-  const makeMessageFormat = (setUserId: number): MessageRequestType => {
-    const chatMessage: MessageRequestType = {
-      senderId: setUserId,
-      content: messageInputRef.current?.value as string,
-      sentTime: date.toLocaleString(),
-      roomId: roomId,
-    };
-
-    return chatMessage;
-  };
-
-  const addMessageToList = (message: MessageRequestType) => {
-    setMessageList((preMessageList) => {
-      return [...preMessageList, message];
-    });
   };
 
   const messageInputInitialize = () => {
@@ -213,16 +160,6 @@ const ChattingForm: React.FC = () => {
     return currentTime;
   };
 
-  const chatLogScrollDown = () => {
-    if (chatRoomMessageRef.current) {
-      chatRoomMessageRef.current?.scrollIntoView({
-        behavior: 'auto',
-        block: 'end',
-        inline: 'nearest',
-      });
-    }
-  };
-
   return (
     <ChatContianer>
       <ChatListSidebar>
@@ -240,77 +177,71 @@ const ChattingForm: React.FC = () => {
         </ChatList>
       </ChatListSidebar>
       <ChatRoomSection>
-        {messageList.length == 0 ? (
-          <ChatRoomEmpty>
-            <ChatRoomEmptyContentWrapper>
-              채팅할 상대를 선택해주세요
-            </ChatRoomEmptyContentWrapper>
-          </ChatRoomEmpty>
-        ) : (
-          <ChatRoomWrapper>
-            <ChatRoomMessageWrapper>
-              <ChatRoomUserNameBar>
-                <ChatRoomHeaderProfile className="userName">
-                  <img></img>
-                  <div className="userName">
-                    <span>호호</span>
-                  </div>
-                </ChatRoomHeaderProfile>
-              </ChatRoomUserNameBar>
-              <ChatRoomMessageList>
-                <Scrollbars autoHide ref={scrollbarRef}>
-                  <MessageWrapper ref={chatRoomMessageRef}>
-                    {messageList.length > 0
-                      ? messageList.map((message, index) => {
-                          if (message.senderId === senderId) {
-                            return (
-                              <MessageBoxWrapper key={index}>
-                                <MessageBoxRightContent>
-                                  <MessageTimeBox>
-                                    <div className="message_date">
-                                      {currentTimeCalculate()}
-                                    </div>
-                                  </MessageTimeBox>
-                                  <p>{message.content}</p>
-                                </MessageBoxRightContent>
-                              </MessageBoxWrapper>
-                            );
-                          } else {
-                            return (
-                              <MessageBoxWrapper>
-                                <MessageBoxLeftContent key={index}>
-                                  <img></img>
-                                  <p>{message.content}</p>
-                                  <MessageTimeBox>
-                                    <div className="message_date">
-                                      {message.sentTime}
-                                    </div>
-                                  </MessageTimeBox>
-                                </MessageBoxLeftContent>
-                              </MessageBoxWrapper>
-                            );
-                          }
-                        })
-                      : null}
-                  </MessageWrapper>
-                </Scrollbars>
-              </ChatRoomMessageList>
-            </ChatRoomMessageWrapper>
-            <ChatTypingWrapper>
-              <TextareaAutosize
-                css={ChatTypingTextarea}
-                ref={messageInputRef}
-                maxRows={3}
-                minRows={1}
-                onKeyPress={handleMessageSendKeyPress}
-                placeholder="메시지를 입력해주세요"
-              />
-              <button onClick={handleSendMessage}>
-                <SendIcon css={SendButton}></SendIcon>
-              </button>
-            </ChatTypingWrapper>
-          </ChatRoomWrapper>
-        )}
+        <ChatRoomWrapper>
+          <ChatRoomMessageWrapper>
+            <ChatRoomUserNameBar>
+              <ChatRoomHeaderProfile className="userName">
+                <img></img>
+                <div className="userName">
+                  <span>손영배</span>
+                </div>
+              </ChatRoomHeaderProfile>
+            </ChatRoomUserNameBar>
+            <ChatRoomMessageList>
+              <Scrollbars autoHide ref={scrollbarRef}>
+                <MessageWrapper ref={chatRoomMessageRef}>
+                  {messageList.length > 0
+                    ? messageList.map((message, index) => {
+                        if (message.senderId === myId) {
+                          return (
+                            <MessageBoxWrapper key={index}>
+                              <MessageBoxRightContent>
+                                <MessageTimeBox>
+                                  <div className="message_date">
+                                    {currentTimeCalculate()}
+                                  </div>
+                                </MessageTimeBox>
+                                <p>{message.content}</p>
+                              </MessageBoxRightContent>
+                            </MessageBoxWrapper>
+                          );
+                        } else {
+                          return (
+                            <MessageBoxWrapper>
+                              <MessageBoxLeftContent key={index}>
+                                <img></img>
+                                <p>{message.content}</p>
+                                <MessageTimeBox>
+                                  <div className="message_date">
+                                    {message.sentTime}
+                                  </div>
+                                </MessageTimeBox>
+                              </MessageBoxLeftContent>
+                            </MessageBoxWrapper>
+                          );
+                        }
+                      })
+                    : null}
+                </MessageWrapper>
+              </Scrollbars>
+            </ChatRoomMessageList>
+          </ChatRoomMessageWrapper>
+          <ChatTypingWrapper>
+            <TextareaAutosize
+              css={ChatTypingTextarea}
+              ref={messageInputRef}
+              maxRows={3}
+              minRows={1}
+              value={chat}
+              onKeyPress={handleMessageSendKeyPress}
+              onChange={onChangeChat}
+              placeholder="메시지를 입력해주세요"
+            />
+            <button onClick={onSubmit}>
+              <SendIcon css={SendButton}></SendIcon>
+            </button>
+          </ChatTypingWrapper>
+        </ChatRoomWrapper>
       </ChatRoomSection>
     </ChatContianer>
   );

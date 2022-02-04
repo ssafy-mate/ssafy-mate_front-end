@@ -7,7 +7,7 @@ import {
   AuthState,
   SignInRequestTypeWithIdSave,
   SignInUser,
-} from '../../types/signInTypes';
+} from '../../types/authTypes';
 
 import SignInService from '../../services/SignInService';
 import TokenService from '../../services/TokenService';

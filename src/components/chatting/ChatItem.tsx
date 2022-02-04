@@ -1,6 +1,24 @@
 import styled from '@emotion/styled';
+import React, { useState } from 'react';
+import { ChatRoomTypeProps } from '../../types/messageTypes';
 
-const ChatItem: React.FC = () => {
+const ChatItem: React.FC<ChatRoomTypeProps> = ({
+  roomId,
+  userId,
+  userName,
+  profileImgUrl,
+  content,
+  sentTime,
+}) => {
+  const [roomInfo, setRoomInfo] = useState<ChatRoomTypeProps>({
+    roomId: roomId,
+    userId: userId,
+    userName: userName,
+    profileImgUrl: profileImgUrl,
+    content: content,
+    sentTime: sentTime,
+  });
+
   return (
     <>
       <ChatListItem>
@@ -10,15 +28,13 @@ const ChatItem: React.FC = () => {
           </ProfileWrapper>
           <ContentWrapper>
             <TitleWrapper>
-              <TitleSenderName>호호</TitleSenderName>
+              <TitleSenderName>{userName}</TitleSenderName>
               <TitleSubText>
                 <span>22.01.25</span>
               </TitleSubText>
             </TitleWrapper>
             <DescriptionWrapper>
-              <DescriptionContent>
-                내일 역삼역 앞에서 11시에 만나요
-              </DescriptionContent>
+              <DescriptionContent>{content}</DescriptionContent>
             </DescriptionWrapper>
           </ContentWrapper>
         </ChatListItemWrapper>
@@ -29,8 +45,11 @@ const ChatItem: React.FC = () => {
 
 const ChatListItem = styled.li`
   width: 100%;
-  /* border-bottom: 1px solid #dfdfdf; */
   box-sizing: border-box;
+
+  @media (max-width: 575px) {
+    display: hidden;
+  }
 `;
 
 const ChatListItemWrapper = styled.a`
@@ -48,6 +67,10 @@ const ChatListItemWrapper = styled.a`
   &:hover {
     background-color: #ebebebce;
   }
+
+  @media (max-width: 575px) {
+    display: hidden;
+  }
 `;
 
 const ProfileWrapper = styled.div`
@@ -60,16 +83,34 @@ const ProfileWrapper = styled.div`
     border: 1px solid #b4b4b4;
     border-radius: 50%;
   }
+
+  @media (max-width: 575px) {
+    display: flex;
+    width: 100%;
+    display: none;
+  }
 `;
 
 const ContentWrapper = styled.div`
   overflow: hidden;
   width: 100%;
+
+  @media (max-width: 575px) {
+    display: flex;
+    width: 100%;
+    display: none;
+  }
 `;
 
 const TitleWrapper = styled.div`
   display: flex;
   width: 100%;
+
+  @media (max-width: 575px) {
+    display: flex;
+    width: 100%;
+    display: none;
+  }
 `;
 
 const TitleSenderName = styled.span`
@@ -81,6 +122,12 @@ const TitleSenderName = styled.span`
   color: #6d6d6d;
   text-overflow: ellipsis;
   white-space: nowrap;
+
+  @media (max-width: 575px) {
+    display: flex;
+    width: 100%;
+    display: none;
+  }
 `;
 
 const TitleSubText = styled.div`
