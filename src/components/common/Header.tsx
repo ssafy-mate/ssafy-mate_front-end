@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 import { Link } from 'react-router-dom';
 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 
 import { useMediaQuery } from 'react-responsive';
 
@@ -13,10 +13,20 @@ import styled from '@emotion/styled';
 import ArticleIcon from '@mui/icons-material/Article';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-
-import { RootState } from '../../types/authTypes';
+import LogoutIcon from '@mui/icons-material/Logout';
+import MenuItem from '@mui/material/MenuItem';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Grow from '@mui/material/Grow';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import MenuList from '@mui/material/MenuList';
+import Divider from '@mui/material/Divider';
+import ListItemIcon from '@mui/material/ListItemIcon';
 
 import { logout } from '../../redux/modules/auth';
+
+import useToken from '../../hooks/useToken';
+import useUserId from '../../hooks/useUserId';
 
 import MenuBar from './MenuBar';
 
@@ -35,13 +45,19 @@ interface ContainerProps {
 const Header: React.FC<HeaderProps> = ({ offFixed }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [accountBoxOpen, setAccountBoxOpen] = useState<boolean>(false);
+
+  const accountBoxAnchorRef = useRef<HTMLButtonElement>(null);
+  const prevAccoutBoxOpen = useRef(accountBoxOpen);
+
   const isMobile = useMediaQuery({
     query: '(max-width: 991px)',
   });
+
   const dispatch = useDispatch();
-  const token = useSelector<RootState, string | null>(
-    (state) => state?.auth.token,
-  );
+
+  const token = useToken();
+  const userId = useUserId();
 
   useEffect(() => {
     if (token !== null) {
@@ -49,12 +65,54 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
     }
   }, [token]);
 
+  useEffect(() => {
+    if (isMobile) {
+      setAccountBoxOpen(false);
+    }
+  }, [isMobile]);
+
+  useEffect(() => {
+    if (
+      !isMobile &&
+      prevAccoutBoxOpen.current === true &&
+      accountBoxOpen === false
+    ) {
+      accountBoxAnchorRef.current!.focus();
+    }
+
+    prevAccoutBoxOpen.current = accountBoxOpen;
+  }, [accountBoxOpen, isMobile]);
+
   const handleClickLogoutButton = () => {
     dispatch(logout());
   };
 
   const handleExpandMenu = () => {
     setIsExpanded(!isExpanded);
+  };
+
+  const handleAccountBoxToggle = () => {
+    setAccountBoxOpen((prevAccoutBoxOpen) => !prevAccoutBoxOpen);
+  };
+
+  const handleAccountBoxClose = (event: Event | React.SyntheticEvent) => {
+    if (
+      accountBoxAnchorRef.current &&
+      accountBoxAnchorRef.current.contains(event.target as HTMLElement)
+    ) {
+      return;
+    }
+
+    setAccountBoxOpen(false);
+  };
+
+  const handleListKeyDown = (event: React.KeyboardEvent) => {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      setAccountBoxOpen(false);
+    } else if (event.key === 'Escape') {
+      setAccountBoxOpen(false);
+    }
   };
 
   return (
@@ -74,57 +132,119 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
             <MenuBar isExpanded={isExpanded} onExpandMenu={handleExpandMenu} />
           ) : null}
         </BrandWrapper>
-        <MenuList isExpanded={isExpanded}>
+        <AccountMenuList isExpanded={isExpanded}>
           {!isLoggedIn ? (
             <>
-              <MenuItem>
+              <AccountMenuItem>
                 <PageLink to="/users/sign_in">로그인</PageLink>
-              </MenuItem>
-              <MenuItem>
+              </AccountMenuItem>
+              <AccountMenuItem>
                 <PageLink to="/users/sign_up">회원가입</PageLink>
-              </MenuItem>
+              </AccountMenuItem>
             </>
           ) : !isMobile ? (
             <>
-              <MenuItem>
-                <IconLink to="#">
+              <AccountMenuItem>
+                <IconLink to={`/users/${userId}`}>
                   <ArticleIcon css={icon} />
                 </IconLink>
-              </MenuItem>
-              <MenuItem>
+              </AccountMenuItem>
+              <AccountMenuItem>
                 <IconLink to="#">
                   <NotificationsIcon css={icon} />
                 </IconLink>
-              </MenuItem>
-              <MenuItem>
-                <IconLink to="#">
+              </AccountMenuItem>
+              <AccountMenuItem>
+                <IconButton
+                  ref={accountBoxAnchorRef}
+                  id="composition-button"
+                  aria-controls={
+                    accountBoxOpen ? 'composition-menu' : undefined
+                  }
+                  aria-expanded={accountBoxOpen ? 'true' : undefined}
+                  aria-haspopup="true"
+                  onClick={handleAccountBoxToggle}
+                >
                   <AccountBoxIcon css={icon} />
-                </IconLink>
-              </MenuItem>
+                </IconButton>
+              </AccountMenuItem>
+              <AccountBox
+                open={accountBoxOpen}
+                anchorEl={accountBoxAnchorRef.current}
+                role={undefined}
+                placement="top-end"
+                transition
+                disablePortal
+              >
+                {({ TransitionProps }) => (
+                  <Grow
+                    {...TransitionProps}
+                    style={{
+                      transformOrigin: 'right top',
+                    }}
+                  >
+                    <Paper>
+                      <ClickAwayListener onClickAway={handleAccountBoxClose}>
+                        <AccountBoxList
+                          autoFocusItem={accountBoxOpen}
+                          id="composition-menu"
+                          aria-labelledby="composition-button"
+                          onKeyDown={handleListKeyDown}
+                        >
+                          <AccountBoxItem>
+                            <Link to={`/users/${userId}/account`}>
+                              계정 관리
+                            </Link>
+                          </AccountBoxItem>
+                          <AccountBoxItem onClick={handleAccountBoxClose}>
+                            <Link to={`/users/${userId}/offers`}>
+                              받은 제안
+                            </Link>
+                          </AccountBoxItem>
+                          <AccountBoxItem onClick={handleAccountBoxClose}>
+                            <Link to={`/users/${userId}/applications`}>
+                              지원 이력
+                            </Link>
+                          </AccountBoxItem>
+                          <Divider />
+                          <AccountBoxItem onClick={handleClickLogoutButton}>
+                            로그아웃
+                            <AccountBoxItemIcon>
+                              <LogoutIcon fontSize="small" />
+                            </AccountBoxItemIcon>
+                          </AccountBoxItem>
+                        </AccountBoxList>
+                      </ClickAwayListener>
+                    </Paper>
+                  </Grow>
+                )}
+              </AccountBox>
             </>
           ) : (
             <>
-              <MenuItem>
-                <PageLink to="#">계정 관리</PageLink>
-              </MenuItem>
-              <MenuItem>
-                <PageLink to="#">내 프로필</PageLink>
-              </MenuItem>
-              <MenuItem>
-                <PageLink to="#">받은 제안</PageLink>
-              </MenuItem>
-              <MenuItem>
-                <PageLink to="#">지원한 팀</PageLink>
-              </MenuItem>
-              <MenuItem css={line} />
-              <MenuItem>
+              <AccountMenuItem>
+                <PageLink to={`/users/${userId}/account`}>계정 관리</PageLink>
+              </AccountMenuItem>
+              <AccountMenuItem>
+                <PageLink to={`/users/${userId}`}>내 프로필</PageLink>
+              </AccountMenuItem>
+              <AccountMenuItem>
+                <PageLink to={`/users/${userId}/offers`}>받은 제안</PageLink>
+              </AccountMenuItem>
+              <AccountMenuItem>
+                <PageLink to={`/users/${userId}/applications`}>
+                  지원 이력
+                </PageLink>
+              </AccountMenuItem>
+              <AccountMenuItem css={line} />
+              <AccountMenuItem>
                 <LogoutButton onClick={handleClickLogoutButton}>
                   로그아웃
                 </LogoutButton>
-              </MenuItem>
+              </AccountMenuItem>
             </>
           )}
-        </MenuList>
+        </AccountMenuList>
       </Wrapper>
     </Container>
   );
@@ -195,7 +315,7 @@ const LogoName = styled.span`
   color: #fff;
 `;
 
-const MenuList = styled.ul<MenuListProps>`
+const AccountMenuList = styled.ul<MenuListProps>`
   display: flex;
 
   @media (max-width: 991px) {
@@ -209,7 +329,7 @@ const MenuList = styled.ul<MenuListProps>`
   }
 `;
 
-const MenuItem = styled.li`
+const AccountMenuItem = styled.li`
   @media (max-width: 992px) {
     padding: 12px 4px;
     box-sizing: border-box;
@@ -265,6 +385,46 @@ const IconLink = styled(Link)`
   padding: 3px 8px;
   box-sizing: border-box;
 `;
+
+const IconButton = styled.button`
+  display: flex;
+  align-items: center;
+  padding: 3px 8px;
+  border: none;
+  box-sizing: border-box;
+  background-color: transparent;
+  cursor: pointer;
+`;
+
+const AccountBoxList = styled(MenuList)``;
+
+const AccountBoxItem = styled(MenuItem)`
+  padding-right: 22px;
+  padding-left: 22px;
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  font-weight: 500;
+  color: #263747;
+  transition: color 0.08s ease-in-out;
+
+  &:hover {
+    color: #3396f4;
+    background-color: transparent;
+
+    & svg {
+      color: #3396f4;
+    }
+  }
+`;
+
+const AccountBoxItemIcon = styled(ListItemIcon)`
+  display: flex;
+  justify-content: center;
+  margin-right: 4px;
+  margin-left: 12px;
+  color: #b2c0cc;
+`;
+
+const AccountBox = styled(Popper)``;
 
 const icon = css`
   font-size: 27px;
