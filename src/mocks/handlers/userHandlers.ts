@@ -7,10 +7,11 @@ export const userHandlers = [
     'http://localhost:3000/api/auth/user/info/:userId',
     async (request, response, context) => {
       const { userId } = request.params;
-      const userIndex = userDataList.findIndex(
+      const userIndex: number = userDataList.findIndex(
         (user) => user.userData.userId === Number(userId),
       );
-      const token = request.headers['_headers'].authorization.split(' ')[1];
+      const token: string =
+        request.headers['_headers'].authorization.split(' ')[1];
 
       // 토큰이 유효하지 않을 시
       if (token === null) {
@@ -44,7 +45,8 @@ export const userHandlers = [
   rest.post(
     'http://localhost:3000/api/auth/user/project/track',
     async (request, response, context) => {
-      const token = request.headers['_headers'].authorization.split(' ')[1];
+      const token: string =
+        request.headers['_headers'].authorization.split(' ')[1];
 
       // 토큰이 유효하지 않을 시
       if (token === null) {
@@ -71,7 +73,8 @@ export const userHandlers = [
   rest.get(
     'http://localhost:3000/api/auth/user/projects',
     async (request, response, context) => {
-      const token = request.headers['_headers'].authorization.split(' ')[1];
+      const token: string =
+        request.headers['_headers'].authorization.split(' ')[1];
 
       // 토큰이 유효하지 않을 시
       if (token === null) {
@@ -116,7 +119,9 @@ export const userHandlers = [
   rest.post(
     'http://localhost:3000/api/auth/user/request',
     async (request, response, context) => {
-      const token = request.headers['_headers'].authorization.split(' ')[1];
+      const status: number = 200;
+      const token: string =
+        request.headers['_headers'].authorization.split(' ')[1];
 
       // 토큰이 유효하지 않을 시
       if (token === null) {
@@ -130,11 +135,35 @@ export const userHandlers = [
         );
       }
 
+      // 사용자가 이미 팀에 속해있을 시
+      if (status === 409) {
+        return response(
+          context.status(409),
+          context.json({
+            status: 409,
+            success: false,
+            message: '사용자는 이미 팀에 속해있어 요청이 불가능합니다.',
+          }),
+        );
+      }
+
+      // 서버 오류 시
+      if (status === 500) {
+        return response(
+          context.status(500),
+          context.json({
+            status: 500,
+            success: false,
+            message: 'Internal Server Error, 팀 지원 요청 실패',
+          }),
+        );
+      }
+
       // 팀 지원 완료 시
       return response(
         context.json({
           success: true,
-          message: '팀 지원이 완료되었습니다.',
+          message: '해당 팀의 팀장 승인 후 팀 합류가 최종적으로 완료됩니다.',
         }),
       );
     },
