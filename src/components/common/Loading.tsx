@@ -7,7 +7,7 @@ const Loading: React.FC = () => {
     <Box
       sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >
-      <CircularProgress />
+      <CircularProgress size={20} style={{ color: '#E8F0FE' }} />
     </Box>
   );
 };

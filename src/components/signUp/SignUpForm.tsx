@@ -298,19 +298,14 @@ const SignUpForm: React.FC<SignUpProps> = ({
               placeholder="이메일"
               readOnly={emailInputDisabled}
             />
-            {loading ? (
-              <LoadingWrapper>
-                <Loading />
-              </LoadingWrapper>
-            ) : (
-              <AuthButton
-                type="button"
-                disabled={emailCodeRequestButton}
-                onClick={verificationCodeRequest}
-              >
-                {verificationCodeButtonText}
-              </AuthButton>
-            )}
+
+            <AuthButton
+              type="button"
+              disabled={emailCodeRequestButton}
+              onClick={verificationCodeRequest}
+            >
+              {loading ? <Loading /> : verificationCodeButtonText}
+            </AuthButton>
           </EmailInputWrapper>
           {errors.signUpEmail && (
             <ErrorMessageWrapper>
