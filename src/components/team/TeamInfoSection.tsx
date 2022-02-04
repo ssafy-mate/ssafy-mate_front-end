@@ -1,6 +1,8 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
+
+import { useDispatch } from 'react-redux';
 
 import styled from '@emotion/styled';
 
@@ -18,6 +20,11 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
+import { ApplicationRequestType } from '../../types/authTypes';
+
+import { sendApplication as sendApplicationSagaStart } from '../../redux/modules/auth';
+
+import useToken from '../../hooks/useToken';
 import useTeamInfo from '../../hooks/useTeamInfo';
 
 import UserLabel from '../user/UserLabel';
@@ -35,8 +42,15 @@ type Params = {
 };
 
 const TeamInfoSection: React.FC = () => {
-  const { teamId } = useParams<Params>();
   const [openApplicationDialog, setOpenApplicationDialog] = useState(false);
+  const [applicationMessage, setApplicationMessage] = useState<string>('');
+
+  const dispatch = useDispatch();
+
+  const { teamId } = useParams<Params>();
+
+  const token = useToken();
+
   const { isLoading, teamData, isError, errorMessage } = useTeamInfo(teamId);
 
   useEffect(() => {
@@ -49,12 +63,35 @@ const TeamInfoSection: React.FC = () => {
     }
   }, [teamData, isError, errorMessage]);
 
+  const sendApplication = useCallback(
+    (application: ApplicationRequestType) => {
+      dispatch(sendApplicationSagaStart(application));
+    },
+    [dispatch],
+  );
+
   const handleOpenApplicationDialog = () => {
     setOpenApplicationDialog(true);
   };
 
   const handleCloseApplicationDialog = () => {
     setOpenApplicationDialog(false);
+    setApplicationMessage('');
+  };
+
+  const handleChangeApplicationMessage = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setApplicationMessage(event.target.value);
+  };
+
+  const handleSendApplication = () => {
+    const application = {
+      teamId: parseInt(teamId),
+      message: applicationMessage,
+    };
+
+    sendApplication(application);
   };
 
   const isTotalSufficient = useMemo(
@@ -81,6 +118,10 @@ const TeamInfoSection: React.FC = () => {
         : false,
     [teamData?.backendRecruitment, teamData?.backendHeadcount],
   );
+
+  if (token === null) {
+    return <Redirect to="/users/sign_in" />;
+  }
 
   if (isError) {
     return <ErrorSection errorMessage={errorMessage} />;
@@ -228,6 +269,7 @@ const TeamInfoSection: React.FC = () => {
                 label="합류 지원 메시지를 입력해주세요."
                 type="text"
                 variant="standard"
+                onChange={handleChangeApplicationMessage}
                 fullWidth
               />
             </DialogContent>
@@ -235,7 +277,7 @@ const TeamInfoSection: React.FC = () => {
               <DialogButton onClick={handleCloseApplicationDialog}>
                 취소
               </DialogButton>
-              <DialogButton onClick={handleCloseApplicationDialog}>
+              <DialogButton onClick={handleSendApplication}>
                 보내기
               </DialogButton>
             </DialogActions>

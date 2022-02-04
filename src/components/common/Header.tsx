@@ -50,14 +50,14 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
   const accountBoxAnchorRef = useRef<HTMLButtonElement>(null);
   const prevAccoutBoxOpen = useRef(accountBoxOpen);
 
-  const isMobile = useMediaQuery({
-    query: '(max-width: 991px)',
-  });
-
   const dispatch = useDispatch();
 
   const token = useToken();
   const userId = useUserId();
+
+  const isMobile = useMediaQuery({
+    query: '(max-width: 991px)',
+  });
 
   useEffect(() => {
     if (token !== null) {

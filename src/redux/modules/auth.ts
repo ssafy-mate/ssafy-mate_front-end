@@ -9,6 +9,8 @@ import {
   SignInUser,
   ProjectsState,
   Project,
+  ProjectTrackRequestType,
+  ApplicationRequestType,
 } from '../../types/authTypes';
 
 import history from '../../history';
@@ -17,11 +19,6 @@ import SignInService from '../../services/SignInService';
 import TokenService from '../../services/TokenService';
 import UserService from '../../services/UserService';
 import PersistReducerService from '../../services/PersistReducerService';
-
-interface ProjectTrackRequestType {
-  projectId: number;
-  projectTrack: string;
-}
 
 const initialState: AuthState = {
   userId: null,
@@ -87,12 +84,10 @@ const reducer = handleActions<AuthState, SignInUser, ProjectsState>(
 export default reducer;
 
 // saga
-export const { login, logout, selectProjectTrack } = createActions(
-  'LOGIN',
-  'LOGOUT',
-  'SELECT_PROJECT_TRACK',
-  { prefix },
-);
+export const { login, logout, selectProjectTrack, sendApplication } =
+  createActions('LOGIN', 'LOGOUT', 'SELECT_PROJECT_TRACK', 'SEND_APPLICATION', {
+    prefix,
+  });
 
 function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
   try {
@@ -168,8 +163,29 @@ function* selectProjectTrackSaga(action: Action<ProjectTrackRequestType>) {
   }
 }
 
+function* sendApplicationSaga(action: Action<ApplicationRequestType>) {
+  try {
+    yield put(pending());
+
+    const token: string = yield select((state) => state.auth.token);
+
+    yield call(UserService.sendApplication, token, action.payload);
+  } catch (error: any) {
+    yield put(
+      fail(new Error(error?.response?.data?.errorMessage || 'UNKNOWN ERROR')),
+    );
+  } finally {
+    const token: string = yield select((state) => state.auth.token);
+    const projects: Project[] = yield call(UserService.getUserProjects, token);
+
+    yield put(updateProjects(projects));
+    yield put(go(0));
+  }
+}
+
 export function* authSaga() {
   yield takeEvery(`${prefix}/LOGIN`, loginSaga);
   yield takeEvery(`${prefix}/LOGOUT`, logoutSaga);
   yield takeLatest(`${prefix}/SELECT_PROJECT_TRACK`, selectProjectTrackSaga);
+  yield takeLatest(`${prefix}/SEND_APPLICATION`, sendApplicationSaga);
 }

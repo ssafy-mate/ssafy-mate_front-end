@@ -61,3 +61,13 @@ export interface RootState {
   auth: AuthState;
   router: Reducer<RouterState<unknown>, AnyAction>;
 }
+
+export interface ProjectTrackRequestType {
+  projectId: number;
+  projectTrack: string;
+}
+
+export interface ApplicationRequestType {
+  teamId: number;
+  message: string;
+}
