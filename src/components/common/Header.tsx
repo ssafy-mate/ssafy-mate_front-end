@@ -16,7 +16,7 @@ import MenuBar from './MenuBar';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../types/authTypes';
 import { logout } from '../../redux/modules/auth';
-import SsafyMateAlert from '../signIn/Alert';
+import SsafyMateAlert from './Alert';
 
 interface MenuListProps {
   isExpanded: boolean;
