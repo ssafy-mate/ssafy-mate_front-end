@@ -19,6 +19,7 @@ import NewPasswordService from '../../services/NewPasswordService';
 
 const NewPasswordCard: React.FC = () => {
   const dispatch = useDispatch();
+  const [loadingColor, setLoadingColor] = useState<string>('#3396f4');
   const [minutes, setMinutes] = useState<number>(3);
   const [seconds, setSeconds] = useState<number>(0);
   const [stepForNewPassword, setStepForNewPassword] = useState<number>(1);
@@ -39,27 +40,35 @@ const NewPasswordCard: React.FC = () => {
     useState<string>('');
   const [newPasswordCheckInputError, setNewPasswordCheckInputError] =
     useState<string>('');
-
+  const [timestop, setTimeStop] = useState<number>(1);
   useEffect(() => {
     const timer = setInterval(() => {
       if (seconds > 0) {
-        setSeconds(seconds - 1);
+        setSeconds(seconds - timestop);
       }
 
       if (seconds === 0) {
         if (minutes === 0) {
-          verificationCodeButtonsOff();
-          setInputError('인증코드가 만료되었습니다.');
           clearInterval(timer);
+          setInputError('인증코드가 만료되었습니다.');
+          if (timestop === 1) {
+            verificationCodeButtonsOff();
+          }
         } else {
-          setMinutes(minutes - 1);
+          setMinutes(minutes - timestop);
           setSeconds(59);
         }
       }
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [minutes, seconds]);
+  }, [minutes, seconds, timestop]);
+
+  useEffect(() => {
+    bottomConfirmButtonDisalbed
+      ? setLoadingColor('#3396f4')
+      : setLoadingColor('#fff');
+  }, [bottomConfirmButtonDisalbed]);
 
   const resetTimer = () => {
     setMinutes(3);
@@ -117,6 +126,7 @@ const NewPasswordCard: React.FC = () => {
         setLoading(false);
         dispatch(showSsafyMateAlert(true, message, 'success'));
         setStepForNewPassword(2);
+        resetTimer();
         verificationCodeButtonsOff();
       })
       .catch((error) => {
@@ -144,10 +154,7 @@ const NewPasswordCard: React.FC = () => {
     setVerificationCodeInput(codeOnChange);
 
     if (showError) {
-      if (seconds === 0 && minutes === 0) {
-        setInputError('인증코드가 만료되었습니다.');
-        verificationCodeButtonsOff();
-      } else if (codeOnChange === '') {
+      if (codeOnChange === '') {
         setInputError('필수 입력 항목입니다.');
         verificationCodeButtonsOff();
       } else if (
@@ -160,10 +167,13 @@ const NewPasswordCard: React.FC = () => {
         setInputError('');
         setCodeConfirmButtonDisabled(false);
       }
-    } else if (codeOnChange.length === 8 && seconds !== 0 && minutes !== 0) {
+    } else if (codeOnChange.length === 8 && timestop !== 0) {
       setCodeConfirmButtonDisabled(false);
-    } else {
-      verificationCodeButtonsOff();
+    } else if (codeOnChange.length === 8 && timestop === 1) {
+      if (seconds === 0 && minutes === 0) {
+        verificationCodeButtonsOff();
+        setInputError('인증코드가 만료되었습니다.');
+      }
     }
   };
 
@@ -173,6 +183,7 @@ const NewPasswordCard: React.FC = () => {
     event.preventDefault();
 
     setShowError(true);
+
     if (verificationCodeInput === '') {
       setInputError('필수 입력 항목입니다.');
     } else if (verificationCodeReg.test(verificationCodeInput)) {
@@ -190,6 +201,8 @@ const NewPasswordCard: React.FC = () => {
       userEmail: emailInput,
     })
       .then(({ message }) => {
+        setShowError(false);
+        setTimeStop(0);
         setBottomConfirmButtonDisabled(false);
         setCodeConfirmButtonDisabled(true);
       })
@@ -265,7 +278,7 @@ const NewPasswordCard: React.FC = () => {
     }
   };
 
-  const handleNewPasswordRequest = (
+  const handleNewPasswordRequestButton = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
     event.preventDefault();
@@ -311,6 +324,7 @@ const NewPasswordCard: React.FC = () => {
     })
       .then(({ message }) => {
         dispatch(showSsafyMateAlert(true, message, 'success'));
+
         history.push('/users/sign_in');
       })
       .catch((error) => {
@@ -379,7 +393,7 @@ const NewPasswordCard: React.FC = () => {
                         maxLength={8}
                         onChange={handleVerificationCodeInput}
                       />
-                      {minutes !== 0 && seconds !== 0 && (
+                      {(minutes !== 0 || seconds !== 0) && (
                         <TimeLimit>
                           {minutes.toString().padStart(2, '0')}:
                           {seconds.toString().padStart(2, '0')}
@@ -415,7 +429,7 @@ const NewPasswordCard: React.FC = () => {
             {stepForNewPassword === 3 && (
               <InputWrapper>
                 <RequirementLabel htmlFor="new-password">
-                  새로운 비밀번호 (영문자와 숫자 포함 최소 6자)
+                  새로운 비밀번호 (영문자와 숫자만 포함 최소 6자)
                 </RequirementLabel>
                 <Input
                   id="new-password"
@@ -471,7 +485,7 @@ const NewPasswordCard: React.FC = () => {
                 disabled={bottomConfirmButtonDisalbed}
               >
                 {loading ? (
-                  <Loading selectColor="#3396f4" />
+                  <Loading selectColor={loadingColor} />
                 ) : (
                   bottomConfirmButtonText
                 )}
@@ -479,7 +493,10 @@ const NewPasswordCard: React.FC = () => {
             )}
 
             {stepForNewPassword === 3 && (
-              <SubmitButton type="submit" onClick={handleNewPasswordRequest}>
+              <SubmitButton
+                type="submit"
+                onClick={handleNewPasswordRequestButton}
+              >
                 {bottomConfirmButtonText}
               </SubmitButton>
             )}
@@ -522,14 +539,14 @@ const Head = styled.h1`
   }
 `;
 
+const CardHeader = styled.div`
+  margin-bottom: 40px;
+`;
+
 const SubHead = styled.h2`
   font-size: 16px;
   line-height: 1.6;
   color: #98a8b9;
-`;
-
-const CardHeader = styled.div`
-  margin-bottom: 40px;
 `;
 
 const CardForm = styled.form``;
@@ -538,21 +555,6 @@ const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-`;
-
-const ErrorMessageWrapper = styled.div`
-  margin-bottom: 8px;
-`;
-
-const ErrorMessage = styled.span`
-  padding-left: 6px;
-  font-size: 13px;
-  line-height: 1.5;
-  color: #f44336;
-
-  &.verification-code {
-    padding: 2px;
-  }
 `;
 
 const RequirementLabel = styled.label`
@@ -610,14 +612,23 @@ const Input = styled.input`
     box-shadow: inset 0 0 0 1px #ff77774d;
   }
 
-  &.email-verification-error {
-    margin-bottom: 4px;
-    border: 1px solid #f44336;
-    box-shadow: inset 0 0 0 1px #ff77774d;
-  }
-
   @media (max-width: 575px) {
     font-size: 13px;
+  }
+`;
+
+const ErrorMessageWrapper = styled.div`
+  margin-bottom: 8px;
+`;
+
+const ErrorMessage = styled.span`
+  padding-left: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #f44336;
+
+  &.verification-code {
+    padding: 2px;
   }
 `;
 
@@ -639,7 +650,6 @@ const VerificationCodeConfirmWrapper = styled.div`
   line-height: 24px;
   color: #263747;
   transition: all 0.08s ease-in-out;
-  min-height: 45px;
 
   &:hover {
     border: 1px solid #3396f4;
@@ -662,23 +672,23 @@ const VerificationCodeInputWrapper = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 45px;
   width: 100%;
+  height: 45px;
 `;
 
 const VerificationCodeInput = styled.input`
   flex: 1 0 0px;
+  width: 100%;
   border: none;
+  background-color: #fbfbfd;
   font-size: 15px;
   line-height: 15px;
-  width: 100%;
-  background-color: #fbfbfd;
 `;
 
 const TimeLimit = styled.span`
   margin-right: 8px;
-  margin-left: 8px;
   margin-bottom: 4px;
+  margin-left: 8px;
   font-size: 14px;
   color: #f44336;
 
@@ -688,19 +698,19 @@ const TimeLimit = styled.span`
 `;
 
 const CodeConfimtButton = styled.button`
+  height: 30px;
   margin-left: 8px;
+  padding: 7px 10px;
   border: none;
   border-radius: 0.25rem;
   box-sizing: border-box;
   background-color: #3396f4;
   font-size: 14px;
   font-weight: 500;
-  color: #fff;
-  transition: background-color 0.08s ease-in-out;
-  cursor: pointer;
   line-height: 15px;
-  height: 30px;
-  padding: 7px 10px;
+  transition: background-color 0.08s ease-in-out;
+  color: #fff;
+  cursor: pointer;
 
   &:disabled {
     background-color: #e8f0fd;
@@ -729,9 +739,9 @@ const ResendEmailMessage = styled.div`
 `;
 
 const ResendEmailIcon = styled(ForwardToInboxIcon)`
-  margin-right: 4px;
   width: 16px;
   height: 16px;
+  margin-right: 4px;
 `;
 
 const ResendLink = styled.a`
@@ -740,32 +750,6 @@ const ResendLink = styled.a`
   text-decoration: underline;
   touch-action: manipulation;
   cursor: pointer;
-`;
-
-const AuthButton = styled.button`
-  width: 120px;
-  height: 40px;
-  margin-left: 8px;
-  border: none;
-  border-radius: 0.25rem;
-  box-sizing: border-box;
-  background-color: #3396f4;
-  font-size: 14px;
-  font-weight: 500;
-  color: #fff;
-  transition: background-color 0.08s ease-in-out;
-  cursor: pointer;
-
-  &:disabled {
-    border-color: #c7effb;
-    background-color: #c7effb;
-    color: #fff;
-    cursor: not-allowed;
-  }
-
-  @media (max-width: 575px) {
-    font-size: 13px;
-  }
 `;
 
 const CardFooter = styled.div``;
