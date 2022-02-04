@@ -49,9 +49,9 @@ export const teamHandlers = [
       // 토큰이 유효하지 않을 시
       if (token === null) {
         return response(
-          context.status(401),
+          context.status(403),
           context.json({
-            status: 401,
+            status: 403,
             success: false,
             message: '토큰이 유효하지 않습니다.',
           }),
