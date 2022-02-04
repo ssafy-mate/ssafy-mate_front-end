@@ -304,7 +304,11 @@ const SignUpForm: React.FC<SignUpProps> = ({
               disabled={emailCodeRequestButton}
               onClick={verificationCodeRequest}
             >
-              {loading ? <Loading /> : verificationCodeButtonText}
+              {loading ? (
+                <Loading selectColor="#fff" />
+              ) : (
+                verificationCodeButtonText
+              )}
             </AuthButton>
           </EmailInputWrapper>
           {errors.signUpEmail && (
