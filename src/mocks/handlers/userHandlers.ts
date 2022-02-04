@@ -15,9 +15,9 @@ export const userHandlers = [
       // 토큰이 유효하지 않을 시
       if (token === null) {
         return response(
-          context.status(401),
+          context.status(403),
           context.json({
-            status: 401,
+            status: 403,
             success: false,
             message: '토큰이 유효하지 않습니다.',
           }),
@@ -49,9 +49,9 @@ export const userHandlers = [
       // 토큰이 유효하지 않을 시
       if (token === null) {
         return response(
-          context.status(401),
+          context.status(403),
           context.json({
-            status: 401,
+            status: 403,
             success: false,
             message: '토큰이 유효하지 않습니다.',
           }),
@@ -73,18 +73,19 @@ export const userHandlers = [
     async (request, response, context) => {
       const token = request.headers['_headers'].authorization.split(' ')[1];
 
-      console.log('token', token);
+      // 토큰이 유효하지 않을 시
       if (token === null) {
         return response(
-          context.status(401),
+          context.status(403),
           context.json({
-            status: 401,
+            status: 403,
             success: false,
             message: '토큰이 유효하지 않습니다.',
           }),
         );
       }
 
+      // 사용자 프로젝트 정보 조회 성공 시
       return response(
         context.json({
           projects: [
@@ -107,6 +108,33 @@ export const userHandlers = [
               projectTeamId: null,
             },
           ],
+        }),
+      );
+    },
+  ),
+
+  rest.post(
+    'http://localhost:3000/api/auth/user/request',
+    async (request, response, context) => {
+      const token = request.headers['_headers'].authorization.split(' ')[1];
+
+      // 토큰이 유효하지 않을 시
+      if (token === null) {
+        return response(
+          context.status(403),
+          context.json({
+            status: 403,
+            success: false,
+            message: '토큰이 유효하지 않습니다.',
+          }),
+        );
+      }
+
+      // 팀 지원 완료 시
+      return response(
+        context.json({
+          success: true,
+          message: '팀 지원이 완료되었습니다.',
         }),
       );
     },
