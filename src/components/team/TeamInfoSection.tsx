@@ -50,7 +50,6 @@ const TeamInfoSection: React.FC = () => {
   const { teamId } = useParams<Params>();
 
   const token = useToken();
-
   const { isLoading, teamData, isError, errorMessage } = useTeamInfo(teamId);
 
   useEffect(() => {
@@ -92,6 +91,7 @@ const TeamInfoSection: React.FC = () => {
     };
 
     sendApplication(application);
+    setOpenApplicationDialog(false);
   };
 
   const isTotalSufficient = useMemo(
@@ -654,10 +654,6 @@ const MuiTextField = styled(TextField)`
   & input {
     font-family: 'Spoqa Han Sans Neo', 'sans-serif';
     font-size: 16px;
-  }
-
-  & input {
-    color: #3396f4;
   }
 
   @media (max-width: 575px) {

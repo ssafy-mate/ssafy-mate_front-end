@@ -36,7 +36,7 @@ export interface AuthState {
   projects: Project[] | null;
   token: string | null;
   loading: boolean;
-  error: Error | null;
+  error: string | null;
 }
 
 export interface SignInUser {

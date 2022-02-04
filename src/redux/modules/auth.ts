@@ -19,6 +19,12 @@ import SignInService from '../../services/SignInService';
 import TokenService from '../../services/TokenService';
 import UserService from '../../services/UserService';
 import PersistReducerService from '../../services/PersistReducerService';
+import Swal from 'sweetalert2';
+
+interface SendApplicationResponseType {
+  success: boolean;
+  message: string;
+}
 
 const initialState: AuthState = {
   userId: null,
@@ -74,7 +80,7 @@ const reducer = handleActions<AuthState, SignInUser, ProjectsState>(
     FAIL: (state, action: any) => ({
       ...state,
       loading: false,
-      error: action.payload,
+      error: action.payload.message,
     }),
   },
   initialState,
@@ -115,9 +121,7 @@ function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
     yield put(push('/'));
   } catch (error: any) {
     //에러처리 -> alert로 변경
-    yield put(
-      fail(new Error(error?.response?.data?.errorMessage || 'UNKNOWN ERROR')),
-    );
+    yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
   }
 }
 
@@ -157,9 +161,7 @@ function* selectProjectTrackSaga(action: Action<ProjectTrackRequestType>) {
     yield put(updateProjects(projects));
     yield put(push('/projects/specialization/teams'));
   } catch (error: any) {
-    yield put(
-      fail(new Error(error?.response?.data?.errorMessage || 'UNKNOWN ERROR')),
-    );
+    yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
   }
 }
 
@@ -169,17 +171,34 @@ function* sendApplicationSaga(action: Action<ApplicationRequestType>) {
 
     const token: string = yield select((state) => state.auth.token);
 
-    yield call(UserService.sendApplication, token, action.payload);
-  } catch (error: any) {
-    yield put(
-      fail(new Error(error?.response?.data?.errorMessage || 'UNKNOWN ERROR')),
+    const response: SendApplicationResponseType = yield call(
+      UserService.sendApplication,
+      token,
+      action.payload,
     );
+
+    Swal.fire({
+      title: '팀 지원 완료',
+      text: response.message,
+      icon: 'success',
+      confirmButtonColor: '#3396f4',
+      confirmButtonText: '확인',
+    });
+  } catch (error: any) {
+    yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
+
+    Swal.fire({
+      title: '팀 지원 실패',
+      text: error.response.data.message,
+      icon: 'warning',
+      confirmButtonColor: '#3396f4',
+      confirmButtonText: '확인',
+    });
   } finally {
     const token: string = yield select((state) => state.auth.token);
     const projects: Project[] = yield call(UserService.getUserProjects, token);
 
     yield put(updateProjects(projects));
-    yield put(go(0));
   }
 }
 
