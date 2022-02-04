@@ -1,4 +1,4 @@
-import { SHOW_ALERT, HIDE_ALERT, alertState } from '../../types/authTypes';
+import { SHOW_ALERT, HIDE_ALERT, alertState } from '../../types/alertTypes';
 import { Severity } from '../../types/signUpTypes';
 
 const controlAlert = (

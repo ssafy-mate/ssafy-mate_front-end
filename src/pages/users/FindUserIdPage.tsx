@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import styled from '@emotion/styled';
 
 import Header from '../../components/common/Header';
-import FindUserIdCard from '../../components/idAndPassword/FindUserIdCard';
+import FindUserIdCard from '../../components/account/FindUserIdCard';
 import Footer from '../../components/common/Footer';
 
 const FindUserIdPage: React.FC = () => {

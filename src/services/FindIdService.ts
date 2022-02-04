@@ -1,4 +1,4 @@
-import { findId, findIdResponse } from '../types/authTypes';
+import { findId, findIdResponse } from '../types/accountTypes';
 
 import { axiosInstance } from '../utils/axios';
 

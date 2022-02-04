@@ -1,5 +1,8 @@
 import { rest } from 'msw';
-import { CodeConfirmForNewPassword, NewPassword } from '../../types/authTypes';
+import {
+  CodeConfirmForNewPassword,
+  NewPassword,
+} from '../../types/accountTypes';
 
 export const newPasswordHandlers = [
   rest.get(

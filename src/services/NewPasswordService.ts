@@ -3,7 +3,7 @@ import {
   emailForNewPassword,
   newPasswordResponse,
   NewPassword,
-} from '../types/authTypes';
+} from '../types/accountTypes';
 
 import { axiosInstance } from '../utils/axios';
 

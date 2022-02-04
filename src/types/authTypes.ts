@@ -1,6 +1,6 @@
 import { RouterState } from 'connected-react-router';
 import { AnyAction, Reducer } from 'redux';
-import { Severity } from './signUpTypes';
+import { alertState } from './alertTypes';
 
 export type SignInRequestType = {
   userEmail: string;
@@ -55,51 +55,9 @@ export interface SignInUser {
   error: Error | null;
 }
 
+// Reduce
 export interface RootState {
   auth: AuthState;
   controlAlert: alertState | string;
   router: Reducer<RouterState<unknown>, AnyAction>;
-}
-
-export const SHOW_ALERT = 'SHOW_ALERT';
-
-export const HIDE_ALERT = 'HIDE_ALERT';
-
-export interface alertState {
-  show: boolean;
-  text: string | null;
-  type: Severity;
-}
-
-//아이디 찾기, 비밀번호 재설정
-export interface newPasswordResponse {
-  status: string | null;
-  success: boolean;
-  message: string;
-}
-
-export interface findIdResponse {
-  status: string | null;
-  success: boolean;
-  message: string;
-  userEmail: string | null;
-}
-
-export interface emailForNewPassword {
-  userEmail: string;
-}
-
-export interface CodeConfirmForNewPassword {
-  code: string;
-  userEmail: string;
-}
-
-export interface NewPassword {
-  userEmail: string;
-  password: string;
-}
-
-export interface findId {
-  studentNumber: string;
-  userName: string;
 }

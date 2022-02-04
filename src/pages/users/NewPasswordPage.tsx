@@ -3,7 +3,7 @@ import { useEffect } from 'react';
 import styled from '@emotion/styled';
 
 import Header from '../../components/common/Header';
-import NewPasswordCard from '../../components/idAndPassword/NewPasswordCard';
+import NewPasswordCard from '../../components/account/NewPasswordCard';
 import Footer from '../../components/common/Footer';
 
 const NewPasswordPage: React.FC = () => {
