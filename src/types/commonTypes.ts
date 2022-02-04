@@ -19,7 +19,6 @@ export interface HomeBannerCardData {
   head: string;
   subHead: string;
   descriptions: string[];
-  pageUrl: string;
   imgUrl: string;
 }
 

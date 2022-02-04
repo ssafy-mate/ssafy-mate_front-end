@@ -12,10 +12,13 @@ import Dialog from '@mui/material/Dialog';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
 import type { ProjectTrack } from '../../types/commonTypes';
 import { ProjectLinkCardProps } from '../../types/commonTypes';
 
+import useToken from '../../hooks/useToken';
 import useProjectTrack from '../../hooks/useProjectTrack';
 
 import ProjectTrackDialog from './ProjectTrackDialog';
@@ -28,15 +31,24 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
   hexColorCode,
   trackOptions,
 }) => {
-  const [open, setOpen] = useState(false);
-  const [openBlockDialog, setOpenBlockDialog] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
+  const [openBlockDialog, setOpenBlockDialog] = useState<boolean>(false);
+  const [openWarningAlert, setOpenWarningAlert] = useState<boolean>(false);
   const [selectedProjectTrack, setSelectedProjectTrack] =
     useState<ProjectTrack>('');
-  const projectTrack: string | null = useProjectTrack(projectId);
+
   const dispatch = useDispatch();
 
+  const token = useToken();
+
+  const projectTrack: string | null = useProjectTrack(projectId);
+
   const handleClickCardItem = () => {
-    projectTrack ? dispatch(push(pageUrl)) : setOpen(true);
+    if (token) {
+      projectTrack ? dispatch(push(pageUrl)) : setOpen(true);
+    } else {
+      setOpenWarningAlert(true);
+    }
   };
 
   const handleClose = (newSelectedProjectTrack?: ProjectTrack) => {
@@ -48,11 +60,15 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
   };
 
   const handleClickOpenBlockDialog = () => {
-    setOpenBlockDialog(true);
+    token ? setOpenBlockDialog(true) : setOpenWarningAlert(true);
   };
 
-  const handleCloseBlockDialog = () => {
+  const onCloseBlockDialog = () => {
     setOpenBlockDialog(false);
+  };
+
+  const onCloseWarningAlert = () => {
+    setOpenWarningAlert(false);
   };
 
   return (
@@ -95,7 +111,7 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
           </Card>
           <Dialog
             open={openBlockDialog}
-            onClose={handleCloseBlockDialog}
+            onClose={onCloseBlockDialog}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
@@ -110,6 +126,25 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
             </DialogContent>
           </Dialog>
         </>
+      )}
+      {openWarningAlert && (
+        <WarningAlertWrapper
+          open={openWarningAlert}
+          autoHideDuration={3000}
+          onClose={onCloseWarningAlert}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+        >
+          <WarningAlert
+            onClose={onCloseWarningAlert}
+            severity="warning"
+            sx={{ width: '100%' }}
+          >
+            로그인 후 이용해 주세요.
+          </WarningAlert>
+        </WarningAlertWrapper>
       )}
     </>
   );
@@ -188,6 +223,14 @@ const BlockDialogContentText = styled(DialogContentText)`
   @media (max-width: 575px) {
     font-size: 14px;
   }
+`;
+
+const WarningAlertWrapper = styled(Snackbar)`
+  height: 20%;
+`;
+
+const WarningAlert = styled(Alert)`
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
 `;
 
 export default ProjectLinkCard;

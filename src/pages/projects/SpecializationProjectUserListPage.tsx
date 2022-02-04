@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 
+import { Redirect } from 'react-router-dom';
+
 import { useMediaQuery } from 'react-responsive';
 
+import useToken from '../../hooks/useToken';
 import useUserList from '../../hooks/useUserList';
 
 import Header from '../../components/common/Header';
@@ -23,6 +26,8 @@ const SpecializationProjectUserListPage: React.FC = () => {
   const [exclusion, setExclusion] = useState<boolean>(false);
   const [sort, setSort] = useState<string>('recent');
   const [page, setPage] = useState<number>(1);
+
+  const token = useToken();
   const { isLoading, data, isError, errorMessage } = useUserList({
     campus,
     project,
@@ -43,6 +48,10 @@ const SpecializationProjectUserListPage: React.FC = () => {
   useEffect(() => {
     document.title = '특화 프로젝트 교육생 공고 | 싸피 메이트';
   }, []);
+
+  if (!token) {
+    return <Redirect to="/users/sign_in" />;
+  }
 
   return (
     <>

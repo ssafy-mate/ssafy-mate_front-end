@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 
+import { Redirect } from 'react-router-dom';
+
 import { useMediaQuery } from 'react-responsive';
 
+import useToken from '../../hooks/useToken';
 import useTeamList from '../../hooks/useTeamList';
 
 import Header from '../../components/common/Header';
@@ -23,10 +26,7 @@ const SpecializationProjectTeamListPage: React.FC = () => {
   const [sort, setSort] = useState<string>('recent');
   const [page, setPage] = useState<number>(1);
 
-  const smallMedia = useMediaQuery({
-    query: '(max-width: 575px)',
-  });
-
+  const token = useToken();
   const { isLoading, data, isError, errorMessage } = useTeamList({
     campus,
     project,
@@ -39,9 +39,17 @@ const SpecializationProjectTeamListPage: React.FC = () => {
     page,
   });
 
+  const smallMedia = useMediaQuery({
+    query: '(max-width: 575px)',
+  });
+
   useEffect(() => {
     document.title = '특화 프로젝트 팀 공고 | 싸피 메이트';
   }, []);
+
+  if (!token) {
+    return <Redirect to="/users/sign_in" />;
+  }
 
   return (
     <>
