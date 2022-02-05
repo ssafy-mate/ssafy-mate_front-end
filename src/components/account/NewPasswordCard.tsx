@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
 
-import history from '../../history';
+import { useDispatch } from 'react-redux';
 
 import { showSsafyMateAlert } from '../../redux/modules/alert';
 
 import styled from '@emotion/styled';
+
 import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
 
 import {
@@ -14,11 +14,13 @@ import {
   verificationCodeReg,
 } from '../../utils/regularExpressionData';
 
-import Loading from '../common/Loading';
+import history from '../../history';
+
 import NewPasswordService from '../../services/NewPasswordService';
 
+import Loading from '../common/Loading';
+
 const NewPasswordCard: React.FC = () => {
-  const dispatch = useDispatch();
   const [loadingColor, setLoadingColor] = useState<string>('#3396f4');
   const [minutes, setMinutes] = useState<number>(3);
   const [seconds, setSeconds] = useState<number>(0);
@@ -42,6 +44,8 @@ const NewPasswordCard: React.FC = () => {
     useState<string>('');
   const [timestop, setTimeStop] = useState<number>(1);
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
     const timer = setInterval(() => {
       if (seconds > 0) {
@@ -52,6 +56,7 @@ const NewPasswordCard: React.FC = () => {
         if (minutes === 0) {
           clearInterval(timer);
           setInputError('인증코드가 만료되었습니다.');
+
           if (timestop === 1) {
             verificationCodeButtonsOff();
           }
@@ -481,7 +486,6 @@ const NewPasswordCard: React.FC = () => {
                 )}
               </SubmitButton>
             )}
-
             {stepForNewPassword === 2 && (
               <SubmitButton
                 type="submit"
@@ -495,7 +499,6 @@ const NewPasswordCard: React.FC = () => {
                 )}
               </SubmitButton>
             )}
-
             {stepForNewPassword === 3 && (
               <SubmitButton
                 type="submit"
@@ -532,14 +535,14 @@ const Wrapper = styled.div`
 `;
 
 const Head = styled.h1`
-  margin-bottom: 32px;
+  margin-bottom: 16px;
   font-size: 26px;
   font-weight: 600;
-  text-align: center;
+  text-align: left;
   color: #263747;
 
   @media (max-width: 575px) {
-    margin-bottom: 40px;
+    font-size: 22px;
   }
 `;
 
@@ -551,6 +554,10 @@ const SubHead = styled.h2`
   font-size: 16px;
   line-height: 1.6;
   color: #98a8b9;
+
+  @media (max-width: 575px) {
+    font-size: 15px;
+  }
 `;
 
 const CardForm = styled.form``;
@@ -641,6 +648,7 @@ const VerificationCodeWrapper = styled.div`
 `;
 
 const VerificationCodeConfirmWrapper = styled.div`
+  overflow: hidden;
   width: 100%;
   min-height: 45px;
   margin-bottom: 10px;
@@ -691,7 +699,6 @@ const VerificationCodeInput = styled.input`
 
 const TimeLimit = styled.span`
   margin-right: 8px;
-  margin-bottom: 4px;
   margin-left: 8px;
   font-size: 14px;
   color: #f44336;
@@ -725,7 +732,7 @@ const CodeConfimtButton = styled.button`
 
 const ResendEmailWrapper = styled.div`
   display: flex;
-  margin-bottom: 12px;
+  margin-bottom: 16px;
 `;
 
 const ResendEmailMessage = styled.div`
@@ -734,7 +741,6 @@ const ResendEmailMessage = styled.div`
   align-items: center;
   padding-left: 6px;
   font-size: 13px;
-  line-height: 1.5;
   color: rgb(130, 140, 148);
 
   @media (max-width: 349px) {
@@ -753,7 +759,12 @@ const ResendLink = styled.a`
   font-weight: 500;
   text-decoration: underline;
   touch-action: manipulation;
+  transition: color 0.08s ease-in-out;
   cursor: pointer;
+
+  &:hover {
+    color: #3396f4;
+  }
 `;
 
 const CardFooter = styled.div``;
