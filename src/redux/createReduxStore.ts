@@ -9,6 +9,7 @@ import rootSaga from './modules/rootSaga';
 
 import history from '../history';
 import TokenService from '../services/TokenService';
+import controlAlert from './modules/alert';
 
 const createReduxStore = () => {
   const token = TokenService.get();
@@ -27,6 +28,8 @@ const createReduxStore = () => {
         ssafyTrack: null,
         token: token,
         projects: null,
+        message: null,
+        error: null,
       },
     },
     composeWithDevTools(

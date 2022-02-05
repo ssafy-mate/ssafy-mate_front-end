@@ -12,11 +12,6 @@ export interface SsafyTrack {
 }
 
 export interface SsafyAuthProps {
-  signUpStep: number;
-  campus: string;
-  ssafyTrack: string;
-  studentNumber: string;
-  studentName: string;
   setSignUpStep: (signUpStep: number) => void;
   setCampus: (campus: string) => void;
   setSsafyTrack: (ssafyTrack: string) => void;
@@ -36,7 +31,7 @@ export interface EmailVerificationCodeConfirmRequest {
 }
 
 export interface TechStacksWithLevel {
-  techStackName: string;
+  techStackCode: number;
   techStackLevel: TechStackLevel;
 }
 
@@ -69,9 +64,6 @@ export interface SignUpResponse {
 
 // 회원가입 2단계 인자
 export interface SignUpProps {
-  signUpStep: number;
-  signUpEmail: string;
-  signUpPassword: string;
   setSignUpStep: (signUpStep: number) => void;
   setSignUpEmail: (email: string) => void;
   setSignUpPassword: (password: string) => void;

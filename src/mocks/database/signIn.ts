@@ -164,6 +164,7 @@ export const SsafyMateMemberList = [
       ssafyTrack: 'Java Track',
       token: 'skdjfslkjflskdfjlskfjdklsd',
       projects: null,
+      message: '로그인하였습니다.',
     },
   },
   {

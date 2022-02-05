@@ -2,20 +2,20 @@ import { useEffect } from 'react';
 
 import styled from '@emotion/styled';
 
-import Header from '../components/common/Header';
-import SignUpCard from '../components/signUp/SignUpCard';
-import Footer from '../components/common/Footer';
+import Header from '../../components/common/Header';
+import FindUserIdCard from '../../components/account/FindUserIdCard';
+import Footer from '../../components/common/Footer';
 
-const SignUpPage: React.FC = () => {
+const FindUserIdPage: React.FC = () => {
   useEffect(() => {
-    document.title = '회원가입 | 싸피 메이트';
+    document.title = '아이디 찾기 | 싸피 메이트';
   }, []);
 
   return (
     <>
       <Header />
       <Container>
-        <SignUpCard />
+        <FindUserIdCard />
       </Container>
       <Footer />
     </>
@@ -31,4 +31,4 @@ const Container = styled.div`
   }
 `;
 
-export default SignUpPage;
+export default FindUserIdPage;

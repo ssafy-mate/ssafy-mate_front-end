@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import styled from '@emotion/styled';
 
-import { SignInRequestTypeWithIdSave } from '../../types/signInTypes';
+import { SignInRequestTypeWithIdSave } from '../../types/authTypes';
 
 import { validEmailReg } from '../../utils/regularExpressionData';
 
@@ -71,6 +71,7 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
   const loginButtonClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
+    event.preventDefault();
     if (validation(inputEmail, inputPassword)) {
       login({
         userEmail: inputEmail,
@@ -99,7 +100,7 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
     if (
       emailInput !== '' &&
       passwordInput !== '' &&
-      inputEmailError === false
+      validEmailReg.test(emailInput)
     ) {
       return true;
     } else {
@@ -113,25 +114,23 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
         <CardHead>로그인</CardHead>
         <SignInForm>
           <SignInLabel htmlFor="email">이메일</SignInLabel>
-          <SignInLabelWrapper>
-            <SignInInput
-              type="email"
-              id="email"
-              className={
-                (emailVerificaion ? '' : 'email-verification-error') ||
-                (inputEmailError ? 'input-error' : '')
-              }
-              value={inputEmail}
-              onChange={handleInputEmail}
-              placeholder="이메일"
-              required
-            />
-            {!emailVerificaion && (
-              <ErrorMessageWrapper>
-                <ErrorMessage>이메일 형식이 올바르지 않습니다.</ErrorMessage>
-              </ErrorMessageWrapper>
-            )}
-          </SignInLabelWrapper>
+          <SignInInput
+            type="email"
+            id="email"
+            className={
+              (emailVerificaion ? '' : 'email-verification-error') ||
+              (inputEmailError ? 'input-error' : '')
+            }
+            value={inputEmail}
+            onChange={handleInputEmail}
+            placeholder="이메일"
+            required
+          />
+          {!emailVerificaion && (
+            <ErrorMessageWrapper>
+              <ErrorMessage>이메일 형식이 올바르지 않습니다.</ErrorMessage>
+            </ErrorMessageWrapper>
+          )}
           <SignInLabel htmlFor="password">비밀번호</SignInLabel>
           <SignInInput
             type="password"
@@ -155,8 +154,10 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
               </IdSaveCheckLabel>
             </IdSaveCheckBox>
             <AccountManagementMenu>
-              <AccountLink to="#">아이디 찾기</AccountLink>
-              <AccountLink to="#">비밀번호 재설정</AccountLink>
+              <AccountLink to="/users/find/id">아이디 찾기</AccountLink>
+              <AccountLink to="/users/password/new">
+                비밀번호 재설정
+              </AccountLink>
             </AccountManagementMenu>
           </Options>
           <SignInButton onClick={loginButtonClick} type="button">
@@ -191,7 +192,7 @@ const Container = styled.div`
   }
 `;
 
-const CardHead = styled.h3`
+const CardHead = styled.h1`
   margin-bottom: 56px;
   font-size: 26px;
   font-weight: 600;
@@ -200,6 +201,7 @@ const CardHead = styled.h3`
 
   @media (max-width: 575px) {
     margin-bottom: 40px;
+    font-size: 22px;
   }
 `;
 
@@ -207,8 +209,6 @@ const SignInForm = styled.form`
   display: flex;
   flex-direction: column;
 `;
-
-const SignInLabelWrapper = styled.div``;
 
 const SignInLabel = styled.label`
   margin-bottom: 4px;

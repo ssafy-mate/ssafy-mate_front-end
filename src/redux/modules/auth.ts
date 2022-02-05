@@ -7,11 +7,12 @@ import {
   AuthState,
   SignInRequestTypeWithIdSave,
   SignInUser,
-} from '../../types/signInTypes';
+} from '../../types/authTypes';
 
 import SignInService from '../../services/SignInService';
 import TokenService from '../../services/TokenService';
 import history from '../../history';
+import { showSsafyMateAlert } from './alert';
 
 const initialState: AuthState = {
   userId: null,
@@ -22,6 +23,8 @@ const initialState: AuthState = {
   ssafyTrack: null,
   token: null,
   projects: null,
+  message: null,
+  error: null,
 };
 
 const prefix = 'ssafy-mate/auth';
@@ -45,9 +48,12 @@ const reducer = handleActions<AuthState, SignInUser>(
       ssafyTrack: action.payload.ssafyTrack,
       token: action.payload.token,
       projects: action.payload.projects,
+      message: action.payload.message,
+      error: null,
     }),
     FAIL: (state, action: any) => ({
       ...state,
+      error: action.payload,
     }),
   },
   initialState,
@@ -68,24 +74,29 @@ function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
       password: action.payload.password,
     });
 
-    //localstorage 에 저장 + store에 저장(userId,userEmail,userName,campus,ssafyTrack)
     if (data.token !== null) {
       TokenService.set(data.token);
+
       yield put(success(data));
 
-      // 로그인 성공한 경우에만 아이디 로컬 스토리지에 저장
+      const message: string = yield select((state) => state.auth.message);
+
+      yield put(showSsafyMateAlert(true, message, 'success'));
+
       if (action.payload.IdSave) {
         localStorage.setItem('ssafy-mate-id', action.payload.userEmail);
       } else {
         localStorage.removeItem('ssafy-mate-id');
       }
-    }
 
-    //로그인 성공 시 메인 페이지로 이동
-    yield put(push('/'));
+      yield put(push('/'));
+    }
   } catch (error: any) {
-    //에러처리 -> alert로 변경
-    yield put(fail(new Error(error?.response?.data?.error || 'UNKNOWN ERROR')));
+    yield put(fail(error.response.data));
+    const message: string = yield select((state) => state.auth.error.message);
+    yield put(showSsafyMateAlert(true, message, 'warning'));
+    //오류 초기화 시켜야한다면
+    //yield put(showAlert(false, '', 'info'));
   }
 }
 
@@ -100,7 +111,11 @@ function* logoutSaga() {
     // yield put(success(null));
   } catch (error: any) {
   } finally {
+    yield put(showSsafyMateAlert(true, '로그아웃 되었습니다.', 'success'));
+
+    localStorage.removeItem('persist:root');
     TokenService.remove();
+
     yield put(success(initialState));
 
     if (history.location.pathname === '/') {

@@ -14,8 +14,9 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 
 import MenuBar from './MenuBar';
 import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../../types/signInTypes';
+import { RootState } from '../../types/authTypes';
 import { logout } from '../../redux/modules/auth';
+import SsafyMateAlert from './Alert';
 
 interface MenuListProps {
   isExpanded: boolean;
@@ -38,6 +39,9 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
   const dispatch = useDispatch();
   const token = useSelector<RootState, string | null>(
     (state) => state?.auth.token,
+  );
+  const ssafyMateAlert: any = useSelector<RootState>(
+    (state) => state.controlAlert,
   );
 
   useEffect(() => {
@@ -71,6 +75,11 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
             <MenuBar isExpanded={isExpanded} onExpandMenu={handleExpandMenu} />
           ) : null}
         </BrandWrapper>
+        <SsafyMateAlert
+          text={ssafyMateAlert.text}
+          show={ssafyMateAlert.show}
+          type={ssafyMateAlert.type}
+        />
         <MenuList isExpanded={isExpanded}>
           {!isLoggedIn ? (
             <>
