@@ -3,10 +3,11 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { showSsafyMateAlert } from '../../redux/modules/alert';
 
-import history from '../../history';
-
 import styled from '@emotion/styled';
+
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+
+import history from '../../history';
 
 import {
   onlyKoreanReg,
@@ -16,13 +17,14 @@ import {
 import FindIdService from '../../services/FindIdService';
 
 const FindUserIdCard: React.FC = () => {
-  const dispatch = useDispatch();
   const [showError, setShowError] = useState<boolean>(false);
   const [studentNumberInput, setStudentNumberInput] = useState<string>('');
   const [studentNumberError, setStudentNumberError] = useState<string>('');
   const [studentNameInput, setStudentNameInput] = useState<string>('');
   const [studentNameError, setStudentNameError] = useState<string>('');
   const [findId, setFindId] = useState<string | null>('');
+
+  const dispatch = useDispatch();
 
   const onCheckEnter = (event: React.KeyboardEvent) => {
     if (event.code === 'Enter' || event.code === 'NumpadEnter') {
@@ -146,7 +148,7 @@ const FindUserIdCard: React.FC = () => {
               </FindIconWrapper>
             )}
             {findId === '' ? (
-              <SubHead>가입 시 등록한 학번과 이름을 입력해주세요.</SubHead>
+              <SubHead>회원가입 시 등록한 학번과 이름을 입력해주세요.</SubHead>
             ) : (
               <>
                 <SubHead>
@@ -201,7 +203,6 @@ const FindUserIdCard: React.FC = () => {
               </FindIdWrapper>
             </>
           )}
-
           {findId === '' ? (
             <CardFooter>
               <SubmitButton type="submit" onClick={handleFindIdButton}>
@@ -246,14 +247,14 @@ const CardHeader = styled.div`
 `;
 
 const Head = styled.h1`
-  margin-bottom: 32px;
+  margin-bottom: 16px;
   font-size: 26px;
   font-weight: 600;
-  text-align: center;
+  text-align: left;
   color: #263747;
 
   @media (max-width: 575px) {
-    margin-bottom: 40px;
+    font-size: 22px;
   }
 `;
 
@@ -274,6 +275,10 @@ const SubHead = styled.h2`
   font-size: 16px;
   line-height: 1.6;
   color: #98a8b9;
+
+  @media (max-width: 575px) {
+    font-size: 15px;
+  }
 `;
 
 const SubInfo = styled.h3`
@@ -320,7 +325,7 @@ const RequirementLabel = styled.label`
 const Input = styled.input`
   width: 100%;
   height: 40px;
-  margin-bottom: 24px;
+  margin-bottom: 16px;
   padding: 8px 12px;
   outline: 0;
   border: 1px solid #d7e2eb;
@@ -426,6 +431,7 @@ const CardFooter = styled.div``;
 const SubmitButton = styled.button`
   width: 100%;
   height: 40px;
+  margin-top: 8px;
   border: none;
   border-radius: 0.25rem;
   box-sizing: border-box;
