@@ -4,7 +4,7 @@ import { userDataList } from '../database/user';
 
 export const userHandlers = [
   rest.get(
-    'http://localhost:3000/api/auth/user/info/:userId',
+    'http://i6a402.p.ssafy.io:8081/api/auth/user/info/:userId',
     async (request, response, context) => {
       const { userId } = request.params;
       const userIndex: number = userDataList.findIndex(
@@ -43,7 +43,7 @@ export const userHandlers = [
   ),
 
   rest.post(
-    'http://localhost:3000/api/auth/user/project/track',
+    'http://i6a402.p.ssafy.io:8081/api/auth/user/project/track',
     async (request, response, context) => {
       const token: string =
         request.headers['_headers'].authorization.split(' ')[1];
@@ -71,7 +71,7 @@ export const userHandlers = [
   ),
 
   rest.get(
-    'http://localhost:3000/api/auth/user/projects',
+    'http://i6a402.p.ssafy.io:8081/api/auth/user/projects',
     async (request, response, context) => {
       const token: string =
         request.headers['_headers'].authorization.split(' ')[1];
@@ -117,7 +117,7 @@ export const userHandlers = [
   ),
 
   rest.post(
-    'http://localhost:3000/api/auth/user/request',
+    'http://i6a402.p.ssafy.io:8081/api/auth/user/request',
     async (request, response, context) => {
       const status: number = 200;
       const token: string =

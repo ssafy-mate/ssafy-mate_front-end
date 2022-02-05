@@ -5,7 +5,7 @@ import { userListData } from '../database/user';
 
 export const projectHandlers = [
   rest.get(
-    'http://localhost:3000/api/auth/project/team-list',
+    'http://i6a402.p.ssafy.io:8081/api/auth/project/team-list',
     async (request, response, context) => {
       const token = request.headers['_headers'].authorization.split(' ')[1];
       const campus = request.url.searchParams.get('campus');
@@ -85,7 +85,7 @@ export const projectHandlers = [
   ),
 
   rest.get(
-    'http://localhost:3000/api/auth/project/user-list',
+    'http://i6a402.p.ssafy.io:8081/api/auth/project/user-list',
     async (request, response, context) => {
       const token = request.headers['_headers'].authorization.split(' ')[1];
       const campus = request.url.searchParams.get('campus');
