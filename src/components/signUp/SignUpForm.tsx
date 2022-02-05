@@ -9,12 +9,6 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
 import {
-  passwordReg,
-  validEmailReg,
-  verificationCodeReg,
-} from '../../utils/regularExpressionData';
-
-import {
   EmailVerificationCodeConfirmRequest,
   EmailVerificationCodeRequest,
   SignUpProps,
@@ -22,13 +16,17 @@ import {
   Severity,
 } from '../../types/signUpTypes';
 
+import {
+  passwordReg,
+  validEmailReg,
+  verificationCodeReg,
+} from '../../utils/regularExpressionData';
+
 import AuthService from '../../services/AuthService';
+
 import Loading from '../common/Loading';
 
 const SignUpForm: React.FC<SignUpProps> = ({
-  signUpStep,
-  signUpEmail,
-  signUpPassword,
   setSignUpStep,
   setSignUpEmail,
   setSignUpPassword,
@@ -49,7 +47,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
   const [emailInputError, setEmailInputError] = useState<string>('');
   const [codeVerificationError, setCodeVerificationError] =
     useState<boolean>(false);
-  const [resendEmail, setResendEmail] = useState<boolean>(false);
   const [minutes, setMinutes] = useState<number>(3);
   const [seconds, setSeconds] = useState<number>(0);
   const [showCodeBox, setShowCodeBox] = useState<boolean>(false);
@@ -161,15 +158,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
       setCodeConfirmButton(false);
     }
   }, [errors.verificationCode, verificationCodeOnChange]);
-
-  // 인증 코드 입력에 문제가 있는 경우에 이메일 재전송 버튼 활성화
-  // useEffect(() => {
-  //   if (!codeInputDisabled) {
-  //     setResendEmail(true);
-  //   } else if (codeConfirmButtonOnChange === 'getAuth') {
-  //     setResendEmail(false);
-  //   }
-  // }, [codeInputDisabled, codeConfirmButtonOnChange]);
 
   const offEmailCodeInput = () => {
     setEmailCodeRequestButton(true);
@@ -384,7 +372,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
                 );
               }
             })()}
-
             <ResendEmailWrapper>
               <ResendEmailMessage>
                 <ResendEmailIcon />

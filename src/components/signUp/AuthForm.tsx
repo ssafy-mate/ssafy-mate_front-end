@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useForm } from 'react-hook-form';
 
@@ -24,11 +24,6 @@ import {
 import AuthService from '../../services/AuthService';
 
 const AuthForm: React.FC<SsafyAuthProps> = ({
-  signUpStep,
-  campus,
-  ssafyTrack,
-  studentNumber,
-  studentName,
   setSignUpStep,
   setCampus,
   setSsafyTrack,

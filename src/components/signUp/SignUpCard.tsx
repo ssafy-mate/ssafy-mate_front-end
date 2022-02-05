@@ -28,11 +28,6 @@ const SignUpCard: React.FC = () => {
             case 0:
               return (
                 <AuthForm
-                  signUpStep={signUpStep}
-                  campus={campus}
-                  ssafyTrack={ssafyTrack}
-                  studentNumber={studentNumber}
-                  studentName={studentName}
                   setSignUpStep={setSignUpStep}
                   setCampus={setCampus}
                   setSsafyTrack={setSsafyTrack}
@@ -43,9 +38,6 @@ const SignUpCard: React.FC = () => {
             case 1:
               return (
                 <SignUpForm
-                  signUpStep={signUpStep}
-                  signUpEmail={signUpEmail}
-                  signUpPassword={signUpPassword}
                   setSignUpStep={setSignUpStep}
                   setSignUpEmail={setSignUpEmail}
                   setSignUpPassword={setSignUpPassword}
