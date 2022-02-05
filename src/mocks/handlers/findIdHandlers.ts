@@ -4,10 +4,10 @@ export const findIdHandlers = [
   rest.get(
     'http://localhost:3000/api/user/id-search',
     async (request, response, context) => {
-      const userEmail = request.url.searchParams.get('userEmail');
+      const userName = request.url.searchParams.get('userName');
 
       // 교육생 정보가 없는 경우
-      if (userEmail === 'sugarfina637@naver.comm') {
+      if (userName === '이여진') {
         return response(
           context.status(401),
           context.json({
@@ -20,7 +20,7 @@ export const findIdHandlers = [
       }
 
       // 서버 에러
-      if (userEmail === 'servererror@gmail.com') {
+      if (userName === '서버에러') {
         return response(
           context.status(500),
           context.json({
@@ -36,8 +36,7 @@ export const findIdHandlers = [
         context.json({
           success: true,
           userEmail: 'sugarfina637@naver.com',
-          message:
-            '입력한 이메일로 인증 메일을 발송했습니다.\n 이메일에 표시된 인증코드를 입력해주세요.',
+          message: '계정을 찾았습니다.',
         }),
       );
     },
