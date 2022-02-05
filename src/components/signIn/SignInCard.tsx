@@ -192,7 +192,7 @@ const Container = styled.div`
   }
 `;
 
-const CardHead = styled.h3`
+const CardHead = styled.h1`
   margin-bottom: 56px;
   font-size: 26px;
   font-weight: 600;
@@ -201,6 +201,7 @@ const CardHead = styled.h3`
 
   @media (max-width: 575px) {
     margin-bottom: 40px;
+    font-size: 22px;
   }
 `;
 
