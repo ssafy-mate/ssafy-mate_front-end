@@ -429,11 +429,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
                 confirmPasswordInput === signUpPasswordOnChange,
             })}
             placeholder="비밀번호 확인"
-            className={
-              errors.signUpCheckPassword || errors.signUpPassword
-                ? 'have-error'
-                : ''
-            }
+            className={errors.signUpCheckPassword ? 'have-error' : ''}
           />
           {errors.signUpCheckPassword?.type === 'required' && (
             <ErrorMessageWrapper>
@@ -443,7 +439,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
             </ErrorMessageWrapper>
           )}
           {errors.signUpCheckPassword?.type !== 'required' &&
-            errors.signUpPassword?.type === 'required' && (
+            errors.signUpCheckPassword?.type === 'validate' && (
               <ErrorMessageWrapper>
                 <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
               </ErrorMessageWrapper>
