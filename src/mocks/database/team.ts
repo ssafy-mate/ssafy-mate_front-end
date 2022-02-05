@@ -19,46 +19,57 @@ export const teamDataList = [
         {
           id: 1,
           techStackName: 'TypeScript',
+          techStackImgUrl: '/images/assets/tech-stack/TypeScript.png',
         },
         {
           id: 2,
           techStackName: 'React',
+          techStackImgUrl: '/images/assets/tech-stack/React.png',
         },
         {
           id: 4,
           techStackName: 'Redux',
+          techStackImgUrl: '/images/assets/tech-stack/Redux.png',
         },
         {
           id: 5,
           techStackName: 'Redux-Saga',
+          techStackImgUrl: '/images/assets/tech-stack/Redux-Saga.png',
         },
         {
           id: 6,
           techStackName: 'React-Query',
+          techStackImgUrl: '/images/assets/tech-stack/React-Query.png',
         },
         {
           id: 7,
           techStackName: 'Emotion',
+          techStackImgUrl: '/images/assets/tech-stack/Emotion.png',
         },
         {
           id: 8,
           techStackName: 'Mock-Service-Worker',
+          techStackImgUrl: '/images/assets/tech-stack/Mock-Service-Worker.png',
         },
         {
           id: 9,
           techStackName: 'Spring-Boot',
+          techStackImgUrl: '/images/assets/tech-stack/Spring-Boot.png',
         },
         {
           id: 10,
           techStackName: 'JPA',
+          techStackImgUrl: '/images/assets/tech-stack/JPA.png',
         },
         {
           id: 11,
           techStackName: 'MySQL',
+          techStackImgUrl: '/images/assets/tech-stack/MySQL.png',
         },
         {
           id: 12,
           techStackName: 'Swagger',
+          techStackImgUrl: '/images/assets/tech-stack/Swagger.png',
         },
       ],
       members: [
@@ -133,46 +144,57 @@ export const teamDataList = [
         {
           id: 1,
           techStackName: 'TypeScript',
+          techStackImgUrl: '/images/assets/tech-stack/TypeScript.png',
         },
         {
           id: 2,
           techStackName: 'React',
+          techStackImgUrl: '/images/assets/tech-stack/React.png',
         },
         {
           id: 4,
           techStackName: 'Redux',
+          techStackImgUrl: '/images/assets/tech-stack/Redux.png',
         },
         {
           id: 5,
           techStackName: 'Redux-Saga',
+          techStackImgUrl: '/images/assets/tech-stack/Redux-Saga.png',
         },
         {
           id: 6,
           techStackName: 'React-Query',
+          techStackImgUrl: '/images/assets/tech-stack/React-Query.png',
         },
         {
           id: 7,
           techStackName: 'Styled-Components',
+          techStackImgUrl: '/images/assets/tech-stack/Styled-Components.png',
         },
         {
           id: 8,
           techStackName: 'Mock-Service-Worker',
+          techStackImgUrl: '/images/assets/tech-stack/Mock-Service-Worker.png',
         },
         {
           id: 9,
           techStackName: 'Spring-Boot',
+          techStackImgUrl: '/images/assets/tech-stack/Spring-Boot.png',
         },
         {
           id: 10,
           techStackName: 'JPA',
+          techStackImgUrl: '/images/assets/tech-stack/JPA.png',
         },
         {
           id: 11,
           techStackName: 'MySQL',
+          techStackImgUrl: '/images/assets/tech-stack/MySQL.png',
         },
         {
           id: 12,
           techStackName: 'Swagger',
+          techStackImgUrl: '/images/assets/tech-stack/Swagger.png',
         },
       ],
       members: [
@@ -240,50 +262,32 @@ export const teamDataList = [
         {
           id: 1,
           techStackName: 'TypeScript',
+          techStackImgUrl: '/images/assets/tech-stack/TypeScript.png',
         },
         {
           id: 2,
           techStackName: 'Vue.js',
+          techStackImgUrl: '/images/assets/tech-stack/Vue.js.png',
+        },
+        {
+          id: 43,
+          techStackName: 'Vuex',
+          techStackImgUrl: '/images/assets/tech-stack/Vuex.png',
         },
         {
           id: 4,
-          techStackName: 'Vuex',
+          techStackName: 'Vuetify',
+          techStackImgUrl: '/images/assets/tech-stack/Vuetify.png',
         },
         {
           id: 5,
-          techStackName: 'Vuetify',
+          techStackName: 'Sass(SCSS)',
+          techStackImgUrl: '/images/assets/tech-stack/Sass(SCSS).png',
         },
         {
           id: 6,
-          techStackName: 'Sass(SCSS)',
-        },
-        {
-          id: 8,
-          techStackName: 'Mock-Service-Worker',
-        },
-        {
-          id: 9,
-          techStackName: 'Python',
-        },
-        {
-          id: 10,
           techStackName: 'django',
-        },
-        {
-          id: 11,
-          techStackName: 'MySQL',
-        },
-        {
-          id: 12,
-          techStackName: 'Swagger',
-        },
-        {
-          id: 13,
-          techStackName: 'docker',
-        },
-        {
-          id: 14,
-          techStackName: 'aws',
+          techStackImgUrl: '/images/assets/tech-stack/django.png',
         },
       ],
       members: [
