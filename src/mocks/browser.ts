@@ -9,11 +9,11 @@ import { signInHandlers } from './handlers/signInHandlers';
 import { projectHandlers } from './handlers/projectHandlers';
 
 export const worker = setupWorker(
-  ...authHandlers,
+  // ...authHandlers,
   ...userHandlers,
   ...teamHandlers,
   ...chattingHandlers,
-  ...techStackHandlers,
-  ...signInHandlers,
+  // ...techStackHandlers,
+  // ...signInHandlers,
   ...projectHandlers,
 );
