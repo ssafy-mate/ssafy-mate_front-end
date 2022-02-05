@@ -107,7 +107,7 @@ const NavItem = styled.li`
 
   @media (max-width: 575px) {
     &.active {
-      box-shadow: none;
+      box-shadow: inset 0 0.1875rem #3396f4;
     }
   }
 `;
