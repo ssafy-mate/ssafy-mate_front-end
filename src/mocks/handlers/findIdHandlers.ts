@@ -31,6 +31,7 @@ export const findIdHandlers = [
         );
       }
 
+      // 아이디 조회 성공 시
       return response(
         context.json({
           success: true,
