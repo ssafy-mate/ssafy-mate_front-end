@@ -41,6 +41,7 @@ const NewPasswordCard: React.FC = () => {
   const [newPasswordCheckInputError, setNewPasswordCheckInputError] =
     useState<string>('');
   const [timestop, setTimeStop] = useState<number>(1);
+
   useEffect(() => {
     const timer = setInterval(() => {
       if (seconds > 0) {
@@ -229,6 +230,7 @@ const NewPasswordCard: React.FC = () => {
     event: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
   ) => {
     resetTimer();
+    setInputError('');
     verificationCodeRequst(emailInput);
   };
 
@@ -415,15 +417,17 @@ const NewPasswordCard: React.FC = () => {
                     )}
                   </VerificationCodeConfirmWrapper>
                 </VerificationCodeWrapper>
-                <ResendEmailWrapper>
-                  <ResendEmailMessage>
-                    <ResendEmailIcon />
-                    이메일을 받지 못하셨나요?
-                    <ResendLink onClick={handleEmailResend}>
-                      이메일 재전송하기
-                    </ResendLink>
-                  </ResendEmailMessage>
-                </ResendEmailWrapper>
+                {timestop === 1 ? (
+                  <ResendEmailWrapper>
+                    <ResendEmailMessage>
+                      <ResendEmailIcon />
+                      이메일을 받지 못하셨나요?
+                      <ResendLink onClick={handleEmailResend}>
+                        이메일 재전송하기
+                      </ResendLink>
+                    </ResendEmailMessage>
+                  </ResendEmailWrapper>
+                ) : null}
               </InputWrapper>
             )}
             {stepForNewPassword === 3 && (
@@ -713,7 +717,7 @@ const CodeConfimtButton = styled.button`
   cursor: pointer;
 
   &:disabled {
-    background-color: #e8f0fd;
+    background-color: #ebf0fe;
     color: #8e888e;
     cursor: not-allowed;
   }
@@ -771,7 +775,7 @@ const SubmitButton = styled.button`
     background-color: #2878c3;
   }
   &:disabled {
-    background-color: #e8f0fd;
+    background-color: #ebf0fe;
     color: #8e888e;
     cursor: not-allowed;
   }

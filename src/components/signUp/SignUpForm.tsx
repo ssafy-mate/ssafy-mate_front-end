@@ -54,6 +54,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
   const [seconds, setSeconds] = useState<number>(0);
   const [showCodeBox, setShowCodeBox] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingColor, setLoadingColor] = useState<string>('##fff');
 
   const {
     register,
@@ -84,6 +85,12 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
     return () => clearInterval(timer);
   }, [minutes, seconds]);
+
+  useEffect(() => {
+    emailCodeRequestButton
+      ? setLoadingColor('#3396f4')
+      : setLoadingColor('#fff');
+  }, [emailCodeRequestButton]);
 
   const signUpEmailOnChange: string = watch('signUpEmail');
   const verificationCodeOnChange: string = watch('verificationCode');
@@ -305,7 +312,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
               onClick={verificationCodeRequest}
             >
               {loading ? (
-                <Loading selectColor="#fff" />
+                <Loading selectColor={loadingColor} />
               ) : (
                 verificationCodeButtonText
               )}

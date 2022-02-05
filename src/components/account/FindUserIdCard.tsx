@@ -440,7 +440,7 @@ const SubmitButton = styled.button`
     background-color: #2878c3;
   }
   &:disabled {
-    background-color: #e8f0fd;
+    background-color: #ebf0fe;
     color: #8e888e;
     cursor: not-allowed;
   }
