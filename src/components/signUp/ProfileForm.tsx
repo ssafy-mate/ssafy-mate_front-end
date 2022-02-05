@@ -277,7 +277,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
     }
   };
 
-  const getSignUpInfomation = () => {
+  const getSignUpInformation = () => {
     if (profileImg !== null) {
       signUpFormData.append('profileImg', profileImg);
     }
@@ -301,7 +301,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const signUpClick = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    const data: FormData = getSignUpInfomation();
+    const data: FormData = getSignUpInformation();
 
     if (validation()) {
       AuthService.signUp(data)
@@ -628,6 +628,18 @@ const InputWrapper = styled.div`
   width: 100%;
 `;
 
+const FileInputLabel = styled.label`
+  position: relative;
+  top: -22px;
+  right: 6px;
+  z-index: 10;
+  color: #3396f4;
+  cursor: pointer;
+`;
+
+const FileInput = styled.input`
+  display: none;
+`;
 const CheckBoxWrapper = styled.div`
   display: flex;
   width: 100%;
@@ -922,19 +934,6 @@ const TechStackImg = styled.img`
     width: 18px;
     height: 18px;
   }
-`;
-
-const FileInputLabel = styled.label`
-  position: relative;
-  top: -22px;
-  right: 6px;
-  z-index: 10;
-  color: #3396f4;
-  cursor: pointer;
-`;
-
-const FileInput = styled.input`
-  display: none;
 `;
 
 const ErrorMessageWrapper = styled.div`

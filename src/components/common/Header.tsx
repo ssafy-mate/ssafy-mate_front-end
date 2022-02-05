@@ -203,9 +203,10 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
                           onKeyDown={handleListKeyDown}
                         >
                           <AccountBoxItem>
-                            <Link to={`/users/${userId}/account`}>
+                            <Link to={`/users/account/edit`}>계정 관리</Link>
+                            {/* <Link to={`/users/${userId}/account`}>
                               계정 관리
-                            </Link>
+                            </Link> */}
                           </AccountBoxItem>
                           <AccountBoxItem onClick={handleAccountBoxClose}>
                             <Link to={`/users/${userId}/offers`}>
@@ -234,7 +235,8 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
           ) : (
             <>
               <AccountMenuItem>
-                <PageLink to={`/users/${userId}/account`}>계정 관리</PageLink>
+                <PageLink to={`/users/account/edit`}>계정 관리</PageLink>
+                {/* <PageLink to={`/users/${userId}/account`}>계정 관리</PageLink> */}
               </AccountMenuItem>
               <AccountMenuItem>
                 <PageLink to={`/users/${userId}`}>내 프로필</PageLink>

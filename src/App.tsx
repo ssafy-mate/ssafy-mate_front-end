@@ -21,6 +21,7 @@ import SignInPage from './pages/SignInPage';
 import SignUpPage from './pages/SignUpPage';
 import NewPasswordPage from './pages/users/NewPasswordPage';
 import FindUserIdPage from './pages/users/FindUserIdPage';
+import AccountEditPage from './pages/users/AccountEditPage';
 import UserInfoPage from './pages/users/UserInfoPage';
 import TeamInfoPage from './pages/teams/TeamInfoPage';
 import TeamCreatePage from './pages/projects/TeamCreatePage';
@@ -45,6 +46,7 @@ const App: React.FC = () => {
           <Route exact path="/users/sign_up" component={SignUpPage} />
           <Route exact path="/users/password/new" component={NewPasswordPage} />
           <Route exact path="/users/find/id" component={FindUserIdPage} />
+          <Route exact path="/users/account/edit" component={AccountEditPage} />
           <Route exact path="/users/:userId" component={UserInfoPage} />
           <Route exact path="/teams/:teamId" component={TeamInfoPage} />
           <Route
