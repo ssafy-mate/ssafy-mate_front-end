@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 
-import { Redirect, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
 
@@ -40,14 +40,18 @@ type Params = {
   teamId: string;
 };
 
+interface MessageTextFieldProps {
+  warning: string;
+}
+
 const TeamInfoSection: React.FC = () => {
-  const [openApplicationDialog, setOpenApplicationDialog] = useState(false);
   const [applicationMessage, setApplicationMessage] = useState<string>('');
+  const [onMessageWarning, setOnMessageWarning] = useState<boolean>(false);
+  const [openApplicationDialog, setOpenApplicationDialog] =
+    useState<boolean>(false);
 
   const dispatch = useDispatch();
-
   const { teamId } = useParams<Params>();
-
   const { isLoading, teamData, isError, errorMessage } = useTeamInfo(teamId);
 
   useEffect(() => {
@@ -59,6 +63,12 @@ const TeamInfoSection: React.FC = () => {
       } 팀 상세 정보 | 싸피 메이트`;
     }
   }, [teamData, isError, errorMessage]);
+
+  useEffect(() => {
+    if (applicationMessage !== '') {
+      setOnMessageWarning(false);
+    }
+  }, [applicationMessage]);
 
   const sendApplication = useCallback(
     (application: ApplicationRequestType) => {
@@ -72,6 +82,7 @@ const TeamInfoSection: React.FC = () => {
   };
 
   const handleCloseApplicationDialog = () => {
+    setOnMessageWarning(false);
     setOpenApplicationDialog(false);
     setApplicationMessage('');
   };
@@ -83,10 +94,20 @@ const TeamInfoSection: React.FC = () => {
   };
 
   const handleSendApplication = () => {
+    if (applicationMessage === '') {
+      alert('합류 지원 메시지를 입력해주세요.');
+      setOnMessageWarning(true);
+      return;
+    }
+
     const application = {
       teamId: parseInt(teamId),
       message: applicationMessage,
     };
+
+    if (onMessageWarning) {
+      setOnMessageWarning(false);
+    }
 
     sendApplication(application);
     setApplicationMessage('');
@@ -258,7 +279,7 @@ const TeamInfoSection: React.FC = () => {
           >
             <RequestDialogTitle>팀 합류 지원하기</RequestDialogTitle>
             <DialogContent>
-              <MuiTextField
+              <MessageTextField
                 autoFocus
                 margin="dense"
                 id="application-message"
@@ -266,6 +287,7 @@ const TeamInfoSection: React.FC = () => {
                 type="text"
                 variant="standard"
                 onChange={handleChangeApplicationMessage}
+                warning={onMessageWarning.toString()}
                 fullWidth
               />
             </DialogContent>
@@ -645,11 +667,21 @@ const RequestDialogTitle = styled(DialogTitle)`
   }
 `;
 
-const MuiTextField = styled(TextField)`
+const DialogButton = styled(Button)`
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  color: #3396f4;
+  font-size: 13px;
+`;
+
+const MessageTextField = styled(TextField)<MessageTextFieldProps>`
   & label,
   & input {
     font-family: 'Spoqa Han Sans Neo', 'sans-serif';
     font-size: 16px;
+  }
+
+  & label {
+    color: ${(props) => (props.warning === 'true' ? '#f44336' : '#3396f4')};
   }
 
   @media (max-width: 575px) {
@@ -658,12 +690,6 @@ const MuiTextField = styled(TextField)`
       font-size: 14px;
     }
   }
-`;
-
-const DialogButton = styled(Button)`
-  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
-  color: #3396f4;
-  font-size: 13px;
 `;
 
 export default TeamInfoSection;

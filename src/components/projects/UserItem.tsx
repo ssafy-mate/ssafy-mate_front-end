@@ -267,7 +267,7 @@ const UserItem: React.FC<UserItemProps> = ({
           <MessageTextField
             autoFocus
             margin="dense"
-            id="request-message"
+            id="offer-message"
             label="합류 요청 메시지를 입력해주세요."
             type="text"
             variant="standard"
