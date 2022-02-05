@@ -536,7 +536,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
               placeholder="https://github.com/ssafy-mate"
               onChange={handleUrlInput}
               pattern="https://.*"
-              css={{ marginBottom: '16px' }}
             />
           </InputWrapper>
         </Row>
@@ -559,7 +558,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
               placeholder="https://velog.io/@ssafy-mate"
               onChange={handleUrlInput}
               pattern="https://.*"
-              css={{ marginBottom: '16px' }}
             />
           </InputWrapper>
         </Row>
@@ -775,6 +773,7 @@ const InfoInputWrapper = styled.div`
 const InfoInput = styled.input`
   width: 100%;
   height: 40px;
+  margin-bottom: 16px;
   padding: 8px 12px;
   outline: 0;
   border: 1px solid #d7e2eb;
@@ -890,7 +889,7 @@ const AgreementLink = styled.a`
 const SignUpButton = styled.button`
   width: 100%;
   height: 40px;
-  margin-top: 24px;
+  margin-top: 16px;
   border: none;
   border-radius: 0.25rem;
   box-sizing: border-box;

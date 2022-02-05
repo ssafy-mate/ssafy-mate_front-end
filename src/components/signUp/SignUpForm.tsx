@@ -305,7 +305,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
               placeholder="이메일"
               readOnly={emailInputDisabled}
             />
-
             <AuthButton
               type="button"
               disabled={emailCodeRequestButton}
@@ -463,7 +462,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
               </ErrorMessageWrapper>
             )}
         </InputWrapper>
-        <SubmitButton type="submit">기본 정보 작성</SubmitButton>
+        <SubmitButton type="submit">기본 정보 작성 완료</SubmitButton>
       </Container>
     </>
   );
@@ -511,7 +510,7 @@ const AuthButton = styled.button`
 const SubmitButton = styled.button`
   width: 100%;
   height: 40px;
-  margin-top: 24px;
+  margin-top: 8px;
   border: none;
   border-radius: 0.25rem;
   box-sizing: border-box;
@@ -636,7 +635,6 @@ const ResendEmailMessage = styled.div`
   align-items: center;
   padding-left: 6px;
   font-size: 13px;
-  line-height: 1.5;
   color: rgb(130, 140, 148);
 
   @media (max-width: 349px) {
@@ -659,7 +657,12 @@ const ResendLink = styled.a`
   font-weight: 500;
   text-decoration: underline;
   touch-action: manipulation;
+  transition: color 0.08s ease-in-out;
   cursor: pointer;
+
+  &:hover {
+    color: #3396f4;
+  }
 `;
 
 const TimeLimit = styled.span`

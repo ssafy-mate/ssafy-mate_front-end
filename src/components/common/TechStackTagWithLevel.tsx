@@ -130,14 +130,16 @@ const TagItem = styled.li`
   margin-bottom: 12px;
   padding: 3px 6px;
   box-sizing: border-box;
+
   &:hover {
     border-radius: 0.25rem;
     background-color: #eaf4fd;
   }
   &:last-of-type {
-    margin-bottom: 16px;
+    margin-bottom: 24px;
   }
-  @media (max-width: 540px) {
+
+  @media (max-width: 575px) {
     margin-bottom: 16px;
   }
 `;
@@ -153,7 +155,8 @@ const Img = styled.img`
   margin-right: 8px;
   border-radius: 2px;
   object-fit: fill;
-  @media (max-width: 540px) {
+
+  @media (max-width: 575px) {
     width: 22px;
     height: 22px;
   }
@@ -162,7 +165,8 @@ const Img = styled.img`
 const Name = styled.h6`
   font-size: 14px;
   color: #5f7f90;
-  @media (max-width: 540px) {
+
+  @media (max-width: 575px) {
     font-size: 13px;
   }
 `;
@@ -178,10 +182,12 @@ const DeleteButton = styled.button`
   color: #f44336;
   transition: all 0.12s ease-in-out;
   cursor: pointer;
+
   &:hover {
     transform: scale(1.15);
   }
-  @media (max-width: 540px) {
+
+  @media (max-width: 575px) {
     svg {
       width: 22px;
       height: 22px;
@@ -198,20 +204,23 @@ const LevelButton = styled(Button)`
   font-size: 14px;
   font-weight: 400;
   color: #3396f4;
+
   &:hover {
     background-color: #5babf6;
     color: #fff;
   }
+
   &.selected {
     background-color: #5babf6;
     color: #fff;
   }
-  @media (max-width: 540px) {
+
+  @media (max-width: 575px) {
     width: 22px;
     height: 22px;
     font-size: 13px;
   }
-  @media (max-width: 348px) {
+  @media (max-width: 349px) {
     width: 18px;
     height: 18px;
     font-size: 12px;

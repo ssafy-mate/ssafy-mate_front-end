@@ -260,9 +260,6 @@ const InputWrapper = styled.div`
     width: 60%;
     margin-right: 12px;
   }
-  &:last-of-type {
-    margin-bottom: 0;
-  }
 
   @media (max-width: 414px) {
     &:first-of-type {
@@ -342,7 +339,6 @@ const InfoInput = styled.input`
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px#3396f4;
   }
-
   &:focus {
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px #3396f4;
@@ -364,7 +360,7 @@ const InfoInput = styled.input`
 const AuthButton = styled.button`
   width: 100%;
   height: 40px;
-  margin-top: 24px;
+  margin-top: 8px;
   border: none;
   border-radius: 0.25rem;
   box-sizing: border-box;
