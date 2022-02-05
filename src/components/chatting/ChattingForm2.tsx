@@ -4,6 +4,7 @@ import { useParams } from 'react-router';
 import dayjs from 'dayjs';
 import useSWR from 'swr';
 import useSWRInfinite from 'swr/infinite';
+import axios from 'axios';
 
 import { axiosInstance } from '../../utils/axios';
 import { fetcherGet, fetcherGetWithParams } from '../../utils/fetcher';
@@ -25,7 +26,6 @@ import { Scrollbars } from 'react-custom-scrollbars-2';
 import SendIcon from '@mui/icons-material/Send';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import useTextArea from '../../hooks/useTextArea';
-import axios from 'axios';
 
 const localUrl = 'http://localhost:3000';
 
@@ -46,8 +46,8 @@ const ChattingForm: React.FC = () => {
   //   const { userId } = useParams<userParams>();
 
   // const [numberUserId, setNunberUserId] = useState(Number(userId));
-  const [myId, setMyId] = useState(BigInt(2)); // 내 아이디
-  const [userId, setUserId] = useState(BigInt(1)); // 상대방 아이디
+  const [myId, setMyId] = useState(2); // 내 아이디
+  const [userId, setUserId] = useState(1); // 상대방 아이디
 
   const [messageList, setMessageList] = useState<MessageType[]>([]);
   const [chatRoomList, setChatRoomList] = useState<ChatRoomResponseType[]>();
@@ -100,7 +100,7 @@ const ChattingForm: React.FC = () => {
   );
 
   console.log(
-    `chatRom List : ${roomData?.toString()} / chat log : ${chatData?.toString()}`,
+    `chatRom List : ${roomData?.toString()} / chat log : ${chatData?.contentList.toString()}`,
   );
 
   // 내가 메시지를 보내거나, 서버 챗 데이터 변경이 일어났을 때 발동하는 콜백
@@ -118,8 +118,8 @@ const ChattingForm: React.FC = () => {
 
       if (chat.trim()) {
         // && chatData
-        axiosInstance
-          .post(`/api/chat`, params)
+        axios
+          .post(`http://localhost:3095/api/chat`, params)
           .then((response) => {
             console.log(`onSumbit response : ${response}`);
             setChat('');

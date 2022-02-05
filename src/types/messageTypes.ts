@@ -1,5 +1,5 @@
 export interface MessageType {
-  senderId: bigint;
+  senderId: number;
   roomId: string;
   content: string;
   sentTime: string;
@@ -8,7 +8,7 @@ export interface MessageType {
 
 export interface ChatRoomResponseType {
   roomId: string;
-  userId: bigint;
+  userId: number;
   userName: string;
   profileImgUrl: string;
   content: string;
