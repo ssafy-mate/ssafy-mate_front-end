@@ -21,6 +21,7 @@ const FindUserIdCard: React.FC = () => {
   const [studentNameInput, setStudentNameInput] = useState<string>('');
   const [studentNameError, setStudentNameError] = useState<string>('');
   const [findId, setFindId] = useState<string | null>('');
+  const [findIdSuccessText, setFindIdSuccessText] = useState<string | null>('');
 
   const dispatch = useDispatch();
 
@@ -108,6 +109,7 @@ const FindUserIdCard: React.FC = () => {
       })
         .then(({ userEmail, message }) => {
           setFindId(userEmail);
+          setFindIdSuccessText(message);
         })
         .catch((error) => {
           setFindId('');
@@ -138,9 +140,7 @@ const FindUserIdCard: React.FC = () => {
               <SubHead>회원가입 시 등록한 학번과 이름을 입력해주세요.</SubHead>
             ) : (
               <>
-                <SubHead>
-                  {studentNameInput}님의 싸피메이트 계정을 찾았습니다.
-                </SubHead>
+                <SubHead>{findIdSuccessText}</SubHead>
                 <SubInfo>계정 확인 후 로그인 해주세요.</SubInfo>
               </>
             )}
