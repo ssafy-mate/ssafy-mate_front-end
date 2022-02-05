@@ -24,7 +24,6 @@ import { ApplicationRequestType } from '../../types/authTypes';
 
 import { sendApplication as sendApplicationSagaStart } from '../../redux/modules/auth';
 
-import useToken from '../../hooks/useToken';
 import useTeamInfo from '../../hooks/useTeamInfo';
 
 import UserLabel from '../user/UserLabel';
@@ -49,7 +48,6 @@ const TeamInfoSection: React.FC = () => {
 
   const { teamId } = useParams<Params>();
 
-  const token = useToken();
   const { isLoading, teamData, isError, errorMessage } = useTeamInfo(teamId);
 
   useEffect(() => {
@@ -91,6 +89,7 @@ const TeamInfoSection: React.FC = () => {
     };
 
     sendApplication(application);
+    setApplicationMessage('');
     setOpenApplicationDialog(false);
   };
 
@@ -118,10 +117,6 @@ const TeamInfoSection: React.FC = () => {
         : false,
     [teamData?.backendRecruitment, teamData?.backendHeadcount],
   );
-
-  if (token === null) {
-    return <Redirect to="/users/sign_in" />;
-  }
 
   if (isError) {
     return <ErrorSection errorMessage={errorMessage} />;
@@ -211,6 +206,7 @@ const TeamInfoSection: React.FC = () => {
                     <TeamTechStackTag
                       key={index}
                       techStackName={techStack.techStackName}
+                      techStackImgUrl={techStack.techStackImgUrl}
                     />
                   ))}
                 </TechStackList>

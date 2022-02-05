@@ -42,3 +42,9 @@ export interface TeamListResponse {
   nowPage: number;
   totalElement: number;
 }
+
+export interface TeamOfferRequestType {
+  project: string;
+  userId: number;
+  message: string;
+}
