@@ -6,15 +6,15 @@ import useSWR from 'swr';
 import useSWRInfinite from 'swr/infinite';
 
 import { axiosInstance } from '../../utils/axios';
-import { fetcherGet, fetcherPost } from '../../utils/fetcher';
+import { fetcherGet, fetcherGetWithParams } from '../../utils/fetcher';
 import useSocket from '../../hooks/useSocket';
 import useToken from '../../hooks/useToken';
 import ChatItem from './ChatItem';
 import {
-  MessageRequestType,
+  MessageType,
   ChatRoomResponseType,
   ChatLogResponseType,
-  ChatRoomListRequestType,
+  ChatRoomListResponseType,
 } from '../../types/messageTypes';
 
 /** @jsxImportSource @emotion/react */
@@ -44,15 +44,16 @@ const ChattingForm: React.FC = () => {
 
   const { roomId } = useParams<roomParams>();
   //   const { userId } = useParams<userParams>();
-  //   console.log(`roomId : ${roomId} / userId : ${userId}`);
 
   // const [numberUserId, setNunberUserId] = useState(Number(userId));
-  const [myId, setMyId] = useState(2); // 내 아이디
-  const [userId, setUserId] = useState(1); // 상대방 아이디
+  const [myId, setMyId] = useState(BigInt(2)); // 내 아이디
+  const [userId, setUserId] = useState(BigInt(1)); // 상대방 아이디
 
-  const [messageList, setMessageList] = useState<MessageRequestType[]>([]);
+  const [messageList, setMessageList] = useState<MessageType[]>([]);
   const [chatRoomList, setChatRoomList] = useState<ChatRoomResponseType[]>();
-  const [entryTime, setEntryTime] = useState(date.toLocaleString());
+  const [entryTime, setEntryTime] = useState(
+    dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS'),
+  );
   const [nowPage, setNowPage] = useState<number>(1);
   const [chat, onChangeChat, setChat] = useTextArea('');
 
@@ -60,31 +61,54 @@ const ChattingForm: React.FC = () => {
   const chatRoomMessageRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<Scrollbars>(null);
 
-  // 채팅 목록 불러오기 - 아직 작동 안함
+  // 채팅 목록 불러오기
   const { data: roomData, mutate: mutateRoom } =
-    useSWR<ChatRoomListRequestType>(`/api/chat/room/${myId}`, fetcherGet);
+    useSWR<ChatRoomListResponseType>(`/api/chat/room/${myId}`, fetcherGet);
 
-  //   console.log(`chatList : ${roomData}`);
+  // 대화 내역 불러오기 - 인피니티 스크롤용
+  // const {
+  //   data: chatData,
+  //   mutate: mutateChat,
+  //   setSize,
+  // } = useSWRInfinite<ChatRoomListRequestType>(
+  //   (index) => `/api/chat/room/${senderId}`,
+  //   fetcherGet,
+  //   {
+  //     onSuccess(data) {
+  //       if (data?.length === 1) {
+  //         setTimeout(() => {
+  //           scrollbarRef.current?.scrollToBottom();
+  //         }, 100);
+  //       }
+  //     },
+  //   },
+  // );
 
-  // 대화 내용 불러오기
+  // 대화 내용 불러오기 - 일반
+  // useSWR('/api/user', url => fetchWithToken(url, token))
+  // const { data: user } = useSWR(['/api/user', token], fetchWithToken)
   const { data: chatData, mutate: mutateChat } = useSWR<ChatLogResponseType>(
-    `/api/chat/log/${roomId}`,
-    fetcherGet,
+    [`/api/chat/log/${roomId}`, { nowPage, entryTime }],
+    fetcherGetWithParams,
   );
+
+  console.log(`chatRom List : ${roomData} / chat log : ${chatData}`);
 
   // 내가 메시지를 보내거나, 서버 챗 데이터 변경이 일어났을 때 발동하는 콜백
   // 서버로 메시지 정보 post 요청
   const onSubmit = useCallback(
     (event) => {
       event.preventDefault();
-      const params: MessageRequestType = {
+      const params: MessageType = {
+        userName: '조원빈',
         roomId: roomId,
         content: chat,
         senderId: myId,
-        sentTime: dayjs().format('YYYY-MM-DDTHH:mm:ss'),
+        sentTime: dayjs().format('YYYY-MM-DDTHH:mm:ss.SSSS'),
       };
 
-      if (chat.trim() && chatData) {
+      if (chat.trim()) {
+        // && chatData
         axiosInstance
           .post(`/api/chat`, params)
           .then((response) => {
@@ -100,20 +124,13 @@ const ChattingForm: React.FC = () => {
   );
 
   // onMessage 메시지 받으면 작동하는 콜백
-  const onMessage = useCallback((data: MessageRequestType) => {
+  const onMessage = useCallback((data: MessageType) => {
     // roomId 중 하나가 상대것인지 검사 => 일단 임시로 내, 상대방 아이디 셋팅
     // 상대방이 보낸 데이터를 chatData.contetnList 에 넣으면
     // onSubmit에서 콜백이 변경된 데이터를 감지해 호출됨
     if (data.senderId === userId && myId !== userId) {
       mutateChat((chatData) => {
-        const chatLog = {
-          id: 1,
-          content: data.content,
-          userName: '손영배',
-          sentTime: data.sentTime,
-          senderId: data.senderId,
-        };
-        chatData?.contentList.unshift(chatLog);
+        chatData?.contentList.unshift(data);
         return chatData;
       }, false).then(() => {
         console.log(`onMessage callback 성공`);

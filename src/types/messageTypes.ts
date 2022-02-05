@@ -1,34 +1,27 @@
-export interface MessageRequestType {
-  senderId: number;
+export interface MessageType {
+  senderId: bigint;
   roomId: string;
   content: string;
   sentTime: string;
+  userName: string;
 }
 
 export interface ChatRoomResponseType {
   roomId: string;
-  userId: number;
+  userId: bigint;
   userName: string;
   profileImgUrl: string;
   content: string;
   sentTime: string;
 }
 
-export interface ChatRoomListRequestType {
+export interface ChatRoomListResponseType {
   roomList: ChatRoomResponseType[];
 }
 
 export interface ChatLogResponseType {
-  contentList: ChatLogContentType[];
+  contentList: MessageType[];
   totalPage?: number;
-}
-
-export interface ChatLogContentType {
-  id: number;
-  content: string;
-  userName: string;
-  sentTime: string;
-  senderId: number;
 }
 
 export interface ChatRoomTypeProps extends ChatRoomResponseType {}
