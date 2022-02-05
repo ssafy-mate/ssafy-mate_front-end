@@ -1,13 +1,11 @@
 import { useState } from 'react';
 
+import { Link } from 'react-router-dom';
+
 import { useDispatch } from 'react-redux';
 import { showSsafyMateAlert } from '../../redux/modules/alert';
 
 import styled from '@emotion/styled';
-
-import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-
-import history from '../../history';
 
 import {
   onlyKoreanReg,
@@ -113,6 +111,7 @@ const FindUserIdCard: React.FC = () => {
         })
         .catch((error) => {
           setFindId('');
+
           if (error.response) {
             const { status, message } = error.response.data;
 
@@ -129,24 +128,12 @@ const FindUserIdCard: React.FC = () => {
     }
   };
 
-  const moveToSignIn = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  ) => {
-    history.push('/users/sign_in');
-  };
-
   return (
     <>
       <Container>
         <Wrapper>
           <CardHeader>
-            {findId === '' ? (
-              <Head>아이디 찾기</Head>
-            ) : (
-              <FindIconWrapper>
-                <FindIdIcon color="primary" fontSize="large" />
-              </FindIconWrapper>
-            )}
+            <Head>아이디 찾기</Head>
             {findId === '' ? (
               <SubHead>회원가입 시 등록한 학번과 이름을 입력해주세요.</SubHead>
             ) : (
@@ -198,24 +185,21 @@ const FindUserIdCard: React.FC = () => {
                 <FindIdImgWrapper>
                   <FindIdImg src="/images/common/ssafy-mate_logo.png" />
                 </FindIdImgWrapper>
-                <FindIdText className="ssafy-mate">SSAFY MATE</FindIdText>
-                <FindIdText className="user-id"> {findId}</FindIdText>
+                <FindIdText className="user-id">{findId}</FindIdText>
               </FindIdWrapper>
             </>
           )}
-          {findId === '' ? (
-            <CardFooter>
+          <CardFooter>
+            {findId === '' ? (
               <SubmitButton type="submit" onClick={handleFindIdButton}>
                 아이디 찾기
               </SubmitButton>
-            </CardFooter>
-          ) : (
-            <CardFooter>
-              <SubmitButton type="button" onClick={moveToSignIn}>
-                로그인
-              </SubmitButton>
-            </CardFooter>
-          )}
+            ) : (
+              <SignInLinkButton to="/users/sign_in">
+                로그인 하러가기
+              </SignInLinkButton>
+            )}
+          </CardFooter>
         </Wrapper>
       </Container>
     </>
@@ -258,19 +242,6 @@ const Head = styled.h1`
   }
 `;
 
-const FindIconWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 80px;
-  margin-bottom: 16px;
-`;
-
-const FindIdIcon = styled(CheckCircleOutlineIcon)`
-  width: 100%;
-  transform: scale(1.8);
-`;
-
 const SubHead = styled.h2`
   font-size: 16px;
   line-height: 1.6;
@@ -281,10 +252,14 @@ const SubHead = styled.h2`
   }
 `;
 
-const SubInfo = styled.h3`
-  font-size: 13px;
+const SubInfo = styled.p`
+  font-size: 14px;
   line-height: 1.6;
   color: #98a8b9;
+
+  @media (max-width: 575px) {
+    font-size: 13px;
+  }
 `;
 
 const CardForm = styled.form``;
@@ -375,6 +350,7 @@ const ErrorMessage = styled.span`
 `;
 
 const FindIdWrapper = styled.div`
+  overflow: hidden;
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -389,6 +365,7 @@ const FindIdWrapper = styled.div`
   font-size: 16px;
   line-height: 24px;
   color: #263747;
+
   transition: all 0.08s ease-in-out;
 
   @media (max-width: 575px) {
@@ -411,16 +388,11 @@ const FindIdImg = styled.img`
 `;
 
 const FindIdText = styled.div`
+  overflow: hidden;
   margin-left: 8px;
-
-  &.ssafy-mate {
-    font-weight: 700;
-    color: #3396f4;
-  }
-
-  &.user-id {
-    margin-left: 16px;
-  }
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 
   @media (max-width: 575px) {
     font-size: 13px;
@@ -429,6 +401,37 @@ const FindIdText = styled.div`
 const CardFooter = styled.div``;
 
 const SubmitButton = styled.button`
+  width: 100%;
+  height: 40px;
+  margin-top: 8px;
+  border: none;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+  background-color: #3396f4;
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+  transition: background-color 0.08s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #2878c3;
+  }
+  &:disabled {
+    background-color: #ebf0fe;
+    color: #8e888e;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 575px) {
+    font-size: 15px;
+  }
+`;
+
+const SignInLinkButton = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   width: 100%;
   height: 40px;
   margin-top: 8px;
