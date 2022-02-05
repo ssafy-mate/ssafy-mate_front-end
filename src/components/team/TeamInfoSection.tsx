@@ -1,6 +1,8 @@
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 
 import { useParams } from 'react-router-dom';
+
+import { useDispatch } from 'react-redux';
 
 import styled from '@emotion/styled';
 
@@ -18,6 +20,10 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
+import { ApplicationRequestType } from '../../types/authTypes';
+
+import { sendApplication as sendApplicationSagaStart } from '../../redux/modules/auth';
+
 import useTeamInfo from '../../hooks/useTeamInfo';
 
 import UserLabel from '../user/UserLabel';
@@ -34,9 +40,18 @@ type Params = {
   teamId: string;
 };
 
+interface MessageTextFieldProps {
+  warning: string;
+}
+
 const TeamInfoSection: React.FC = () => {
+  const [applicationMessage, setApplicationMessage] = useState<string>('');
+  const [onMessageWarning, setOnMessageWarning] = useState<boolean>(false);
+  const [openApplicationDialog, setOpenApplicationDialog] =
+    useState<boolean>(false);
+
+  const dispatch = useDispatch();
   const { teamId } = useParams<Params>();
-  const [openApplicationDialog, setOpenApplicationDialog] = useState(false);
   const { isLoading, teamData, isError, errorMessage } = useTeamInfo(teamId);
 
   useEffect(() => {
@@ -49,11 +64,53 @@ const TeamInfoSection: React.FC = () => {
     }
   }, [teamData, isError, errorMessage]);
 
+  useEffect(() => {
+    if (applicationMessage !== '') {
+      setOnMessageWarning(false);
+    }
+  }, [applicationMessage]);
+
+  const sendApplication = useCallback(
+    (application: ApplicationRequestType) => {
+      dispatch(sendApplicationSagaStart(application));
+    },
+    [dispatch],
+  );
+
   const handleOpenApplicationDialog = () => {
     setOpenApplicationDialog(true);
   };
 
   const handleCloseApplicationDialog = () => {
+    setOnMessageWarning(false);
+    setOpenApplicationDialog(false);
+    setApplicationMessage('');
+  };
+
+  const handleChangeApplicationMessage = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setApplicationMessage(event.target.value);
+  };
+
+  const handleSendApplication = () => {
+    if (applicationMessage === '') {
+      alert('합류 지원 메시지를 입력해주세요.');
+      setOnMessageWarning(true);
+      return;
+    }
+
+    const application = {
+      teamId: parseInt(teamId),
+      message: applicationMessage,
+    };
+
+    if (onMessageWarning) {
+      setOnMessageWarning(false);
+    }
+
+    sendApplication(application);
+    setApplicationMessage('');
     setOpenApplicationDialog(false);
   };
 
@@ -170,6 +227,7 @@ const TeamInfoSection: React.FC = () => {
                     <TeamTechStackTag
                       key={index}
                       techStackName={techStack.techStackName}
+                      techStackImgUrl={techStack.techStackImgUrl}
                     />
                   ))}
                 </TechStackList>
@@ -221,13 +279,15 @@ const TeamInfoSection: React.FC = () => {
           >
             <RequestDialogTitle>팀 합류 지원하기</RequestDialogTitle>
             <DialogContent>
-              <MuiTextField
+              <MessageTextField
                 autoFocus
                 margin="dense"
                 id="application-message"
                 label="합류 지원 메시지를 입력해주세요."
                 type="text"
                 variant="standard"
+                onChange={handleChangeApplicationMessage}
+                warning={onMessageWarning.toString()}
                 fullWidth
               />
             </DialogContent>
@@ -235,7 +295,7 @@ const TeamInfoSection: React.FC = () => {
               <DialogButton onClick={handleCloseApplicationDialog}>
                 취소
               </DialogButton>
-              <DialogButton onClick={handleCloseApplicationDialog}>
+              <DialogButton onClick={handleSendApplication}>
                 보내기
               </DialogButton>
             </DialogActions>
@@ -607,15 +667,21 @@ const RequestDialogTitle = styled(DialogTitle)`
   }
 `;
 
-const MuiTextField = styled(TextField)`
+const DialogButton = styled(Button)`
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  color: #3396f4;
+  font-size: 13px;
+`;
+
+const MessageTextField = styled(TextField)<MessageTextFieldProps>`
   & label,
   & input {
     font-family: 'Spoqa Han Sans Neo', 'sans-serif';
     font-size: 16px;
   }
 
-  & input {
-    color: #3396f4;
+  & label {
+    color: ${(props) => (props.warning === 'true' ? '#f44336' : '#3396f4')};
   }
 
   @media (max-width: 575px) {
@@ -624,12 +690,6 @@ const MuiTextField = styled(TextField)`
       font-size: 14px;
     }
   }
-`;
-
-const DialogButton = styled(Button)`
-  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
-  color: #3396f4;
-  font-size: 13px;
 `;
 
 export default TeamInfoSection;

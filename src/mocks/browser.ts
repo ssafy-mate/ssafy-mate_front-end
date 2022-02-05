@@ -11,8 +11,12 @@ import { projectHandlers } from './handlers/projectHandlers';
 import { chattingHandlers } from './handlers/chattingHandlers';
 
 export const worker = setupWorker(
-  ...authHandlers,
-  ...signInHandlers,
+  // ...authHandlers,
+  ...userHandlers,
+  ...teamHandlers,
+  ...chattingHandlers,
+  // ...techStackHandlers,
+  // ...signInHandlers,
   ...newPasswordHandlers,
   ...findIdHandlers,
   ...userHandlers,

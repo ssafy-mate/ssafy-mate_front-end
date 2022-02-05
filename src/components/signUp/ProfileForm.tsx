@@ -62,8 +62,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const [alertText, setAlertText] = useState<string>('');
   const [alertSeverity, setAlertSeverity] = useState<Severity>('success');
 
-  const techStackList = useTechStackList();
-
+  const techStackList: TechStackWithImg[] = useTechStackList();
   const signUpFormData = new FormData();
   const dispatch = useDispatch();
 
@@ -84,6 +83,8 @@ const ProfileForm: React.FC<ProfileProps> = ({
     options: techStackList,
     getOptionLabel: (option) => option.techStackName,
   });
+
+  const signUpFormData = new FormData();
 
   const showAlert = (type: Severity, message: string) => {
     setAlertSeverity(type);

@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-
 import styled from '@emotion/styled';
 
 import { HomeBannderCardProps } from '../../types/commonTypes';
@@ -8,11 +6,10 @@ const HomeBannerCard: React.FC<HomeBannderCardProps> = ({
   head,
   subHead,
   descriptions,
-  pageUrl,
   imgUrl,
 }) => {
   return (
-    <BannerCard to={pageUrl}>
+    <BannerCard>
       <InfoWrapper>
         <Head>{head}</Head>
         <SubHead>{subHead}</SubHead>
@@ -27,7 +24,7 @@ const HomeBannerCard: React.FC<HomeBannderCardProps> = ({
   );
 };
 
-const BannerCard = styled(Link)`
+const BannerCard = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -45,12 +42,6 @@ const BannerCard = styled(Link)`
   }
   @media (max-width: 575px) {
     height: 440px;
-  }
-
-  &:hover {
-    & h2 {
-      text-decoration: underline 2px;
-    }
   }
 `;
 

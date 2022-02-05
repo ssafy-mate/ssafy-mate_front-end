@@ -1,5 +1,7 @@
 import { RouterState } from 'connected-react-router';
+
 import { AnyAction, Reducer } from 'redux';
+
 import { alertState } from './alertTypes';
 
 export type SignInRequestType = {
@@ -20,7 +22,7 @@ export interface SignInResponse {
   message: string;
 }
 
-export interface project {
+export interface Project {
   projectId: number | null;
   projectName: string | null;
   projectTrack: string | null;
@@ -34,10 +36,11 @@ export interface AuthState {
   studentNumber: string | null;
   campus: string | null;
   ssafyTrack: string | null;
+  projects: Project[] | null;
   token: string | null;
-  projects: project[] | null;
+  loading: boolean;
   message: string | null;
-  error: Error | null;
+  error: string | null;
 }
 
 export interface SignInUser {
@@ -48,14 +51,31 @@ export interface SignInUser {
   campus: string | null;
   ssafyTrack: string | null;
   token: string | null;
-  projects: project[] | null;
-  message: string;
+  projects: Project[] | null;
+  message: string | null;
   status: number | null;
   success: boolean | null;
-  error: Error | null;
 }
 
-// Reduce
+export interface ProjectsState {
+  projects: Project[];
+}
+
+export interface RootState {
+  auth: AuthState;
+  router: Reducer<RouterState<unknown>, AnyAction>;
+}
+
+export interface ProjectTrackRequestType {
+  projectId: number;
+  projectTrack: string;
+}
+
+export interface ApplicationRequestType {
+  teamId: number;
+  message: string;
+}
+
 export interface RootState {
   auth: AuthState;
   controlAlert: alertState | string;

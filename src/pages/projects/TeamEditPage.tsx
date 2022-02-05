@@ -1,6 +1,12 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
+
+import { Redirect } from 'react-router-dom';
+
+import { useMediaQuery } from 'react-responsive';
 
 import styled from '@emotion/styled';
+
+import useToken from '../../hooks/useToken';
 
 import Header from '../../components/common/Header';
 import ProjectNavigation from '../../components/projects/ProjectNavigation';
@@ -8,9 +14,18 @@ import EditTeamForm from '../../components/team/EditTeamForm';
 import Footer from '../../components/common/Footer';
 
 const TeamEditPage: React.FC = () => {
+  const token = useToken();
+  const smallMedia = useMediaQuery({
+    query: '(max-width: 575px)',
+  });
+
   useEffect(() => {
     document.title = '팀 정보 수정 | 싸피 메이트';
   }, []);
+
+  if (!token) {
+    return <Redirect to="/users/sign_in" />;
+  }
 
   return (
     <>
@@ -19,7 +34,7 @@ const TeamEditPage: React.FC = () => {
       <Container>
         <EditTeamForm />
       </Container>
-      <Footer />
+      {!smallMedia && <Footer />}
     </>
   );
 };

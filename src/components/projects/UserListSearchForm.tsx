@@ -5,11 +5,12 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
-import GroupsIcon from '@mui/icons-material/Groups';
 import CheckIcon from '@mui/icons-material/Check';
 
 import useQueryString from '../../hooks/useQueryString';
 import useTechStackList from '../../hooks/useTechStackList';
+
+import { TechStackWithImg } from '../../types/commonTypes';
 
 import {
   ssafyTrackListData,
@@ -44,7 +45,7 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
   const [userName, onSetUserName] = useQueryString('user_name');
   const [ssafyTrack, onSetSsafyTrack] = useQueryString('ssafy_track');
 
-  const techStackList = useTechStackList();
+  const techStackList: TechStackWithImg[] = useTechStackList();
 
   const {
     getInputProps,

@@ -9,17 +9,18 @@ import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 
-import { campusListData, projectListData } from '../../data/ssafyData';
-
 import { TechStackWithImg } from '../../types/commonTypes';
 
-import TechStackTag from '../common/TechStackTag';
+import { campusListData, projectListData } from '../../data/ssafyData';
+
 import useTechStackList from '../../hooks/useTechStackList';
+
+import TechStackTag from '../common/TechStackTag';
 
 const TeamCreateForm: React.FC = () => {
   const [teamImg, setTeamImg] = useState(null);
   const [previewTeamImg, setPreviewTeamImg] = useState(null);
-  const techStackList = useTechStackList();
+  const techStackList: TechStackWithImg[] = useTechStackList();
   const {
     getRootProps,
     getInputLabelProps,

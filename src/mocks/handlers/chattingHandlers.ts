@@ -2,7 +2,7 @@ import { rest } from 'msw';
 
 export const chattingHandlers = [
   rest.get(
-    'http://localhost:3000/api/chat/room/:userId',
+    'http://i6a402.p.ssafy.io:8081/api/chat/room/:userId',
     async (request, response, context) => {
       const status: number = 200;
 
@@ -47,7 +47,7 @@ export const chattingHandlers = [
   ),
 
   rest.get(
-    'http://localhost:3000/api/chat/log',
+    'http://i6a402.p.ssafy.io:8081/api/chat/log',
     async (request, response, context) => {
       const status: number = 200;
 

@@ -10,6 +10,8 @@ import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
 import GroupsIcon from '@mui/icons-material/Groups';
 import CheckIcon from '@mui/icons-material/Check';
 
+import { TechStackWithImg } from '../../types/commonTypes';
+
 import { campusListData, projectListData } from '../../data/ssafyData';
 import { jobListData } from '../../data/jobListData';
 
@@ -39,7 +41,7 @@ const TeamListSearchForm: React.FC<TeamListSearchFormProps> = ({
   const [techStackCode, onSetTechStackCode] = useQueryString('techstack_code');
   const [teamName, onSetTeamName] = useQueryString('team_name');
 
-  const techStackList = useTechStackList();
+  const techStackList: TechStackWithImg[] = useTechStackList();
 
   const {
     getInputProps,

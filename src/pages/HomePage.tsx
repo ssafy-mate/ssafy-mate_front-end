@@ -2,8 +2,8 @@ import { useEffect } from 'react';
 
 import Header from '../components/common/Header';
 import HomeBannerSection from '../components/home/HomeBannerSection';
-import Footer from '../components/common/Footer';
 import ProjectsSection from '../components/home/ProjectsSection';
+import Footer from '../components/common/Footer';
 
 const HomePage: React.FC = () => {
   useEffect(() => {

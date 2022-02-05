@@ -13,7 +13,6 @@ import controlAlert from './modules/alert';
 
 const createReduxStore = () => {
   const token = TokenService.get();
-
   const sagaMiddleWare = createSagaMiddleware();
 
   const store = createStore(
@@ -26,8 +25,9 @@ const createReduxStore = () => {
         studentNumber: null,
         campus: null,
         ssafyTrack: null,
-        token: token,
         projects: null,
+        token,
+        loading: false,
         message: null,
         error: null,
       },

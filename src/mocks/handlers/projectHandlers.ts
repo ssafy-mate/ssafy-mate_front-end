@@ -5,7 +5,7 @@ import { userListData } from '../database/user';
 
 export const projectHandlers = [
   rest.get(
-    'http://localhost:3000/api/auth/project/team-list',
+    'http://i6a402.p.ssafy.io:8081/api/auth/project/team-list',
     async (request, response, context) => {
       const token = request.headers['_headers'].authorization.split(' ')[1];
       const campus = request.url.searchParams.get('campus');
@@ -61,11 +61,11 @@ export const projectHandlers = [
         });
 
       // 토큰이 유효하지 않을 시
-      if (token !== 't123456789') {
+      if (token === null) {
         return response(
-          context.status(401),
+          context.status(403),
           context.json({
-            status: 401,
+            status: 403,
             success: false,
             message: '토큰이 유효하지 않습니다.',
           }),
@@ -85,7 +85,7 @@ export const projectHandlers = [
   ),
 
   rest.get(
-    'http://localhost:3000/api/auth/project/user-list',
+    'http://i6a402.p.ssafy.io:8081/api/auth/project/user-list',
     async (request, response, context) => {
       const token = request.headers['_headers'].authorization.split(' ')[1];
       const campus = request.url.searchParams.get('campus');
@@ -124,11 +124,11 @@ export const projectHandlers = [
         );
 
       // 토큰이 유효하지 않을 시
-      if (token !== 't123456789') {
+      if (token === null) {
         return response(
-          context.status(401),
+          context.status(403),
           context.json({
-            status: 401,
+            status: 403,
             success: false,
             message: '토큰이 유효하지 않습니다.',
           }),
