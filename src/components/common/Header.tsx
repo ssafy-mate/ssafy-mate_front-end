@@ -2,9 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 
 import { Link } from 'react-router-dom';
 
-import { useDispatch } from 'react-redux';
-
 import { useMediaQuery } from 'react-responsive';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../redux/modules/auth';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -23,11 +24,12 @@ import MenuList from '@mui/material/MenuList';
 import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
 
-import { logout } from '../../redux/modules/auth';
+import { RootState } from '../../types/authTypes';
 
 import useToken from '../../hooks/useToken';
 import useUserId from '../../hooks/useUserId';
 
+import SsafyMateAlert from './Alert';
 import MenuBar from './MenuBar';
 
 interface MenuListProps {
@@ -58,6 +60,13 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
   const isMobile = useMediaQuery({
     query: '(max-width: 991px)',
   });
+
+  const token = useSelector<RootState, string | null>(
+    (state) => state?.auth.token,
+  );
+  const ssafyMateAlert: any = useSelector<RootState>(
+    (state) => state.controlAlert,
+  );
 
   useEffect(() => {
     if (token !== null) {
@@ -133,6 +142,11 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
           ) : null}
         </BrandWrapper>
         <AccountMenuList isExpanded={isExpanded}>
+        <SsafyMateAlert
+          text={ssafyMateAlert.text}
+          show={ssafyMateAlert.show}
+          type={ssafyMateAlert.type}
+        />
           {!isLoggedIn ? (
             <>
               <AccountMenuItem>

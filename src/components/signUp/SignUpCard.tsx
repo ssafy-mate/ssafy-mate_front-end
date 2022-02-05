@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 import { Redirect } from 'react-router-dom';
 
@@ -19,57 +19,47 @@ const SignUpCard: React.FC = () => {
   const [signUpPassword, setSignUpPassword] = useState<string>('');
 
   return (
-    <>
-      <Container>
-        <Wrapper>
-          <Head>회원가입</Head>
-          <SignUpStepper signUpStep={signUpStep} />
-          {(() => {
-            switch (signUpStep) {
-              case 0:
-                return (
-                  <AuthForm
-                    signUpStep={signUpStep}
-                    campus={campus}
-                    ssafyTrack={ssafyTrack}
-                    studentNumber={studentNumber}
-                    studentName={studentName}
-                    setSignUpStep={setSignUpStep}
-                    setCampus={setCampus}
-                    setSsafyTrack={setSsafyTrack}
-                    setStudentNumber={setStudentNumber}
-                    setStudentName={setStudentName}
-                  />
-                );
-              case 1:
-                return (
-                  <SignUpForm
-                    signUpStep={signUpStep}
-                    signUpEmail={signUpEmail}
-                    signUpPassword={signUpPassword}
-                    setSignUpStep={setSignUpStep}
-                    setSignUpEmail={setSignUpEmail}
-                    setSignUpPassword={setSignUpPassword}
-                  />
-                );
-              case 2:
-                return (
-                  <ProfileForm
-                    campus={campus}
-                    ssafyTrack={ssafyTrack}
-                    studentNumber={studentNumber}
-                    studentName={studentName}
-                    signUpEmail={signUpEmail}
-                    signUpPassword={signUpPassword}
-                  />
-                );
-              default:
-                return <Redirect to="/" />;
-            }
-          })()}
-        </Wrapper>
-      </Container>
-    </>
+    <Container>
+      <Wrapper>
+        <Head>회원가입</Head>
+        <SignUpStepper signUpStep={signUpStep} />
+        {(() => {
+          switch (signUpStep) {
+            case 0:
+              return (
+                <AuthForm
+                  setSignUpStep={setSignUpStep}
+                  setCampus={setCampus}
+                  setSsafyTrack={setSsafyTrack}
+                  setStudentNumber={setStudentNumber}
+                  setStudentName={setStudentName}
+                />
+              );
+            case 1:
+              return (
+                <SignUpForm
+                  setSignUpStep={setSignUpStep}
+                  setSignUpEmail={setSignUpEmail}
+                  setSignUpPassword={setSignUpPassword}
+                />
+              );
+            case 2:
+              return (
+                <ProfileForm
+                  campus={campus}
+                  ssafyTrack={ssafyTrack}
+                  studentNumber={studentNumber}
+                  studentName={studentName}
+                  signUpEmail={signUpEmail}
+                  signUpPassword={signUpPassword}
+                />
+              );
+            default:
+              return <Redirect to="/" />;
+          }
+        })()}
+      </Wrapper>
+    </Container>
   );
 };
 
@@ -93,7 +83,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const Head = styled.h3`
+const Head = styled.h1`
   margin-bottom: 56px;
   font-size: 26px;
   font-weight: 600;
@@ -102,6 +92,7 @@ const Head = styled.h3`
 
   @media (max-width: 575px) {
     margin-bottom: 40px;
+    font-size: 22px;
   }
 `;
 

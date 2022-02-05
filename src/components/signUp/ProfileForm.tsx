@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -29,6 +29,8 @@ import AuthService from '../../services/AuthService';
 
 import useTechStackList from '../../hooks/useTechStackList';
 import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
+import { useDispatch } from 'react-redux';
+import { showSsafyMateAlert } from '../../redux/modules/alert';
 
 const ProfileForm: React.FC<ProfileProps> = ({
   campus,
@@ -61,6 +63,8 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const [alertSeverity, setAlertSeverity] = useState<Severity>('success');
 
   const techStackList: TechStackWithImg[] = useTechStackList();
+  const signUpFormData = new FormData();
+  const dispatch = useDispatch();
 
   const {
     getRootProps,
@@ -159,22 +163,22 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const updateTechStacks = (selectedTechStack: TechStacksWithLevel): void => {
     const updateTechStackIndex = techStacks.findIndex(
       (techStack) =>
-        techStack.techStackName === selectedTechStack.techStackName,
+        techStack.techStackCode === selectedTechStack.techStackCode,
     );
 
     const tempTechStacks = [...techStacks];
 
     tempTechStacks[updateTechStackIndex] = {
-      techStackName: selectedTechStack.techStackName,
+      techStackCode: selectedTechStack.techStackCode,
       techStackLevel: selectedTechStack.techStackLevel,
     };
 
     setTechStacks(tempTechStacks);
   };
 
-  const deleteTechStacks = (seletedTechStackName: string): void => {
+  const deleteTechStacks = (seletedTechStackId: number): void => {
     const findStackIndex = techStacks.findIndex(
-      (techStack) => techStack.techStackName === seletedTechStackName,
+      (techStack) => techStack.techStackCode === seletedTechStackId,
     );
 
     const tempTechStacks = [...techStacks];
@@ -186,17 +190,21 @@ const ProfileForm: React.FC<ProfileProps> = ({
     setTechStacks(tempTechStacks);
   };
 
-  const controlTechStacks = (selectedTechStack: string) => {
-    if (!JSON.stringify(techStacks).includes(selectedTechStack)) {
+  const controlTechStacks = (selectedTechStackId: number) => {
+    const findTeckStackId = techStacks.findIndex(
+      (techStack) => techStack.techStackCode === selectedTechStackId,
+    );
+
+    if (findTeckStackId === -1) {
       setTechStacks([
         ...techStacks,
         {
-          techStackName: selectedTechStack,
+          techStackCode: selectedTechStackId,
           techStackLevel: '중',
         },
       ]);
     } else {
-      deleteTechStacks(selectedTechStack);
+      deleteTechStacks(selectedTechStackId);
     }
   };
 
@@ -299,8 +307,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
     if (validation()) {
       AuthService.signUp(data)
         .then(({ status, message }) => {
-          showAlert('success', message);
-
+          dispatch(showSsafyMateAlert(true, message, 'success'));
           history.push('/users/sign_in');
         })
         .catch((error) => {
@@ -469,8 +476,9 @@ const ProfileForm: React.FC<ProfileProps> = ({
                 {(groupedOptions as typeof techStackList).map(
                   (option, index) => (
                     <SearchItemWrapper
+                      key={option.id}
                       onClick={() => {
-                        controlTechStacks(option.techStackName);
+                        controlTechStacks(option.id);
                       }}
                     >
                       <SearchItem {...getOptionProps({ option, index })}>
@@ -529,7 +537,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
               placeholder="https://github.com/ssafy-mate"
               onChange={handleUrlInput}
               pattern="https://.*"
-              css={{ marginBottom: '16px' }}
             />
           </InputWrapper>
         </Row>
@@ -552,7 +559,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
               placeholder="https://velog.io/@ssafy-mate"
               onChange={handleUrlInput}
               pattern="https://.*"
-              css={{ marginBottom: '16px' }}
             />
           </InputWrapper>
         </Row>
@@ -768,6 +774,7 @@ const InfoInputWrapper = styled.div`
 const InfoInput = styled.input`
   width: 100%;
   height: 40px;
+  margin-bottom: 16px;
   padding: 8px 12px;
   outline: 0;
   border: 1px solid #d7e2eb;
@@ -883,7 +890,7 @@ const AgreementLink = styled.a`
 const SignUpButton = styled.button`
   width: 100%;
   height: 40px;
-  margin-top: 24px;
+  margin-top: 16px;
   border: none;
   border-radius: 0.25rem;
   box-sizing: border-box;

@@ -1,5 +1,8 @@
 import { RouterState } from 'connected-react-router';
+
 import { AnyAction, Reducer } from 'redux';
+
+import { alertState } from './alertTypes';
 
 export type SignInRequestType = {
   userEmail: string;
@@ -36,6 +39,7 @@ export interface AuthState {
   projects: Project[] | null;
   token: string | null;
   loading: boolean;
+  message: string | null;
   error: string | null;
 }
 
@@ -70,4 +74,10 @@ export interface ProjectTrackRequestType {
 export interface ApplicationRequestType {
   teamId: number;
   message: string;
+}
+
+export interface RootState {
+  auth: AuthState;
+  controlAlert: alertState | string;
+  router: Reducer<RouterState<unknown>, AnyAction>;
 }
