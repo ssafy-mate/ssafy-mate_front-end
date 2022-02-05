@@ -24,8 +24,6 @@ import UserService from '../../services/UserService';
 import PersistReducerService from '../../services/PersistReducerService';
 import TeamService from '../../services/TeamService';
 
-import history from '../../history';
-
 import { showSsafyMateAlert } from './alert';
 
 interface SendApplicationResponseType {
@@ -135,9 +133,9 @@ function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
 
       yield put(success(data));
 
-      const message: string = yield select((state) => state.auth.message);
+      // const message: string = yield select((state) => state.auth.message);
 
-      yield put(showSsafyMateAlert(true, message, 'success'));
+      yield put(showSsafyMateAlert(true, data.message, 'success'));
 
       if (action.payload.IdSave) {
         localStorage.setItem('ssafy-mate-id', action.payload.userEmail);

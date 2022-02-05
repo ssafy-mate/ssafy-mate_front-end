@@ -63,7 +63,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const [alertSeverity, setAlertSeverity] = useState<Severity>('success');
 
   const techStackList: TechStackWithImg[] = useTechStackList();
-  const signUpFormData = new FormData();
   const dispatch = useDispatch();
 
   const {

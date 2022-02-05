@@ -61,9 +61,6 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
     query: '(max-width: 991px)',
   });
 
-  const token = useSelector<RootState, string | null>(
-    (state) => state?.auth.token,
-  );
   const ssafyMateAlert: any = useSelector<RootState>(
     (state) => state.controlAlert,
   );
@@ -142,11 +139,11 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
           ) : null}
         </BrandWrapper>
         <AccountMenuList isExpanded={isExpanded}>
-        <SsafyMateAlert
-          text={ssafyMateAlert.text}
-          show={ssafyMateAlert.show}
-          type={ssafyMateAlert.type}
-        />
+          <SsafyMateAlert
+            text={ssafyMateAlert.text}
+            show={ssafyMateAlert.show}
+            type={ssafyMateAlert.type}
+          />
           {!isLoggedIn ? (
             <>
               <AccountMenuItem>

@@ -1,10 +1,10 @@
-import { context, rest } from 'msw';
+import { rest } from 'msw';
 
 import { teamDataList } from '../database/team';
 
 export const teamHandlers = [
   rest.post(
-    'http://localhost:3000/api/auth/team',
+    'http://i6a402.p.ssafy.io:8081/api/auth/team',
     async (request, response, context) => {
       const status: number = 200;
 
@@ -38,7 +38,7 @@ export const teamHandlers = [
   ),
 
   rest.get(
-    'http://localhost:3000/api/auth/team/info/:teamId',
+    'http://i6a402.p.ssafy.io:8081/api/auth/team/info/:teamId',
     async (request, response, context) => {
       const { teamId } = request.params;
       const teamIndex = teamDataList.findIndex(
@@ -76,7 +76,7 @@ export const teamHandlers = [
   ),
 
   rest.post(
-    'http://localhost:3000/api/auth/team/request',
+    'http://i6a402.p.ssafy.io:8081/api/auth/team/request',
     async (request, response, context) => {
       const token: string =
         request.headers['_headers'].authorization.split(' ')[1];

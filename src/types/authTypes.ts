@@ -52,7 +52,7 @@ export interface SignInUser {
   ssafyTrack: string | null;
   token: string | null;
   projects: Project[] | null;
-  message: string | null;
+  message: string;
   status: number | null;
   success: boolean | null;
 }
