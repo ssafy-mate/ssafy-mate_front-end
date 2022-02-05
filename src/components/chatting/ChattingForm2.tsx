@@ -62,8 +62,15 @@ const ChattingForm: React.FC = () => {
   const scrollbarRef = useRef<Scrollbars>(null);
 
   // 채팅 목록 불러오기
-  const { data: roomData, mutate: mutateRoom } =
-    useSWR<ChatRoomListResponseType>(`/api/chat/room/${myId}`, fetcherGet);
+  const {
+    data: roomData,
+    error: roomError,
+    mutate: mutateRoom,
+  } = useSWR<ChatRoomListResponseType>(`/api/chat/room/${myId}`, fetcherGet);
+
+  // #######
+  // 토큰이 없는 상태에서 접근하면 error 페이지로, teamInfoPage 확인
+  // #######
 
   // 대화 내역 불러오기 - 인피니티 스크롤용
   // const {
@@ -92,7 +99,9 @@ const ChattingForm: React.FC = () => {
     fetcherGetWithParams,
   );
 
-  console.log(`chatRom List : ${roomData} / chat log : ${chatData}`);
+  console.log(
+    `chatRom List : ${roomData?.toString()} / chat log : ${chatData?.toString()}`,
+  );
 
   // 내가 메시지를 보내거나, 서버 챗 데이터 변경이 일어났을 때 발동하는 콜백
   // 서버로 메시지 정보 post 요청
@@ -207,15 +216,15 @@ const ChattingForm: React.FC = () => {
             <ChatRoomMessageList>
               <Scrollbars autoHide ref={scrollbarRef}>
                 <MessageWrapper ref={chatRoomMessageRef}>
-                  {messageList.length > 0
-                    ? messageList.map((message, index) => {
+                  {chatData && chatData.contentList.length > 0
+                    ? chatData?.contentList.map((message, index) => {
                         if (message.senderId === myId) {
                           return (
                             <MessageBoxWrapper key={index}>
                               <MessageBoxRightContent>
                                 <MessageTimeBox>
                                   <div className="message_date">
-                                    {currentTimeCalculate()}
+                                    {dayjs().format('HH:mm')}
                                   </div>
                                 </MessageTimeBox>
                                 <p>{message.content}</p>
