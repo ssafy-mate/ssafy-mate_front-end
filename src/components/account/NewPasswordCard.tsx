@@ -42,7 +42,7 @@ const NewPasswordCard: React.FC = () => {
     useState<string>('');
   const [newPasswordCheckInputError, setNewPasswordCheckInputError] =
     useState<string>('');
-  const [timestop, setTimeStop] = useState<number>(1);
+  const [timestop, setTimeStop] = useState<number>(0);
 
   const dispatch = useDispatch();
 
@@ -132,6 +132,7 @@ const NewPasswordCard: React.FC = () => {
         setLoading(false);
         dispatch(showSsafyMateAlert(true, message, 'success'));
         setStepForNewPassword(2);
+        setTimeStop(1);
         resetTimer();
         verificationCodeButtonsOff();
       })
