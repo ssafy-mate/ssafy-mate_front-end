@@ -159,7 +159,7 @@ export const userHandlers = [
         );
       }
 
-      // 팀 지원 완료 시
+      // 팀 지원 성공 시
       return response(
         context.json({
           success: true,
