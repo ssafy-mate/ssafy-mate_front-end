@@ -23,6 +23,7 @@ interface UserProject {
 interface UserTechStack {
   id: number;
   techStackName: string;
+  techStackImgUrl: string;
   techStackLevel: string;
 }
 

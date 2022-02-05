@@ -3,6 +3,8 @@ import { go, push } from 'connected-react-router';
 import { Action, createActions, handleActions } from 'redux-actions';
 import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
 
+import Swal from 'sweetalert2';
+
 import {
   AuthState,
   SignInRequestTypeWithIdSave,
@@ -12,6 +14,7 @@ import {
   ProjectTrackRequestType,
   ApplicationRequestType,
 } from '../../types/authTypes';
+import { TeamOfferRequestType } from '../../types/teamTypes';
 
 import history from '../../history';
 
@@ -19,9 +22,14 @@ import SignInService from '../../services/SignInService';
 import TokenService from '../../services/TokenService';
 import UserService from '../../services/UserService';
 import PersistReducerService from '../../services/PersistReducerService';
-import Swal from 'sweetalert2';
+import TeamService from '../../services/TeamService';
 
 interface SendApplicationResponseType {
+  success: boolean;
+  message: string;
+}
+
+interface SendTeamOfferResponseType {
   success: boolean;
   message: string;
 }
@@ -90,10 +98,22 @@ const reducer = handleActions<AuthState, SignInUser, ProjectsState>(
 export default reducer;
 
 // saga
-export const { login, logout, selectProjectTrack, sendApplication } =
-  createActions('LOGIN', 'LOGOUT', 'SELECT_PROJECT_TRACK', 'SEND_APPLICATION', {
+export const {
+  login,
+  logout,
+  selectProjectTrack,
+  sendApplication,
+  sendTeamOffer,
+} = createActions(
+  'LOGIN',
+  'LOGOUT',
+  'SELECT_PROJECT_TRACK',
+  'SEND_APPLICATION',
+  'SEND_TEAM_OFFER',
+  {
     prefix,
-  });
+  },
+);
 
 function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
   try {
@@ -170,7 +190,6 @@ function* sendApplicationSaga(action: Action<ApplicationRequestType>) {
     yield put(pending());
 
     const token: string = yield select((state) => state.auth.token);
-
     const response: SendApplicationResponseType = yield call(
       UserService.sendApplication,
       token,
@@ -181,8 +200,8 @@ function* sendApplicationSaga(action: Action<ApplicationRequestType>) {
       title: '팀 지원 완료',
       text: response.message,
       icon: 'success',
-      confirmButtonColor: '#3396f4',
-      confirmButtonText: '확인',
+      showConfirmButton: false,
+      timer: 2000,
     });
   } catch (error: any) {
     yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
@@ -202,9 +221,46 @@ function* sendApplicationSaga(action: Action<ApplicationRequestType>) {
   }
 }
 
+function* sendTeamOfferSaga(action: Action<TeamOfferRequestType>) {
+  try {
+    yield put(pending());
+
+    const token: string = yield select((state) => state.auth.token);
+    const response: SendTeamOfferResponseType = yield call(
+      TeamService.sendTeamOffer,
+      token,
+      action.payload,
+    );
+
+    Swal.fire({
+      title: '팀 합류 요청 완료',
+      text: response.message,
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 2000,
+    });
+  } catch (error: any) {
+    yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
+
+    Swal.fire({
+      title: '팀 합류 요청 실패',
+      text: error.response.data.message,
+      icon: 'warning',
+      confirmButtonColor: '#3396f4',
+      confirmButtonText: '확인',
+    });
+  } finally {
+    const token: string = yield select((state) => state.auth.token);
+    const projects: Project[] = yield call(UserService.getUserProjects, token);
+
+    yield put(updateProjects(projects));
+  }
+}
+
 export function* authSaga() {
   yield takeEvery(`${prefix}/LOGIN`, loginSaga);
   yield takeEvery(`${prefix}/LOGOUT`, logoutSaga);
   yield takeLatest(`${prefix}/SELECT_PROJECT_TRACK`, selectProjectTrackSaga);
   yield takeLatest(`${prefix}/SEND_APPLICATION`, sendApplicationSaga);
+  yield takeLatest(`${prefix}/SEND_TEAM_OFFER`, sendTeamOfferSaga);
 }

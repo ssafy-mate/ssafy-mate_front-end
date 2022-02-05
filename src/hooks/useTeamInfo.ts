@@ -17,6 +17,7 @@ interface TeamOwner {
 interface TeamTechStack {
   id: number;
   techStackName: string;
+  techStackImgUrl: string;
 }
 
 interface TeamData {

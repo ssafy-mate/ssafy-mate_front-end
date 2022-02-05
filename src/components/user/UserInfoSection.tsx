@@ -1,6 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import { Link, useParams } from 'react-router-dom';
+
+import { useDispatch } from 'react-redux';
+import { sendTeamOffer as sendTeamOfferSagaStart } from '../../redux/modules/auth';
 
 import styled from '@emotion/styled';
 
@@ -22,6 +25,12 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+
+import { TeamOfferRequestType } from '../../types/teamTypes';
 
 import useUserInfo from '../../hooks/useUserInfo';
 
@@ -34,8 +43,22 @@ type Params = {
   userId: string;
 };
 
+interface MessageTextFieldProps {
+  warning: string;
+}
+
+interface OfferProjectLabelProps {
+  warning: string;
+}
+
 const UserInfoSection: React.FC = () => {
-  const [openRequestDialog, setOpenRequestDialog] = useState(false);
+  const [offerMessage, setOfferMessage] = useState<string>('');
+  const [offerProject, setOfferProject] = useState<string>('');
+  const [openOfferDialog, setOpenOfferDialog] = useState<boolean>(false);
+  const [onMessageWarning, setOnMessageWarning] = useState<boolean>(false);
+  const [onProjectWarning, setOnProjectWarning] = useState<boolean>(false);
+
+  const dispatch = useDispatch();
   const { userId } = useParams<Params>();
   const { isLoading, userData, isError, errorMessage } = useUserInfo(userId);
 
@@ -49,12 +72,80 @@ const UserInfoSection: React.FC = () => {
     }
   }, [userData, isError, errorMessage]);
 
-  const handleOpenRequestDialog = () => {
-    setOpenRequestDialog(true);
+  useEffect(() => {
+    if (offerProject !== '') {
+      setOnProjectWarning(false);
+    }
+  }, [offerProject]);
+
+  useEffect(() => {
+    if (offerMessage !== '') {
+      setOnMessageWarning(false);
+    }
+  }, [offerMessage]);
+
+  const sendTeamOffer = useCallback(
+    (teamOffer: TeamOfferRequestType) => {
+      dispatch(sendTeamOfferSagaStart(teamOffer));
+    },
+    [dispatch],
+  );
+
+  const handleOpenOfferDialog = () => {
+    setOpenOfferDialog(true);
   };
 
-  const handleCloseRequestDialog = () => {
-    setOpenRequestDialog(false);
+  const handleCloseOfferDialog = () => {
+    setOnProjectWarning(false);
+    setOnMessageWarning(false);
+    setOpenOfferDialog(false);
+    setOfferMessage('');
+    setOfferProject('');
+  };
+
+  const handleChangeOfferProject = (event: SelectChangeEvent) => {
+    setOfferProject(event.target.value as string);
+  };
+
+  const handleChangeOfferMessage = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setOfferMessage(event.target.value);
+  };
+
+  const handleSendTeamOffer = () => {
+    if (offerProject === '' && offerMessage === '') {
+      alert('프로젝트 선택과 합류 요청 메시지를 입력해주세요');
+      setOnProjectWarning(true);
+      setOnMessageWarning(true);
+      return;
+    } else if (offerProject === '') {
+      alert('프로젝트를 선택해주세요.');
+      setOnProjectWarning(true);
+      return;
+    } else if (offerMessage === '') {
+      alert('합류 요청 메시지를 입력해주세요.');
+      setOnMessageWarning(true);
+      return;
+    }
+
+    const teamOffer = {
+      project: offerProject,
+      userId: parseInt(userId),
+      message: offerMessage,
+    };
+
+    if (onProjectWarning) {
+      setOnProjectWarning(false);
+    }
+
+    if (onMessageWarning) {
+      setOnMessageWarning(false);
+    }
+
+    setOpenOfferDialog(false);
+    sendTeamOffer(teamOffer);
+    setOfferMessage('');
   };
 
   if (isError) {
@@ -92,7 +183,7 @@ const UserInfoSection: React.FC = () => {
               </NameWrapper>
             </TitleBox>
             <ButtonBox>
-              <RequestButton onClick={handleOpenRequestDialog}>
+              <RequestButton onClick={handleOpenOfferDialog}>
                 <VolunteerActivismIcon />
                 <span>팀 합류 요청하기</span>
               </RequestButton>
@@ -280,6 +371,7 @@ const UserInfoSection: React.FC = () => {
                 {userData.techStacks.map((techStack) => (
                   <UserTechStackTag
                     key={techStack.id}
+                    techStackImgUrl={techStack.techStackImgUrl}
                     techStackName={techStack.techStackName}
                     techStackLevel={techStack.techStackLevel}
                   />
@@ -288,30 +380,53 @@ const UserInfoSection: React.FC = () => {
             </Section>
           </BodyContainer>
           <Dialog
-            open={openRequestDialog}
-            onClose={handleCloseRequestDialog}
+            open={openOfferDialog}
+            onClose={handleCloseOfferDialog}
             fullWidth={true}
             maxWidth={'sm'}
           >
             <RequestDialogTitle>팀 합류 요청하기</RequestDialogTitle>
+            <OfferPorjectInputWrapper fullWidth>
+              <OfferProjectLabel
+                id="offer-project-select-label"
+                warning={onProjectWarning.toString()}
+              >
+                프로젝트 선택
+              </OfferProjectLabel>
+              <Select
+                labelId="offer-project-select-label"
+                id="offer-project-select"
+                label="offer-project"
+                value={offerProject}
+                onChange={handleChangeOfferProject}
+              >
+                <OfferProjectItem value="공통 프로젝트">
+                  공통 프로젝트
+                </OfferProjectItem>
+                <OfferProjectItem value="특화 프로젝트">
+                  특화 프로젝트
+                </OfferProjectItem>
+                <OfferProjectItem value="자율 프로젝트">
+                  자율 프로젝트
+                </OfferProjectItem>
+              </Select>
+            </OfferPorjectInputWrapper>
             <DialogContent>
-              <MuiTextField
+              <MessageTextField
                 autoFocus
                 margin="dense"
                 id="request-message"
                 label="합류 요청 메시지를 입력해주세요."
                 type="text"
                 variant="standard"
+                onChange={handleChangeOfferMessage}
+                warning={onMessageWarning.toString()}
                 fullWidth
               />
             </DialogContent>
             <DialogActions>
-              <DialogButton onClick={handleCloseRequestDialog}>
-                취소
-              </DialogButton>
-              <DialogButton onClick={handleCloseRequestDialog}>
-                보내기
-              </DialogButton>
+              <DialogButton onClick={handleCloseOfferDialog}>취소</DialogButton>
+              <DialogButton onClick={handleSendTeamOffer}>보내기</DialogButton>
             </DialogActions>
           </Dialog>
         </Container>
@@ -720,15 +835,15 @@ const RequestDialogTitle = styled(DialogTitle)`
   }
 `;
 
-const MuiTextField = styled(TextField)`
+const MessageTextField = styled(TextField)<MessageTextFieldProps>`
   & label,
   & input {
     font-family: 'Spoqa Han Sans Neo', 'sans-serif';
     font-size: 16px;
   }
 
-  & input {
-    color: #3396f4;
+  & label {
+    color: ${(props) => (props.warning === 'true' ? '#f44336' : '#3396f4')};
   }
 
   @media (max-width: 575px) {
@@ -743,6 +858,33 @@ const DialogButton = styled(Button)`
   font-family: 'Spoqa Han Sans Neo', 'sans-serif';
   color: #3396f4;
   font-size: 13px;
+`;
+
+const OfferPorjectInputWrapper = styled(FormControl)`
+  padding: 20px 24px 0 20px;
+  box-sizing: border-box;
+
+  & select {
+    padding: 20px 24px;
+  }
+`;
+
+const OfferProjectLabel = styled(InputLabel)<OfferProjectLabelProps>`
+  padding: 21px 26px;
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  font-size: 16px;
+
+  color: ${(props) => (props.warning === 'true' ? '#f44336' : '#3396f4')};
+`;
+
+const OfferProjectItem = styled(MenuItem)`
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  font-size: 16px;
+  color: #263647;
+
+  @media (max-width: 575px) {
+    font-size: 14px;
+  }
 `;
 
 export default UserInfoSection;

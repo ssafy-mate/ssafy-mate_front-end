@@ -1,21 +1,29 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import { Link } from 'react-router-dom';
 
+import { useDispatch } from 'react-redux';
+import { sendTeamOffer as sendTeamOfferSagaStart } from '../../redux/modules/auth';
+
 import styled from '@emotion/styled';
 
+import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import WorkIcon from '@mui/icons-material/Work';
+import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
+import ConstructionIcon from '@mui/icons-material/Construction';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
-import WorkIcon from '@mui/icons-material/Work';
-import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
-import ConstructionIcon from '@mui/icons-material/Construction';
 import GitHubIcon from '@mui/icons-material/GitHub';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 
+import { TeamOfferRequestType } from '../../types/teamTypes';
 import { TechStack } from '../../types/commonTypes';
 
 import UserLabel from '../user/UserLabel';
@@ -34,6 +42,14 @@ interface UserItemProps {
   belongToTeam: boolean;
 }
 
+interface MessageTextFieldProps {
+  warning: string;
+}
+
+interface OfferProjectLabelProps {
+  warning: string;
+}
+
 const UserItem: React.FC<UserItemProps> = ({
   userId,
   userName,
@@ -47,14 +63,88 @@ const UserItem: React.FC<UserItemProps> = ({
   githubUrl,
   belongToTeam,
 }) => {
-  const [openRequestDialog, setOpenRequestDialog] = useState(false);
+  const [offerMessage, setOfferMessage] = useState<string>('');
+  const [offerProject, setOfferProject] = useState<string>('');
+  const [openOfferDialog, setOpenOfferDialog] = useState<boolean>(false);
+  const [onMessageWarning, setOnMessageWarning] = useState<boolean>(false);
+  const [onProjectWarning, setOnProjectWarning] = useState<boolean>(false);
 
-  const handleOpenRequestDialog = () => {
-    setOpenRequestDialog(true);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (offerProject !== '') {
+      setOnProjectWarning(false);
+    }
+  }, [offerProject]);
+
+  useEffect(() => {
+    if (offerMessage !== '') {
+      setOnMessageWarning(false);
+    }
+  }, [offerMessage]);
+
+  const sendTeamOffer = useCallback(
+    (teamOffer: TeamOfferRequestType) => {
+      dispatch(sendTeamOfferSagaStart(teamOffer));
+    },
+    [dispatch],
+  );
+
+  const handleOpenOfferDialog = () => {
+    setOpenOfferDialog(true);
   };
 
-  const handleCloseRequestDialog = () => {
-    setOpenRequestDialog(false);
+  const handleCloseOfferDialog = () => {
+    setOnProjectWarning(false);
+    setOnMessageWarning(false);
+    setOpenOfferDialog(false);
+    setOfferMessage('');
+    setOfferProject('');
+  };
+
+  const handleChangeOfferProject = (event: SelectChangeEvent) => {
+    setOfferProject(event.target.value as string);
+  };
+
+  const handleChangeOfferMessage = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setOfferMessage(event.target.value);
+  };
+
+  const handleSendTeamOffer = () => {
+    if (offerProject === '' && offerMessage === '') {
+      alert('프로젝트 선택과 합류 요청 메시지를 입력해주세요');
+      setOnProjectWarning(true);
+      setOnMessageWarning(true);
+      return;
+    } else if (offerProject === '') {
+      alert('프로젝트를 선택해주세요.');
+      setOnProjectWarning(true);
+      return;
+    } else if (offerMessage === '') {
+      alert('합류 요청 메시지를 입력해주세요.');
+      setOnMessageWarning(true);
+      return;
+    }
+
+    const teamOffer = {
+      project: offerProject,
+      userId,
+      message: offerMessage,
+    };
+
+    if (onProjectWarning) {
+      setOnProjectWarning(false);
+    }
+
+    if (onMessageWarning) {
+      setOnMessageWarning(false);
+    }
+
+    setOpenOfferDialog(false);
+    sendTeamOffer(teamOffer);
+    setOfferMessage('');
   };
 
   return (
@@ -135,33 +225,60 @@ const UserItem: React.FC<UserItemProps> = ({
       </ItemBody>
       <ItemFooter className={belongToTeam ? 'belong' : ''}>
         {!belongToTeam && (
-          <RequestButton onClick={handleOpenRequestDialog}>
+          <RequestButton onClick={handleOpenOfferDialog}>
             팀 합류 요청
           </RequestButton>
         )}
         <ProfileLink to={`/users/${userId}`}>프로필 보기</ProfileLink>
       </ItemFooter>
       <Dialog
-        open={openRequestDialog}
-        onClose={handleCloseRequestDialog}
+        open={openOfferDialog}
+        onClose={handleCloseOfferDialog}
         fullWidth={true}
         maxWidth={'sm'}
       >
         <RequestDialogTitle>팀 합류 요청하기</RequestDialogTitle>
+        <OfferPorjectInputWrapper fullWidth>
+          <OfferProjectLabel
+            id="offer-project-select-label"
+            warning={onProjectWarning.toString()}
+          >
+            프로젝트 선택
+          </OfferProjectLabel>
+          <Select
+            labelId="offer-project-select-label"
+            id="offer-project-select"
+            label="offer-project"
+            value={offerProject}
+            onChange={handleChangeOfferProject}
+          >
+            <OfferProjectItem value="공통 프로젝트">
+              공통 프로젝트
+            </OfferProjectItem>
+            <OfferProjectItem value="특화 프로젝트">
+              특화 프로젝트
+            </OfferProjectItem>
+            <OfferProjectItem value="자율 프로젝트">
+              자율 프로젝트
+            </OfferProjectItem>
+          </Select>
+        </OfferPorjectInputWrapper>
         <DialogContent>
-          <MuiTextField
+          <MessageTextField
             autoFocus
             margin="dense"
             id="request-message"
             label="합류 요청 메시지를 입력해주세요."
             type="text"
             variant="standard"
+            onChange={handleChangeOfferMessage}
+            warning={onMessageWarning.toString()}
             fullWidth
           />
         </DialogContent>
         <DialogActions>
-          <DialogButton onClick={handleCloseRequestDialog}>취소</DialogButton>
-          <DialogButton onClick={handleCloseRequestDialog}>보내기</DialogButton>
+          <DialogButton onClick={handleCloseOfferDialog}>취소</DialogButton>
+          <DialogButton onClick={handleSendTeamOffer}>보내기</DialogButton>
         </DialogActions>
       </Dialog>
     </Item>
@@ -420,15 +537,15 @@ const RequestDialogTitle = styled(DialogTitle)`
   }
 `;
 
-const MuiTextField = styled(TextField)`
+const MessageTextField = styled(TextField)<MessageTextFieldProps>`
   & label,
   & input {
     font-family: 'Spoqa Han Sans Neo', 'sans-serif';
     font-size: 16px;
   }
 
-  & input {
-    color: #3396f4;
+  & label {
+    color: ${(props) => (props.warning === 'true' ? '#f44336' : '#3396f4')};
   }
 
   @media (max-width: 575px) {
@@ -443,6 +560,33 @@ const DialogButton = styled(Button)`
   font-family: 'Spoqa Han Sans Neo', 'sans-serif';
   color: #3396f4;
   font-size: 13px;
+`;
+
+const OfferPorjectInputWrapper = styled(FormControl)`
+  padding: 20px 24px 0 20px;
+  box-sizing: border-box;
+
+  & select {
+    padding: 20px 24px;
+  }
+`;
+
+const OfferProjectLabel = styled(InputLabel)<OfferProjectLabelProps>`
+  padding: 21px 26px;
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  font-size: 16px;
+
+  color: ${(props) => (props.warning === 'true' ? '#f44336' : '#3396f4')};
+`;
+
+const OfferProjectItem = styled(MenuItem)`
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  font-size: 16px;
+  color: #263647;
+
+  @media (max-width: 575px) {
+    font-size: 14px;
+  }
 `;
 
 export default UserItem;
