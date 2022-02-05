@@ -193,9 +193,11 @@ const FindUserIdCard: React.FC = () => {
           ) : (
             <>
               <FindIdWrapper>
-                <FindIdLabel htmlFor="find-id">이메일</FindIdLabel>
-
-                <FindId>{findId}</FindId>
+                <FindIdImgWrapper>
+                  <FindIdImg src="/images/common/ssafy-mate_logo.png" />
+                </FindIdImgWrapper>
+                <FindIdText className="ssafy-mate">SSAFY MATE</FindIdText>
+                <FindIdText className="user-id"> {findId}</FindIdText>
               </FindIdWrapper>
             </>
           )}
@@ -369,21 +371,7 @@ const ErrorMessage = styled.span`
 
 const FindIdWrapper = styled.div`
   display: flex;
-  flex-direction: column;
-`;
-
-const FindIdLabel = styled.label`
-  margin-bottom: 4px;
-  font-size: 14px;
-  line-height: 1.5;
-  color: #263747;
-
-  @media (max-width: 575px) {
-    font-size: 13px;
-  }
-`;
-
-const FindId = styled.div`
+  flex-direction: row;
   width: 100%;
   height: 40px;
   margin-bottom: 16px;
@@ -392,7 +380,7 @@ const FindId = styled.div`
   border: 1px solid #d7e2eb;
   border-radius: 0.25rem;
   box-sizing: border-box;
-  background-color: #fbfbfd;
+  background-color: #e8f0fe;
   font-size: 16px;
   line-height: 24px;
   color: #263747;
@@ -403,6 +391,36 @@ const FindId = styled.div`
   }
 `;
 
+const FindIdImgWrapper = styled.div`
+  display: flex;
+  width: 24px;
+  height: 100%;
+  border: 1px solid #fff;
+  border-radius: 5px;
+  background-color: #fff;
+`;
+
+const FindIdImg = styled.img`
+  width: 24px;
+  height: 100%;
+`;
+
+const FindIdText = styled.div`
+  margin-left: 8px;
+
+  &.ssafy-mate {
+    font-weight: 700;
+    color: #3396f4;
+  }
+
+  &.user-id {
+    margin-left: 16px;
+  }
+
+  @media (max-width: 575px) {
+    font-size: 13px;
+  }
+`;
 const CardFooter = styled.div``;
 
 const SubmitButton = styled.button`
