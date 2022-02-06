@@ -34,8 +34,8 @@ class AuthService {
 
   public static async getEmailVerificationCodeConfirm(
     data: EmailVerificationCodeConfirmRequest,
-  ): Promise<SignUpResponse> {
-    const response = await axiosInstance.put<SignUpResponse>(
+  ): Promise<{ success: boolean }> {
+    const response = await axiosInstance.put<{ success: boolean }>(
       '/api/user/sign-up/verification/email',
       data,
     );

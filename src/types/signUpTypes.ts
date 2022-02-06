@@ -57,7 +57,7 @@ export interface SignUpProfile {
 
 // 회원가입 모든 단계 응답
 export interface SignUpResponse {
-  status: number;
+  status: number | null;
   success: boolean;
   message: string;
 }

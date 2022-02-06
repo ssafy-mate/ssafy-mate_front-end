@@ -182,11 +182,11 @@ const SignUpForm: React.FC<SignUpProps> = ({
       setLoading(false);
     }
     AuthService.getEmailVerificationCode(data)
-      .then((response) => {
-        if (response.success) {
+      .then(({ success, message }) => {
+        if (success) {
           setLoading(false);
           resetCodeVerificationError();
-          showAlert('success', response.message);
+          showAlert('success', message);
           offEmailCodeInput();
           setShowCodeBox(true);
           resetTimer();
