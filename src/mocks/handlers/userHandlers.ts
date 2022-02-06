@@ -1,10 +1,10 @@
-import { rest } from 'msw';
+import { context, response, rest } from 'msw';
 
 import { userDataList } from '../database/user';
 
 export const userHandlers = [
   rest.get(
-    'http://i6a402.p.ssafy.io:8081/api/auth/user/info/:userId',
+    'https://i6a402.p.ssafy.io:8443/api/auth/user/info/:userId',
     async (request, response, context) => {
       const { userId } = request.params;
       const userIndex: number = userDataList.findIndex(
@@ -43,7 +43,7 @@ export const userHandlers = [
   ),
 
   rest.post(
-    'http://i6a402.p.ssafy.io:8081/api/auth/user/project/track',
+    'https://i6a402.p.ssafy.io:8443/api/auth/user/project/track',
     async (request, response, context) => {
       const token: string =
         request.headers['_headers'].authorization.split(' ')[1];
@@ -71,7 +71,7 @@ export const userHandlers = [
   ),
 
   rest.get(
-    'http://i6a402.p.ssafy.io:8081/api/auth/user/projects',
+    'https://i6a402.p.ssafy.io:8443/api/auth/user/projects',
     async (request, response, context) => {
       const token: string =
         request.headers['_headers'].authorization.split(' ')[1];
@@ -117,7 +117,7 @@ export const userHandlers = [
   ),
 
   rest.post(
-    'http://i6a402.p.ssafy.io:8081/api/auth/user/request',
+    'https://i6a402.p.ssafy.io:8443/api/auth/user/request',
     async (request, response, context) => {
       const status: number = 200;
       const token: string =
@@ -164,6 +164,32 @@ export const userHandlers = [
         context.json({
           success: true,
           message: '해당 팀의 팀장 승인 후 팀 합류가 최종적으로 완료됩니다.',
+        }),
+      );
+    },
+  ),
+
+  rest.get(
+    'https://i6a402.p.ssafy.io:8443/api/auth/user/team',
+    async (request, response, context) => {
+      const token: string | null =
+        request.headers['_headers'].authorization.split(' ')[1];
+      const status: number = 200;
+
+      if (token === null) {
+        return response(
+          context.status(403),
+          context.json({
+            status: 403,
+            success: false,
+            message: '토큰이 유효하지 않습니다.',
+          }),
+        );
+      }
+
+      return response(
+        context.json({
+          belongToTeam: false,
         }),
       );
     },
