@@ -9,7 +9,14 @@ const useAlert = (
   alertType: Severity,
 ) => {
   const dispatch = useDispatch();
-  dispatch(showSsafyMateAlert(showAlert, alertText, alertType));
+
+  dispatch(
+    showSsafyMateAlert({
+      show: showAlert,
+      text: alertText,
+      type: alertType,
+    }),
+  );
 };
 
 export default useAlert;

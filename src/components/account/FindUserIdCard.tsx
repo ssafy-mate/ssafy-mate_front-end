@@ -117,10 +117,22 @@ const FindUserIdCard: React.FC = () => {
 
             switch (status) {
               case 401:
-                dispatch(showSsafyMateAlert(true, message, 'warning'));
+                dispatch(
+                  showSsafyMateAlert({
+                    show: true,
+                    text: message,
+                    type: 'warning',
+                  }),
+                );
                 break;
               case 500:
-                dispatch(showSsafyMateAlert(true, message, 'warning'));
+                dispatch(
+                  showSsafyMateAlert({
+                    show: true,
+                    text: message,
+                    type: 'warning',
+                  }),
+                );
                 break;
             }
           }

@@ -306,7 +306,14 @@ const ProfileForm: React.FC<ProfileProps> = ({
     if (validation()) {
       AuthService.signUp(data)
         .then(({ status, message }) => {
-          dispatch(showSsafyMateAlert(true, message, 'success'));
+          dispatch(
+            showSsafyMateAlert({
+              show: true,
+              text: message,
+              type: 'success',
+            }),
+          );
+
           history.push('/users/sign_in');
         })
         .catch((error) => {

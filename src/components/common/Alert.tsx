@@ -5,7 +5,10 @@ import styled from '@emotion/styled';
 import { Alert, Snackbar } from '@mui/material';
 import { alertState } from '../../types/alertTypes';
 import { useDispatch } from 'react-redux';
-import { showSsafyMateAlert } from '../../redux/modules/alert';
+import {
+  alertInitialState,
+  showSsafyMateAlert,
+} from '../../redux/modules/alert';
 
 const SsafyMateAlert: React.FC<alertState> = ({ show, text, type }) => {
   const [alertOpen, setAlertOpen] = useState<boolean>(true);
@@ -17,7 +20,7 @@ const SsafyMateAlert: React.FC<alertState> = ({ show, text, type }) => {
 
   const alertClose = () => {
     setAlertOpen(false);
-    dispatch(showSsafyMateAlert(false, '', 'info'));
+    dispatch(showSsafyMateAlert(alertInitialState));
   };
 
   return (
