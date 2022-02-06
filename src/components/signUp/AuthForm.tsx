@@ -144,7 +144,7 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
                 </option>
               ))}
             </Select>
-            {errors.campus && (
+            {errors.campus !== undefined && (
               <ErrorMessageWrapper>
                 <ErrorMessage>필수 선택 항목입니다.</ErrorMessage>
               </ErrorMessageWrapper>
@@ -173,7 +173,7 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
                 <option key={track.id}>{track.name}</option>
               ))}
             </Select>
-            {errors.ssafyTrack && (
+            {errors.ssafyTrack !== undefined && (
               <ErrorMessageWrapper>
                 <ErrorMessage>필수 선택 항목입니다.</ErrorMessage>
               </ErrorMessageWrapper>
@@ -194,16 +194,20 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
             })}
             className={errors.studentNumber ? 'have-error' : ''}
           />
-          {errors.studentNumber && errors.studentNumber.type === 'required' && (
-            <ErrorMessageWrapper>
-              <ErrorMessage>{requiredFields}</ErrorMessage>
-            </ErrorMessageWrapper>
-          )}
-          {errors.studentNumber && errors.studentNumber.type !== 'required' && (
-            <ErrorMessageWrapper>
-              <ErrorMessage>학번 7자리를 정확하게 입력해 주세요.</ErrorMessage>
-            </ErrorMessageWrapper>
-          )}
+          {errors.studentNumber !== undefined &&
+            errors.studentNumber.type === 'required' && (
+              <ErrorMessageWrapper>
+                <ErrorMessage>{requiredFields}</ErrorMessage>
+              </ErrorMessageWrapper>
+            )}
+          {errors.studentNumber !== undefined &&
+            errors.studentNumber.type !== 'required' && (
+              <ErrorMessageWrapper>
+                <ErrorMessage>
+                  학번 7자리를 정확하게 입력해 주세요.
+                </ErrorMessage>
+              </ErrorMessageWrapper>
+            )}
         </InputWrapper>
         <InputWrapper>
           <RequirementLabel htmlFor="student-name">이름</RequirementLabel>

@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 import {
   AuthState,
   SignInRequestTypeWithIdSave,
-  SignInUser,
+  SignInResponse,
   ProjectsState,
   Project,
   ProjectTrackRequestType,
@@ -46,7 +46,6 @@ const initialState: AuthState = {
   projects: null,
   token: null,
   loading: false,
-  message: null,
   error: null,
 };
 
@@ -62,7 +61,7 @@ export const { pending, success, updateProjects, fail } = createActions(
   },
 );
 
-const reducer = handleActions<AuthState, SignInUser, ProjectsState>(
+const reducer = handleActions<AuthState, SignInResponse, ProjectsState>(
   {
     PENDING: (state) => ({
       ...state,
@@ -123,7 +122,7 @@ function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
   try {
     yield put(pending());
 
-    const data: SignInUser = yield call(SignInService.login, {
+    const data: SignInResponse = yield call(SignInService.login, {
       userEmail: action.payload.userEmail,
       password: action.payload.password,
     });
@@ -133,9 +132,13 @@ function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
 
       yield put(success(data));
 
-      // const message: string = yield select((state) => state.auth.message);
-
-      yield put(showSsafyMateAlert(true, data.message, 'success'));
+      yield put(
+        showSsafyMateAlert({
+          show: true,
+          text: data.message,
+          type: 'success',
+        }),
+      );
 
       if (action.payload.IdSave) {
         localStorage.setItem('ssafy-mate-id', action.payload.userEmail);
@@ -146,9 +149,15 @@ function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
       yield put(push('/'));
     }
   } catch (error: any) {
-    yield put(fail(error.response.data));
-    const message: string = yield select((state) => state.auth.error.message);
-    yield put(showSsafyMateAlert(true, message, 'warning'));
+    yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
+
+    yield put(
+      showSsafyMateAlert({
+        show: true,
+        text: error.response.data.message,
+        type: 'warning',
+      }),
+    );
   }
 }
 
@@ -163,9 +172,14 @@ function* logoutSaga() {
     // yield put(success(null));
   } catch (error: any) {
   } finally {
-    yield put(showSsafyMateAlert(true, '로그아웃 되었습니다.', 'success'));
+    yield put(
+      showSsafyMateAlert({
+        show: true,
+        text: '로그아웃 되었습니다.',
+        type: 'success',
+      }),
+    );
 
-    localStorage.removeItem('persist:root');
     TokenService.remove();
     PersistReducerService.remove();
 

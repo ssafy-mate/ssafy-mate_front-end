@@ -265,7 +265,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
       : setEtcUrlPatternError(false);
 
     if (
-      selfIntroduction &&
+      selfIntroduction !== '' &&
       job1 !== 'default' &&
       techStacks.length >= 2 &&
       agreement
@@ -306,7 +306,14 @@ const ProfileForm: React.FC<ProfileProps> = ({
     if (validation()) {
       AuthService.signUp(data)
         .then(({ status, message }) => {
-          dispatch(showSsafyMateAlert(true, message, 'success'));
+          dispatch(
+            showSsafyMateAlert({
+              show: true,
+              text: message,
+              type: 'success',
+            }),
+          );
+
           history.push('/users/sign_in');
         })
         .catch((error) => {
@@ -519,15 +526,13 @@ const ProfileForm: React.FC<ProfileProps> = ({
           <InputWrapper>
             <Label htmlFor="github-url">
               GitHub URL <Em>(선택)</Em>
-              {githubUrl.length >= 1 &&
-                showError === 1 &&
-                gitHubUrlPatternError && (
-                  <ErrorMessageWrapper>
-                    <ErrorMessage className="url">
-                      유효한 URL이 아닙니다.
-                    </ErrorMessage>
-                  </ErrorMessageWrapper>
-                )}
+              {githubUrl !== '' && showError === 1 && gitHubUrlPatternError && (
+                <ErrorMessageWrapper>
+                  <ErrorMessage className="url">
+                    유효한 URL이 아닙니다.
+                  </ErrorMessage>
+                </ErrorMessageWrapper>
+              )}
             </Label>
             <InfoInput
               type="url"
@@ -543,7 +548,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
           <InputWrapper>
             <Label htmlFor="etc-url">
               기술 블로그 URL 또는 기타 URL <Em>(선택)</Em>
-              {etcUrl.length >= 1 && showError === 1 && etcUrlPatternError && (
+              {etcUrl !== '' && showError === 1 && etcUrlPatternError && (
                 <ErrorMessageWrapper>
                   <ErrorMessage className="url">
                     유효한 URL이 아닙니다.

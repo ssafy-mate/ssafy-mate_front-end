@@ -49,7 +49,7 @@ const SpecializationProjectUserListPage: React.FC = () => {
     document.title = '특화 프로젝트 교육생 공고 | 싸피 메이트';
   }, []);
 
-  if (!token) {
+  if (token === null) {
     return <Redirect to="/users/sign_in" />;
   }
 

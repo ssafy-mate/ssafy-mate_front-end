@@ -161,7 +161,7 @@ const UserInfoSection: React.FC = () => {
           <HeadContainer>
             <TitleBox>
               <ProfileImgWrapper>
-                {userData.profileImgUrl && (
+                {userData.profileImgUrl !== null && (
                   <ProfileImg
                     src={userData.profileImgUrl}
                     alt={`${userData.userName}님의 프로필 이미지`}

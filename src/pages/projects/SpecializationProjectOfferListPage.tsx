@@ -21,7 +21,7 @@ const SpecializationProjectOfferListPage: React.FC = () => {
     document.title = '특화 프로젝트 받은 제안 | 싸피 메이트';
   }, []);
 
-  if (!token) {
+  if (token === null) {
     return <Redirect to="/users/sign_in" />;
   }
 

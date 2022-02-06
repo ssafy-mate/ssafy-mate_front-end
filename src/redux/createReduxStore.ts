@@ -9,12 +9,10 @@ import rootSaga from './modules/rootSaga';
 
 import history from '../history';
 import TokenService from '../services/TokenService';
-import controlAlert from './modules/alert';
 
 const createReduxStore = () => {
   const token = TokenService.get();
   const sagaMiddleWare = createSagaMiddleware();
-
   const store = createStore(
     reducer,
     {
@@ -28,7 +26,6 @@ const createReduxStore = () => {
         projects: null,
         token,
         loading: false,
-        message: null,
         error: null,
       },
     },

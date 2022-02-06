@@ -23,7 +23,7 @@ const CreateTeamPage: React.FC = () => {
     document.title = '팀 생성 | 싸피 메이트';
   }, []);
 
-  if (!token) {
+  if (token === null) {
     return <Redirect to="/users/sign_in" />;
   }
 
