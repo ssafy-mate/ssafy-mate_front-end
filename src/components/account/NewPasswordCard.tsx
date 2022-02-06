@@ -19,6 +19,7 @@ import history from '../../history';
 import NewPasswordService from '../../services/NewPasswordService';
 
 import Loading from '../common/Loading';
+import NewPassWordCardSubHead from './NewPassWordCardSubHead';
 
 const NewPasswordCard: React.FC = () => {
   const [loadingColor, setLoadingColor] = useState<string>('#3396f4');
@@ -350,18 +351,7 @@ const NewPasswordCard: React.FC = () => {
         <Wrapper>
           <CardHeader>
             <Head>비밀번호 재설정</Head>
-            {stepForNewPassword === 1 && (
-              <SubHead>
-                비밀번호를 재설정 할 이메일을 입력하세요. 자세한 안내가 담긴
-                메일을 보내드리겠습니다.
-              </SubHead>
-            )}
-            {stepForNewPassword === 2 && (
-              <SubHead>이메일로 전송된 인증코드를 입력해주세요.</SubHead>
-            )}
-            {stepForNewPassword === 3 && (
-              <SubHead>새로운 비밀번호를 입력해주세요.</SubHead>
-            )}
+            <NewPassWordCardSubHead step={stepForNewPassword} />
           </CardHeader>
           <CardForm onKeyPress={onCheckEnter}>
             {stepForNewPassword === 1 && (
