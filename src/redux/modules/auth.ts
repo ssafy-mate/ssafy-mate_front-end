@@ -172,7 +172,13 @@ function* logoutSaga() {
     // yield put(success(null));
   } catch (error: any) {
   } finally {
-    yield put(showSsafyMateAlert(true, '로그아웃 되었습니다.', 'success'));
+    yield put(
+      showSsafyMateAlert({
+        show: true,
+        text: '로그아웃 되었습니다.',
+        type: 'success',
+      }),
+    );
 
     TokenService.remove();
     PersistReducerService.remove();
