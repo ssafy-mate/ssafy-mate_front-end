@@ -305,12 +305,12 @@ const SignUpForm: React.FC<SignUpProps> = ({
               )}
             </AuthButton>
           </EmailInputWrapper>
-          {errors.signUpEmail && (
+          {errors.signUpEmail !== undefined && (
             <ErrorMessageWrapper>
               <ErrorMessage>{errors.signUpEmail.message}</ErrorMessage>
             </ErrorMessageWrapper>
           )}
-          {!errors.signUpEmail && emailInputError !== '' && (
+          {errors.signUpEmail === undefined && emailInputError !== '' && (
             <ErrorMessageWrapper>
               <ErrorMessage>{emailInputError}</ErrorMessage>
             </ErrorMessageWrapper>
