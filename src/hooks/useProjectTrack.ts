@@ -7,7 +7,7 @@ const useProjectTrack = (projectId: number) => {
     (state) => state.auth.projects,
   );
 
-  if (!projects) {
+  if (projects === null) {
     return null;
   }
 

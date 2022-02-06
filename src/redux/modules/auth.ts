@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 import {
   AuthState,
   SignInRequestTypeWithIdSave,
-  SignInUser,
+  SignInResponse,
   ProjectsState,
   Project,
   ProjectTrackRequestType,
@@ -46,7 +46,6 @@ const initialState: AuthState = {
   projects: null,
   token: null,
   loading: false,
-  message: null,
   error: null,
 };
 
@@ -62,7 +61,7 @@ export const { pending, success, updateProjects, fail } = createActions(
   },
 );
 
-const reducer = handleActions<AuthState, SignInUser, ProjectsState>(
+const reducer = handleActions<AuthState, SignInResponse, ProjectsState>(
   {
     PENDING: (state) => ({
       ...state,
@@ -123,7 +122,7 @@ function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
   try {
     yield put(pending());
 
-    const data: SignInUser = yield call(SignInService.login, {
+    const data: SignInResponse = yield call(SignInService.login, {
       userEmail: action.payload.userEmail,
       password: action.payload.password,
     });
@@ -132,8 +131,6 @@ function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
       TokenService.set(data.token);
 
       yield put(success(data));
-
-      // const message: string = yield select((state) => state.auth.message);
 
       yield put(showSsafyMateAlert(true, data.message, 'success'));
 
@@ -147,8 +144,7 @@ function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
     }
   } catch (error: any) {
     yield put(fail(error.response.data));
-    const message: string = yield select((state) => state.auth.error.message);
-    yield put(showSsafyMateAlert(true, message, 'warning'));
+    yield put(showSsafyMateAlert(true, error.response.data.message, 'warning'));
   }
 }
 

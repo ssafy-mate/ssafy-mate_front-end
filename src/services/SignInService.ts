@@ -1,12 +1,12 @@
 import { axiosInstance } from './../utils/axios';
 
-import { SignInRequestType, SignInUser } from '../types/authTypes';
+import { SignInRequestType, SignInResponse } from '../types/authTypes';
 
 class SignInService {
   public static async login(
     requestData: SignInRequestType,
-  ): Promise<SignInUser> {
-    const response = await axiosInstance.post<SignInUser>(
+  ): Promise<SignInResponse> {
+    const response = await axiosInstance.post<SignInResponse>(
       '/api/user/sign-in',
       requestData,
     );

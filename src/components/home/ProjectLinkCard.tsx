@@ -44,7 +44,7 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
   const projectTrack: string | null = useProjectTrack(projectId);
 
   const handleClickCardItem = () => {
-    if (token) {
+    if (token !== null) {
       projectTrack ? dispatch(push(pageUrl)) : setOpen(true);
     } else {
       setOpenWarningAlert(true);
@@ -54,13 +54,13 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
   const handleClose = (newSelectedProjectTrack?: ProjectTrack) => {
     setOpen(false);
 
-    if (newSelectedProjectTrack) {
+    if (newSelectedProjectTrack !== undefined) {
       setSelectedProjectTrack(newSelectedProjectTrack);
     }
   };
 
   const handleClickOpenBlockDialog = () => {
-    token ? setOpenBlockDialog(true) : setOpenWarningAlert(true);
+    token !== null ? setOpenBlockDialog(true) : setOpenWarningAlert(true);
   };
 
   const onCloseBlockDialog = () => {
