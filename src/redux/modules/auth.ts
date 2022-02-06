@@ -132,7 +132,13 @@ function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
 
       yield put(success(data));
 
-      yield put(showSsafyMateAlert(true, data.message, 'success'));
+      yield put(
+        showSsafyMateAlert({
+          show: true,
+          text: data.message,
+          type: 'success',
+        }),
+      );
 
       if (action.payload.IdSave) {
         localStorage.setItem('ssafy-mate-id', action.payload.userEmail);
@@ -143,8 +149,15 @@ function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
       yield put(push('/'));
     }
   } catch (error: any) {
-    yield put(fail(error.response.data));
-    yield put(showSsafyMateAlert(true, error.response.data.message, 'warning'));
+    yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
+
+    yield put(
+      showSsafyMateAlert({
+        show: true,
+        text: error.response.data.message,
+        type: 'warning',
+      }),
+    );
   }
 }
 
@@ -161,7 +174,6 @@ function* logoutSaga() {
   } finally {
     yield put(showSsafyMateAlert(true, '로그아웃 되었습니다.', 'success'));
 
-    localStorage.removeItem('persist:root');
     TokenService.remove();
     PersistReducerService.remove();
 
