@@ -10,6 +10,7 @@ import { axiosInstance } from '../../utils/axios';
 import { fetcherGet, fetcherGetWithParams } from '../../utils/fetcher';
 import useSocket from '../../hooks/useSocket';
 import useToken from '../../hooks/useToken';
+import useTextArea from '../../hooks/useTextArea';
 import ChatRoomList from './ChatRoomList';
 import {
   MessageType,
@@ -25,7 +26,7 @@ import styled from '@emotion/styled';
 import { Scrollbars } from 'react-custom-scrollbars-2';
 import SendIcon from '@mui/icons-material/Send';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
-import useTextArea from '../../hooks/useTextArea';
+import { Drawer } from '@mui/material';
 
 const localUrl = 'http://localhost:3000';
 const socketUrl = 'http://localhost:3095';
@@ -39,7 +40,6 @@ type userParams = {
 };
 
 const ChattingForm: React.FC = () => {
-  const date = new Date();
   const userToken = useToken(); // 유저 토큰
   const [socket] = useSocket();
 
@@ -50,7 +50,6 @@ const ChattingForm: React.FC = () => {
   const [myId, setMyId] = useState(2); // 내 아이디
   const [userId, setUserId] = useState(1); // 상대방 아이디
 
-  const [chatRoomList, setChatRoomList] = useState<ChatRoomResponseType[]>();
   const [entryTime, setEntryTime] = useState(
     dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS'),
   );
@@ -60,6 +59,60 @@ const ChattingForm: React.FC = () => {
   const messageInputRef = useRef<HTMLTextAreaElement>(null);
   const chatRoomMessageRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<Scrollbars>(null);
+
+  const [messageList, setMessageList] = useState<MessageType[]>([]);
+  const [chatRoomList, setChatRoomList] = useState<ChatRoomResponseType[]>();
+
+  const addMessageToList = (message: MessageType) => {
+    setMessageList((preMessageList) => {
+      return [...preMessageList, message];
+    });
+  };
+
+  /*
+  // mock 채팅방 목록 불러오기
+  useEffect(() => {
+    axiosInstance
+      .get(`http://localhost:3000/api/chat/room/${myId}`)
+      .then((response) => {
+        console.log(response);
+        setChatRoomList(response.data);
+      })
+      .catch((error) => console.log(error));
+  }, []);
+
+  useEffect(() => {
+    getChatLog();
+  }, []);
+
+  // mock 대화 내역 불러오기
+  const getChatLog = async () => {
+    const chatLog = await axiosInstance.get<ChatLogResponseType>(
+      `http://localhost:3000/api/chat/log`,
+      {
+        params: {
+          userId1: 1,
+          userId2: 2,
+          nowPage: 1,
+          entryTime: entryTime,
+        },
+      },
+    );
+
+    chatLog.data.contentList.map((log, index) => {
+      const sentTime = dayjs(log.sentTime).toString();
+      const message = {
+        senderId: log.senderId,
+        roomId: roomId,
+        content: log.content,
+        sentTime: sentTime,
+        userName: '조원빈',
+      };
+
+      addMessageToList(message);
+    });
+  };
+  */
 
   // 채팅 목록 불러오기
   const {
@@ -92,32 +145,55 @@ const ChattingForm: React.FC = () => {
   // );
 
   // 대화 내용 불러오기 - 일반
-  // useSWR('/api/user', url => fetchWithToken(url, token))
-  // const { data: user } = useSWR(['/api/user', token], fetchWithToken)
   const { data: chatData, mutate: mutateChat } = useSWR<ChatLogResponseType>(
     [`/api/chat/log/${roomId}`, { nowPage, entryTime }],
     fetcherGetWithParams,
   );
 
-  console.log(
-    `chatRom List : ${roomData?.roomList?.toString()} / chat log : ${chatData?.contentList.toString()}`,
-  );
+  // console.log(
+  //   `chatRom List : ${roomData?.roomList?.toString()} / chat log : ${chatData?.contentList.toString()}`,
+  // );
 
   // 내가 메시지를 보내거나, 서버 챗 데이터 변경이 일어났을 때 발동하는 콜백
   // 서버로 메시지 정보 post 요청
   const onSubmit = useCallback(
     (event) => {
       event.preventDefault();
-      const params: MessageType = {
-        userName: '조원빈',
-        roomId: roomId,
-        content: chat,
-        senderId: myId,
-        sentTime: dayjs().format('YYYY-MM-DDTHH:mm:ss.SSSS'),
-      };
 
-      if (chat.trim()) {
-        // && chatData
+      if (chat?.trim()) {
+        const params: MessageType = {
+          userName: '조원빈',
+          roomId: roomId,
+          content: chat,
+          senderId: myId,
+          sentTime: dayjs().format('YYYY-MM-DDTHH:mm:ss.SSSS'),
+        };
+
+        // 서버 가지 않고, 실제 서버 가는 것처럼 더미 데이터를 만듬
+        mutateChat((prevChatData) => {
+          prevChatData?.contentList.unshift({
+            userName: '조원빈',
+            roomId: roomId,
+            content: chat,
+            senderId: myId,
+            sentTime: dayjs().format('YYYY-MM-DDTHH:mm:ss.SSSS'),
+          });
+          return prevChatData;
+        }, false).then(() => {
+          setChat('');
+          if (scrollbarRef.current) {
+            if (
+              scrollbarRef.current.getScrollHeight() <
+              scrollbarRef.current.getClientHeight() +
+                scrollbarRef.current.getScrollTop() +
+                150
+            ) {
+              console.log('scrollToBottom!', scrollbarRef.current?.getValues());
+              scrollbarRef.current.scrollToBottom();
+            }
+          }
+        });
+
         axios
           .post(`${socketUrl}/api/chat`, params)
           .then((response) => {
@@ -172,9 +248,40 @@ const ChattingForm: React.FC = () => {
       if (!event.shiftKey) {
         event.preventDefault();
         onSubmit(event);
+
+        const chatMessage: MessageType = {
+          senderId: myId,
+          content: messageInputRef.current?.value as string,
+          sentTime: dayjs().format('YYYY-MM-DDTHH:mm:ss.SSSS'),
+          roomId: roomId,
+          userName: '조원빈',
+        };
+        addMessageToList(chatMessage);
+        setChat('');
       }
     }
   };
+
+  /*
+  // 스크롤 내리기
+  useEffect(() => {
+    chatLogScrollDown();
+  }, [messageList]);
+
+  const chatLogScrollDown = () => {
+    if (chatRoomMessageRef.current) {
+      chatRoomMessageRef.current?.scrollIntoView({
+        behavior: 'auto',
+        block: 'end',
+        inline: 'nearest',
+      });
+    }
+  };
+  */
+
+  const chatSections = chatData?.contentList
+    ? ([] as MessageType[]).concat(...chatData.contentList).reverse()
+    : [];
 
   return (
     <ChatContianer>
@@ -206,15 +313,15 @@ const ChattingForm: React.FC = () => {
             <Scrollbars autoHide ref={scrollbarRef}>
               <ChatRoomMessageList>
                 <MessageWrapper ref={chatRoomMessageRef}>
-                  {chatData && chatData.contentList.length > 0
-                    ? chatData?.contentList.map((message, index) => {
+                  {chatSections && chatSections.length > 0
+                    ? chatSections?.map((message, index) => {
                         if (message.senderId === myId) {
                           return (
                             <MessageBoxWrapper key={index}>
                               <MessageBoxRightContent>
                                 <MessageTimeBox>
                                   <div className="message_date">
-                                    {dayjs().format('A HH:mm')}
+                                    {dayjs().format('YYYY.MM.DD HH:mm')}
                                   </div>
                                 </MessageTimeBox>
                                 <p>{message.content}</p>
@@ -229,7 +336,9 @@ const ChattingForm: React.FC = () => {
                                 <p>{message.content}</p>
                                 <MessageTimeBox>
                                   <div className="message_date">
-                                    {dayjs(message.sentTime).format('A HH:mm')}
+                                    {dayjs(message.sentTime).format(
+                                      'YYYY.MM.DD HH:mm',
+                                    )}
                                   </div>
                                 </MessageTimeBox>
                               </MessageBoxLeftContent>
@@ -369,6 +478,8 @@ const ChatRoomHeaderProfile = styled.div`
   & img {
     width: 40px;
     height: 40px;
+    min-height: 40px;
+    min-width: 40px;
     margin-right: 12px;
     border: 1px solid #eaebef;
     border-radius: 50%;
@@ -416,6 +527,8 @@ const MessageBoxLeftContent = styled.div`
   & img {
     width: 36px;
     height: 36px;
+    min-height: 36px;
+    min-width: 36px;
     margin-right: 8px;
     border: 1px solid #f9f9f9;
     border-radius: 50%;
