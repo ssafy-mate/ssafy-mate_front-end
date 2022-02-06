@@ -20,6 +20,7 @@ import NewPasswordService from '../../services/NewPasswordService';
 
 import Loading from '../common/Loading';
 import NewPassWordCardSubHead from './NewPassWordCardSubHead';
+import { Severity } from '../../types/signUpTypes';
 
 const NewPasswordCard: React.FC = () => {
   const [loadingColor, setLoadingColor] = useState<string>('#3396f4');
@@ -82,6 +83,20 @@ const NewPasswordCard: React.FC = () => {
     setSeconds(0);
   };
 
+  const showAlert = (
+    alertShow: boolean,
+    alertText: string,
+    alertType: Severity,
+  ) => {
+    dispatch(
+      showSsafyMateAlert({
+        show: alertShow,
+        text: alertText,
+        type: alertType,
+      }),
+    );
+  };
+
   const onCheckEnter = (event: React.KeyboardEvent) => {
     if (event.code === 'Enter' || event.code === 'NumpadEnter') {
       event.preventDefault();
@@ -131,7 +146,7 @@ const NewPasswordCard: React.FC = () => {
     })
       .then(({ message }) => {
         setLoading(false);
-        dispatch(showSsafyMateAlert(true, message, 'success'));
+        showAlert(true, message, 'success');
         setStepForNewPassword(2);
         setTimeStop(1);
         resetTimer();
@@ -144,10 +159,10 @@ const NewPasswordCard: React.FC = () => {
 
           switch (status) {
             case 401:
-              dispatch(showSsafyMateAlert(true, message, 'warning'));
+              showAlert(true, message, 'warning');
               break;
             case 500:
-              dispatch(showSsafyMateAlert(true, message, 'warning'));
+              showAlert(true, message, 'warning');
               break;
           }
         }
@@ -226,7 +241,7 @@ const NewPasswordCard: React.FC = () => {
               setInputError(message);
               break;
             case 500:
-              dispatch(showSsafyMateAlert(true, message, 'warning'));
+              showAlert(true, message, 'warning');
               break;
           }
         }
@@ -332,7 +347,7 @@ const NewPasswordCard: React.FC = () => {
       password: newPasswordInput,
     })
       .then(({ message }) => {
-        dispatch(showSsafyMateAlert(true, message, 'success'));
+        showAlert(true, message, 'success');
 
         history.push('/users/sign_in');
       })
@@ -340,7 +355,7 @@ const NewPasswordCard: React.FC = () => {
         if (error.response) {
           const { message } = error.response.data;
 
-          dispatch(showSsafyMateAlert(true, message, 'warning'));
+          showAlert(true, message, 'warning');
         }
       });
   };

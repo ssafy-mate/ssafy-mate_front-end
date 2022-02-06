@@ -22,6 +22,17 @@ export interface SignInResponse {
   message: string;
 }
 
+export interface SignInResponse {
+  userId: number;
+  userName: string;
+  userEmail: string;
+  studentNumber: string;
+  campus: string;
+  ssafyTrack: string;
+  token: string;
+  projects: Project[];
+}
+
 export interface Project {
   projectId: number | null;
   projectName: string | null;
@@ -40,17 +51,6 @@ export interface AuthState {
   token: string | null;
   loading: boolean;
   error: string | null;
-}
-
-export interface SignInResponse {
-  userId: number;
-  userName: string;
-  userEmail: string;
-  studentNumber: string;
-  campus: string;
-  ssafyTrack: string;
-  token: string;
-  projects: Project[];
 }
 
 export interface ProjectsState {
