@@ -92,7 +92,9 @@ const SsafyInformation: React.FC = () => {
           </SingleInformationWrapper>
 
           <SingleInformationWrapper>
-            <InformationLabel htmlFor="ssafyTrack">교육 트랙</InformationLabel>
+            <InformationLabel className="necessary" htmlFor="ssafyTrack">
+              교육 트랙
+            </InformationLabel>
             <SelectWrapper>
               <Select
                 id="ssafyTrack"
@@ -290,6 +292,21 @@ const InformationLabel = styled.label`
   font-size: 14px;
   line-height: 1.5;
   color: #263747;
+
+  &.necessary {
+    &::before {
+      content: '*';
+      display: inline-block;
+      vertical-align: top;
+      margin: 0 0.125rem 0 0;
+      -webkit-font-smoothing: antialiased;
+      font-size: 1.25rem;
+      font-weight: 700;
+      line-height: 1.25rem;
+      color: #f44336;
+    }
+  }
+
   @media (max-width: 575px) {
     font-size: 13px;
   }
