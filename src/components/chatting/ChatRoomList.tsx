@@ -2,7 +2,7 @@ import styled from '@emotion/styled';
 import React, { useState } from 'react';
 import { ChatRoomTypeProps } from '../../types/messageTypes';
 
-const ChatItem: React.FC<ChatRoomTypeProps> = ({
+const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
   roomId,
   userId,
   userName,
@@ -150,4 +150,4 @@ const DescriptionContent = styled.p`
   white-space: nowrap;
 `;
 
-export default ChatItem;
+export default ChatRoomList;

@@ -10,7 +10,7 @@ import { axiosInstance } from '../../utils/axios';
 import { fetcherGet, fetcherGetWithParams } from '../../utils/fetcher';
 import useSocket from '../../hooks/useSocket';
 import useToken from '../../hooks/useToken';
-import ChatItem from './ChatItem';
+import ChatRoomList from './ChatRoomList';
 import {
   MessageType,
   ChatRoomResponseType,
@@ -28,6 +28,7 @@ import TextareaAutosize from '@mui/base/TextareaAutosize';
 import useTextArea from '../../hooks/useTextArea';
 
 const localUrl = 'http://localhost:3000';
+const socketUrl = 'http://localhost:3095';
 
 type roomParams = {
   roomId: string;
@@ -99,7 +100,7 @@ const ChattingForm: React.FC = () => {
   );
 
   console.log(
-    `chatRom List : ${roomData?.toString()} / chat log : ${chatData?.contentList.toString()}`,
+    `chatRom List : ${roomData?.roomList?.toString()} / chat log : ${chatData?.contentList.toString()}`,
   );
 
   // 내가 메시지를 보내거나, 서버 챗 데이터 변경이 일어났을 때 발동하는 콜백
@@ -118,13 +119,15 @@ const ChattingForm: React.FC = () => {
       if (chat.trim()) {
         // && chatData
         axios
-          .post(`http://localhost:3095/api/chat`, params)
+          .post(`${socketUrl}/api/chat`, params)
           .then((response) => {
             console.log(`onSumbit response : ${response}`);
-            setChat('');
           })
           .catch((error) => {
             console.log(`onSumbit error : ${error}`);
+          })
+          .finally(() => {
+            setChat('');
           });
       }
     },
@@ -154,6 +157,15 @@ const ChattingForm: React.FC = () => {
     };
   }, [socket, onMessage]);
 
+  // 로딩 시 스크롤바 제일 아래로
+  useEffect(() => {
+    if (chatData?.contentList.length === 1) {
+      setTimeout(() => {
+        scrollbarRef.current?.scrollToBottom();
+      }, 100);
+    }
+  }, [chatData]);
+
   // 엔터 누르면 onSubmit 호출
   const handleMessageSendKeyPress = (event: React.KeyboardEvent) => {
     if (event.code === 'Enter' || event.code === 'NumpadEnter') {
@@ -164,33 +176,12 @@ const ChattingForm: React.FC = () => {
     }
   };
 
-  const messageInputInitialize = () => {
-    if (messageInputRef.current) {
-      messageInputRef.current.value = '';
-      messageInputRef.current?.focus();
-    }
-  };
-
-  const currentTimeCalculate = (): string => {
-    let am = '오전';
-    let hours = date.getHours();
-    const minutes = date.getMinutes();
-
-    if (hours >= 12) {
-      am = '오후';
-      if (hours !== 12) hours -= 12;
-    }
-
-    const currentTime: string = `${am} ${hours}:${minutes}`;
-    return currentTime;
-  };
-
   return (
     <ChatContianer>
-      <ChatListSidebar>
-        <ChatList>
+      <ChatRoomListSidebar>
+        <ChatRoomListWrapper>
           {chatRoomList?.map((room: ChatRoomResponseType, index: number) => (
-            <ChatItem
+            <ChatRoomList
               roomId={room.roomId}
               userId={room.userId}
               userName={room.userName}
@@ -199,8 +190,8 @@ const ChattingForm: React.FC = () => {
               sentTime={room.sentTime}
             />
           ))}
-        </ChatList>
-      </ChatListSidebar>
+        </ChatRoomListWrapper>
+      </ChatRoomListSidebar>
       <ChatRoomSection>
         <ChatRoomWrapper>
           <ChatRoomMessageWrapper>
@@ -212,8 +203,8 @@ const ChattingForm: React.FC = () => {
                 </div>
               </ChatRoomHeaderProfile>
             </ChatRoomUserNameBar>
-            <ChatRoomMessageList>
-              <Scrollbars autoHide ref={scrollbarRef}>
+            <Scrollbars autoHide ref={scrollbarRef}>
+              <ChatRoomMessageList>
                 <MessageWrapper ref={chatRoomMessageRef}>
                   {chatData && chatData.contentList.length > 0
                     ? chatData?.contentList.map((message, index) => {
@@ -223,7 +214,7 @@ const ChattingForm: React.FC = () => {
                               <MessageBoxRightContent>
                                 <MessageTimeBox>
                                   <div className="message_date">
-                                    {dayjs().format('HH:mm')}
+                                    {dayjs().format('A HH:mm')}
                                   </div>
                                 </MessageTimeBox>
                                 <p>{message.content}</p>
@@ -238,7 +229,7 @@ const ChattingForm: React.FC = () => {
                                 <p>{message.content}</p>
                                 <MessageTimeBox>
                                   <div className="message_date">
-                                    {message.sentTime}
+                                    {dayjs(message.sentTime).format('A HH:mm')}
                                   </div>
                                 </MessageTimeBox>
                               </MessageBoxLeftContent>
@@ -248,8 +239,8 @@ const ChattingForm: React.FC = () => {
                       })
                     : null}
                 </MessageWrapper>
-              </Scrollbars>
-            </ChatRoomMessageList>
+              </ChatRoomMessageList>
+            </Scrollbars>
           </ChatRoomMessageWrapper>
           <ChatTypingWrapper>
             <TextareaAutosize
@@ -281,7 +272,7 @@ const ChatContianer = styled.div`
   background-color: #ffffff;
 `;
 
-const ChatListSidebar = styled.div`
+const ChatRoomListSidebar = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -298,7 +289,7 @@ const ChatListSidebar = styled.div`
   }
 `;
 
-const ChatList = styled.ul`
+const ChatRoomListWrapper = styled.ul`
   overflow-x: hidden;
   box-sizing: border-box;
 
@@ -393,26 +384,6 @@ const ChatRoomHeaderProfile = styled.div`
 const ChatRoomMessageList = styled.div`
   overflow: hidden auto;
   padding: 0px 20px;
-
-  ::-webkit-scrollbar {
-    opacity: 0;
-    width: 6px;
-    height: 7px;
-    appearance: auto;
-  }
-
-  ::-webkit-scrollbar-button {
-    background-color: transparent;
-  }
-
-  ::-webkit-scrollbar-corner {
-    background-color: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: rgba(51, 150, 244, 0.5);
-    border-radius: 5px;
-  }
 `;
 
 const MessageWrapper = styled.div`
@@ -497,31 +468,6 @@ const ChatTypingWrapper = styled.div`
   padding: 0px 10px;
   border-radius: 10px;
   background-color: #eaebef;
-
-  textarea {
-    overflow: auto;
-    overflow-wrap: break-word;
-    width: 100%;
-    padding: 10px;
-    resize: none;
-    border: none;
-    outline: none;
-    line-height: 150%;
-    background-color: #eaebef;
-    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
-
-    ::-webkit-scrollbar {
-      opacity: 0;
-      width: 6px;
-      height: 7px;
-      appearance: auto;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      border-radius: 5px;
-      background-color: rgba(51, 150, 244, 0.5);
-    }
-  }
 
   button {
     outline: none;
