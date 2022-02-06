@@ -4,6 +4,7 @@ import {
   ProjectTrackRequestType,
   ApplicationRequestType,
 } from '../types/authTypes';
+import { CheckBelongToTeamRequestParams } from '../types/userTypes';
 
 class UserService {
   public static async getUserInfo(token: string | null, userId: string) {
@@ -58,6 +59,20 @@ class UserService {
     );
 
     return response.data;
+  }
+
+  public static async checkBelongToTeam(
+    token: string,
+    params: CheckBelongToTeamRequestParams,
+  ) {
+    const response = await axiosInstance.get('/api/auth/user/team', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params,
+    });
+
+    return response;
   }
 }
 

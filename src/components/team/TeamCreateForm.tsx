@@ -1,8 +1,14 @@
 import { useState, useEffect } from 'react';
 
+import { push } from 'connected-react-router';
+
+import { useDispatch } from 'react-redux';
+
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+
+import Swal from 'sweetalert2';
 
 import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
@@ -10,16 +16,27 @@ import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
 
 import { TechStackWithImg } from '../../types/commonTypes';
+import { CheckBelongToTeamRequestParams } from '../../types/userTypes';
 
 import { campusListData, projectListData } from '../../data/ssafyData';
 
+import useToken from '../../hooks/useToken';
 import useTechStackList from '../../hooks/useTechStackList';
+import useUserProjectInfo from '../../hooks/useUserProjectInfo';
+
+import UserService from '../../services/UserService';
 
 import TechStackTag from '../common/TechStackTag';
+
+const PROJECT_ID: number = 2;
 
 const TeamCreateForm: React.FC = () => {
   const [teamImg, setTeamImg] = useState(null);
   const [previewTeamImg, setPreviewTeamImg] = useState(null);
+  const [campus, project, projectTrack] = useUserProjectInfo(PROJECT_ID);
+
+  const dispatch = useDispatch();
+  const token = useToken();
   const techStackList: TechStackWithImg[] = useTechStackList();
   const {
     getRootProps,
@@ -38,6 +55,39 @@ const TeamCreateForm: React.FC = () => {
     options: techStackList,
     getOptionLabel: (option) => option.techStackName,
   });
+
+  useEffect(() => {
+    async function checkTeam(
+      token: string,
+      params: CheckBelongToTeamRequestParams,
+    ) {
+      const response = await UserService.checkBelongToTeam(token, params);
+
+      if (response.data.belongToTeam) {
+        Swal.fire({
+          title: '팀 생성 불가',
+          text: '이미 해당 프로젝트의 팀에 속해 있습니다.',
+          icon: 'warning',
+          confirmButtonColor: '#3396f4',
+          confirmButtonText: '확인',
+        });
+
+        dispatch(push('/projects/specialization/teams'));
+      }
+    }
+
+    if (token !== null && project !== null) {
+      const params = {
+        selectedProject: project,
+      };
+
+      checkTeam(token, params);
+    }
+  }, [dispatch, token, project]);
+
+  useEffect(() => {
+    console.log(project);
+  }, [project]);
 
   const handleChangeTeamImg = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -61,6 +111,20 @@ const TeamCreateForm: React.FC = () => {
   const handleClearTeamImg = () => {
     setPreviewTeamImg(null);
     setTeamImg(null);
+  };
+
+  const handleChangeProject = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedProject = event.target.value;
+
+    if (
+      selectedProject === '공통 프로젝트' ||
+      selectedProject === '자율 프로젝트'
+    ) {
+      alert('해당 프로젝트의 팀을 생성할 수 있는 기간이 아닙니다.');
+      return;
+    }
+
+    // setProject(event.target.value);
   };
 
   return (
@@ -98,11 +162,10 @@ const TeamCreateForm: React.FC = () => {
             <Select
               id="team-campus"
               name="team-campus"
-              defaultValue={'default'}
+              defaultValue={campus !== null ? campus : ''}
+              disabled
             >
-              <option value="default" disabled>
-                - 선택 -
-              </option>
+              <option value="">- 선택 -</option>
               {campusListData.map((campus) => (
                 <option key={campus.id} value={campus.area}>
                   {campus.area}
@@ -113,13 +176,13 @@ const TeamCreateForm: React.FC = () => {
           <InputWrapper>
             <RequirementLabel htmlFor="team-project">프로젝트</RequirementLabel>
             <Select
-              id="team-campus"
-              name="team-campus"
-              defaultValue={'default'}
+              id="team-project"
+              name="team-project"
+              onChange={handleChangeProject}
+              defaultValue={project !== null ? project : ''}
+              disabled
             >
-              <option value="default" disabled>
-                - 선택 -
-              </option>
+              <option value="">- 선택 -</option>
               {projectListData.map((project) => (
                 <option key={project.id} value={project.name}>
                   {project.name}
@@ -128,15 +191,16 @@ const TeamCreateForm: React.FC = () => {
             </Select>
           </InputWrapper>
           <InputWrapper>
-            <RequirementLabel htmlFor="team-campus">
+            <RequirementLabel htmlFor="team-project-track">
               프로젝트 트랙
             </RequirementLabel>
             <Select
-              id="team-campus"
-              name="team-campus"
-              defaultValue={'default'}
+              id="team-project-track"
+              name="team-project-track"
+              defaultValue={projectTrack !== null ? projectTrack : ''}
+              disabled
             >
-              <option value="default" disabled>
+              <option value="" disabled>
                 - 선택 -
               </option>
               <option value="인공지능">인공지능</option>
@@ -467,15 +531,14 @@ const Select = styled.select`
   transition: all 0.08s ease-in-out;
   appearance: none;
 
-  &:hover {
-    border: 1px solid #3396f4;
-    box-shadow: inset 0 0 0 1px#3396f4;
-  }
   &:focus {
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px #3396f4;
     background-color: #fff;
     color: #495057;
+  }
+  &:disabled {
+    cursor: not-allowed;
   }
 
   @media (max-width: 575px) {

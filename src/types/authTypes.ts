@@ -3,6 +3,7 @@ import { RouterState } from 'connected-react-router';
 import { AnyAction, Reducer } from 'redux';
 
 import { alertState } from './alertTypes';
+import { MyTeamState } from './teamTypes';
 
 export type SignInRequestType = {
   userEmail: string;
@@ -36,7 +37,7 @@ export interface AuthState {
   studentNumber: string | null;
   campus: string | null;
   ssafyTrack: string | null;
-  projects: Project[] | null;
+  projects: Project[];
   token: string | null;
   loading: boolean;
   error: string | null;
@@ -57,11 +58,6 @@ export interface ProjectsState {
   projects: Project[];
 }
 
-export interface RootState {
-  auth: AuthState;
-  router: Reducer<RouterState<unknown>, AnyAction>;
-}
-
 export interface ProjectTrackRequestType {
   projectId: number;
   projectTrack: string;
@@ -74,6 +70,7 @@ export interface ApplicationRequestType {
 
 export interface RootState {
   auth: AuthState;
+  myTeam: MyTeamState;
   controlAlert: alertState | string;
   router: Reducer<RouterState<unknown>, AnyAction>;
 }

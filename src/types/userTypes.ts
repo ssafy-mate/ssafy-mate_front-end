@@ -41,3 +41,7 @@ export interface UserListResponse {
   nowPage: number;
   totalElement: number;
 }
+
+export interface CheckBelongToTeamRequestParams {
+  selectedProject: string;
+}

@@ -52,7 +52,9 @@ const TeamInfoSection: React.FC = () => {
 
   const dispatch = useDispatch();
   const { teamId } = useParams<Params>();
-  const { isLoading, teamData, isError, errorMessage } = useTeamInfo(teamId);
+  const { isLoading, teamData, isError, errorMessage } = useTeamInfo(
+    parseInt(teamId),
+  );
 
   useEffect(() => {
     if (isError) {
