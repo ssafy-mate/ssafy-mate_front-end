@@ -106,6 +106,11 @@ const SsafyInformation: React.FC = () => {
           </SingleInformationWrapper>
 
           <SingleInformationWrapper>
+            <InformationLabel htmlFor="studentNumber">학번</InformationLabel>
+            <Information id="studentNumber">0643844</Information>
+          </SingleInformationWrapper>
+
+          <SingleInformationWrapper>
             <NewPasswordLinkButton to="/users/password/new">
               비밀번호 재설정 하러가기
             </NewPasswordLinkButton>
