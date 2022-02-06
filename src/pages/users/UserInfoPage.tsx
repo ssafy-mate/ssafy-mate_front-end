@@ -15,7 +15,7 @@ const UserInfoPage: React.FC = () => {
     query: '(max-width: 575px)',
   });
 
-  if (!token) {
+  if (token === null) {
     return <Redirect to="/users/sign_in" />;
   }
 

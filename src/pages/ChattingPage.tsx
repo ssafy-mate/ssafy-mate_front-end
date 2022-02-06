@@ -11,7 +11,7 @@ import ChattingForm from '../components/chatting/ChattingForm';
 const ChattingPage: React.FC = () => {
   const token = useToken();
 
-  if (!token) {
+  if (token === null) {
     return <Redirect to="/users/sign_in" />;
   }
 
