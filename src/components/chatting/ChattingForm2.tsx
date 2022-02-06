@@ -49,7 +49,6 @@ const ChattingForm: React.FC = () => {
   const [myId, setMyId] = useState(2); // 내 아이디
   const [userId, setUserId] = useState(1); // 상대방 아이디
 
-  const [messageList, setMessageList] = useState<MessageType[]>([]);
   const [chatRoomList, setChatRoomList] = useState<ChatRoomResponseType[]>();
   const [entryTime, setEntryTime] = useState(
     dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS'),

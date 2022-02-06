@@ -11,10 +11,10 @@ import useSocket from '../../hooks/useSocket';
 import useToken from '../../hooks/useToken';
 import ChatItem from './ChatItem';
 import {
-  MessageRequestType,
+  MessageType,
   ChatRoomResponseType,
   ChatLogResponseType,
-  ChatRoomListRequestType,
+  ChatRoomListResponseType,
 } from '../../types/messageTypes';
 
 /** @jsxImportSource @emotion/react */
@@ -44,7 +44,7 @@ const ChattingForm: React.FC = () => {
   console.log(roomId);
 
   const [senderId, setSenderId] = useState<number>(2);
-  const [messageList, setMessageList] = useState<MessageRequestType[]>([]);
+  const [messageList, setMessageList] = useState<MessageType[]>([]);
   const [chatRoomList, setChatRoomList] = useState<ChatRoomResponseType[]>();
   const [entryTime, setEntryTime] = useState(date.toLocaleString());
   const [nowPage, setNowPage] = useState<number>(1);
@@ -53,30 +53,6 @@ const ChattingForm: React.FC = () => {
   const chatRoomMessageRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<Scrollbars>(null);
 
-  // 기존 대화 내역 불러오기 - 인피니티 스크롤용
-  // const {
-  //   data: chatData,
-  //   mutate: mutateChat,
-  //   setSize,
-  // } = useSWRInfinite<ChatRoomListRequestType>(
-  //   (index) => `/api/chat/room/${senderId}`,
-  //   fetcherGet,
-  //   {
-  //     onSuccess(data) {
-  //       if (data?.length === 1) {
-  //         setTimeout(() => {
-  //           scrollbarRef.current?.scrollToBottom();
-  //         }, 100);
-  //       }
-  //     },
-  //   },
-  // );
-
-  // 대화 내용 불러오기 - 일반
-  const { data: chatData, mutate: mutateChat } =
-    useSWR<ChatRoomListRequestType>(`/api/chat/room/${senderId}`, fetcherGet);
-
-  /*
   useEffect(() => {
     // 채팅방 목록 불러오기
     axiosInstance
@@ -112,53 +88,34 @@ const ChattingForm: React.FC = () => {
         roomId: roomId,
         content: log.content,
         sentTime: sentTime,
+        userName: '조원빈',
       };
       addMessageToList(message);
     });
   };
-  */
 
   useEffect(() => {
     chatLogScrollDown();
   }, [messageList]);
 
+  const onMessageReceived = (payload: any) => {
+    const message = JSON.parse(payload.body);
+    if (message.type !== 'JOIN') addMessageToList(message);
+  };
+
   const handleSendMessage = (
     event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent,
   ) => {
     event.preventDefault();
+
     const messageContent = messageInputRef.current?.value.trim();
 
     if (messageContent) {
       const curMessage = makeMessageFormat(senderId);
-      const params = {
-        roomId: roomId,
-        senderId: 1,
-        content: curMessage,
-        sentTime: date.toLocaleString(),
-      };
-
-      axiosInstance
-        .post(`/api/chat`, params)
-        .then((response) => {
-          console.log(response);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
     }
+
     messageInputInitialize();
   };
-
-  const onMessage = useCallback(() => {}, []);
-
-  // useEffect(() => {
-  //   socket?.on('dm', onMessage);
-  //   return () => {
-  //     socket?.off('dm', onMessage);
-  //   };
-  // }, [socket, onMessage]);
-
-  // console.log(messageList);
 
   const handleMessageSendKeyPress = (event: React.KeyboardEvent) => {
     if (event.code === 'Enter' || event.code === 'NumpadEnter') {
@@ -175,18 +132,19 @@ const ChattingForm: React.FC = () => {
     }
   };
 
-  const makeMessageFormat = (setUserId: number): MessageRequestType => {
-    const chatMessage: MessageRequestType = {
-      senderId: setUserId,
+  const makeMessageFormat = (id: number): MessageType => {
+    const chatMessage: MessageType = {
+      senderId: id,
       content: messageInputRef.current?.value as string,
       sentTime: date.toLocaleString(),
       roomId: roomId,
+      userName: '조원빈',
     };
 
     return chatMessage;
   };
 
-  const addMessageToList = (message: MessageRequestType) => {
+  const addMessageToList = (message: MessageType) => {
     setMessageList((preMessageList) => {
       return [...preMessageList, message];
     });
@@ -253,7 +211,7 @@ const ChattingForm: React.FC = () => {
                 <ChatRoomHeaderProfile className="userName">
                   <img></img>
                   <div className="userName">
-                    <span>호호</span>
+                    <span>손영배</span>
                   </div>
                 </ChatRoomHeaderProfile>
               </ChatRoomUserNameBar>
