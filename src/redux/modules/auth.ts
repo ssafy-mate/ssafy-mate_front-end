@@ -25,6 +25,7 @@ import PersistReducerService from '../../services/PersistReducerService';
 import TeamService from '../../services/TeamService';
 
 import { showSsafyMateAlert } from './alert';
+import { profileInitialState, updateProfile } from './profile';
 
 interface SendApplicationResponseType {
   success: boolean;
@@ -184,6 +185,7 @@ function* logoutSaga() {
     PersistReducerService.remove();
 
     yield put(success(initialState));
+    yield put(updateProfile(profileInitialState));
 
     if (history.location.pathname === '/') {
       yield put(go(0));

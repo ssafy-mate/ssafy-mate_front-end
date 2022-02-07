@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -31,6 +31,9 @@ import useUserId from '../../hooks/useUserId';
 
 import SsafyMateAlert from './Alert';
 import MenuBar from './MenuBar';
+
+import { updateUserInfo } from '../../redux/modules/profile';
+import getProfileInfoRequest from '../../services/ProfileService';
 
 interface MenuListProps {
   isExpanded: boolean;
@@ -121,6 +124,19 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
     }
   };
 
+  const update = useCallback(
+    (requestData: getProfileInfoRequest) => {
+      dispatch(updateUserInfo(requestData));
+    },
+    [dispatch],
+  );
+
+  const handleUserAccountEdit = (evevt: React.MouseEvent) => {
+    if (token !== null && userId !== null) {
+      update({ token: token, userId: userId });
+    }
+  };
+
   return (
     <Container offFixed={offFixed}>
       <Wrapper>
@@ -203,7 +219,12 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
                           onKeyDown={handleListKeyDown}
                         >
                           <AccountBoxItem>
-                            <Link to={`/users/account/edit`}>계정 관리</Link>
+                            <Link
+                              to={`/users/account/edit`}
+                              onClick={handleUserAccountEdit}
+                            >
+                              계정 관리
+                            </Link>
                             {/* <Link to={`/users/${userId}/account`}>
                               계정 관리
                             </Link> */}
@@ -235,7 +256,12 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
           ) : (
             <>
               <AccountMenuItem>
-                <PageLink to={`/users/account/edit`}>계정 관리</PageLink>
+                <PageLink
+                  to={`/users/account/edit`}
+                  onClick={handleUserAccountEdit}
+                >
+                  계정 관리
+                </PageLink>
                 {/* <PageLink to={`/users/${userId}/account`}>계정 관리</PageLink> */}
               </AccountMenuItem>
               <AccountMenuItem>
