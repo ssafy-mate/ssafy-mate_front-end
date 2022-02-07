@@ -1,4 +1,4 @@
-import { context, response, rest } from 'msw';
+import { rest } from 'msw';
 
 import { userDataList } from '../database/user';
 
@@ -192,6 +192,39 @@ export const userHandlers = [
           belongToTeam: false,
         }),
       );
+    },
+  ),
+
+  rest.get(
+    'https://i6a402.p.ssafy.io:8443/api/auth/user/team-id',
+    async (request, response, context) => {
+      const token: string =
+        request.headers['_headers'].authorization.split(' ')[1];
+      const status: number = 200;
+
+      if (token === null) {
+        return response(
+          context.status(403),
+          context.json({
+            status: 403,
+            success: false,
+            message: '토큰이 유효하지 않습니다.',
+          }),
+        );
+      }
+
+      if (status === 500) {
+        return response(
+          context.status(500),
+          context.json({
+            status: 500,
+            success: false,
+            meesage: 'Internal Server, 내 팀 아이디 조회 실패',
+          }),
+        );
+      }
+
+      return response(context.json({ teamId: 1 }));
     },
   ),
 ];
