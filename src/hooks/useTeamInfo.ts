@@ -22,6 +22,7 @@ const useTeamInfo = (teamId: number) => {
   return {
     isLoading,
     teamData: data?.data.teamData,
+    role: data?.data.role,
     isError,
     errorMessage: error?.response?.data.message,
   };

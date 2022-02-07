@@ -4,7 +4,7 @@ import { TeamOfferRequestType } from '../types/teamTypes';
 
 class TeamService {
   public static async createMyTeam(token: string, formData: FormData) {
-    const response = await axiosInstance.post('/api/auth/team', formData, {
+    const response = await axiosInstance.post('/api/auth/team/info', formData, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -32,6 +32,19 @@ class TeamService {
         Authorization: `Bearer ${token}`,
       },
     });
+
+    return response.data;
+  }
+
+  public static async leaveTeam(token: string, teamId: number) {
+    const response = await axiosInstance.delete(
+      `/api/auth/team/leave/${teamId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
 
     return response.data;
   }

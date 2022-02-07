@@ -3,6 +3,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
+import { leaveMyTeam as leaveMyTeamSagaStart } from '../../redux/modules/myTeam';
 
 import styled from '@emotion/styled';
 
@@ -13,6 +14,8 @@ import FlagIcon from '@mui/icons-material/Flag';
 import SchoolIcon from '@mui/icons-material/School';
 import ComputerIcon from '@mui/icons-material/Computer';
 import StyleIcon from '@mui/icons-material/Style';
+import LogoutIcon from '@mui/icons-material/Logout';
+import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -20,6 +23,9 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
+import Swal from 'sweetalert2';
+
+import { RoleType } from '../../types/teamTypes';
 import { ApplicationRequestType } from '../../types/authTypes';
 
 import { sendApplication as sendApplicationSagaStart } from '../../redux/modules/auth';
@@ -44,6 +50,10 @@ interface MessageTextFieldProps {
   warning: string;
 }
 
+interface OptionButtonProps {
+  role: RoleType;
+}
+
 const TeamInfoSection: React.FC = () => {
   const [applicationMessage, setApplicationMessage] = useState<string>('');
   const [onMessageWarning, setOnMessageWarning] = useState<boolean>(false);
@@ -52,7 +62,7 @@ const TeamInfoSection: React.FC = () => {
 
   const dispatch = useDispatch();
   const { teamId } = useParams<Params>();
-  const { isLoading, teamData, isError, errorMessage } = useTeamInfo(
+  const { isLoading, teamData, role, isError, errorMessage } = useTeamInfo(
     parseInt(teamId),
   );
 
@@ -141,6 +151,56 @@ const TeamInfoSection: React.FC = () => {
     [teamData?.backendRecruitment, teamData?.backendHeadcount],
   );
 
+  const leaveMyTeam = useCallback(
+    (teamId: number) => {
+      dispatch(leaveMyTeamSagaStart(teamId));
+    },
+    [dispatch],
+  );
+
+  const handleClickLeaveButton = () => {
+    Swal.fire({
+      title: '정말 팀을 탈퇴하시겠습니까?',
+      text: '탈퇴 처리 후 취소는 불가능합니다.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#f5554a',
+      cancelButtonColor: '#919aa1',
+      confirmButtonText: '탈퇴하기',
+      cancelButtonText: '취소하기',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        leaveMyTeam(parseInt(teamId));
+      }
+    });
+  };
+
+  const renderingOptionButton = (role: RoleType = 'outsider') => {
+    switch (role) {
+      case 'owner':
+        return (
+          <OptionButton onClick={handleOpenApplicationDialog} role={role}>
+            <EditIcon />
+            <span>팀 정보 수정하기</span>
+          </OptionButton>
+        );
+      case 'member':
+        return (
+          <OptionButton onClick={handleClickLeaveButton} role={role}>
+            <LogoutIcon />
+            <span>팀 탈퇴하기</span>
+          </OptionButton>
+        );
+      default:
+        return (
+          <OptionButton onClick={handleOpenApplicationDialog} role={role}>
+            <BorderColorIcon />
+            <span>지원하기</span>
+          </OptionButton>
+        );
+    }
+  };
+
   if (isError) {
     return <ErrorSection errorMessage={errorMessage} />;
   }
@@ -172,10 +232,7 @@ const TeamInfoSection: React.FC = () => {
               </TeamTitleWrapper>
             </TitleBox>
             <ButtonBox>
-              <ApplicationButton onClick={handleOpenApplicationDialog}>
-                <BorderColorIcon />
-                <span>지원하기</span>
-              </ApplicationButton>
+              {renderingOptionButton(role)}
               <SharingButton>
                 <ShareIcon />
                 <span>공유하기</span>
@@ -487,7 +544,7 @@ const MemberList = styled.ul`
   box-sizing: border-box;
 `;
 
-const ApplicationButton = styled.button`
+const OptionButton = styled.button<OptionButtonProps>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -496,7 +553,12 @@ const ApplicationButton = styled.button`
   border: none;
   border-radius: 4px;
   box-sizing: border-box;
-  background-color: #3396f4;
+  background-color: ${(props) =>
+    props.role === 'owner'
+      ? '#ffc00a'
+      : props.role === 'member'
+      ? '#f5554a'
+      : '#3396f4'};
   font-size: 16px;
   font-weight: 500;
   line-height: 1.5;
@@ -505,7 +567,12 @@ const ApplicationButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background-color: #2878c3;
+    background-color: ${(props) =>
+      props.role === 'owner'
+        ? '#e5ac09'
+        : props.role === 'member'
+        ? '#dc4c42'
+        : '#3396f4'};
   }
 
   & svg {

@@ -1,5 +1,7 @@
 import { TechStack, TechStackWithImg } from './commonTypes';
 
+export type RoleType = 'owner' | 'member' | 'outsider';
+
 interface TeamOwner {
   userId: number;
   userName: string;
@@ -77,6 +79,7 @@ export interface TeamDataType {
 
 export interface TeamInfoResponse {
   teamData: TeamDataType;
+  role: RoleType;
 }
 
 export interface MyTeamResponse {
@@ -88,4 +91,9 @@ export interface MyTeamState {
   team: TeamDataType | null;
   loading: boolean;
   error: string | null;
+}
+
+export interface LeaveMyTeamResponse {
+  success: boolean;
+  message: string;
 }
