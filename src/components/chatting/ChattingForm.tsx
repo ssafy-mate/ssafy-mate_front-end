@@ -1,247 +1,374 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useParams, useLocation } from 'react-router';
 
-import SockJS from 'sockjs-client';
-import { Stomp, CompatClient } from '@stomp/stompjs';
+import dayjs from 'dayjs';
+import useSWR from 'swr';
+import useSWRInfinite from 'swr/infinite';
+import axios from 'axios';
+
+import { axiosInstance } from '../../utils/axios';
+import { fetcherGet, fetcherGetWithParams } from '../../utils/fetcher';
+import useSocket from '../../hooks/useSocket';
+import useToken from '../../hooks/useToken';
+import useTextArea from '../../hooks/useTextArea';
+import ChatRoomList from './ChatRoomList';
+import { MessageType, ChatRoomType } from '../../types/messageTypes';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
+import { Scrollbars } from 'react-custom-scrollbars-2';
 import SendIcon from '@mui/icons-material/Send';
+import TextareaAutosize from '@mui/base/TextareaAutosize';
+import { Drawer } from '@mui/material';
 
-import ChatItem from './ChatItem';
-import { MessageType, ChatRoomType } from '../../types/messageTypes';
-import { axiosInstance } from '../../utils/axios';
+const localUrl = 'http://localhost:3000';
+const socketUrl = 'http://localhost:3095';
+
+const PAGE_SIZE = 10;
+
+type userParams = {
+  myId: string;
+};
 
 const ChattingForm: React.FC = () => {
-  const date = new Date();
-  const dummyData: MessageType = {
-    senderId: 1,
-    roomId: '1-2',
-    content: '내일 역삼역 1번 출구에서 11시에 만나요',
-    sentTime: date.toLocaleString(),
-    type: 'CHAT',
-  };
+  const userToken = useToken(); // 유저 토큰
+  const [socket] = useSocket();
 
-  const senderId: number = 2;
+  const location = useLocation();
+  const param = new URLSearchParams(location.search);
+  const roomId = param.get('roomId');
+  const userId = param.get('userId');
+  const userName = param.get('userName');
 
-  const [messageList, setMessageList] = useState<MessageType[]>([dummyData]);
-  const [chatRoomList, setChatRoomList] = useState<ChatRoomType[]>();
-  const [entryTime, setEntryTime] = useState(date.toLocaleString());
-  const [roomId, setRoomId] = useState<string>('1-2');
-  const [nowPage, setNowPage] = useState<number>(1);
-  const messageInputRef = useRef<HTMLTextAreaElement>(null);
-  const chatRoomMessageRef = useRef<HTMLDivElement>(null);
+  // const { roomId } = useParams<roomParams>();
+  const { myId } = useParams<userParams>();
 
-  // SockJS 로 웹소켓 연결, Stomp 프로토콜을 이용
-  const [stompClient, setStompClient] = useState<CompatClient>(() =>
-    Stomp.over(() => {
-      return new SockJS('http://localhost:8080/ws');
-    }),
+  // const [numberUserId, setNunberUserId] = useState(Number(userId));
+  // const [userId, setUserId] = useState(2); // 내 아이디
+  // const [userId, setUserId] = useState(1); // 상대방 아이디
+
+  const [entryTime, setEntryTime] = useState(
+    dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS'),
   );
 
-  // send,recive 메시지 숨기기
-  stompClient.debug = () => {};
+  const [chat, onChangeChat, setChat] = useTextArea('');
+  const [messageList, setMessageList] = useState<MessageType[]>([]);
+  const messageInputRef = useRef<HTMLTextAreaElement>(null);
+  const chatRoomMessageRef = useRef<HTMLDivElement>(null);
+  const scrollbarRef = useRef<Scrollbars>(null);
 
+  // 채팅 목록 불러오기
+  const {
+    data: roomData,
+    error: roomError,
+    mutate: mutateRoom,
+  } = useSWR<ChatRoomType[]>(`/api/chat/room/${myId}`, fetcherGet);
+
+  // #######
+  // 토큰이 없는 상태에서 접근하면 error 페이지로, teamInfoPage 확인
+  // #######
+
+  // 대화 내역 불러오기 - 인피니티 스크롤용
+  const {
+    data: chatData,
+    mutate: mutateChat,
+    setSize,
+  } = useSWRInfinite<MessageType[]>(
+    (index) => {
+      console.log(`인피니티 스크롤 index:${index}`);
+      const nextPage: number = index + 1;
+      return [`/api/chat/log/${roomId}`, nextPage, entryTime];
+    },
+    fetcherGetWithParams,
+    {
+      onSuccess(data) {
+        if (data?.length === 1) {
+          scrollbarRef.current?.scrollToBottom();
+        }
+      },
+    },
+  );
+
+  // 내가 메시지를 보내거나, 서버 챗 데이터 변경이 일어났을 때 발동하는 콜백
+  // 서버로 메시지 정보 post 요청
+  const onSubmit = useCallback(
+    (event) => {
+      event.preventDefault();
+
+      if (chat?.trim()) {
+        const params: MessageType = {
+          userName: '조원빈',
+          roomId: roomId as string,
+          content: chat,
+          senderId: Number(myId),
+          sentTime: dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS'),
+        };
+
+        /*
+        mutateChat((prevChatData) => {
+          prevChatData?.[0].unshift(params);
+          console.log(prevChatData?.[0].toString());
+          return prevChatData;
+        }, true).then(() => {
+          setChat('');
+          if (scrollbarRef.current) {
+            if (
+              scrollbarRef.current.getScrollHeight() <
+              scrollbarRef.current.getClientHeight() +
+                scrollbarRef.current.getScrollTop() +
+                150
+            ) {
+              scrollbarRef.current.scrollToBottom();
+            }
+          }
+        });
+        */
+
+        axios
+          .post(`${socketUrl}/api/chat`, params)
+          .then((response) => {
+            console.log(`onSumbit response : ${response}`);
+            if (scrollbarRef.current) {
+              if (
+                scrollbarRef.current.getScrollHeight() <
+                scrollbarRef.current.getClientHeight() +
+                  scrollbarRef.current.getScrollTop() +
+                  150
+              ) {
+                scrollbarRef.current.scrollToBottom();
+              }
+            }
+          })
+          .catch((error) => {
+            console.log(`onSumbit error : ${error}`);
+          })
+          .finally(() => {
+            setChat('');
+          });
+
+        setMessageList((data) => data.concat(params));
+      }
+    },
+    [chat, roomId, myId, userId, chatData, mutateChat, setChat],
+  );
+
+  // onMessage 메시지 받으면 작동하는 콜백
+  const onMessage = useCallback(
+    (data: MessageType) => {
+      // roomId 중 하나가 상대것인지 검사 => 일단 임시로 내, 상대방 아이디 셋팅
+
+      // onSubmit에서 콜백이 변경된 데이터를 감지해 호출됨
+      if (data.senderId === Number(userId) && Number(myId) !== Number(userId)) {
+        mutateChat((chatData) => {
+          chatData?.[0].unshift(data);
+          return chatData;
+        }, false).then(() => {
+          console.log(`onMessage callback 성공`);
+
+          if (scrollbarRef.current) {
+            if (
+              scrollbarRef.current.getScrollHeight() <
+              scrollbarRef.current.getClientHeight() +
+                scrollbarRef.current.getScrollTop() +
+                150
+            ) {
+              setTimeout(() => {
+                scrollbarRef.current?.scrollToBottom();
+              }, 100);
+            }
+          }
+        });
+      }
+    },
+    [userId, myId, mutateChat],
+  );
+
+  // 소켓 on 달아두는 곳
   useEffect(() => {
-    stompClient.connect({}, onConnected);
-
+    socket?.on('message', onMessage);
     return () => {
-      stompClient.disconnect();
+      socket?.off('message', onMessage);
     };
-  }, []);
+  }, [socket, onMessage]);
 
+  // 로딩 시 스크롤바 제일 아래로
   useEffect(() => {
-    // 채팅방 목록 불러오기
-    axiosInstance
-      .get(`http://localhost:3000/api/chat/room/${senderId}`)
-      .then((response) => {
-        console.log(response);
-        setChatRoomList(response.data.roomList);
-        console.log(chatRoomList);
-      })
-      .catch((error) => console.log(error));
-  }, []);
-
-  useEffect(() => {
-    // 대화 내용 불러오기
-    // axiosInstance.get(`http://localhost:3000/api/chat/log`);
-  }, []);
-
-  useEffect(() => {
-    chatLogScrollDown();
-  }, [messageList]);
-
-  const onConnected = () => {
-    stompClient.subscribe(`/queue/ssafymate/chat/${roomId}`, onMessageReceived);
-
-    stompClient.send(
-      `/app/ssafymate/chat/addUser/${roomId}`,
-      {},
-      JSON.stringify({
-        senderId: senderId,
-        type: 'JOIN',
-        roomId: roomId,
-        content: '',
-        sentTime: entryTime,
-      }),
-    );
-  };
-
-  const onMessageReceived = (payload: any) => {
-    const message = JSON.parse(payload.body);
-    if (message.type !== 'JOIN') addMessageToList(message);
-  };
-
-  const handleSendMessage = (
-    event: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent,
-  ) => {
-    const messageContent = messageInputRef.current?.value.trim();
-
-    if (messageContent && stompClient) {
-      const curMessage = makeMessageFormat(senderId);
-
-      stompClient.send(
-        `/app/ssafymate/chat/sendMessage/${roomId}`,
-        {},
-        JSON.stringify(curMessage),
-      );
+    if (chatData?.length === 1) {
+      setTimeout(() => {
+        scrollbarRef.current?.scrollToBottom();
+      }, 100);
     }
+  }, [chatData]);
 
-    messageInputInitialize();
-    event.preventDefault();
-  };
-
+  // 엔터 누르면 onSubmit 호출
   const handleMessageSendKeyPress = (event: React.KeyboardEvent) => {
     if (event.code === 'Enter' || event.code === 'NumpadEnter') {
       if (!event.shiftKey) {
         event.preventDefault();
-        try {
-          handleSendMessage(event);
-        } catch {
-          const curMessage = makeMessageFormat(senderId);
-          addMessageToList(curMessage);
-          messageInputInitialize();
-        }
+        onSubmit(event);
       }
     }
   };
 
-  const makeMessageFormat = (setUserId: number): MessageType => {
-    const chatMessage: MessageType = {
-      senderId: setUserId,
-      content: messageInputRef.current?.value as string,
-      sentTime: date.toLocaleString(),
-      roomId: roomId,
-      type: 'CHAT',
-    };
+  // 인피니티 스크롤을 위한, ReachingEnd : 페이지 사이즈 만큼 못가져왔을때 남는거
+  const isEmpty = chatData?.[0]?.length === 0;
+  const isReachingEnd =
+    isEmpty || (chatData && chatData[chatData.length - 1]?.length < PAGE_SIZE);
 
-    return chatMessage;
-  };
+  const onScroll = useCallback(
+    (values) => {
+      // 가장 위로 올라갔을 때, 다음 페이지 불러오도록 페이지 셋팅
+      if (values.scrollTop === 0 && !isReachingEnd && !isEmpty) {
+        setSize((size) => size + 1).then(() => {
+          // 스크롤 위치 유지 : 현재 스크롤 높이 - 스크롤바의 높이
+          scrollbarRef.current?.scrollTop(
+            scrollbarRef.current?.getScrollHeight() - values.scrollHeight,
+          );
+        });
+      }
+    },
+    [setSize, scrollbarRef, isReachingEnd, isEmpty],
+  );
 
-  const addMessageToList = (message: MessageType) => {
-    setMessageList((preMessageList) => {
-      return [...preMessageList, message];
-    });
-  };
-
-  const messageInputInitialize = () => {
-    if (messageInputRef.current) {
-      messageInputRef.current.value = '';
-      messageInputRef.current?.focus();
-    }
-  };
-
-  const currentTimeCalculate = (): string => {
-    let am = '오전';
-    let hours = date.getHours();
-    const minutes = date.getMinutes();
-
-    if (hours >= 12) {
-      am = '오후';
-      if (hours !== 12) hours -= 12;
-    }
-
-    const currentTime: string = `${am} ${hours}:${minutes}`;
-    return currentTime;
-  };
-
-  const chatLogScrollDown = () => {
-    if (chatRoomMessageRef.current) {
-      chatRoomMessageRef.current?.scrollIntoView({
-        behavior: 'auto',
-        block: 'end',
-        inline: 'nearest',
-      });
-    }
-  };
+  // 채팅 메시지 reverse
+  const chatSections = chatData
+    ? ([] as MessageType[]).concat(...chatData).reverse()
+    : [];
 
   return (
     <ChatContianer>
-      <ChatListSidebar>
-        <ChatList>
-          <ChatItem />
-        </ChatList>
-      </ChatListSidebar>
-      <ChatRoomSection>
-        <ChatRoomWrapper>
-          <ChatRoomMessageWrapper>
-            <ChatRoomUserNameBar>
-              <ChatRoomHeaderProfile className="userName">
-                <img></img>
-                <div className="userName">
-                  <span>호호</span>
-                </div>
-              </ChatRoomHeaderProfile>
-            </ChatRoomUserNameBar>
-            <ChatRoomMessageList>
-              <MessageWrapper ref={chatRoomMessageRef}>
-                {messageList.length > 0
-                  ? messageList.map((message, index) => {
-                      if (message.senderId === senderId) {
-                        return (
-                          <MessageBoxWrapper key={index}>
-                            <MessageBoxRightContent>
-                              <MessageTimeBox>
-                                <div className="message_date">
-                                  {currentTimeCalculate()}
-                                </div>
-                              </MessageTimeBox>
-                              <p>{message.content}</p>
-                            </MessageBoxRightContent>
-                          </MessageBoxWrapper>
-                        );
-                      } else {
-                        return (
-                          <MessageBoxWrapper>
-                            <MessageBoxLeftContent key={index}>
-                              <img></img>
-                              <p>{message.content}</p>
-                              <MessageTimeBox>
-                                <div className="message_date">
-                                  {message.sentTime}
-                                </div>
-                              </MessageTimeBox>
-                            </MessageBoxLeftContent>
-                          </MessageBoxWrapper>
-                        );
-                      }
-                    })
-                  : null}
-              </MessageWrapper>
-            </ChatRoomMessageList>
-          </ChatRoomMessageWrapper>
-          <ChatTypingWrapper>
-            <textarea
-              ref={messageInputRef}
-              onKeyPress={handleMessageSendKeyPress}
-              placeholder="메시지를 입력해주세요"
+      <ChatRoomListSidebar>
+        <ChatRoomListWrapper>
+          {roomData?.map((room: ChatRoomType, index: number) => (
+            <ChatRoomList
+              myId={Number(myId)}
+              roomId={room.roomId}
+              userId={room.userId}
+              userName={room.userName}
+              profileImgUrl={room.profileImgUrl}
+              content={room.content}
+              sentTime={room.sentTime}
             />
-            <button onClick={handleSendMessage}>
-              <SendIcon css={SendButton}></SendIcon>
-            </button>
-          </ChatTypingWrapper>
-        </ChatRoomWrapper>
+          ))}
+        </ChatRoomListWrapper>
+      </ChatRoomListSidebar>
+      <ChatRoomSection>
+        {!roomId ? (
+          <ChatRoomEmpty>
+            <ChatRoomEmptyContentWrapper>
+              <span>대화할 상대를 선택해주세요.</span>
+            </ChatRoomEmptyContentWrapper>
+          </ChatRoomEmpty>
+        ) : (
+          <ChatRoomWrapper>
+            <ChatRoomMessageWrapper>
+              <ChatRoomUserNameBar>
+                <ChatRoomHeaderProfile className="userName">
+                  <img></img>
+                  <div className="userName">
+                    <span>{userName}</span>
+                  </div>
+                </ChatRoomHeaderProfile>
+              </ChatRoomUserNameBar>
+              <Scrollbars autoHide ref={scrollbarRef} onScrollFrame={onScroll}>
+                <ChatRoomMessageList>
+                  <MessageWrapper ref={chatRoomMessageRef}>
+                    {chatSections && chatSections.length > 0
+                      ? chatSections?.map((message, index) => {
+                          if (message.senderId === Number(myId)) {
+                            return (
+                              <MessageBoxWrapper key={index}>
+                                <MessageBoxRightContent>
+                                  <MessageTimeBox>
+                                    <div className="message_date">
+                                      {dayjs(message.sentTime).format(
+                                        'YYYY.MM.DD HH:mm',
+                                      )}
+                                    </div>
+                                  </MessageTimeBox>
+                                  <p>{message.content}</p>
+                                </MessageBoxRightContent>
+                              </MessageBoxWrapper>
+                            );
+                          } else {
+                            return (
+                              <MessageBoxWrapper>
+                                <MessageBoxLeftContent key={index}>
+                                  <img></img>
+                                  <p>{message.content}</p>
+                                  <MessageTimeBox>
+                                    <div className="message_date">
+                                      {dayjs(message.sentTime).format(
+                                        'YYYY.MM.DD HH:mm',
+                                      )}
+                                    </div>
+                                  </MessageTimeBox>
+                                </MessageBoxLeftContent>
+                              </MessageBoxWrapper>
+                            );
+                          }
+                        })
+                      : null}
+                    <hr></hr>
+                    {messageList.length > 0
+                      ? messageList.map((message, index) => {
+                          if (message.senderId === Number(myId)) {
+                            return (
+                              <MessageBoxWrapper key={index}>
+                                <MessageBoxRightContent>
+                                  <MessageTimeBox>
+                                    <div className="message_date">
+                                      {dayjs(message.sentTime).format(
+                                        'YYYY.MM.DD HH:mm',
+                                      )}
+                                    </div>
+                                  </MessageTimeBox>
+                                  <p>{message.content}</p>
+                                </MessageBoxRightContent>
+                              </MessageBoxWrapper>
+                            );
+                          } else {
+                            return (
+                              <MessageBoxWrapper>
+                                <MessageBoxLeftContent key={index}>
+                                  <img></img>
+                                  <p>{message.content}</p>
+                                  <MessageTimeBox>
+                                    <div className="message_date">
+                                      {dayjs(message.sentTime).format(
+                                        'YYYY.MM.DD HH:mm',
+                                      )}
+                                    </div>
+                                  </MessageTimeBox>
+                                </MessageBoxLeftContent>
+                              </MessageBoxWrapper>
+                            );
+                          }
+                        })
+                      : null}
+                  </MessageWrapper>
+                </ChatRoomMessageList>
+              </Scrollbars>
+            </ChatRoomMessageWrapper>
+            <ChatTypingWrapper>
+              <TextareaAutosize
+                css={ChatTypingTextarea}
+                ref={messageInputRef}
+                maxRows={3}
+                minRows={1}
+                value={chat}
+                onKeyPress={handleMessageSendKeyPress}
+                onChange={onChangeChat}
+                placeholder="메시지를 입력해주세요"
+              />
+              <button onClick={onSubmit}>
+                <SendIcon css={SendButton}></SendIcon>
+              </button>
+            </ChatTypingWrapper>
+          </ChatRoomWrapper>
+        )}
       </ChatRoomSection>
     </ChatContianer>
   );
@@ -254,15 +381,9 @@ const ChatContianer = styled.div`
   width: 100%;
   height: calc(100vh - 46px);
   background-color: #ffffff;
-
-  @media (max-width: 400px) {
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-  }
 `;
 
-const ChatListSidebar = styled.nav`
+const ChatRoomListSidebar = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -271,11 +392,23 @@ const ChatListSidebar = styled.nav`
   border-left: 1px solid #dfdfdf;
   box-sizing: border-box;
   background-color: #fff;
+
+  @media (max-width: 575px) {
+    display: flex;
+    width: 100%;
+    display: none;
+  }
 `;
 
-const ChatList = styled.ul`
+const ChatRoomListWrapper = styled.ul`
   overflow-x: hidden;
   box-sizing: border-box;
+
+  @media (max-width: 575px) {
+    display: flex;
+    width: 100%;
+    display: none;
+  }
 `;
 
 const ChatRoomSection = styled.section`
@@ -287,6 +420,30 @@ const ChatRoomSection = styled.section`
   border-left: solid 1px #dfdfdf;
   border-right: solid 1px #dfdfdf;
   background-color: #fff;
+
+  @media (max-width: 575px) {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+  }
+`;
+
+const ChatRoomEmpty = styled.div`
+  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+`;
+
+const ChatRoomEmptyContentWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  color: #383838;
+  font-size: 18px;
 `;
 
 const ChatRoomWrapper = styled.div`
@@ -323,6 +480,8 @@ const ChatRoomHeaderProfile = styled.div`
   & img {
     width: 40px;
     height: 40px;
+    min-height: 40px;
+    min-width: 40px;
     margin-right: 12px;
     border: 1px solid #eaebef;
     border-radius: 50%;
@@ -338,26 +497,6 @@ const ChatRoomHeaderProfile = styled.div`
 const ChatRoomMessageList = styled.div`
   overflow: hidden auto;
   padding: 0px 20px;
-
-  ::-webkit-scrollbar {
-    opacity: 0;
-    width: 6px;
-    height: 7px;
-    appearance: auto;
-  }
-
-  ::-webkit-scrollbar-button {
-    background-color: transparent;
-  }
-
-  ::-webkit-scrollbar-corner {
-    background-color: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: rgba(51, 150, 244, 0.5);
-    border-radius: 5px;
-  }
 `;
 
 const MessageWrapper = styled.div`
@@ -390,6 +529,8 @@ const MessageBoxLeftContent = styled.div`
   & img {
     width: 36px;
     height: 36px;
+    min-height: 36px;
+    min-width: 36px;
     margin-right: 8px;
     border: 1px solid #f9f9f9;
     border-radius: 50%;
@@ -436,36 +577,12 @@ const ChatTypingWrapper = styled.div`
   display: flex;
   flex-direction: row;
   position: relative;
-  height: 40px;
+  /* height: 40px; */
+  height: 85px;
   margin: 20px;
   padding: 0px 10px;
   border-radius: 10px;
   background-color: #eaebef;
-
-  textarea {
-    overflow: auto;
-    overflow-wrap: break-word;
-    width: 100%;
-    padding: 10px;
-    resize: none;
-    border: none;
-    outline: none;
-    line-height: 150%;
-    background-color: #eaebef;
-    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
-
-    ::-webkit-scrollbar {
-      opacity: 0;
-      width: 6px;
-      height: 7px;
-      appearance: auto;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      border-radius: 5px;
-      background-color: rgba(51, 150, 244, 0.5);
-    }
-  }
 
   button {
     outline: none;
@@ -477,6 +594,31 @@ const ChatTypingWrapper = styled.div`
 const SendButton = css`
   color: #3396f4;
   cursor: pointer;
+`;
+
+const ChatTypingTextarea = css`
+  overflow: auto;
+  overflow-wrap: break-word;
+  width: 100%;
+  padding: 10px;
+  resize: none;
+  border: none;
+  outline: none;
+  line-height: 150%;
+  background-color: #eaebef;
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+
+  ::-webkit-scrollbar {
+    opacity: 0;
+    width: 6px;
+    height: 7px;
+    appearance: auto;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: rgba(51, 150, 244, 0.5);
+  }
 `;
 
 export default ChattingForm;

@@ -3,7 +3,7 @@ export interface MessageType {
   roomId: string;
   content: string;
   sentTime: string;
-  type: string;
+  userName: string;
 }
 
 export interface ChatRoomType {
@@ -13,4 +13,17 @@ export interface ChatRoomType {
   profileImgUrl: string;
   content: string;
   sentTime: string;
+}
+
+export interface ChatRoomListResponseType {
+  roomList: ChatRoomType[];
+}
+
+export interface ChatLogResponseType {
+  contentList: MessageType[];
+  totalPage?: number;
+}
+
+export interface ChatRoomTypeProps extends ChatRoomType {
+  myId: number;
 }
