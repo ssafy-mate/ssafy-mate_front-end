@@ -219,7 +219,7 @@ export const userHandlers = [
           context.json({
             status: 500,
             success: false,
-            meesage: 'Internal Server, 내 팀 아이디 조회 실패',
+            message: 'Internal Server, 내 팀 아이디 조회 실패',
           }),
         );
       }
