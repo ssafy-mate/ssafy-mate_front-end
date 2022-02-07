@@ -11,6 +11,7 @@ import { fetcherGet, fetcherGetWithParams } from '../../utils/fetcher';
 import useSocket from '../../hooks/useSocket';
 import useToken from '../../hooks/useToken';
 import useTextArea from '../../hooks/useTextArea';
+import useUserIdName from '../../hooks/useUserIdName';
 import ChatRoomList from './ChatRoomList';
 import { MessageType, ChatRoomType } from '../../types/messageTypes';
 
@@ -43,7 +44,10 @@ const ChattingForm: React.FC = () => {
   const userName = param.get('userName');
 
   // const { roomId } = useParams<roomParams>();
-  const { myId } = useParams<userParams>();
+  const myData = useUserIdName();
+  // const { myId } = useParams<userParams>();
+  const myId = myData[0];
+  const myName = myData[1];
 
   // const [numberUserId, setNunberUserId] = useState(Number(userId));
   // const [userId, setUserId] = useState(2); // 내 아이디
@@ -98,7 +102,7 @@ const ChattingForm: React.FC = () => {
 
       if (chat?.trim()) {
         const params: MessageType = {
-          userName: '조원빈',
+          userName: myName as string,
           roomId: roomId as string,
           content: chat,
           senderId: Number(myId),
