@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
+import dayjs from 'dayjs';
+
 import { ChatRoomTypeProps } from '../../types/messageTypes';
 
 import styled from '@emotion/styled';
@@ -13,6 +15,7 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
   profileImgUrl,
   content,
   sentTime,
+  userEmail,
 }) => {
   const [roomInfo, setRoomInfo] = useState<ChatRoomTypeProps>({
     myId: myId,
@@ -22,12 +25,15 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
     profileImgUrl: profileImgUrl,
     content: content,
     sentTime: sentTime,
+    userEmail: userEmail,
   });
+
+  const email = userEmail.split('@');
 
   return (
     <>
       <NavLink
-        to={`/chatting/${myId}?roomId=${roomId}&userId=${userId}&userName=${userName}`}
+        to={`/chatting/${myId}?roomId=${roomId}&userId=${userId}&userName=${userName}@${email[0]}`}
       >
         <ChatListItem>
           <ChatListItemWrapper>
@@ -38,7 +44,7 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
               <TitleWrapper>
                 <TitleSenderName>{userName}</TitleSenderName>
                 <TitleSubText>
-                  <span>22.01.25</span>
+                  <span>{dayjs(sentTime).format('YYYY.MM.DD')}</span>
                 </TitleSubText>
               </TitleWrapper>
               <DescriptionWrapper>

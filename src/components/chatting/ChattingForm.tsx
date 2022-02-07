@@ -77,7 +77,6 @@ const ChattingForm: React.FC = () => {
     setSize,
   } = useSWRInfinite<MessageType[]>(
     (index) => {
-      console.log(`인피니티 스크롤 index:${index}`);
       const nextPage: number = index + 1;
       return [`/api/chat/log/${roomId}`, nextPage, entryTime];
     },
@@ -111,7 +110,7 @@ const ChattingForm: React.FC = () => {
           prevChatData?.[0].unshift(params);
           console.log(prevChatData?.[0].toString());
           return prevChatData;
-        }, true).then(() => {
+        }, false).then(() => {
           setChat('');
           if (scrollbarRef.current) {
             if (
@@ -157,9 +156,6 @@ const ChattingForm: React.FC = () => {
   // onMessage 메시지 받으면 작동하는 콜백
   const onMessage = useCallback(
     (data: MessageType) => {
-      // roomId 중 하나가 상대것인지 검사 => 일단 임시로 내, 상대방 아이디 셋팅
-
-      // onSubmit에서 콜백이 변경된 데이터를 감지해 호출됨
       if (data.senderId === Number(userId) && Number(myId) !== Number(userId)) {
         mutateChat((chatData) => {
           chatData?.[0].unshift(data);
@@ -250,6 +246,7 @@ const ChattingForm: React.FC = () => {
               profileImgUrl={room.profileImgUrl}
               content={room.content}
               sentTime={room.sentTime}
+              userEmail={room.userEmail}
             />
           ))}
         </ChatRoomListWrapper>

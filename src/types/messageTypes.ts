@@ -13,6 +13,7 @@ export interface ChatRoomType {
   profileImgUrl: string;
   content: string;
   sentTime: string;
+  userEmail: string;
 }
 
 export interface ChatRoomListResponseType {
