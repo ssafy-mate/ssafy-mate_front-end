@@ -35,13 +35,13 @@ type userParams = {
 
 const ChattingForm: React.FC = () => {
   const userToken = useToken(); // 유저 토큰
-  const [socket] = useSocket();
 
   const location = useLocation();
   const param = new URLSearchParams(location.search);
-  const roomId = param.get('roomId');
-  const userId = param.get('userId');
-  const userName = param.get('userName');
+  const roomId: string | null = param.get('roomId');
+  const userId: string | null = param.get('userId');
+  const userName: string | null = param.get('userName');
+  const [socket] = useSocket(roomId as string);
 
   // const { roomId } = useParams<roomParams>();
   const myData = useUserIdName();
@@ -109,7 +109,6 @@ const ChattingForm: React.FC = () => {
           sentTime: dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS'),
         };
 
-        /*
         mutateChat((prevChatData) => {
           prevChatData?.[0].unshift(params);
           console.log(prevChatData?.[0].toString());
@@ -127,7 +126,6 @@ const ChattingForm: React.FC = () => {
             }
           }
         });
-        */
 
         axios
           .post(`${socketUrl}/api/chat`, params)
@@ -151,7 +149,7 @@ const ChattingForm: React.FC = () => {
             setChat('');
           });
 
-        setMessageList((data) => data.concat(params));
+        // setMessageList((data) => data.concat(params));
       }
     },
     [chat, roomId, myId, userId, chatData, mutateChat, setChat],
@@ -160,6 +158,9 @@ const ChattingForm: React.FC = () => {
   // onMessage 메시지 받으면 작동하는 콜백
   const onMessage = useCallback(
     (data: MessageType) => {
+      console.log(
+        `senderId : ${data.senderId} / userId:${userId} / myId:${myId}`,
+      );
       if (data.senderId === Number(userId) && Number(myId) !== Number(userId)) {
         mutateChat((chatData) => {
           chatData?.[0].unshift(data);

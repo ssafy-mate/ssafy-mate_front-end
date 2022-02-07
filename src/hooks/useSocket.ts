@@ -4,8 +4,8 @@ import { io, Socket } from 'socket.io-client';
 
 const backUrl = 'http://localhost:3095';
 
-const useSocket = (): [Socket | undefined, () => void] => {
-  const socket = io(`${backUrl}/dm`, { transports: ['websocket'] });
+const useSocket = (roomId: string): [Socket | undefined, () => void] => {
+  const socket = io(`${backUrl}/dm-${roomId}`, { transports: ['websocket'] });
 
   const disconnect = useCallback(() => {
     socket.disconnect();
