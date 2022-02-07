@@ -4,7 +4,7 @@ import { teamDataList } from '../database/team';
 
 export const teamHandlers = [
   rest.post(
-    'https://i6a402.p.ssafy.io:8443/api/auth/team',
+    'https://i6a402.p.ssafy.io:8443/api/auth/team/info',
     async (request, response, context) => {
       const token: string | null =
         request.headers['_headers'].authorization.split(' ')[1];
@@ -74,7 +74,12 @@ export const teamHandlers = [
       }
 
       // 팀 상세 정보 조회 성공 시
-      return response(context.json(teamDataList[teamIndex]));
+      return response(
+        context.json({
+          teamData: teamDataList[teamIndex].teamData,
+          role: 'member',
+        }),
+      );
     },
   ),
 
@@ -126,6 +131,45 @@ export const teamHandlers = [
         context.json({
           success: true,
           message: '해당 교육생의 승인 후 팀 합류가 최종적으로 완료됩니다.',
+        }),
+      );
+    },
+  ),
+
+  rest.delete(
+    'https://i6a402.p.ssafy.io:8443/api/auth/team/leave/:teamId',
+    async (request, response, context) => {
+      const { teamId } = request.params;
+      const token = request.headers['_headers'].authorization.split(' ')[1];
+      const status: number = 200;
+
+      // 토큰이 유효하지 않을 시
+      if (token === null) {
+        return response(
+          context.status(403),
+          context.json({
+            status: 403,
+            success: false,
+            message: '토큰이 유효하지 않습니다.',
+          }),
+        );
+      }
+
+      if (status === 500) {
+        return response(
+          context.status(500),
+          context.json({
+            status: 500,
+            success: false,
+            message: 'Internal Server, 팀 탈퇴 처리 실패',
+          }),
+        );
+      }
+
+      return response(
+        context.json({
+          success: true,
+          message: '탈퇴 처리가 완료되었습니다.',
         }),
       );
     },
