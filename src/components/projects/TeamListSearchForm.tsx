@@ -170,7 +170,7 @@ const TeamListSearchForm: React.FC<TeamListSearchFormProps> = ({
             placeholder="팀 이름 검색"
             css={{ margin: '0 12px' }}
           />
-          <CreateTeamLink to="/projects/team/create">
+          <CreateTeamLink to="/projects/teams/new">
             <GroupsIcon />
             <span>팀 생성</span>
           </CreateTeamLink>

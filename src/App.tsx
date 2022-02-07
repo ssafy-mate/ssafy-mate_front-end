@@ -47,12 +47,8 @@ const App: React.FC = () => {
           <Route exact path="/users/find/id" component={FindUserIdPage} />
           <Route exact path="/users/:userId" component={UserInfoPage} />
           <Route exact path="/teams/:teamId" component={TeamInfoPage} />
-          <Route
-            exact
-            path="/projects/team/create"
-            component={TeamCreatePage}
-          />
-          <Route exact path="/projects/team/edit" component={TeamEditPage} />
+          <Route exact path="/teams/:teamId/edit" component={TeamEditPage} />
+          <Route exact path="/projects/teams/new" component={TeamCreatePage} />
           <Route exact path="/projects/common" component={CommonProjectPage} />
           <Route
             exact

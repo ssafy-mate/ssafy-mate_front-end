@@ -82,9 +82,41 @@ const TeamInfoSection: React.FC = () => {
     }
   }, [applicationMessage]);
 
+  const isTotalSufficient = useMemo(
+    () =>
+      Number(teamData?.totalRecruitment) <= Number(teamData?.totalHeadcount)
+        ? true
+        : false,
+    [teamData?.totalRecruitment, teamData?.totalHeadcount],
+  );
+
+  const isFrontendSufficient = useMemo(
+    () =>
+      Number(teamData?.frontendRecruitment) <=
+      Number(teamData?.frontendHeadcount)
+        ? true
+        : false,
+    [teamData?.frontendRecruitment, teamData?.frontendHeadcount],
+  );
+
+  const isBackendSufficient = useMemo(
+    () =>
+      Number(teamData?.backendRecruitment) <= Number(teamData?.backendHeadcount)
+        ? true
+        : false,
+    [teamData?.backendRecruitment, teamData?.backendHeadcount],
+  );
+
   const sendApplication = useCallback(
     (application: ApplicationRequestType) => {
       dispatch(sendApplicationSagaStart(application));
+    },
+    [dispatch],
+  );
+
+  const leaveMyTeam = useCallback(
+    (teamId: number) => {
+      dispatch(leaveMyTeamSagaStart(teamId));
     },
     [dispatch],
   );
@@ -126,38 +158,6 @@ const TeamInfoSection: React.FC = () => {
     setOpenApplicationDialog(false);
   };
 
-  const isTotalSufficient = useMemo(
-    () =>
-      Number(teamData?.totalRecruitment) <= Number(teamData?.totalHeadcount)
-        ? true
-        : false,
-    [teamData?.totalRecruitment, teamData?.totalHeadcount],
-  );
-
-  const isFrontendSufficient = useMemo(
-    () =>
-      Number(teamData?.frontendRecruitment) <=
-      Number(teamData?.frontendHeadcount)
-        ? true
-        : false,
-    [teamData?.frontendRecruitment, teamData?.frontendHeadcount],
-  );
-
-  const isBackendSufficient = useMemo(
-    () =>
-      Number(teamData?.backendRecruitment) <= Number(teamData?.backendHeadcount)
-        ? true
-        : false,
-    [teamData?.backendRecruitment, teamData?.backendHeadcount],
-  );
-
-  const leaveMyTeam = useCallback(
-    (teamId: number) => {
-      dispatch(leaveMyTeamSagaStart(teamId));
-    },
-    [dispatch],
-  );
-
   const handleClickLeaveButton = () => {
     Swal.fire({
       title: '정말 팀을 탈퇴하시겠습니까?',
@@ -175,11 +175,13 @@ const TeamInfoSection: React.FC = () => {
     });
   };
 
+  const handleClickMoveEditPageButton = () => {};
+
   const renderingOptionButton = (role: RoleType = 'outsider') => {
     switch (role) {
       case 'owner':
         return (
-          <OptionButton onClick={handleOpenApplicationDialog} role={role}>
+          <OptionButton onClick={handleClickMoveEditPageButton} role={role}>
             <EditIcon />
             <span>팀 정보 수정하기</span>
           </OptionButton>
@@ -232,7 +234,7 @@ const TeamInfoSection: React.FC = () => {
               </TeamTitleWrapper>
             </TitleBox>
             <ButtonBox>
-              {renderingOptionButton(role)}
+              {!isTotalSufficient && renderingOptionButton(role)}
               <SharingButton>
                 <ShareIcon />
                 <span>공유하기</span>
