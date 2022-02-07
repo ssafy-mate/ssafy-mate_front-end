@@ -42,7 +42,7 @@ const Footer: React.FC<FooterProps> = ({ offMarginTop }) => {
           </MenuList>
           <MenuList>
             <MenuItem>고객센터</MenuItem>
-            <MenuItem>대표 문의: ssafymate@gmail.com</MenuItem>
+            <MenuItem>대표 문의: ssafymate.service@gmail.com</MenuItem>
             <MenuItem>
               운영 시간: 오전 9시 ~ 오후 6시 (주말 및 공휴일 휴무)
             </MenuItem>

@@ -41,7 +41,7 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
 
   const token = useToken();
 
-  const projectTrack: string | null = useProjectTrack(projectId);
+  const projectTrack: string | null | undefined = useProjectTrack(projectId);
 
   const handleClickCardItem = () => {
     if (token !== null) {

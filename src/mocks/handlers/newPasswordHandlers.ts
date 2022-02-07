@@ -7,7 +7,7 @@ import {
 
 export const newPasswordHandlers = [
   rest.get(
-    'http://localhost:3000/api/user/pw-search',
+    'https://i6a402.p.ssafy.io:8443/api/user/pw-search',
     async (request, response, context) => {
       const userEmail = request.url.searchParams.get('userEmail');
 
@@ -47,7 +47,7 @@ export const newPasswordHandlers = [
   ),
 
   rest.post(
-    'http://localhost:3000/api/user/pw-search',
+    'https://i6a402.p.ssafy.io:8443/api/user/pw-search',
     async (request: any, response, context) => {
       const data: CodeConfirmForNewPassword = request.body;
       const { code } = data;
@@ -93,7 +93,7 @@ export const newPasswordHandlers = [
   ),
 
   rest.put(
-    'http://localhost:3000/api/user/sign-up/verification/email',
+    'https://i6a402.p.ssafy.io:8443/api/user/sign-up/verification/email',
     async (request: any, response, context) => {
       const data: NewPassword = request.body;
       const { password, userEmail } = data;

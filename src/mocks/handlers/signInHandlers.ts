@@ -4,7 +4,7 @@ import { SsafyMateMemberList } from '../database/signIn';
 
 export const signInHandlers = [
   rest.post(
-    'http://i6a402.p.ssafy.io:8081/api/user/sign-in',
+    'https://i6a402.p.ssafy.io:8443/api/user/sign-in',
     async (request: any, response, context) => {
       const data: SignInRequestType = request.body;
       const { userEmail } = data;
@@ -40,7 +40,7 @@ export const signInHandlers = [
   ),
 
   rest.delete(
-    'http://i6a402.p.ssafy.io:8081/',
+    'https://i6a402.p.ssafy.io:8443/',
     async (request, response, context) => {},
   ),
 ];

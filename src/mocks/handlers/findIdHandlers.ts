@@ -2,7 +2,7 @@ import { rest } from 'msw';
 
 export const findIdHandlers = [
   rest.get(
-    'http://localhost:3000/api/user/id-search',
+    'https://i6a402.p.ssafy.io:8443/api/user/id-search',
     async (request, response, context) => {
       const userName = request.url.searchParams.get('userName');
 

@@ -56,7 +56,7 @@ const ProjectNavigation: React.FC = () => {
       >
         <NavLink to="/projects/applications">
           <HowToVoteIcon css={navLinkIcon} />
-          지원한 팀
+          보낸 요청
         </NavLink>
       </NavItem>
       <NavItem
