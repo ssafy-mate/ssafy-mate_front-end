@@ -1,8 +1,12 @@
-import styled from '@emotion/styled';
 import React, { useState } from 'react';
+import { NavLink } from 'react-router-dom';
+
 import { ChatRoomTypeProps } from '../../types/messageTypes';
 
+import styled from '@emotion/styled';
+
 const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
+  myId,
   roomId,
   userId,
   userName,
@@ -11,6 +15,7 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
   sentTime,
 }) => {
   const [roomInfo, setRoomInfo] = useState<ChatRoomTypeProps>({
+    myId: myId,
     roomId: roomId,
     userId: userId,
     userName: userName,
@@ -21,24 +26,26 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
 
   return (
     <>
-      <ChatListItem>
-        <ChatListItemWrapper>
-          <ProfileWrapper>
-            <img></img>
-          </ProfileWrapper>
-          <ContentWrapper>
-            <TitleWrapper>
-              <TitleSenderName>{userName}</TitleSenderName>
-              <TitleSubText>
-                <span>22.01.25</span>
-              </TitleSubText>
-            </TitleWrapper>
-            <DescriptionWrapper>
-              <DescriptionContent>{content}</DescriptionContent>
-            </DescriptionWrapper>
-          </ContentWrapper>
-        </ChatListItemWrapper>
-      </ChatListItem>
+      <NavLink to={`/chatting/${myId}?roomId=${roomId}`}>
+        <ChatListItem>
+          <ChatListItemWrapper>
+            <ProfileWrapper>
+              <img></img>
+            </ProfileWrapper>
+            <ContentWrapper>
+              <TitleWrapper>
+                <TitleSenderName>{userName}</TitleSenderName>
+                <TitleSubText>
+                  <span>22.01.25</span>
+                </TitleSubText>
+              </TitleWrapper>
+              <DescriptionWrapper>
+                <DescriptionContent>{content}</DescriptionContent>
+              </DescriptionWrapper>
+            </ContentWrapper>
+          </ChatListItemWrapper>
+        </ChatListItem>
+      </NavLink>
     </>
   );
 };

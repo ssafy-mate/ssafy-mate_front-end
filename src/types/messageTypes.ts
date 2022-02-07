@@ -6,7 +6,7 @@ export interface MessageType {
   userName: string;
 }
 
-export interface ChatRoomResponseType {
+export interface ChatRoomType {
   roomId: string;
   userId: number;
   userName: string;
@@ -16,7 +16,7 @@ export interface ChatRoomResponseType {
 }
 
 export interface ChatRoomListResponseType {
-  roomList: ChatRoomResponseType[];
+  roomList: ChatRoomType[];
 }
 
 export interface ChatLogResponseType {
@@ -24,4 +24,6 @@ export interface ChatLogResponseType {
   totalPage?: number;
 }
 
-export interface ChatRoomTypeProps extends ChatRoomResponseType {}
+export interface ChatRoomTypeProps extends ChatRoomType {
+  myId: number;
+}

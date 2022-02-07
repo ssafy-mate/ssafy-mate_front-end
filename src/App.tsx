@@ -70,7 +70,7 @@ const App: React.FC = () => {
             path="/projects/autonomy/"
             component={AutonomyProjectPage}
           />
-          <Route exact path="/chatting/:roomId" component={ChattingPage} />
+          <Route exact path="/chatting/:myId" component={ChattingPage} />
           <Route component={NotFoundPage} />
         </Switch>
         <ReactQueryDevtools />
