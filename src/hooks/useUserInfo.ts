@@ -6,6 +6,8 @@ import { ErrorResponse } from '../types/commonTypes';
 
 import UserService from '../services/UserService';
 
+import useToken from './useToken';
+
 interface UserProjectTeam {
   teamId: number;
   teamName: string;
@@ -21,6 +23,7 @@ interface UserProject {
 interface UserTechStack {
   id: number;
   techStackName: string;
+  techStackImgUrl: string;
   techStackLevel: string;
 }
 
@@ -45,7 +48,8 @@ interface UserInfoResponse {
 }
 
 const useUserInfo = (userId: string) => {
-  const queryFunction = () => UserService.userDetailInfoApi(userId);
+  const token: string | null = useToken();
+  const queryFunction = () => UserService.getUserInfo(token, userId);
   const { isLoading, data, isError, error } = useQuery<
     AxiosResponse<UserInfoResponse>,
     AxiosError<ErrorResponse>

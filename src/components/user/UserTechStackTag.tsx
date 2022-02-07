@@ -8,20 +8,19 @@ import Button from '@mui/material/Button';
 
 interface UserTechStackTagProps {
   techStackName: string;
+  techStackImgUrl: string;
   techStackLevel: string;
 }
 
 const UserTechStackTag: React.FC<UserTechStackTagProps> = ({
   techStackName,
+  techStackImgUrl,
   techStackLevel,
 }) => {
   return (
     <TagItem>
       <Group>
-        <Img
-          src={`/images/assets/tech-stack/${techStackName}.png`}
-          alt={techStackName}
-        />
+        <Img src={techStackImgUrl} alt={techStackName} />
         <Name>{techStackName}</Name>
       </Group>
       <Group>

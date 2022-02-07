@@ -143,8 +143,8 @@ export const SsafyMateMemberList = [
         {
           projectId: 2,
           projectName: '특화 프로젝트',
-          projectTrack: '빅데이터',
-          projectTeamId: 12,
+          projectTrack: null,
+          projectTeamId: null,
         },
         {
           projectId: 3,
@@ -164,6 +164,7 @@ export const SsafyMateMemberList = [
       ssafyTrack: 'Java Track',
       token: 'skdjfslkjflskdfjlskfjdklsd',
       projects: null,
+      message: '로그인하였습니다.',
     },
   },
   {

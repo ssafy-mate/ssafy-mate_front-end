@@ -1,8 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { useForm } from 'react-hook-form';
 
 import styled from '@emotion/styled';
+
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
@@ -24,11 +25,6 @@ import {
 import AuthService from '../../services/AuthService';
 
 const AuthForm: React.FC<SsafyAuthProps> = ({
-  signUpStep,
-  campus,
-  ssafyTrack,
-  studentNumber,
-  studentName,
   setSignUpStep,
   setCampus,
   setSsafyTrack,
@@ -150,7 +146,7 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
                 </option>
               ))}
             </Select>
-            {errors.campus && (
+            {errors.campus !== undefined && (
               <ErrorMessageWrapper>
                 <ErrorMessage>필수 선택 항목입니다.</ErrorMessage>
               </ErrorMessageWrapper>
@@ -179,7 +175,7 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
                 <option key={track.id}>{track.name}</option>
               ))}
             </Select>
-            {errors.ssafyTrack && (
+            {errors.ssafyTrack !== undefined && (
               <ErrorMessageWrapper>
                 <ErrorMessage>필수 선택 항목입니다.</ErrorMessage>
               </ErrorMessageWrapper>
@@ -200,16 +196,20 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
             })}
             className={errors.studentNumber ? 'have-error' : ''}
           />
-          {errors.studentNumber && errors.studentNumber.type === 'required' && (
-            <ErrorMessageWrapper>
-              <ErrorMessage>{requiredFields}</ErrorMessage>
-            </ErrorMessageWrapper>
-          )}
-          {errors.studentNumber && errors.studentNumber.type !== 'required' && (
-            <ErrorMessageWrapper>
-              <ErrorMessage>학번 7자리를 정확하게 입력해 주세요.</ErrorMessage>
-            </ErrorMessageWrapper>
-          )}
+          {errors.studentNumber !== undefined &&
+            errors.studentNumber.type === 'required' && (
+              <ErrorMessageWrapper>
+                <ErrorMessage>{requiredFields}</ErrorMessage>
+              </ErrorMessageWrapper>
+            )}
+          {errors.studentNumber !== undefined &&
+            errors.studentNumber.type !== 'required' && (
+              <ErrorMessageWrapper>
+                <ErrorMessage>
+                  학번 7자리를 정확하게 입력해 주세요.
+                </ErrorMessage>
+              </ErrorMessageWrapper>
+            )}
         </InputWrapper>
         <InputWrapper>
           <RequirementLabel htmlFor="student-name">이름</RequirementLabel>
@@ -259,9 +259,6 @@ const InputWrapper = styled.div`
   &:first-of-type {
     width: 60%;
     margin-right: 12px;
-  }
-  &:last-of-type {
-    margin-bottom: 0;
   }
 
   @media (max-width: 414px) {
@@ -342,7 +339,6 @@ const InfoInput = styled.input`
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px#3396f4;
   }
-
   &:focus {
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px #3396f4;
@@ -364,7 +360,7 @@ const InfoInput = styled.input`
 const AuthButton = styled.button`
   width: 100%;
   height: 40px;
-  margin-top: 24px;
+  margin-top: 8px;
   border: none;
   border-radius: 0.25rem;
   box-sizing: border-box;

@@ -4,7 +4,7 @@ import { SsafyMateMemberList } from '../database/signIn';
 
 export const signInHandlers = [
   rest.post(
-    'http://localhost:3000/api/user/sign-in',
+    'https://i6a402.p.ssafy.io:8443/api/user/sign-in',
     async (request: any, response, context) => {
       const data: SignInRequestType = request.body;
       const { userEmail } = data;
@@ -13,7 +13,7 @@ export const signInHandlers = [
         (ssafyMember) => ssafyMember.userData.userEmail === userEmail,
       );
 
-      if (memberIndex === -1) {
+      if (memberIndex === -1 && userEmail !== 'error@naver.com') {
         return response(
           context.status(401),
           context.json({
@@ -24,12 +24,23 @@ export const signInHandlers = [
         );
       }
 
+      if (userEmail === 'error@naver.com') {
+        return response(
+          context.status(500),
+          context.json({
+            status: 500,
+            success: false,
+            message: 'Internal Server Error, 로그인 실패',
+          }),
+        );
+      }
+
       return response(context.json(SsafyMateMemberList[memberIndex].userData));
     },
   ),
 
   rest.delete(
-    'http://localhost:3000/',
+    'https://i6a402.p.ssafy.io:8443/',
     async (request, response, context) => {},
   ),
 ];

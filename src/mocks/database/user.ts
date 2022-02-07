@@ -38,26 +38,31 @@ export const userDataList = [
         {
           id: 1,
           techStackName: 'Java',
+          techStackImgUrl: '/images/assets/tech-stack/Java.png',
           techStackLevel: '상',
         },
         {
           id: 2,
           techStackName: 'JPA',
+          techStackImgUrl: '/images/assets/tech-stack/JPA.png',
           techStackLevel: '중',
         },
         {
           id: 3,
           techStackName: 'Mysql',
+          techStackImgUrl: '/images/assets/tech-stack/Mysql.png',
           techStackLevel: '중',
         },
         {
           id: 4,
           techStackName: 'Spring-Boot',
+          techStackImgUrl: '/images/assets/tech-stack/Spring-Boot.png',
           techStackLevel: '상',
         },
         {
           id: 5,
           techStackName: 'Hibernate',
+          techStackImgUrl: '/images/assets/tech-stack/Hibernate.png',
           techStackLevel: '중',
         },
       ],
@@ -104,79 +109,85 @@ export const userDataList = [
         {
           id: 1,
           techStackName: 'Java',
+          techStackImgUrl: '/images/assets/tech-stack/Java.png',
           techStackLevel: '중',
         },
         {
           id: 2,
           techStackName: 'Python',
+          techStackImgUrl: '/images/assets/tech-stack/Python.png',
           techStackLevel: '상',
         },
         {
           id: 3,
           techStackName: 'MySQL',
+          techStackImgUrl: '/images/assets/tech-stack/MySQL.png',
           techStackLevel: '하',
         },
         {
           id: 4,
           techStackName: 'HTML5',
+          techStackImgUrl: '/images/assets/tech-stack/HTML5.png',
           techStackLevel: '중',
         },
         {
           id: 5,
           techStackName: 'CSS3',
+          techStackImgUrl: '/images/assets/tech-stack/CSS3.png',
           techStackLevel: '하',
         },
         {
           id: 6,
           techStackName: 'JavaScript',
+          techStackImgUrl: '/images/assets/tech-stack/JavaScript.png',
           techStackLevel: '중',
         },
-
         {
           id: 7,
           techStackName: 'TypeScript',
+          techStackImgUrl: '/images/assets/tech-stack/TypeScript.png',
           techStackLevel: '중',
         },
-
         {
           id: 8,
           techStackName: 'Vue.js',
+          techStackImgUrl: '/images/assets/tech-stack/Vue.js.png',
           techStackLevel: '하',
         },
-
         {
           id: 9,
           techStackName: 'React',
+          techStackImgUrl: '/images/assets/tech-stack/React.png',
           techStackLevel: '중',
         },
-
         {
           id: 10,
           techStackName: 'Vuex',
+          techStackImgUrl: '/images/assets/tech-stack/Vuex.png',
           techStackLevel: '하',
         },
-
         {
           id: 11,
           techStackName: 'Redux',
+          techStackImgUrl: '/images/assets/tech-stack/Redux.png',
           techStackLevel: '하',
         },
-
         {
           id: 12,
           techStackName: 'Emotion',
+          techStackImgUrl: '/images/assets/tech-stack/Emotion.png',
           techStackLevel: '하',
         },
-
         {
           id: 13,
           techStackName: 'Pytorch',
+          techStackImgUrl: '/images/assets/tech-stack/Pytorch.png',
           techStackLevel: '중',
         },
-
         {
           id: 14,
           techStackName: 'Git',
+          techStackImgUrl: '/images/assets/tech-stack/Git.png',
           techStackLevel: '중',
         },
       ],
@@ -223,31 +234,37 @@ export const userDataList = [
         {
           id: 1,
           techStackName: 'Java',
+          techStackImgUrl: '/images/assets/tech-stack/Java.png',
           techStackLevel: '중',
         },
         {
           id: 2,
           techStackName: 'Python',
+          techStackImgUrl: '/images/assets/tech-stack/Python.png',
           techStackLevel: '중',
         },
         {
           id: 3,
-          techStackName: 'Mysql',
+          techStackName: 'MySQL',
+          techStackImgUrl: '/images/assets/tech-stack/MySQL.png',
           techStackLevel: '상',
         },
         {
           id: 4,
           techStackName: 'Spring-Boot',
+          techStackImgUrl: '/images/assets/tech-stack/Spring-Boot.png',
           techStackLevel: '하',
         },
         {
           id: 5,
           techStackName: 'django',
+          techStackImgUrl: '/images/assets/tech-stack/django.png',
           techStackLevel: '하',
         },
         {
           id: 6,
           techStackName: 'JPA',
+          techStackImgUrl: '/images/assets/tech-stack/JPA.png',
           techStackLevel: '중',
         },
       ],
@@ -294,26 +311,31 @@ export const userDataList = [
         {
           id: 1,
           techStackName: 'Java',
+          techStackImgUrl: '/images/assets/tech-stack/Java.png',
           techStackLevel: '상',
         },
         {
           id: 2,
           techStackName: 'Python',
+          techStackImgUrl: '/images/assets/tech-stack/Python.png',
           techStackLevel: '중',
         },
         {
           id: 3,
-          techStackName: 'Mysql',
+          techStackName: 'MySQL',
+          techStackImgUrl: '/images/assets/tech-stack/Mysql.png',
           techStackLevel: '중',
         },
         {
           id: 4,
           techStackName: 'Spring-Boot',
+          techStackImgUrl: '/images/assets/tech-stack/Spring-Boot.png',
           techStackLevel: '하',
         },
         {
           id: 5,
           techStackName: 'R',
+          techStackImgUrl: '/images/assets/tech-stack/R.png',
           techStackLevel: '하',
         },
       ],
@@ -360,51 +382,61 @@ export const userDataList = [
         {
           id: 1,
           techStackName: 'JavaScript',
+          techStackImgUrl: '/images/assets/tech-stack/JavaScript.png',
           techStackLevel: '상',
         },
         {
           id: 2,
           techStackName: 'TypeScript',
+          techStackImgUrl: '/images/assets/tech-stack/TypeScript.png',
           techStackLevel: '중',
         },
         {
           id: 3,
           techStackName: 'React',
+          techStackImgUrl: '/images/assets/tech-stack/React.png',
           techStackLevel: '중',
         },
         {
           id: 4,
           techStackName: 'Redux',
+          techStackImgUrl: '/images/assets/tech-stack/Redux.png',
           techStackLevel: '중',
         },
         {
           id: 5,
           techStackName: 'Redux-Saga',
+          techStackImgUrl: '/images/assets/tech-stack/Redux-Saga.png',
           techStackLevel: '하',
         },
         {
           id: 6,
           techStackName: 'React-Query',
+          techStackImgUrl: '/images/assets/tech-stack/React-Query.png',
           techStackLevel: '하',
         },
         {
           id: 7,
           techStackName: 'Vue.js',
+          techStackImgUrl: '/images/assets/tech-stack/Vue.js.png',
           techStackLevel: '중',
         },
         {
           id: 8,
           techStackName: 'Vuex',
+          techStackImgUrl: '/images/assets/tech-stack/Vuex.png',
           techStackLevel: '중',
         },
         {
           id: 9,
           techStackName: 'Emotion',
+          techStackImgUrl: '/images/assets/tech-stack/Emotion.png',
           techStackLevel: '중',
         },
         {
           id: 10,
           techStackName: 'Mock-Service-Worker',
+          techStackImgUrl: '/images/assets/tech-stack/Mock-Service-Worker.png',
           techStackLevel: '중',
         },
       ],
@@ -450,36 +482,43 @@ export const userDataList = [
         {
           id: 1,
           techStackName: 'JavaScript',
+          techStackImgUrl: '/images/assets/tech-stack/JavaScript.png',
           techStackLevel: '중',
         },
         {
           id: 2,
           techStackName: 'TypeScript',
+          techStackImgUrl: '/images/assets/tech-stack/TypeScript.png',
           techStackLevel: '중',
         },
         {
           id: 3,
           techStackName: 'React',
+          techStackImgUrl: '/images/assets/tech-stack/React.png',
           techStackLevel: '중',
         },
         {
           id: 4,
           techStackName: 'Vue.js',
+          techStackImgUrl: '/images/assets/tech-stack/Vue.js.png',
           techStackLevel: '중',
         },
         {
           id: 5,
           techStackName: 'Vuex',
+          techStackImgUrl: '/images/assets/tech-stack/Vuex.png',
           techStackLevel: '중',
         },
         {
           id: 6,
           techStackName: 'Java',
+          techStackImgUrl: '/images/assets/tech-stack/Java.png',
           techStackLevel: '상',
         },
         {
           id: 7,
-          techStackName: 'Mysql',
+          techStackName: 'MySQL',
+          techStackImgUrl: '/images/assets/tech-stack/MySQL.png',
           techStackLevel: '중',
         },
       ],

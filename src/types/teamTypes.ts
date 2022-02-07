@@ -1,4 +1,9 @@
-import { TechStack } from './commonTypes';
+import { TechStack, TechStackWithImg } from './commonTypes';
+
+interface TeamOwner {
+  userId: number;
+  userName: string;
+}
 
 export interface TeamMemberType {
   userId: number;
@@ -41,4 +46,46 @@ export interface TeamListResponse {
   totalPage: number;
   nowPage: number;
   totalElement: number;
+}
+
+export interface TeamOfferRequestType {
+  project: string;
+  userId: number;
+  message: string;
+}
+
+export interface TeamDataType {
+  teamId: number;
+  teamName: string;
+  teamImgUrl: string | null;
+  campus: string;
+  project: string;
+  projectTrack: string;
+  owner: TeamOwner;
+  notice: string;
+  introduction: string | null;
+  techStacks: TechStackWithImg[];
+  members: TeamMember[];
+  totalRecruitment: number;
+  totalHeadcount: number;
+  frontendRecruitment: number;
+  frontendHeadcount: number;
+  backendRecruitment: number;
+  backendHeadcount: number;
+  createDateTime: string;
+}
+
+export interface TeamInfoResponse {
+  teamData: TeamDataType;
+}
+
+export interface MyTeamResponse {
+  teamId: number;
+  message: string;
+}
+
+export interface MyTeamState {
+  team: TeamDataType | null;
+  loading: boolean;
+  error: string | null;
 }

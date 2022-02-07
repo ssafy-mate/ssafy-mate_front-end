@@ -1,15 +1,14 @@
 import { connectRouter } from 'connected-react-router';
 
 import { combineReducers } from 'redux';
-
 import { persistReducer } from 'redux-persist';
-
 import storage from 'redux-persist/lib/storage';
 
 import history from '../../history';
 
 import auth from './auth';
-import user from './user';
+import myTeam from './myTeam';
+import controlAlert from './alert';
 
 const persistConfig = {
   key: 'root',
@@ -20,7 +19,8 @@ const persistConfig = {
 
 const reducer = combineReducers({
   auth,
-  user,
+  myTeam,
+  controlAlert,
   router: connectRouter(history),
 });
 

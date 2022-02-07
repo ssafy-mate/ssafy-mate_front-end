@@ -2,20 +2,16 @@ import { useEffect } from 'react';
 
 import { Redirect } from 'react-router-dom';
 
-import { useSelector } from 'react-redux';
-
 import styled from '@emotion/styled';
 
-import { RootState } from '../types/authTypes';
+import useToken from '../hooks/useToken';
 
 import Header from '../components/common/Header';
 import SignInContainer from '../containers/SignInContainer';
 import Footer from '../components/common/Footer';
 
 const SignInPage: React.FC = () => {
-  const token = useSelector<RootState, string | null>(
-    (state) => state?.auth.token,
-  );
+  const token = useToken();
 
   useEffect(() => {
     document.title = '로그인 | 싸피 메이트';

@@ -1,17 +1,40 @@
 import { go, push } from 'connected-react-router';
 
 import { Action, createActions, handleActions } from 'redux-actions';
-import { call, put, select, takeEvery } from 'redux-saga/effects';
+import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
+
+import Swal from 'sweetalert2';
 
 import {
   AuthState,
   SignInRequestTypeWithIdSave,
-  SignInUser,
+  SignInResponse,
+  ProjectsState,
+  Project,
+  ProjectTrackRequestType,
+  ApplicationRequestType,
 } from '../../types/authTypes';
+import { TeamOfferRequestType } from '../../types/teamTypes';
+
+import history from '../../history';
 
 import SignInService from '../../services/SignInService';
 import TokenService from '../../services/TokenService';
-import history from '../../history';
+import UserService from '../../services/UserService';
+import PersistReducerService from '../../services/PersistReducerService';
+import TeamService from '../../services/TeamService';
+
+import { showSsafyMateAlert } from './alert';
+
+interface SendApplicationResponseType {
+  success: boolean;
+  message: string;
+}
+
+interface SendTeamOfferResponseType {
+  success: boolean;
+  message: string;
+}
 
 const initialState: AuthState = {
   userId: null,
@@ -20,34 +43,74 @@ const initialState: AuthState = {
   studentNumber: null,
   campus: null,
   ssafyTrack: null,
+  projects: [
+    {
+      projectId: 1,
+      projectName: '공통 프로젝트',
+      projectTrack: null,
+      projectTeamId: null,
+    },
+    {
+      projectId: 2,
+      projectName: '특화 프로젝트',
+      projectTrack: null,
+      projectTeamId: null,
+    },
+    {
+      projectId: 3,
+      projectName: '자율 프로젝트',
+      projectTrack: null,
+      projectTeamId: null,
+    },
+  ],
   token: null,
-  projects: null,
+  loading: false,
+  error: null,
 };
 
 const prefix = 'ssafy-mate/auth';
 
-export const { pending, success, fail } = createActions(
+export const { pending, success, updateProjects, fail } = createActions(
   'PENDING',
   'SUCCESS',
+  'UPDATE_PROJECTS',
   'FAIL',
-  { prefix },
+  {
+    prefix,
+  },
 );
 
-const reducer = handleActions<AuthState, SignInUser>(
+const reducer = handleActions<AuthState, SignInResponse, ProjectsState>(
   {
-    PENDING: (state) => ({ ...state }),
+    PENDING: (state) => ({
+      ...state,
+      loading: true,
+      error: null,
+    }),
     SUCCESS: (state, action) => ({
+      ...state,
       userId: action.payload.userId,
       userName: action.payload.userName,
       userEmail: action.payload.userEmail,
       studentNumber: action.payload.studentNumber,
       campus: action.payload.campus,
       ssafyTrack: action.payload.ssafyTrack,
-      token: action.payload.token,
       projects: action.payload.projects,
+      token: action.payload.token,
+      loading: false,
+      error: null,
+    }),
+    UPDATE_PROJECTS: (state, action) => ({
+      ...state,
+      projects: action.payload.projects,
+      loading: false,
+      message: action.payload.message,
+      error: null,
     }),
     FAIL: (state, action: any) => ({
       ...state,
+      loading: false,
+      error: action.payload.message,
     }),
   },
   initialState,
@@ -57,35 +120,63 @@ const reducer = handleActions<AuthState, SignInUser>(
 export default reducer;
 
 // saga
-export const { login, logout } = createActions('LOGIN', 'LOGOUT', { prefix });
+export const {
+  login,
+  logout,
+  selectProjectTrack,
+  sendApplication,
+  sendTeamOffer,
+} = createActions(
+  'LOGIN',
+  'LOGOUT',
+  'SELECT_PROJECT_TRACK',
+  'SEND_APPLICATION',
+  'SEND_TEAM_OFFER',
+  {
+    prefix,
+  },
+);
 
 function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
   try {
     yield put(pending());
 
-    const data: SignInUser = yield call(SignInService.login, {
+    const data: SignInResponse = yield call(SignInService.login, {
       userEmail: action.payload.userEmail,
       password: action.payload.password,
     });
 
-    //localstorage 에 저장 + store에 저장(userId,userEmail,userName,campus,ssafyTrack)
     if (data.token !== null) {
       TokenService.set(data.token);
+
       yield put(success(data));
 
-      // 로그인 성공한 경우에만 아이디 로컬 스토리지에 저장
+      yield put(
+        showSsafyMateAlert({
+          show: true,
+          text: data.message,
+          type: 'success',
+        }),
+      );
+
       if (action.payload.IdSave) {
         localStorage.setItem('ssafy-mate-id', action.payload.userEmail);
       } else {
         localStorage.removeItem('ssafy-mate-id');
       }
-    }
 
-    //로그인 성공 시 메인 페이지로 이동
-    yield put(push('/'));
+      yield put(push('/'));
+    }
   } catch (error: any) {
-    //에러처리 -> alert로 변경
-    yield put(fail(new Error(error?.response?.data?.error || 'UNKNOWN ERROR')));
+    yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
+
+    yield put(
+      showSsafyMateAlert({
+        show: true,
+        text: error.response.data.message,
+        type: 'warning',
+      }),
+    );
   }
 }
 
@@ -100,7 +191,17 @@ function* logoutSaga() {
     // yield put(success(null));
   } catch (error: any) {
   } finally {
+    yield put(
+      showSsafyMateAlert({
+        show: true,
+        text: '로그아웃 되었습니다.',
+        type: 'success',
+      }),
+    );
+
     TokenService.remove();
+    PersistReducerService.remove();
+
     yield put(success(initialState));
 
     if (history.location.pathname === '/') {
@@ -111,7 +212,99 @@ function* logoutSaga() {
   }
 }
 
+function* selectProjectTrackSaga(action: Action<ProjectTrackRequestType>) {
+  try {
+    yield put(pending());
+
+    const token: string = yield select((state) => state.auth.token);
+
+    yield call(UserService.selectProjectTrack, token, action.payload);
+
+    const projects: Project[] = yield call(UserService.getUserProjects, token);
+
+    yield put(updateProjects(projects));
+    yield put(push('/projects/specialization/teams'));
+  } catch (error: any) {
+    yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
+  }
+}
+
+function* sendApplicationSaga(action: Action<ApplicationRequestType>) {
+  try {
+    yield put(pending());
+
+    const token: string = yield select((state) => state.auth.token);
+    const response: SendApplicationResponseType = yield call(
+      UserService.sendApplication,
+      token,
+      action.payload,
+    );
+
+    Swal.fire({
+      title: '팀 지원 완료',
+      text: response.message,
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 2000,
+    });
+  } catch (error: any) {
+    yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
+
+    Swal.fire({
+      title: '팀 지원 실패',
+      text: error.response.data.message,
+      icon: 'warning',
+      confirmButtonColor: '#3396f4',
+      confirmButtonText: '확인',
+    });
+  } finally {
+    const token: string = yield select((state) => state.auth.token);
+    const projects: Project[] = yield call(UserService.getUserProjects, token);
+
+    yield put(updateProjects(projects));
+  }
+}
+
+function* sendTeamOfferSaga(action: Action<TeamOfferRequestType>) {
+  try {
+    yield put(pending());
+
+    const token: string = yield select((state) => state.auth.token);
+    const response: SendTeamOfferResponseType = yield call(
+      TeamService.sendTeamOffer,
+      token,
+      action.payload,
+    );
+
+    Swal.fire({
+      title: '팀 합류 요청 완료',
+      text: response.message,
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 2000,
+    });
+  } catch (error: any) {
+    yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
+
+    Swal.fire({
+      title: '팀 합류 요청 실패',
+      text: error.response.data.message,
+      icon: 'warning',
+      confirmButtonColor: '#3396f4',
+      confirmButtonText: '확인',
+    });
+  } finally {
+    const token: string = yield select((state) => state.auth.token);
+    const projects: Project[] = yield call(UserService.getUserProjects, token);
+
+    yield put(updateProjects(projects));
+  }
+}
+
 export function* authSaga() {
   yield takeEvery(`${prefix}/LOGIN`, loginSaga);
   yield takeEvery(`${prefix}/LOGOUT`, logoutSaga);
+  yield takeLatest(`${prefix}/SELECT_PROJECT_TRACK`, selectProjectTrackSaga);
+  yield takeLatest(`${prefix}/SEND_APPLICATION`, sendApplicationSaga);
+  yield takeLatest(`${prefix}/SEND_TEAM_OFFER`, sendTeamOfferSaga);
 }

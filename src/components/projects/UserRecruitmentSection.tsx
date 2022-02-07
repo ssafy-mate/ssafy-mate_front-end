@@ -85,6 +85,7 @@ const UserRecruitmentSection: React.FC<UserRecruitmentSectionProps> = ({
             <UserList>
               {data?.users.map((user) => (
                 <UserItem
+                  key={user.userId}
                   userId={user.userId}
                   userName={user.userName}
                   profileImgUrl={user.profileImgUrl}

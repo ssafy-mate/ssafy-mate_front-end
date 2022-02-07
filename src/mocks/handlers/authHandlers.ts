@@ -21,7 +21,7 @@ interface Student {
 export const authHandlers = [
   // 회원 가입 1단계 교육생 인증
   rest.get(
-    'http://localhost:3000/api/user/sign-up/verification/ssafy',
+    'https://i6a402.p.ssafy.io:8443/api/user/sign-up/verification/ssafy',
     async (request, response, context) => {
       const studentNumber = request.url.searchParams.get('studentNumber');
       const studentName = request.url.searchParams.get('studentNumber');
@@ -86,7 +86,7 @@ export const authHandlers = [
 
   // 회원가입 2단계-1 이메일 인증 코드 전송
   rest.get(
-    'http://localhost:3000/api/user/sign-up/verification/email',
+    'https://i6a402.p.ssafy.io:8443/api/user/sign-up/verification/email',
     async (request, response, context) => {
       const userEmail = request.url.searchParams.get('userEmail');
 
@@ -128,7 +128,7 @@ export const authHandlers = [
 
   // 회원가입 2단계-2 이메일 인증 코드 확인
   rest.put(
-    'http://localhost:3000/api/user/sign-up/verification/email',
+    'https://i6a402.p.ssafy.io:8443/api/user/sign-up/verification/email',
     async (request: any, response, context) => {
       const data: EmailVerificationCodeConfirmRequest = request.body;
       const { code, userEmail } = data;
@@ -182,7 +182,7 @@ export const authHandlers = [
 
   // 회원가입 3단계
   rest.post(
-    'http://localhost:3000/api/user',
+    'https://i6a402.p.ssafy.io:8443/api/user',
     async (request: any, response, context) => {
       const data: SignUpProfile = request.body;
       const { selfIntroduction } = data;

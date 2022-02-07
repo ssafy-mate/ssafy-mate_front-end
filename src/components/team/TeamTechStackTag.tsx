@@ -2,17 +2,16 @@ import styled from '@emotion/styled';
 
 interface TeamTechStackTagProps {
   techStackName: string;
+  techStackImgUrl: string;
 }
 
 const TeamTechStackTag: React.FC<TeamTechStackTagProps> = ({
   techStackName,
+  techStackImgUrl,
 }) => {
   return (
     <TagItem>
-      <Img
-        src={`/images/assets/tech-stack/${techStackName}.png`}
-        alt={`${techStackName} 로고 이미지`}
-      />
+      <Img src={techStackImgUrl} alt={`${techStackName} 로고 이미지`} />
       <Name>{techStackName}</Name>
     </TagItem>
   );

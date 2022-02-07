@@ -7,12 +7,14 @@ import ProjectLinkCard from './ProjectLinkCard';
 const ProjectsSection: React.FC = () => {
   const projectLinkCardDataList: ProjectLinkCardData[] = [
     {
+      projectId: 1,
       projectName: '공통 프로젝트',
       pageUrl: '/projects/common/teams',
       imgUrl: '/images/projects/common-project_link.png',
       hexColorCode: '#3396f4',
     },
     {
+      projectId: 2,
       projectName: '특화 프로젝트',
       pageUrl: '/projects/specialization/teams',
       imgUrl: '/images/projects/specialization-project_link.png',
@@ -20,6 +22,7 @@ const ProjectsSection: React.FC = () => {
       trackOptions: ['인공지능', '빅데이터', '블록체인', 'IoT 제어'],
     },
     {
+      projectId: 3,
       projectName: '자율 프로젝트',
       pageUrl: '/projects/autonomy/teams',
       imgUrl: '/images/projects/autonomy-project_link.png',
@@ -32,7 +35,8 @@ const ProjectsSection: React.FC = () => {
       <Wrapper>
         {projectLinkCardDataList.map((projectLinkCardData) => (
           <ProjectLinkCard
-            key={projectLinkCardData.projectName}
+            key={projectLinkCardData.projectId}
+            projectId={projectLinkCardData.projectId}
             projectName={projectLinkCardData.projectName}
             pageUrl={projectLinkCardData.pageUrl}
             imgUrl={projectLinkCardData.imgUrl}

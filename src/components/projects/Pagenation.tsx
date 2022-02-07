@@ -10,6 +10,7 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
 import useQueryString from '../../hooks/useQueryString';
+import useToken from '../../hooks/useToken';
 
 interface PagenationProps {
   totalPage: number;
@@ -17,11 +18,11 @@ interface PagenationProps {
 }
 
 const Pagenation: React.FC<PagenationProps> = ({ totalPage, setPage }) => {
-  const smallMedia = useMediaQuery({
-    query: '(max-width: 575px)',
-  });
   const extraLargeMedia = useMediaQuery({
     query: '(max-width: 1199px)',
+  });
+  const smallMedia = useMediaQuery({
+    query: '(max-width: 575px)',
   });
   const [page, onSetPage] = useQueryString('page');
 
@@ -66,6 +67,7 @@ const Container = styled.div`
   }
   @media (max-width: 575px) {
     margin-top: 10px;
+    margin-bottom: 90px;
   }
 `;
 

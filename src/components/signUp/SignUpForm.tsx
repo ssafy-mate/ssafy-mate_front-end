@@ -9,12 +9,6 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
 import {
-  passwordReg,
-  validEmailReg,
-  verificationCodeReg,
-} from '../../utils/regularExpressionData';
-
-import {
   EmailVerificationCodeConfirmRequest,
   EmailVerificationCodeRequest,
   SignUpProps,
@@ -22,13 +16,17 @@ import {
   Severity,
 } from '../../types/signUpTypes';
 
+import {
+  passwordReg,
+  validEmailReg,
+  verificationCodeReg,
+} from '../../utils/regularExpressionData';
+
 import AuthService from '../../services/AuthService';
+
 import Loading from '../common/Loading';
 
 const SignUpForm: React.FC<SignUpProps> = ({
-  signUpStep,
-  signUpEmail,
-  signUpPassword,
   setSignUpStep,
   setSignUpEmail,
   setSignUpPassword,
@@ -49,11 +47,11 @@ const SignUpForm: React.FC<SignUpProps> = ({
   const [emailInputError, setEmailInputError] = useState<string>('');
   const [codeVerificationError, setCodeVerificationError] =
     useState<boolean>(false);
-  const [resendEmail, setResendEmail] = useState<boolean>(false);
   const [minutes, setMinutes] = useState<number>(3);
   const [seconds, setSeconds] = useState<number>(0);
   const [showCodeBox, setShowCodeBox] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [loadingColor, setLoadingColor] = useState<string>('##fff');
 
   const {
     register,
@@ -84,6 +82,12 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
     return () => clearInterval(timer);
   }, [minutes, seconds]);
+
+  useEffect(() => {
+    emailCodeRequestButton
+      ? setLoadingColor('#3396f4')
+      : setLoadingColor('#fff');
+  }, [emailCodeRequestButton]);
 
   const signUpEmailOnChange: string = watch('signUpEmail');
   const verificationCodeOnChange: string = watch('verificationCode');
@@ -155,15 +159,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
     }
   }, [errors.verificationCode, verificationCodeOnChange]);
 
-  // 인증 코드 입력에 문제가 있는 경우에 이메일 재전송 버튼 활성화
-  // useEffect(() => {
-  //   if (!codeInputDisabled) {
-  //     setResendEmail(true);
-  //   } else if (codeConfirmButtonOnChange === 'getAuth') {
-  //     setResendEmail(false);
-  //   }
-  // }, [codeInputDisabled, codeConfirmButtonOnChange]);
-
   const offEmailCodeInput = () => {
     setEmailCodeRequestButton(true);
     setCodeInputDisabled(false);
@@ -187,11 +182,11 @@ const SignUpForm: React.FC<SignUpProps> = ({
       setLoading(false);
     }
     AuthService.getEmailVerificationCode(data)
-      .then((response) => {
-        if (response.success) {
+      .then(({ success, message }) => {
+        if (success) {
           setLoading(false);
           resetCodeVerificationError();
-          showAlert('success', response.message);
+          showAlert('success', message);
           offEmailCodeInput();
           setShowCodeBox(true);
           resetTimer();
@@ -291,31 +286,31 @@ const SignUpForm: React.FC<SignUpProps> = ({
                   message: '이메일 형식이 올바르지 않습니다.',
                 },
               })}
-              className={errors.signUpEmail ? 'have-error' : ''}
+              className={
+                errors.signUpEmail || emailInputError !== '' ? 'have-error' : ''
+              }
               maxLength={320}
               placeholder="이메일"
               readOnly={emailInputDisabled}
             />
-            {loading ? (
-              <LoadingWrapper>
-                <Loading />
-              </LoadingWrapper>
-            ) : (
-              <AuthButton
-                type="button"
-                disabled={emailCodeRequestButton}
-                onClick={verificationCodeRequest}
-              >
-                {verificationCodeButtonText}
-              </AuthButton>
-            )}
+            <AuthButton
+              type="button"
+              disabled={emailCodeRequestButton}
+              onClick={verificationCodeRequest}
+            >
+              {loading ? (
+                <Loading selectColor={loadingColor} />
+              ) : (
+                verificationCodeButtonText
+              )}
+            </AuthButton>
           </EmailInputWrapper>
-          {errors.signUpEmail && (
+          {errors.signUpEmail !== undefined && (
             <ErrorMessageWrapper>
               <ErrorMessage>{errors.signUpEmail.message}</ErrorMessage>
             </ErrorMessageWrapper>
           )}
-          {!errors.signUpEmail && emailInputError !== '' && (
+          {errors.signUpEmail === undefined && emailInputError !== '' && (
             <ErrorMessageWrapper>
               <ErrorMessage>{emailInputError}</ErrorMessage>
             </ErrorMessageWrapper>
@@ -377,7 +372,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
                 );
               }
             })()}
-
             <ResendEmailWrapper>
               <ResendEmailMessage>
                 <ResendEmailIcon />
@@ -435,7 +429,11 @@ const SignUpForm: React.FC<SignUpProps> = ({
                 confirmPasswordInput === signUpPasswordOnChange,
             })}
             placeholder="비밀번호 확인"
-            className={errors.signUpCheckPassword ? 'have-error' : ''}
+            className={
+              errors.signUpCheckPassword || errors.signUpPassword
+                ? 'have-error'
+                : ''
+            }
           />
           {errors.signUpCheckPassword?.type === 'required' && (
             <ErrorMessageWrapper>
@@ -451,7 +449,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
               </ErrorMessageWrapper>
             )}
         </InputWrapper>
-        <SubmitButton type="submit">기본 정보 작성</SubmitButton>
+        <SubmitButton type="submit">기본 정보 작성 완료</SubmitButton>
       </Container>
     </>
   );
@@ -499,7 +497,7 @@ const AuthButton = styled.button`
 const SubmitButton = styled.button`
   width: 100%;
   height: 40px;
-  margin-top: 24px;
+  margin-top: 8px;
   border: none;
   border-radius: 0.25rem;
   box-sizing: border-box;
@@ -624,7 +622,6 @@ const ResendEmailMessage = styled.div`
   align-items: center;
   padding-left: 6px;
   font-size: 13px;
-  line-height: 1.5;
   color: rgb(130, 140, 148);
 
   @media (max-width: 349px) {
@@ -647,7 +644,12 @@ const ResendLink = styled.a`
   font-weight: 500;
   text-decoration: underline;
   touch-action: manipulation;
+  transition: color 0.08s ease-in-out;
   cursor: pointer;
+
+  &:hover {
+    color: #3396f4;
+  }
 `;
 
 const TimeLimit = styled.span`
