@@ -28,10 +28,6 @@ const socketUrl = 'http://localhost:3095';
 
 const PAGE_SIZE = 10;
 
-type roomParams = {
-  roomId: string;
-};
-
 type userParams = {
   myId: string;
 };
@@ -43,13 +39,15 @@ const ChattingForm: React.FC = () => {
   const location = useLocation();
   const param = new URLSearchParams(location.search);
   const roomId = param.get('roomId');
+  const userId = param.get('userId');
+  const userName = param.get('userName');
 
   // const { roomId } = useParams<roomParams>();
   const { myId } = useParams<userParams>();
 
   // const [numberUserId, setNunberUserId] = useState(Number(userId));
   // const [userId, setUserId] = useState(2); // 내 아이디
-  const [userId, setUserId] = useState(1); // 상대방 아이디
+  // const [userId, setUserId] = useState(1); // 상대방 아이디
 
   const [entryTime, setEntryTime] = useState(
     dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS'),
@@ -60,13 +58,6 @@ const ChattingForm: React.FC = () => {
   const messageInputRef = useRef<HTMLTextAreaElement>(null);
   const chatRoomMessageRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<Scrollbars>(null);
-
-  /*
-  const chatSections = chatData
-    ? ([] as MessageType[]).concat(...chatData).reverse()
-    : [];
-    */
-  // const [chatSections, setChatSections] = useState<MessageType[]>(null);
 
   // 채팅 목록 불러오기
   const {
@@ -99,10 +90,6 @@ const ChattingForm: React.FC = () => {
       },
     },
   );
-
-  // console.log(
-  //   `chatRoom List : ${roomData?.length} / chat log : ${chatData?.[0].length}`,
-  // );
 
   // 내가 메시지를 보내거나, 서버 챗 데이터 변경이 일어났을 때 발동하는 콜백
   // 서버로 메시지 정보 post 요청
@@ -173,7 +160,7 @@ const ChattingForm: React.FC = () => {
       // roomId 중 하나가 상대것인지 검사 => 일단 임시로 내, 상대방 아이디 셋팅
 
       // onSubmit에서 콜백이 변경된 데이터를 감지해 호출됨
-      if (data.senderId === userId && Number(myId) !== userId) {
+      if (data.senderId === Number(userId) && Number(myId) !== Number(userId)) {
         mutateChat((chatData) => {
           chatData?.[0].unshift(data);
           return chatData;
@@ -250,10 +237,6 @@ const ChattingForm: React.FC = () => {
     ? ([] as MessageType[]).concat(...chatData).reverse()
     : [];
 
-  const chatSectionsNewData = messageList
-    ? ([] as MessageType[]).concat(...messageList).reverse()
-    : [];
-
   return (
     <ChatContianer>
       <ChatRoomListSidebar>
@@ -285,7 +268,7 @@ const ChattingForm: React.FC = () => {
                 <ChatRoomHeaderProfile className="userName">
                   <img></img>
                   <div className="userName">
-                    <span>손영배</span>
+                    <span>{userName}</span>
                   </div>
                 </ChatRoomHeaderProfile>
               </ChatRoomUserNameBar>

@@ -26,7 +26,9 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
 
   return (
     <>
-      <NavLink to={`/chatting/${myId}?roomId=${roomId}`}>
+      <NavLink
+        to={`/chatting/${myId}?roomId=${roomId}&userId=${userId}&userName=${userName}`}
+      >
         <ChatListItem>
           <ChatListItemWrapper>
             <ProfileWrapper>
