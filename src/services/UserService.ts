@@ -3,6 +3,7 @@ import { axiosInstance } from '../utils/axios';
 import {
   ProjectTrackRequestType,
   ApplicationRequestType,
+  GetMyTeamIdParams,
 } from '../types/authTypes';
 import { CheckBelongToTeamRequestParams } from '../types/userTypes';
 
@@ -73,6 +74,17 @@ class UserService {
     });
 
     return response;
+  }
+
+  public static async getMyTeamId(token: string, params: GetMyTeamIdParams) {
+    const response = await axiosInstance.get('/api/auth/user/team-id', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      params,
+    });
+
+    return response.data.teamId;
   }
 }
 
