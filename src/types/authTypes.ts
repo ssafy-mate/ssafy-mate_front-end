@@ -35,8 +35,8 @@ export interface SignInResponse {
 }
 
 export interface Project {
-  projectId: number | null;
-  projectName: string | null;
+  projectId: number;
+  projectName: string;
   projectTrack: string | null;
   projectTeamId: string | null;
 }
@@ -73,4 +73,8 @@ export interface RootState {
   myTeam: MyTeamState;
   controlAlert: alertState | string;
   router: Reducer<RouterState<unknown>, AnyAction>;
+}
+
+export interface GetMyTeamIdParams {
+  project: string;
 }

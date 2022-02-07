@@ -13,7 +13,7 @@ import controlAlert from './alert';
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth'],
+  whitelist: ['auth', 'myTeam'],
   blacklist: ['router'],
 };
 
