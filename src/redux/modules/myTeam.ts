@@ -1,7 +1,9 @@
+import { AxiosResponse } from 'axios';
+
 import { push } from 'connected-react-router';
 
 import { Action, createActions, handleActions } from 'redux-actions';
-import { call, put, select, takeEvery, takeLatest } from 'redux-saga/effects';
+import { call, put, select, takeEvery } from 'redux-saga/effects';
 
 import Swal from 'sweetalert2';
 
@@ -11,11 +13,11 @@ import {
   TeamInfoResponse,
   MyTeamState,
   MyTeamResponse,
-  TeamType,
+  TeamDataType,
 } from '../../types/teamTypes';
 
 const initialState: MyTeamState = {
-  myTeam: null,
+  team: null,
   loading: false,
   error: null,
 };
@@ -31,7 +33,7 @@ export const { pending, success, fail } = createActions(
   },
 );
 
-const reducer = handleActions<MyTeamState, TeamType>(
+const reducer = handleActions<MyTeamState, TeamDataType>(
   {
     PENDING: (state) => ({
       ...state,
@@ -39,7 +41,8 @@ const reducer = handleActions<MyTeamState, TeamType>(
       error: null,
     }),
     SUCCESS: (state, action) => ({
-      myTeam: action.payload,
+      ...state,
+      team: action.payload,
       loading: false,
       error: null,
     }),
@@ -75,13 +78,13 @@ function* createMyTeamSaga(action: Action<FormData>) {
       token,
       action.payload,
     );
-    const teamInfoResponse: TeamInfoResponse = yield call(
+    const teamInfoResponse: AxiosResponse<TeamInfoResponse> = yield call(
       TeamService.getTeamInfo,
       token,
       response.teamId,
     );
 
-    yield put(success(teamInfoResponse.teamData));
+    yield put(success(teamInfoResponse.data.teamData));
 
     Swal.fire({
       title: '팀 생성 완료',

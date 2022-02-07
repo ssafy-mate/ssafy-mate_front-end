@@ -1,19 +1,20 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import { push } from 'connected-react-router';
 
 import { useDispatch } from 'react-redux';
+import { createMyTeam as createMyTeamSagaStart } from '../../redux/modules/myTeam';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-import Swal from 'sweetalert2';
-
-import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
+import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
+
+import Swal from 'sweetalert2';
 
 import { TechStackWithImg } from '../../types/commonTypes';
 import { CheckBelongToTeamRequestParams } from '../../types/userTypes';
@@ -27,6 +28,7 @@ import useUserProjectInfo from '../../hooks/useUserProjectInfo';
 import UserService from '../../services/UserService';
 
 import TechStackTag from '../common/TechStackTag';
+import WarningMessage from '../common/WarningMessage';
 
 const PROJECT_ID: number = 2;
 
@@ -34,6 +36,15 @@ const TeamCreateForm: React.FC = () => {
   const [teamImg, setTeamImg] = useState(null);
   const [previewTeamImg, setPreviewTeamImg] = useState(null);
   const [campus, project, projectTrack] = useUserProjectInfo(PROJECT_ID);
+  const [teamName, setTeamName] = useState<string>('');
+  const [notice, setNotice] = useState<string>('');
+  const [introduction, setIntroduction] = useState<string>('');
+  const [techStacks, setTechStacks] = useState<number[]>([]);
+  const [totalRecruitment, setTotalRecruitment] = useState<number>(0);
+  const [frontendRecruitment, setFrontendRecruitment] = useState<number>(0);
+  const [backendRecruitment, setBackendRecruitment] = useState<number>(0);
+  const [isDisplayedWarningText, setIsDisplayedWarningText] =
+    useState<boolean>(false);
 
   const dispatch = useDispatch();
   const token = useToken();
@@ -86,8 +97,17 @@ const TeamCreateForm: React.FC = () => {
   }, [dispatch, token, project]);
 
   useEffect(() => {
-    console.log(project);
-  }, [project]);
+    const selectedTechStackCodes = value.map((techStack) => techStack.id);
+
+    setTechStacks(selectedTechStackCodes);
+  }, [value]);
+
+  const createMyTeam = useCallback(
+    (teamFormData: FormData) => {
+      dispatch(createMyTeamSagaStart(teamFormData));
+    },
+    [dispatch],
+  );
 
   const handleChangeTeamImg = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -113,18 +133,143 @@ const TeamCreateForm: React.FC = () => {
     setTeamImg(null);
   };
 
-  const handleChangeProject = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedProject = event.target.value;
+  const handleChangeTeamName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTeamName(event.target.value);
+  };
 
-    if (
-      selectedProject === '공통 프로젝트' ||
-      selectedProject === '자율 프로젝트'
-    ) {
-      alert('해당 프로젝트의 팀을 생성할 수 있는 기간이 아닙니다.');
-      return;
+  const handleChangeNotice = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNotice(event.target.value);
+  };
+
+  const handleChangeIntroduction = (
+    event: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    setIntroduction(event.target.value);
+  };
+
+  const handleTextAreaEnterKeyPressed = (event: React.KeyboardEvent) => {
+    if (event.code === 'Enter' || event.code === 'NumpadEnter') {
+      if (!event.shiftKey) {
+        event.preventDefault();
+      }
+    }
+  };
+
+  const handleChangeTotalRecruitment = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    const recruitment = parseInt(event.target.value);
+
+    if (recruitment < frontendRecruitment) {
+      setFrontendRecruitment(0);
     }
 
-    // setProject(event.target.value);
+    setBackendRecruitment(0);
+    setTotalRecruitment(recruitment);
+  };
+
+  const handleChangeFrontendRecruitment = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    setBackendRecruitment(0);
+    setFrontendRecruitment(parseInt(event.target.value));
+  };
+
+  const handleChangeBackendRecruitment = (
+    event: React.ChangeEvent<HTMLSelectElement>,
+  ) => {
+    setBackendRecruitment(parseInt(event.target.value));
+  };
+
+  const getTeamFormData = (
+    campus: string,
+    project: string,
+    projectTrack: string,
+    teamName: string,
+    teamImg: File | null,
+    notice: string,
+    introduction: string,
+    techStacks: number[],
+    totalRecruitment: number,
+    frontendRecruitment: number,
+    backendRecruitment: number,
+  ): FormData => {
+    const teamFormData = new FormData();
+
+    if (teamImg !== null) {
+      teamFormData.append('teamImg', teamImg);
+    }
+
+    teamFormData.append('campus', campus);
+    teamFormData.append('project', project);
+    teamFormData.append('projectTrack', projectTrack);
+    teamFormData.append('teamName', teamName);
+    teamFormData.append('notice', notice);
+    teamFormData.append('introduction', introduction);
+    teamFormData.append(
+      'techStacks',
+      '[' + techStacks.map((code) => code.toString()).join(',') + ']',
+    );
+    teamFormData.append('totalRecruitment', totalRecruitment.toString());
+    teamFormData.append('frontendRecruitment', frontendRecruitment.toString());
+    teamFormData.append('backendRecruitment', backendRecruitment.toString());
+
+    return teamFormData;
+  };
+
+  const handleSubmitFormData = () => {
+    if (
+      campus !== null &&
+      project !== null &&
+      projectTrack !== null &&
+      teamName !== '' &&
+      notice !== '' &&
+      techStacks.length >= 2 &&
+      totalRecruitment > 0 &&
+      frontendRecruitment > 0 &&
+      backendRecruitment > 0
+    ) {
+      const teamFormData: FormData = getTeamFormData(
+        campus,
+        project,
+        projectTrack,
+        teamName,
+        teamImg,
+        notice,
+        introduction,
+        techStacks,
+        totalRecruitment,
+        frontendRecruitment,
+        backendRecruitment,
+      );
+
+      createMyTeam(teamFormData);
+    } else {
+      setIsDisplayedWarningText(true);
+    }
+  };
+
+  const renderingRecruitmentOptions = (
+    startHeadCount: number,
+    endHeadCount: number,
+  ) => {
+    const result = [];
+
+    result.push(
+      <option key="default" value={0}>
+        - 선택 -
+      </option>,
+    );
+
+    for (let i = startHeadCount; i <= endHeadCount; i++) {
+      result.push(
+        <option key={i} value={i}>
+          {i}명
+        </option>,
+      );
+    }
+
+    return result;
   };
 
   return (
@@ -158,11 +303,12 @@ const TeamCreateForm: React.FC = () => {
         </FileInputWrapper>
         <SsafyInfoWrapper>
           <InputWrapper>
-            <RequirementLabel htmlFor="team-campus">캠퍼스</RequirementLabel>
+            <RequirementLabel htmlFor="campus">캠퍼스</RequirementLabel>
             <Select
-              id="team-campus"
-              name="team-campus"
+              id="campus"
+              name="campus"
               defaultValue={campus !== null ? campus : ''}
+              required
               disabled
             >
               <option value="">- 선택 -</option>
@@ -174,12 +320,12 @@ const TeamCreateForm: React.FC = () => {
             </Select>
           </InputWrapper>
           <InputWrapper>
-            <RequirementLabel htmlFor="team-project">프로젝트</RequirementLabel>
+            <RequirementLabel htmlFor="project">프로젝트</RequirementLabel>
             <Select
-              id="team-project"
-              name="team-project"
-              onChange={handleChangeProject}
+              id="project"
+              name="project"
               defaultValue={project !== null ? project : ''}
+              required
               disabled
             >
               <option value="">- 선택 -</option>
@@ -191,13 +337,14 @@ const TeamCreateForm: React.FC = () => {
             </Select>
           </InputWrapper>
           <InputWrapper>
-            <RequirementLabel htmlFor="team-project-track">
+            <RequirementLabel htmlFor="project-track">
               프로젝트 트랙
             </RequirementLabel>
             <Select
-              id="team-project-track"
-              name="team-project-track"
+              id="project-track"
+              name="project-track"
               defaultValue={projectTrack !== null ? projectTrack : ''}
+              required
               disabled
             >
               <option value="" disabled>
@@ -215,32 +362,58 @@ const TeamCreateForm: React.FC = () => {
       <Row>
         <InputWrapper>
           <RequirementLabel htmlFor="team-name">팀 이름</RequirementLabel>
-          <InfoInput type="text" id="team-name" name="team-name" />
-        </InputWrapper>
-      </Row>
-      <Row>
-        <InputWrapper>
-          <RequirementLabel htmlFor="team-name">
-            팀원 공고 문구 <Em>(한 문장으로 작성해주세요.)</Em>
-          </RequirementLabel>
           <InfoInput
             type="text"
             id="team-name"
             name="team-name"
-            placeholder="ex) 최우수상에 도전할 팀원을 모집합니다."
+            className={
+              isDisplayedWarningText && teamName === '' ? 'active-warning' : ''
+            }
+            onChange={handleChangeTeamName}
+            required
           />
+          {isDisplayedWarningText && teamName === '' && (
+            <WarningMessage text="필수 입력 항목입니다." />
+          )}
         </InputWrapper>
       </Row>
       <Row>
         <InputWrapper>
-          <Label htmlFor="team-self-introduction">팀 소개</Label>
-          <Textarea id="team-self-introduction" name="team-self-introduction" />
+          <RequirementLabel htmlFor="notice">
+            팀원 공고 문구 <Em>(한 문장으로 작성해주세요.)</Em>
+          </RequirementLabel>
+          <InfoInput
+            type="text"
+            id="notice"
+            name="notice"
+            className={
+              isDisplayedWarningText && notice === '' ? 'active-warning' : ''
+            }
+            onChange={handleChangeNotice}
+            required
+            placeholder="ex) 최우수상에 도전할 팀원을 모집합니다."
+          />
+          {isDisplayedWarningText && notice === '' && (
+            <WarningMessage text="필수 입력 항목입니다." />
+          )}
+        </InputWrapper>
+      </Row>
+      <Row>
+        <InputWrapper>
+          <Label htmlFor="introduction">팀 소개</Label>
+          <Textarea
+            id="introduction"
+            name="introduction"
+            onKeyPress={handleTextAreaEnterKeyPressed}
+            onChange={handleChangeIntroduction}
+            placeholder="ex) 팀의 목표, 개발 방향성, 어떤 팀원들을 원하는지 등을 자유롭게 작성해 주세요."
+          />
         </InputWrapper>
       </Row>
       <Hr />
       <Row css={techStackRow}>
         <InputWrapper {...getRootProps()} css={techStackInputWrapper}>
-          <RequirementLabel htmlFor="team-tech-stack" {...getInputLabelProps()}>
+          <RequirementLabel htmlFor="tech-stacks" {...getInputLabelProps()}>
             계획 중인 기술 스택 <Em>(필수 2가지 이상 기입)</Em>
           </RequirementLabel>
           <InfoInputWrapper
@@ -249,11 +422,19 @@ const TeamCreateForm: React.FC = () => {
           >
             <InfoInput
               type="text"
-              id="team-tech-stack"
-              name="team-tech-stack"
+              id="tech-stacks"
+              name="tech-stacks"
+              className={
+                isDisplayedWarningText && techStacks.length < 2
+                  ? 'active-warning'
+                  : ''
+              }
               placeholder="ex) Vue.js, django, Spring Boot, MySQL"
               {...getInputProps()}
             />
+            {isDisplayedWarningText && techStacks.length < 2 && (
+              <WarningMessage text="필수 2가지 이상 기입이 필요한 항목입니다." />
+            )}
           </InfoInputWrapper>
           {groupedOptions.length > 0 ? (
             <SearchList {...getListboxProps()}>
@@ -286,71 +467,81 @@ const TeamCreateForm: React.FC = () => {
       <Hr />
       <Row>
         <InputWrapper>
-          <RequirementLabel htmlFor="team-total-headcount">
+          <RequirementLabel htmlFor="total-recruitment">
             전체 모집 인원
           </RequirementLabel>
           <Select
-            id="team-total-headcount"
-            name="team-total-headcount"
-            defaultValue={'default'}
+            id="total-recruitment"
+            name="total-recruitment"
+            className={
+              isDisplayedWarningText && totalRecruitment === 0
+                ? 'active-warning'
+                : ''
+            }
+            value={totalRecruitment}
+            onChange={handleChangeTotalRecruitment}
+            required
           >
-            <option value="default" disabled>
-              - 선택 -
-            </option>
-            <option value="3">3명</option>
-            <option value="4">4명</option>
-            <option value="5">5명</option>
-            <option value="6">6명</option>
-            <option value="7">7명</option>
+            {renderingRecruitmentOptions(4, 6)}
           </Select>
+          {isDisplayedWarningText && totalRecruitment === 0 && (
+            <WarningMessage text="필수 선택 항목입니다." />
+          )}
         </InputWrapper>
       </Row>
       <Row>
         <InputWrapper css={rightGap}>
-          <RequirementLabel htmlFor="team-frontend-headcount">
+          <RequirementLabel htmlFor="frontend-recruitment">
             프론트엔드 모집 인원
           </RequirementLabel>
           <Select
-            id="team-frontend-headcount"
-            name="team-frontend-headcount"
-            defaultValue={'default'}
+            id="frontend-recruitment"
+            name="frontend-recruitment"
+            className={
+              isDisplayedWarningText && frontendRecruitment === 0
+                ? 'active-warning'
+                : ''
+            }
+            value={frontendRecruitment}
+            onChange={handleChangeFrontendRecruitment}
+            disabled={totalRecruitment === 0}
+            required
           >
-            <option value="default" disabled>
-              - 선택 -
-            </option>
-            <option value="1">1명</option>
-            <option value="2">2명</option>
-            <option value="3">3명</option>
-            <option value="4">4명</option>
-            <option value="5">5명</option>
-            <option value="6">6명</option>
-            <option value="7">7명</option>
+            {renderingRecruitmentOptions(1, totalRecruitment - 1)}
           </Select>
+          {isDisplayedWarningText && frontendRecruitment === 0 && (
+            <WarningMessage text="필수 선택 항목입니다." />
+          )}
         </InputWrapper>
         <InputWrapper>
-          <RequirementLabel htmlFor="team-backend-headcount">
+          <RequirementLabel htmlFor="backend-recruitment">
             백엔드 모집 인원
           </RequirementLabel>
           <Select
-            id="team-backend-headcount"
-            name="team-backend-headcount"
-            defaultValue={'default'}
+            id="backend-recruitment"
+            name="backend-recruitment"
+            className={
+              isDisplayedWarningText && backendRecruitment === 0
+                ? 'active-warning'
+                : ''
+            }
+            value={backendRecruitment}
+            onChange={handleChangeBackendRecruitment}
+            disabled={totalRecruitment === 0 || frontendRecruitment === 0}
+            required
           >
-            <option value="default" disabled>
-              - 선택 -
-            </option>
-            <option value="1">1명</option>
-            <option value="2">2명</option>
-            <option value="3">3명</option>
-            <option value="4">4명</option>
-            <option value="5">5명</option>
-            <option value="6">6명</option>
-            <option value="7">7명</option>
+            {renderingRecruitmentOptions(
+              totalRecruitment - frontendRecruitment,
+              totalRecruitment - frontendRecruitment,
+            )}
           </Select>
+          {isDisplayedWarningText && backendRecruitment === 0 && (
+            <WarningMessage text="필수 선택 항목입니다." />
+          )}
         </InputWrapper>
       </Row>
       <Row>
-        <CreateTeamButton>팀 생성</CreateTeamButton>
+        <SubmitButton onClick={handleSubmitFormData}>팀 생성</SubmitButton>
       </Row>
     </Container>
   );
@@ -386,7 +577,7 @@ const Head = styled.h1`
   }
   @media (max-width: 575px) {
     margin-bottom: 32px;
-    font-size: 26px;
+    font-size: 24px;
   }
 `;
 
@@ -417,7 +608,6 @@ const InputWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-bottom: 16px;
 `;
 
 const FileInputWrapper = styled.div`
@@ -450,6 +640,7 @@ const InfoInputWrapper = styled.div``;
 const InfoInput = styled.input`
   width: 100%;
   height: 40px;
+  margin-bottom: 16px;
   padding: 8px 12px;
   outline: 0;
   border: 1px solid #d7e2eb;
@@ -470,6 +661,12 @@ const InfoInput = styled.input`
     box-shadow: inset 0 0 0 1px #3396f4;
     background-color: #fff;
     color: #495057;
+  }
+
+  &.active-warning {
+    margin-bottom: 4px;
+    border: 1px solid #f44336;
+    box-shadow: inset 0 0 0 1px #ff77774d;
   }
 
   @media (max-width: 575px) {
@@ -515,6 +712,7 @@ const Textarea = styled.textarea`
 const Select = styled.select`
   width: 100%;
   height: 40px;
+  margin-bottom: 16px;
   padding: 8px 12px;
   outline: 0;
   border: 1px solid #d7e2eb;
@@ -539,6 +737,12 @@ const Select = styled.select`
   }
   &:disabled {
     cursor: not-allowed;
+  }
+
+  &.active-warning {
+    margin-bottom: 4px;
+    border: 1px solid #f44336;
+    box-shadow: inset 0 0 0 1px #ff77774d;
   }
 
   @media (max-width: 575px) {
@@ -720,7 +924,7 @@ const ClearButton = styled.button`
   }
 `;
 
-const CreateTeamButton = styled.button`
+const SubmitButton = styled.button`
   width: 100%;
   height: 40px;
   border: none;

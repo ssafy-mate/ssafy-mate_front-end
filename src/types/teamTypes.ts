@@ -1,5 +1,10 @@
 import { TechStack, TechStackWithImg } from './commonTypes';
 
+interface TeamOwner {
+  userId: number;
+  userName: string;
+}
+
 export interface TeamMemberType {
   userId: number;
   userName: string;
@@ -49,60 +54,29 @@ export interface TeamOfferRequestType {
   message: string;
 }
 
-interface TeamOwner {
-  userId: number;
-  userName: string;
-}
-
-interface TeamData {
-  teamId: number;
-  teamName: string;
-  owner: TeamOwner;
-  teamImgUrl: string;
-  campus: string;
-  project: string;
-  projectTrack: string;
-  notice: string;
-  introduction: string;
-  createDateTime: string;
-  techStacks: TechStackWithImg[];
-  members: TeamMember[];
-  totalRecruitment: number;
-  frontendRecruitment: number;
-  backendRecruitment: number;
-  totalHeadcount: number;
-  frontendHeadcount: number;
-  backendHeadcount: number;
-}
-
-export interface TeamInfoResponse {
-  teamData: TeamData;
-}
-
-interface TeamOwner {
-  userId: number;
-  userName: string;
-}
-
-export interface TeamType {
+export interface TeamDataType {
   teamId: number;
   teamName: string;
   teamImgUrl: string | null;
-  owner: TeamOwner;
   campus: string;
   project: string;
   projectTrack: string;
+  owner: TeamOwner;
   notice: string;
   introduction: string | null;
   techStacks: TechStackWithImg[];
-  totalRecruitment: 6;
-  totalHeadcount: 5;
-  frontendRecruitment: 3;
-  frontendHeadcount: 3;
-  backendRecruitment: 3;
-  backendHeadcount: 2;
   members: TeamMember[];
+  totalRecruitment: number;
+  totalHeadcount: number;
+  frontendRecruitment: number;
+  frontendHeadcount: number;
+  backendRecruitment: number;
+  backendHeadcount: number;
   createDateTime: string;
+}
+
+export interface TeamInfoResponse {
+  teamData: TeamDataType;
 }
 
 export interface MyTeamResponse {
@@ -111,7 +85,7 @@ export interface MyTeamResponse {
 }
 
 export interface MyTeamState {
-  myTeam: TeamType | null;
+  team: TeamDataType | null;
   loading: boolean;
   error: string | null;
 }
