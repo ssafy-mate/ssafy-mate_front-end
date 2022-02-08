@@ -1,19 +1,13 @@
 import { UserInfoResponse } from '../hooks/useUserInfo';
-import { SignInResponse, updateAuthInfoRequest } from '../types/authTypes';
+import {
+  EditProfileInfoRequest,
+  getProfileInfoRequest,
+  SignInResponse,
+  updateAuthInfoRequest,
+} from '../types/authTypes';
 import { SignUpResponse } from '../types/signUpTypes';
 import { axiosInstance } from '../utils/axios';
 
-export interface getProfileInfoRequest {
-  token: string;
-  userId: number;
-}
-
-interface EditProfileInfoRequest {
-  data: FormData;
-  token: string;
-  userId: number;
-  profileInfo: string;
-}
 class ProfileService {
   public static async getProfileInfo(
     data: getProfileInfoRequest,

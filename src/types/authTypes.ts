@@ -1,6 +1,7 @@
 import { RouterState } from 'connected-react-router';
 
 import { AnyAction, Reducer } from 'redux';
+import { ProfileState } from '../redux/modules/profile';
 
 import { alertState } from './alertTypes';
 
@@ -57,10 +58,10 @@ export interface ProjectsState {
   projects: Project[];
 }
 
-export interface RootState {
-  auth: AuthState;
-  router: Reducer<RouterState<unknown>, AnyAction>;
-}
+// export interface RootState {
+//   auth: AuthState;
+//   router: Reducer<RouterState<unknown>, AnyAction>;
+// }
 
 export interface ProjectTrackRequestType {
   projectId: number;
@@ -74,6 +75,24 @@ export interface ApplicationRequestType {
 
 export interface RootState {
   auth: AuthState;
-  controlAlert: alertState | string;
+  controlAlert: alertState;
+  profile: ProfileState;
   router: Reducer<RouterState<unknown>, AnyAction>;
+}
+
+export interface updateAuthInfoRequest {
+  userId: number;
+  token: string;
+}
+
+export interface EditProfileInfoRequest {
+  data: FormData;
+  token: string;
+  userId: number;
+  profileInfo: string;
+}
+
+export interface getProfileInfoRequest {
+  token: string;
+  userId: number;
 }

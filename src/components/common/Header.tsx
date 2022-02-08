@@ -32,7 +32,7 @@ import useUserId from '../../hooks/useUserId';
 import SsafyMateAlert from './Alert';
 import MenuBar from './MenuBar';
 
-import { updateUserInfo } from '../../redux/modules/profile';
+import { updateProfileInfo } from '../../redux/modules/profile';
 import getProfileInfoRequest from '../../services/ProfileService';
 
 interface MenuListProps {
@@ -126,7 +126,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
 
   const update = useCallback(
     (requestData: getProfileInfoRequest) => {
-      dispatch(updateUserInfo(requestData));
+      dispatch(updateProfileInfo(requestData));
     },
     [dispatch],
   );

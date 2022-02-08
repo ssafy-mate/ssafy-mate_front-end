@@ -1,17 +1,24 @@
 import { Action, createActions, handleActions } from 'redux-actions';
-import { call, put, takeEvery } from 'redux-saga/effects';
+import { call, put, select, takeEvery } from 'redux-saga/effects';
+
+import { showSsafyMateAlert } from './alert';
+import { success } from './auth';
+
+import { SignUpResponse } from './../../types/signUpTypes';
+import {
+  EditProfileInfoRequest,
+  getProfileInfoRequest,
+} from '../../types/authTypes';
 import {
   UserData,
   UserInfoResponse,
   UserProject,
   UserTechStack,
 } from '../../hooks/useUserInfo';
-import ProfileService, {
-  getProfileInfoRequest,
-} from '../../services/ProfileService';
-import { showSsafyMateAlert } from './alert';
 
-export interface ProfileData {
+import ProfileService from '../../services/ProfileService';
+
+export interface ProfileState {
   userId: number | null;
   userName: string | null;
   userEmail: string | null;
@@ -29,7 +36,7 @@ export interface ProfileData {
   error: string | null;
 }
 
-export const profileInitialState: ProfileData = {
+export const profileInitialState: ProfileState = {
   userId: null,
   userName: null,
   userEmail: null,
@@ -58,7 +65,7 @@ export const { pending, updateProfile, fail } = createActions(
   },
 );
 
-const profile = handleActions<ProfileData, UserData>(
+const profile = handleActions<ProfileState, UserData>(
   {
     PENDING: (state) => ({
       ...state,
@@ -98,22 +105,90 @@ const profile = handleActions<ProfileData, UserData>(
 export default profile;
 
 //saga
-export const { updateUserInfo } = createActions('UPDATE_USER_INFO', {
-  prefix,
-});
+export const { updateProfileInfo, editProfileInfo } = createActions(
+  'UPDATE_PROFILE_INFO',
+  'EDIT_PROFILE_INFO',
+  {
+    prefix,
+  },
+);
+
+function* editUserInfoSaga(action: Action<EditProfileInfoRequest>) {
+  try {
+    yield put(pending());
+
+    const token: string = yield select((state) => state.auth.token);
+    const userId: number = yield select((state) => state.auth.userId);
+
+    const response: SignUpResponse = yield call(
+      ProfileService.editProfileInfo,
+      {
+        data: action.payload.data,
+        token: token,
+        userId: userId,
+        profileInfo: action.payload.profileInfo,
+      },
+    );
+
+    yield put(
+      showSsafyMateAlert({
+        show: true,
+        text: response.message,
+        type: 'success',
+      }),
+    );
+  } catch (error: any) {
+    yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
+
+    yield put(
+      showSsafyMateAlert({
+        show: true,
+        text: error.response.data.message,
+        type: 'warning',
+      }),
+    );
+  } finally {
+    const token: string = yield select((state) => state.auth.token);
+    const userId: number = yield select((state) => state.auth.userId);
+
+    const profileData: UserInfoResponse = yield call(
+      ProfileService.getProfileInfo,
+      {
+        token: token,
+        userId: userId,
+      },
+    );
+
+    yield put(updateProfile(profileData.userData));
+
+    if (action.payload.profileInfo === 'ssafy-track') {
+      const Authdata: UserInfoResponse = yield call(
+        ProfileService.updateAuthInfo,
+        {
+          token: token,
+          userId: userId,
+        },
+      );
+
+      yield put(success(Authdata));
+    }
+  }
+}
 
 function* updateUserInfoSaga(action: Action<getProfileInfoRequest>) {
   try {
     yield put(pending());
 
+    const token: string = yield select((state) => state.auth.token);
+    const userId: number = yield select((state) => state.auth.userId);
+
     const data: UserInfoResponse = yield call(ProfileService.getProfileInfo, {
-      token: action.payload.token,
-      userId: action.payload.userId,
+      token: token,
+      userId: userId,
     });
 
     yield put(updateProfile(data.userData));
   } catch (error: any) {
-    alert(JSON.stringify(action));
     yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
 
     yield put(
@@ -127,5 +202,6 @@ function* updateUserInfoSaga(action: Action<getProfileInfoRequest>) {
 }
 
 export function* profileSaga() {
-  yield takeEvery(`${prefix}/UPDATE_USER_INFO`, updateUserInfoSaga);
+  yield takeEvery(`${prefix}/UPDATE_PROFILE_INFO`, updateUserInfoSaga);
+  yield takeEvery(`${prefix}/EDIT_PROFILE_INFO`, editUserInfoSaga);
 }

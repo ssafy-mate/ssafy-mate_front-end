@@ -3,7 +3,7 @@ import { alertState } from '../../types/alertTypes';
 
 export const alertInitialState: alertState = {
   show: false,
-  text: null,
+  text: '실행에 문제가 있습니다.',
   type: 'info',
 };
 
