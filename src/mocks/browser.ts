@@ -8,18 +8,17 @@ import { usersHandlers } from './handlers/usersHandlers';
 import { teamsHandlers } from './handlers/teamsHandlers';
 import { requestsHandlers } from './handlers/requestsHandlers';
 import { chattingHandlers } from './handlers/chattingHandlers';
-import { techStackHandlers } from './handlers/techStackHandlers';
+import { techStacksHandlers } from './handlers/techStacksHandlers';
 
 export const worker = setupWorker(
-  // ...authHandlers,
+  ...authHandlers,
   ...usersHandlers,
   ...teamsHandlers,
   ...requestsHandlers,
   ...chattingHandlers,
-  // ...techStackHandlers,
-  // ...signInHandlers,
+  ...signInHandlers,
   ...newPasswordHandlers,
   ...findIdHandlers,
   ...chattingHandlers,
-  ...techStackHandlers,
+  ...techStacksHandlers,
 );

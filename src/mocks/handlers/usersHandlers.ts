@@ -275,7 +275,7 @@ export const usersHandlers = [
         );
       }
 
-      return response(context.json({ teamId: 1 }));
+      return response(context.json({ teamId: null }));
     },
   ),
 ];

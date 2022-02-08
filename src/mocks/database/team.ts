@@ -460,3 +460,38 @@ export const teamListData = [
     isRecruiting: false,
   },
 ];
+
+export const teamEditData = {
+  teamId: 1,
+  teamName: '디벨로파시토',
+  teamImgUrl: '/images/common/ssafy-mate_logo.png',
+  campus: '서울',
+  project: '공통 프로젝트',
+  projectTrack: '웹 기술',
+  notice: '실제 운영할 서비스 개발을 도전할 분들을 모집합니다.',
+  introduction:
+    '실사용자를 받는 플랫폼 개발에 도전하실 분들을 찾고 있습니다. 개발 효율성을 높이기 위해 API First Design 설계 방식으로 진행하려고 합니다. 서버에서는 Swagger를 이용하여 API 테스트를 진행하고, 클라이언트 팀은 정식 API가 배포되기 이전까지 Mock Service Worker를 이용하여 Mock을 만들어 개발을 진행하려고 합니다.',
+  techStacks: [
+    {
+      id: 1,
+      techStackName: 'HTML5',
+      techStackImgUrl: '/images/assets/tech-stack/HTML5.png',
+    },
+    {
+      id: 2,
+      techStackName: 'CSS3',
+      techStackImgUrl: '/images/assets/tech-stack/CSS3.png',
+    },
+    {
+      id: 43,
+      techStackName: 'Vuex',
+      techStackImgUrl: '/images/assets/tech-stack/Vuex.png',
+    },
+  ],
+  totalRecruitment: 6,
+  totalHeadcount: 3,
+  frontendRecruitment: 3,
+  frontendHeadcount: 2,
+  backendRecruitment: 3,
+  backendHeadcount: 1,
+};

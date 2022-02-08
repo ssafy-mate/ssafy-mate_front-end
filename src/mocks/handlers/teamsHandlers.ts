@@ -1,6 +1,6 @@
 import { rest } from 'msw';
 
-import { teamListData, teamDataListData } from '../database/team';
+import { teamListData, teamDataListData, teamEditData } from '../database/team';
 
 export const teamsHandlers = [
   rest.post(
@@ -193,7 +193,7 @@ export const teamsHandlers = [
       return response(
         context.json({
           teamData: teamDataListData[teamIndex].teamData,
-          role: 'outsider',
+          role: 'owner',
         }),
       );
     },
@@ -204,7 +204,7 @@ export const teamsHandlers = [
     async (request, response, context) => {
       const { teamId } = request.params;
       const token = request.headers['_headers'].authorization.split(' ')[1];
-      const status: number = 200;
+      const status: number = 500;
 
       // 로그인이 안 되어 있을 시
       if (token === null) {
@@ -249,6 +249,40 @@ export const teamsHandlers = [
           message: '팀 상세 정보 수정이 완료되었습니다.',
         }),
       );
+    },
+  ),
+
+  rest.get(
+    `${process.env.REACT_APP_SERVER_URL}/api/auth/teams/:teamId/edit`,
+    async (request, response, context) => {
+      const { teamId } = request.params;
+      const token = request.headers['_headers'].authorization.split(' ')[1];
+      const status: number = 200;
+
+      // 팀 수정 권한이 없을 시
+      if (token === null) {
+        return response(
+          context.status(403),
+          context.json({
+            status: 403,
+            success: false,
+            message: '팀을 수정할 수 있는 권한이 없습니다.',
+          }),
+        );
+      }
+
+      if (status === 500) {
+        return response(
+          context.status(500),
+          context.json({
+            status: 500,
+            success: false,
+            message: 'Internal Server, 팀 수정 페이저 접근 실패',
+          }),
+        );
+      }
+
+      return response(context.json(teamEditData));
     },
   ),
 
