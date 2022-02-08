@@ -3,7 +3,7 @@ import { useState, useEffect, useMemo, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
-import { leaveMyTeam as leaveMyTeamSagaStart } from '../../redux/modules/myTeam';
+import { leaveTeam as leaveTeamSagaStart } from '../../redux/modules/myTeam';
 
 import styled from '@emotion/styled';
 
@@ -26,16 +26,16 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Swal from 'sweetalert2';
 
 import { RoleType } from '../../types/teamTypes';
-import { ApplicationRequestType } from '../../types/authTypes';
+import { UserApplicationRequestType } from '../../types/authTypes';
 
-import { sendApplication as sendApplicationSagaStart } from '../../redux/modules/auth';
+import { sendUserApplication as sendUserApplicationSagaStart } from '../../redux/modules/auth';
 
 import useTeamInfo from '../../hooks/useTeamInfo';
 
 import UserLabel from '../user/UserLabel';
 import RecruitStatusBadge from '../projects/RecruitStatusBadge';
 import TeamTechStackTag from './TeamTechStackTag';
-import MemberItem from './MemberItem';
+import TeamMemberItem from './TeamMemberItem';
 import TeamMembersStatusBox from './TeamMembersStatus';
 import JobChart from '../chart/JobChart';
 import RecruitingStatusChart from '../chart/RecruitingStatusChart';
@@ -107,16 +107,16 @@ const TeamInfoSection: React.FC = () => {
     [teamData?.backendRecruitment, teamData?.backendHeadcount],
   );
 
-  const sendApplication = useCallback(
-    (application: ApplicationRequestType) => {
-      dispatch(sendApplicationSagaStart(application));
+  const sendUserApplication = useCallback(
+    (userApplication: UserApplicationRequestType) => {
+      dispatch(sendUserApplicationSagaStart(userApplication));
     },
     [dispatch],
   );
 
-  const leaveMyTeam = useCallback(
+  const leaveTeam = useCallback(
     (teamId: number) => {
-      dispatch(leaveMyTeamSagaStart(teamId));
+      dispatch(leaveTeamSagaStart(teamId));
     },
     [dispatch],
   );
@@ -137,14 +137,14 @@ const TeamInfoSection: React.FC = () => {
     setApplicationMessage(event.target.value);
   };
 
-  const handleSendApplication = () => {
+  const handleSendUserApplication = () => {
     if (applicationMessage === '') {
       alert('합류 지원 메시지를 입력해주세요.');
       setOnMessageWarning(true);
       return;
     }
 
-    const application = {
+    const userApplication = {
       teamId: parseInt(teamId),
       message: applicationMessage,
     };
@@ -153,7 +153,7 @@ const TeamInfoSection: React.FC = () => {
       setOnMessageWarning(false);
     }
 
-    sendApplication(application);
+    sendUserApplication(userApplication);
     setApplicationMessage('');
     setOpenApplicationDialog(false);
   };
@@ -170,7 +170,7 @@ const TeamInfoSection: React.FC = () => {
       cancelButtonText: '취소하기',
     }).then((result) => {
       if (result.isConfirmed) {
-        leaveMyTeam(parseInt(teamId));
+        leaveTeam(parseInt(teamId));
       }
     });
   };
@@ -302,7 +302,7 @@ const TeamInfoSection: React.FC = () => {
               <SubHead>팀원 모집 현황</SubHead>
               <MemberList>
                 {teamData.members.map((member, index) => (
-                  <MemberItem
+                  <TeamMemberItem
                     key={member.userId}
                     userId={member.userId}
                     userName={member.userName}
@@ -360,7 +360,7 @@ const TeamInfoSection: React.FC = () => {
               <DialogButton onClick={handleCloseApplicationDialog}>
                 취소
               </DialogButton>
-              <DialogButton onClick={handleSendApplication}>
+              <DialogButton onClick={handleSendUserApplication}>
                 보내기
               </DialogButton>
             </DialogActions>

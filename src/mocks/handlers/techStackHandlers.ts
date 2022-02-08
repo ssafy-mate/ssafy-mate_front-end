@@ -4,7 +4,7 @@ import { techStackListData } from '../database/techstack';
 
 export const techStackHandlers = [
   rest.get(
-    'https://i6a402.p.ssafy.io:8443/api/techstack-list',
+    'https://i6a402.p.ssafy.io:8443/api/techstacks',
     async (request, response, context) => {
       const status: number = 200;
 

@@ -4,7 +4,7 @@ import { TechStackWithImg } from '../types/commonTypes';
 
 class TechStackService {
   public static async getTechStackList(): Promise<TechStackWithImg[]> {
-    const response = await axiosInstance.get('/api/techstack-list');
+    const response = await axiosInstance.get('/api/techstacks');
 
     return response.data.techStackList;
   }

@@ -27,7 +27,7 @@ const SpecializationProjectTeamListPage: React.FC = () => {
   const [page, setPage] = useState<number>(1);
 
   const token = useToken();
-  const { isLoading, data, isError, errorMessage } = useTeamList({
+  const { isLoading, data, isError, errorMessage } = useTeamList(token, {
     campus,
     project,
     project_track: projectTrack,

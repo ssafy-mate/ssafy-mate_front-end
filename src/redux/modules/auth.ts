@@ -12,7 +12,7 @@ import {
   ProjectsState,
   Project,
   ProjectTrackRequestType,
-  ApplicationRequestType,
+  UserApplicationRequestType,
 } from '../../types/authTypes';
 import { TeamOfferRequestType } from '../../types/teamTypes';
 
@@ -21,17 +21,17 @@ import history from '../../history';
 import SignInService from '../../services/SignInService';
 import TokenService from '../../services/TokenService';
 import UserService from '../../services/UserService';
+import RequestService from '../../services/RequestService';
 import PersistReducerService from '../../services/PersistReducerService';
-import TeamService from '../../services/TeamService';
 
 import { showSsafyMateAlert } from './alert';
 
-interface SendApplicationResponseType {
+interface UserApplicationResponseType {
   success: boolean;
   message: string;
 }
 
-interface SendTeamOfferResponseType {
+interface TeamOfferResponseType {
   success: boolean;
   message: string;
 }
@@ -124,13 +124,13 @@ export const {
   login,
   logout,
   selectProjectTrack,
-  sendApplication,
+  sendUserApplication,
   sendTeamOffer,
 } = createActions(
   'LOGIN',
   'LOGOUT',
   'SELECT_PROJECT_TRACK',
-  'SEND_APPLICATION',
+  'SEND_USER_APPLICATION',
   'SEND_TEAM_OFFER',
   {
     prefix,
@@ -217,10 +217,15 @@ function* selectProjectTrackSaga(action: Action<ProjectTrackRequestType>) {
     yield put(pending());
 
     const token: string = yield select((state) => state.auth.token);
+    const userId: number = yield select((state) => state.auth.userId);
 
-    yield call(UserService.selectProjectTrack, token, action.payload);
+    yield call(UserService.selectProjectTrack, token, userId, action.payload);
 
-    const projects: Project[] = yield call(UserService.getUserProjects, token);
+    const projects: Project[] = yield call(
+      UserService.getUserProjects,
+      token,
+      userId,
+    );
 
     yield put(updateProjects(projects));
     yield put(push('/projects/specialization/teams'));
@@ -229,13 +234,13 @@ function* selectProjectTrackSaga(action: Action<ProjectTrackRequestType>) {
   }
 }
 
-function* sendApplicationSaga(action: Action<ApplicationRequestType>) {
+function* sendUserApplicationSaga(action: Action<UserApplicationRequestType>) {
   try {
     yield put(pending());
 
     const token: string = yield select((state) => state.auth.token);
-    const response: SendApplicationResponseType = yield call(
-      UserService.sendApplication,
+    const response: UserApplicationResponseType = yield call(
+      RequestService.sendUserApplication,
       token,
       action.payload,
     );
@@ -259,7 +264,12 @@ function* sendApplicationSaga(action: Action<ApplicationRequestType>) {
     });
   } finally {
     const token: string = yield select((state) => state.auth.token);
-    const projects: Project[] = yield call(UserService.getUserProjects, token);
+    const userId: number = yield select((state) => state.auth.userId);
+    const projects: Project[] = yield call(
+      UserService.getUserProjects,
+      token,
+      userId,
+    );
 
     yield put(updateProjects(projects));
   }
@@ -270,8 +280,8 @@ function* sendTeamOfferSaga(action: Action<TeamOfferRequestType>) {
     yield put(pending());
 
     const token: string = yield select((state) => state.auth.token);
-    const response: SendTeamOfferResponseType = yield call(
-      TeamService.sendTeamOffer,
+    const response: TeamOfferResponseType = yield call(
+      RequestService.sendTeamOffer,
       token,
       action.payload,
     );
@@ -295,7 +305,12 @@ function* sendTeamOfferSaga(action: Action<TeamOfferRequestType>) {
     });
   } finally {
     const token: string = yield select((state) => state.auth.token);
-    const projects: Project[] = yield call(UserService.getUserProjects, token);
+    const userId: number = yield select((state) => state.auth.userId);
+    const projects: Project[] = yield call(
+      UserService.getUserProjects,
+      token,
+      userId,
+    );
 
     yield put(updateProjects(projects));
   }
@@ -305,6 +320,6 @@ export function* authSaga() {
   yield takeEvery(`${prefix}/LOGIN`, loginSaga);
   yield takeEvery(`${prefix}/LOGOUT`, logoutSaga);
   yield takeLatest(`${prefix}/SELECT_PROJECT_TRACK`, selectProjectTrackSaga);
-  yield takeLatest(`${prefix}/SEND_APPLICATION`, sendApplicationSaga);
+  yield takeLatest(`${prefix}/SEND_USER_APPLICATION`, sendUserApplicationSaga);
   yield takeLatest(`${prefix}/SEND_TEAM_OFFER`, sendTeamOfferSaga);
 }

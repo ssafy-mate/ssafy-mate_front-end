@@ -63,7 +63,7 @@ export interface ProjectTrackRequestType {
   projectTrack: string;
 }
 
-export interface ApplicationRequestType {
+export interface UserApplicationRequestType {
   teamId: number;
   message: string;
 }

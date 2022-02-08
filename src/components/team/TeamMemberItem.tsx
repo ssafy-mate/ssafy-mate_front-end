@@ -6,11 +6,11 @@ import { TeamMember } from '../../types/teamTypes';
 
 import UserLabel from '../user/UserLabel';
 
-interface MemberItemProps extends TeamMember {
+interface TeamMemberItemProps extends TeamMember {
   isOwner: boolean;
 }
 
-const MemberItem: React.FC<MemberItemProps> = ({
+const TeamMemberItem: React.FC<TeamMemberItemProps> = ({
   userId,
   userName,
   profileImgUrl,
@@ -161,4 +161,4 @@ const InfoItem = styled.span`
   }
 `;
 
-export default MemberItem;
+export default TeamMemberItem;

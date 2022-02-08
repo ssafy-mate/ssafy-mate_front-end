@@ -61,16 +61,16 @@ const reducer = handleActions<MyTeamState, TeamDataType>(
 
 export default reducer;
 
-export const { createMyTeam, deleteMyTeam, leaveMyTeam } = createActions(
-  'CREATE_MY_TEAM',
-  'DELETE_MY_TEAM',
-  'LEAVE_MY_TEAM',
+export const { createTeam, deleteTeam, leaveTeam } = createActions(
+  'CREATE_TEAM',
+  'DELETE_TEAM',
+  'LEAVE_TEAM',
   {
     prefix,
   },
 );
 
-function* createMyTeamSaga(action: Action<FormData>) {
+function* createTeamSaga(action: Action<FormData>) {
   try {
     yield put(pending());
 
@@ -110,7 +110,7 @@ function* createMyTeamSaga(action: Action<FormData>) {
   }
 }
 
-function* leaveMyTeamSaga(action: Action<number>) {
+function* leaveTeamSaga(action: Action<number>) {
   try {
     yield put(pending());
 
@@ -147,6 +147,6 @@ function* leaveMyTeamSaga(action: Action<number>) {
 }
 
 export function* myTeamSaga() {
-  yield takeEvery(`${prefix}/CREATE_MY_TEAM`, createMyTeamSaga);
-  yield takeEvery(`${prefix}/LEAVE_MY_TEAM`, leaveMyTeamSaga);
+  yield takeEvery(`${prefix}/CREATE_TEAM`, createTeamSaga);
+  yield takeEvery(`${prefix}/LEAVE_TEAM`, leaveTeamSaga);
 }

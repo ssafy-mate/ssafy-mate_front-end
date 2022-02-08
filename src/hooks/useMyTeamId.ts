@@ -7,21 +7,27 @@ import { GetMyTeamIdParams } from '../types/authTypes';
 import UserService from '../services/UserService';
 
 import useToken from './useToken';
+import useUserId from './useUserId';
 
 const useMyTeamId = (project: string) => {
   const [myTeamId, setMyTeamId] = useState<number | null>(null);
   const token = useToken();
+  const userId = useUserId();
 
   useEffect(() => {
-    async function fetchMyTeamId(token: string, params: GetMyTeamIdParams) {
+    async function fetchMyTeamId(
+      token: string,
+      userId: number,
+      params: GetMyTeamIdParams,
+    ) {
       try {
-        const teamId = await UserService.getMyTeamId(token, params);
+        const teamId = await UserService.getMyTeamId(token, userId, params);
 
         setMyTeamId(teamId);
       } catch (error: any) {
         Swal.fire({
           title: '잠시 후 다시 시도해주세요.',
-          text: error.response.data.meesage,
+          text: error.response.data.message,
           icon: 'warning',
           confirmButtonColor: '#3396f4',
           confirmButtonText: '확인',
@@ -29,10 +35,10 @@ const useMyTeamId = (project: string) => {
       }
     }
 
-    if (token !== null) {
-      fetchMyTeamId(token, { project });
+    if (token !== null && userId !== null) {
+      fetchMyTeamId(token, userId, { project });
     }
-  }, [token, project]);
+  }, [token, userId, project]);
 
   return myTeamId;
 };

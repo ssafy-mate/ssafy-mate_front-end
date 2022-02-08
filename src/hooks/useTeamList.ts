@@ -5,10 +5,10 @@ import { useQuery } from 'react-query';
 import { TeamListResponse } from '../types/teamTypes';
 import { ErrorResponse } from '../types/commonTypes';
 
-import ProjectService from '../services/ProjectService';
+import TeamService from '../services/TeamService';
 
-const useTeamList = (params: object) => {
-  const queryFn = () => ProjectService.getTeamList(params);
+const useTeamList = (token: string | null, params: object) => {
+  const queryFn = () => TeamService.getTeamList(token, params);
   const { isLoading, data, isError, error } = useQuery<
     AxiosResponse<TeamListResponse>,
     AxiosError<ErrorResponse>
