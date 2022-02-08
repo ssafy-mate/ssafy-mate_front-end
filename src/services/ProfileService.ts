@@ -7,6 +7,15 @@ import {
 } from '../types/authTypes';
 import { SignUpResponse } from '../types/signUpTypes';
 import { axiosInstance } from '../utils/axios';
+export interface project {
+  project: string;
+  projectTrack: string;
+}
+export interface EditProfileProjectsRequest {
+  data: project;
+  token: string;
+  userId: number;
+}
 
 class ProfileService {
   public static async getProfileInfo(
@@ -29,6 +38,22 @@ class ProfileService {
   ): Promise<SignUpResponse> {
     const response = await axiosInstance.put<SignUpResponse>(
       `/api/auth/users/${data.userId}/${data.profileInfo}`,
+      data.data,
+      {
+        headers: {
+          Authorization: `Bearer ${data.token}`,
+        },
+      },
+    );
+
+    return response.data;
+  }
+
+  public static async editProfileProjectsInfo(
+    data: EditProfileProjectsRequest,
+  ): Promise<SignUpResponse> {
+    const response = await axiosInstance.put<SignUpResponse>(
+      `/api/auth/users/${data.userId}/project-tracks`,
       data.data,
       {
         headers: {

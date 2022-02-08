@@ -8,6 +8,7 @@ import { SignUpResponse } from './../../types/signUpTypes';
 import {
   EditProfileInfoRequest,
   getProfileInfoRequest,
+  SignInResponse,
 } from '../../types/authTypes';
 import {
   UserData,
@@ -16,7 +17,9 @@ import {
   UserTechStack,
 } from '../../hooks/useUserInfo';
 
-import ProfileService from '../../services/ProfileService';
+import ProfileService, {
+  EditProfileProjectsRequest,
+} from '../../services/ProfileService';
 
 export interface ProfileState {
   userId: number | null;
@@ -53,6 +56,22 @@ export const profileInitialState: ProfileState = {
   loading: false,
   error: null,
 };
+
+export interface ProfileStateResponse {
+  userId: number;
+  userName: string;
+  userEmail: string;
+  profileImgUrl: string | null;
+  campus: string;
+  ssafyTrack: string;
+  selfIntroduction: string;
+  job1: string;
+  job2: string | null;
+  projects: UserProject[];
+  techStacks: UserTechStack[];
+  githubUrl: string | null;
+  etcUrl: string | null;
+}
 
 const prefix = 'ssafy-mate/profile';
 
@@ -105,13 +124,70 @@ const profile = handleActions<ProfileState, UserData>(
 export default profile;
 
 //saga
-export const { updateProfileInfo, editProfileInfo } = createActions(
-  'UPDATE_PROFILE_INFO',
-  'EDIT_PROFILE_INFO',
-  {
-    prefix,
-  },
-);
+export const { updateProfileInfo, editProfileInfo, editProfileProjectsInfo } =
+  createActions(
+    'UPDATE_PROFILE_INFO',
+    'EDIT_PROFILE_INFO',
+    'EDIT_PROFILE_PROJECTS_INFO',
+    {
+      prefix,
+    },
+  );
+function* editUserProjectSaga(action: Action<EditProfileProjectsRequest>) {
+  try {
+    yield put(pending());
+
+    const token: string = yield select((state) => state.auth.token);
+    const userId: number = yield select((state) => state.auth.userId);
+
+    const response: SignUpResponse = yield call(
+      ProfileService.editProfileProjectsInfo,
+      {
+        data: action.payload.data,
+        token: token,
+        userId: userId,
+      },
+    );
+
+    yield put(
+      showSsafyMateAlert({
+        show: true,
+        text: response.message,
+        type: 'success',
+      }),
+    );
+  } catch (error: any) {
+    yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
+
+    yield put(
+      showSsafyMateAlert({
+        show: true,
+        text: error.response.data.message,
+        type: 'warning',
+      }),
+    );
+  } finally {
+    const token: string = yield select((state) => state.auth.token);
+    const userId: number = yield select((state) => state.auth.userId);
+
+    const profileData: UserInfoResponse = yield call(
+      ProfileService.getProfileInfo,
+      {
+        token: token,
+        userId: userId,
+      },
+    );
+
+    yield put(updateProfile(profileData.userData));
+
+    const Authdata: SignInResponse = yield call(ProfileService.updateAuthInfo, {
+      token: token,
+      userId: userId,
+    });
+
+    yield put(success(Authdata));
+  }
+}
 
 function* editUserInfoSaga(action: Action<EditProfileInfoRequest>) {
   try {
@@ -162,7 +238,7 @@ function* editUserInfoSaga(action: Action<EditProfileInfoRequest>) {
     yield put(updateProfile(profileData.userData));
 
     if (action.payload.profileInfo === 'ssafy-track') {
-      const Authdata: UserInfoResponse = yield call(
+      const Authdata: SignInResponse = yield call(
         ProfileService.updateAuthInfo,
         {
           token: token,
@@ -204,4 +280,5 @@ function* updateUserInfoSaga(action: Action<getProfileInfoRequest>) {
 export function* profileSaga() {
   yield takeEvery(`${prefix}/UPDATE_PROFILE_INFO`, updateUserInfoSaga);
   yield takeEvery(`${prefix}/EDIT_PROFILE_INFO`, editUserInfoSaga);
+  yield takeEvery(`${prefix}/EDIT_PROFILE_PROJECTS_INFO`, editUserProjectSaga);
 }

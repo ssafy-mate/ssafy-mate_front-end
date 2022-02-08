@@ -109,7 +109,7 @@ export const campusListData: Campus[] = [
   },
 ];
 
-interface ProjectTrack {
+export interface ProjectTrack {
   id: number;
   name: string;
 }

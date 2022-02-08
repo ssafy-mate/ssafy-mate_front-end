@@ -4,10 +4,34 @@ import { TechStackWithImg } from '../../types/commonTypes';
 import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
 import { useAutocomplete } from '@mui/material';
 import useTechStackList from '../../hooks/useTechStackList';
-import { TechStacksWithLevel } from '../../types/signUpTypes';
-import { useState } from 'react';
+import { Severity, TechStacksWithLevel } from '../../types/signUpTypes';
+import React, { useCallback, useEffect, useState } from 'react';
+import useProfileInfo from '../../hooks/useProfileInfo';
+import { jobListData } from '../../data/jobListData';
+
+import useToken from '../../hooks/useToken';
+import useUserId from '../../hooks/useUserId';
+import {
+  editProfileInfo,
+  editProfileProjectsInfo,
+  updateProfileInfo,
+} from '../../redux/modules/profile';
+import { useDispatch } from 'react-redux';
+import {
+  EditProfileInfoRequest,
+  getProfileInfoRequest,
+} from '../../types/authTypes';
+import { showSsafyMateAlert } from '../../redux/modules/alert';
+import { projectListData, ProjectTrack } from '../../data/ssafyData';
+import {
+  EditProfileProjectsRequest,
+  project,
+} from '../../services/ProfileService';
 
 const SsafyMateInformation: React.FC = () => {
+  const profileInfo = useProfileInfo();
+  const token: string | null = useToken();
+  const userId: number | null = useUserId();
   const [techStacks, setTechStacks] = useState<TechStacksWithLevel[]>([]);
   const techStackList: TechStackWithImg[] = useTechStackList();
   const {
@@ -27,6 +51,84 @@ const SsafyMateInformation: React.FC = () => {
     options: techStackList,
     getOptionLabel: (option) => option.techStackName,
   });
+
+  const dispatch = useDispatch();
+
+  const showAlert = (
+    alertShow: boolean,
+    alertText: string,
+    alertType: Severity,
+  ) => {
+    dispatch(
+      showSsafyMateAlert({
+        show: alertShow,
+        text: alertText,
+        type: alertType,
+      }),
+    );
+  };
+
+  const [commonProjectListData, setCommonProjectListData] = useState<
+    ProjectTrack[]
+  >([]);
+  const [specialProjectListData, setSpecialProjectListData] = useState<
+    ProjectTrack[]
+  >([]);
+
+  const [selfIntroductionDisabled, setSelfIntroductionDisabled] =
+    useState<boolean>(true);
+
+  const [selfIntroductionValue, setSelfIntroductionValue] =
+    useState<string>('');
+
+  const [newJob1, setNewJob1] = useState<string>('');
+  const [newJob2, setNewJob2] = useState<string>('');
+  const [oldcommonProject, setOldCommonProject] = useState<string>('');
+  const [commonProject, setCommonProject] = useState<string>('');
+  const [oldspecialProject, setOldSpecialProject] = useState<string>('');
+  const [specialProject, setSpecialProject] = useState<string>('');
+
+  useEffect(() => {
+    if (profileInfo.selfIntroduction !== null) {
+      setSelfIntroductionValue(profileInfo.selfIntroduction);
+    }
+    if (profileInfo.job1 !== null) {
+      setNewJob1(profileInfo.job1);
+    }
+    if (profileInfo.job2 !== null) {
+      setNewJob2(profileInfo.job2);
+    }
+    if (projectListData[0].projectTracks !== undefined) {
+      setCommonProjectListData(projectListData[0].projectTracks);
+    }
+
+    if (projectListData[1].projectTracks !== undefined) {
+      setSpecialProjectListData(projectListData[1].projectTracks);
+    }
+
+    if (profileInfo.projects !== null) {
+      if (profileInfo.projects[0].projectTrack !== null) {
+        setCommonProject(profileInfo.projects[0].projectTrack);
+        setOldCommonProject(profileInfo.projects[0].projectTrack);
+      }
+      if (profileInfo.projects[1].projectTrack !== null) {
+        setSpecialProject(profileInfo.projects[1].projectTrack);
+        setOldSpecialProject(profileInfo.projects[1].projectTrack);
+      }
+    }
+  }, [
+    profileInfo.job1,
+    profileInfo.job2,
+    profileInfo.projects,
+    profileInfo.selfIntroduction,
+    profileInfo.techStacks,
+  ]);
+
+  const [
+    selfIntroductionModifyButtonText,
+    setSelfIntroductionModifyButtonText,
+  ] = useState<string>('수정');
+
   const updateTechStacks = (selectedTechStack: TechStacksWithLevel): void => {
     const updateTechStackIndex = techStacks.findIndex(
       (techStack) =>
@@ -75,6 +177,191 @@ const SsafyMateInformation: React.FC = () => {
     }
   };
 
+  const handleTextAreaEnterKeyPressed = (event: React.KeyboardEvent) => {
+    if (event.code === 'Enter' || event.code === 'NumpadEnter') {
+      if (!event.shiftKey) {
+        event.preventDefault();
+      }
+    }
+  };
+
+  const handleNewSelfIntroduction = (
+    event: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    setSelfIntroductionValue(event.target.value);
+  };
+
+  const handleSelfIntroductionModifyButton = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    if (selfIntroductionModifyButtonText === '수정') {
+      setSelfIntroductionModifyButtonText('확인');
+      setSelfIntroductionDisabled(false);
+    } else {
+      setSelfIntroductionModifyButtonText('수정');
+      setSelfIntroductionDisabled(true);
+      newProfileInfo('self-introduction');
+    }
+  };
+
+  const [newJobsDisabled, setNewJobsDisabled] = useState<boolean>(true);
+  const [newJobsModifyButtonText, setNewJobsModifyButtonText] =
+    useState<string>('수정');
+
+  const handlJobsModifyButton = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    if (newJobsModifyButtonText === '수정') {
+      setNewJobsModifyButtonText('확인');
+      setNewJobsDisabled(false);
+    } else {
+      newProfileInfo('jobs');
+      setNewJobsDisabled(true);
+      setNewJobsModifyButtonText('수정');
+    }
+  };
+
+  const handleJobsSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    if (event.target.name === 'job1') {
+      setNewJob1(event.target.value);
+      setNewJob2('default');
+    } else {
+      setNewJob2(event.target.value);
+    }
+  };
+
+  const EditJobs = () => {
+    const EditJobsFormDate = new FormData();
+    EditJobsFormDate.append('job1', newJob1);
+    EditJobsFormDate.append('job2', newJob2);
+
+    return EditJobsFormDate;
+  };
+
+  const EditSelfIntroduction = () => {
+    const EditSelfIntroductionFormDate = new FormData();
+    EditSelfIntroductionFormDate.append(
+      'selfIntroduction',
+      selfIntroductionValue,
+    );
+
+    return EditSelfIntroductionFormDate;
+  };
+
+  const EditProjects = () => {
+    const EditProjectsData: project[] = [
+      {
+        project: '공통 프로젝트',
+        projectTrack: commonProject,
+      },
+      {
+        project: '특화 프로젝트',
+        projectTrack: specialProject,
+      },
+    ];
+
+    return EditProjectsData;
+  };
+
+  const updateProfileAndAuth = useCallback(
+    (requestData: EditProfileInfoRequest) => {
+      dispatch(editProfileInfo(requestData));
+    },
+    [dispatch],
+  );
+
+  const updateProfileProjectAndAuth = useCallback(
+    (requestData: EditProfileProjectsRequest) => {
+      dispatch(editProfileProjectsInfo(requestData));
+    },
+    [dispatch],
+  );
+
+  const [newProjectsDisabled, setNewProjectsDisabled] = useState<boolean>(true);
+  const [projectsModifyButtonText, newProjectsModifyButtonText] =
+    useState<string>('수정');
+
+  const handleProjectSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    if (event.target.name === 'common-project') {
+      setCommonProject(event.target.value);
+    } else {
+      setSpecialProject(event.target.value);
+    }
+  };
+
+  const handleProjectssModifyButton = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    if (projectsModifyButtonText === '수정') {
+      newProjectsModifyButtonText('확인');
+      setNewProjectsDisabled(false);
+    } else {
+      newProfileInfo('projects');
+      setNewProjectsDisabled(true);
+      newProjectsModifyButtonText('수정');
+      //기존 값과 비교해서 서버로 요청
+    }
+  };
+  const newProfileInfo = (profileInfoSelected: string) => {
+    switch (profileInfoSelected) {
+      case 'self-introduction':
+        if (profileInfo?.selfIntroduction !== selfIntroductionValue) {
+          if (selfIntroductionValue === '') {
+            showAlert(true, '자기소개는 필수 입력 항목입니다.', 'warning');
+          } else {
+            const RequestFormData: FormData = EditSelfIntroduction();
+            if (token !== null && userId !== undefined && userId !== null) {
+              updateProfileAndAuth({
+                data: RequestFormData,
+                token: token,
+                userId: userId,
+                profileInfo: 'self-introduction',
+              });
+            }
+          }
+        }
+        break;
+      case 'jobs':
+        if (profileInfo?.job1 !== newJob1 || profileInfo.job2 !== newJob2) {
+          const RequestFormData: FormData = EditJobs();
+
+          if (token !== null && userId !== undefined && userId !== null) {
+            updateProfileAndAuth({
+              data: RequestFormData,
+              token: token,
+              userId: userId,
+              profileInfo: 'jobs',
+            });
+          }
+        }
+        break;
+      case 'projects':
+        if (
+          oldcommonProject !== commonProject ||
+          oldspecialProject !== specialProject
+        ) {
+          const RequestProjectData: project[] = EditProjects();
+          if (token !== null && userId !== undefined && userId !== null) {
+            updateProfileProjectAndAuth({
+              data: RequestProjectData[0],
+              token: token,
+              userId: userId,
+            });
+            updateProfileProjectAndAuth({
+              data: RequestProjectData[1],
+              token: token,
+              userId: userId,
+            });
+          }
+        }
+        break;
+      case 'techStacks':
+        break;
+      case 'urls':
+        break;
+    }
+  };
+
   return (
     <>
       <SsafyMateInformationWrapper>
@@ -83,8 +370,20 @@ const SsafyMateInformation: React.FC = () => {
             <InformationLabel htmlFor="self-introduction" className="necessary">
               자기소개
             </InformationLabel>
-            <Textarea id="self-introduction" name="selfIntroduction" />
-            <ModifyButton type="button">수정</ModifyButton>
+            <Textarea
+              id="self-introduction"
+              name="selfIntroduction"
+              value={selfIntroductionValue}
+              onKeyPress={handleTextAreaEnterKeyPressed}
+              onChange={handleNewSelfIntroduction}
+              disabled={selfIntroductionDisabled}
+            />
+            <ModifyButton
+              type="button"
+              onClick={handleSelfIntroductionModifyButton}
+            >
+              {selfIntroductionModifyButtonText}
+            </ModifyButton>
           </SingleInformationWrapper>
 
           <Row>
@@ -92,40 +391,96 @@ const SsafyMateInformation: React.FC = () => {
               <InformationLabel htmlFor="job1" className="necessary">
                 희망 직무1
               </InformationLabel>
-              <Select id="job1" defaultValue={'default'} name="job1"></Select>
+              <Select
+                id="job1"
+                name="job1"
+                value={newJob1}
+                onChange={handleJobsSelect}
+                disabled={newJobsDisabled}
+              >
+                <option value="default" disabled>
+                  - 선택 -
+                </option>
+                {jobListData.map((job) => (
+                  <option key={job.id} value={job.name}>
+                    {job.name}
+                  </option>
+                ))}
+              </Select>
             </JobSelectWrapper>
 
             <JobSelectWrapper className="right-gap">
               <InformationLabel htmlFor="job2">희망 직무2</InformationLabel>
-              <Select id="job2" defaultValue={'default'} name="job2"></Select>
+              <Select
+                id="job2"
+                value={newJob2}
+                name="job2"
+                onChange={handleJobsSelect}
+                disabled={newJobsDisabled}
+              >
+                <option value="default">- 선택 -</option>
+                {jobListData
+                  .filter((job) => job.name !== newJob1)
+                  .map((job) => (
+                    <option key={job.id} value={job.name}>
+                      {job.name}
+                    </option>
+                  ))}
+              </Select>
             </JobSelectWrapper>
 
             <JobSelectWrapper className="top-gap">
-              <ModifyButton type="button">수정</ModifyButton>
+              <ModifyButton type="button" onClick={handlJobsModifyButton}>
+                {newJobsModifyButtonText}
+              </ModifyButton>
             </JobSelectWrapper>
           </Row>
 
           <Row>
             <SingleInformationWrapper className="right-gap">
-              <InformationLabel htmlFor="common" className="necessary">
+              <InformationLabel htmlFor="common-project">
                 공통 프로젝트
               </InformationLabel>
-              <Select id="common" defaultValue={'default'} name="job1"></Select>
+              <Select
+                id="common-project"
+                name="common-project"
+                value={commonProject}
+                onChange={handleProjectSelect}
+                disabled={newProjectsDisabled}
+              >
+                <option value="default">- 선택 -</option>
+                {commonProjectListData.map((project) => (
+                  <option key={project.id} value={project.name}>
+                    {project.name}
+                  </option>
+                ))}
+              </Select>
             </SingleInformationWrapper>
 
             <SingleInformationWrapper className="right-gap">
-              <InformationLabel htmlFor="special" className="necessary">
+              <InformationLabel htmlFor="special-project">
                 특화 프로젝트
               </InformationLabel>
               <Select
-                id="special"
-                defaultValue={'default'}
-                name="job2"
-              ></Select>
+                id="special-project"
+                name="special-project"
+                value={specialProject}
+                onChange={handleProjectSelect}
+                disabled={newProjectsDisabled}
+              >
+                <option value="default">- 선택 -</option>
+                {specialProjectListData.map((project) => (
+                  <option key={project.id} value={project.name}>
+                    {project.name}
+                  </option>
+                ))}
+              </Select>
             </SingleInformationWrapper>
 
             <SingleInformationWrapper className="top-gap-button">
-              <ModifyButton type="button">수정</ModifyButton>
+              <ModifyButton type="button" onClick={handleProjectssModifyButton}>
+                {projectsModifyButtonText}
+              </ModifyButton>
             </SingleInformationWrapper>
           </Row>
 
@@ -500,6 +855,10 @@ const Textarea = styled.textarea`
   color: #263747;
   transition: all 0.08s ease-in-out;
 
+  &:disabled {
+    cursor: not-allowed;
+  }
+
   &.have-error {
     margin-bottom: 4px;
     border: 1px solid #f44336;
@@ -566,10 +925,6 @@ const Select = styled.select`
   }
 
   &:disabled {
-    border: 1px solid #d7e2eb;
-    box-shadow: none;
-    background-color: #f7f8fa;
-    color: #d8d4d1;
     cursor: not-allowed;
   }
 
