@@ -60,6 +60,16 @@ class TeamService {
     return response.data;
   }
 
+  public static async deleteTeam(token: string, teamId: number) {
+    const response = await axiosInstance.delete(`/api/auth/teams/${teamId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    return response.data;
+  }
+
   public static async leaveTeam(token: string, teamId: number) {
     const response = await axiosInstance.delete(
       `/api/auth/teams/${teamId}/leave`,

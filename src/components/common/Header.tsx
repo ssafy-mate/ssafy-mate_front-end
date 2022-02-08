@@ -303,7 +303,7 @@ const Container = styled.header<ContainerProps>`
   position: ${(props) => (props.offFixed ? 'relative' : 'fixed')};
   top: 0;
   left: 0;
-  z-index: 10;
+  z-index: 50;
   width: 100%;
   background-color: #0d161c;
 `;

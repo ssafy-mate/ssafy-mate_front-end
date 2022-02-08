@@ -14,7 +14,9 @@ import {
   MyTeamState,
   MyTeamResponse,
   TeamDataType,
+  TeamEditRequest,
   LeaveMyTeamResponse,
+  DeleteTeamResponse,
 } from '../../types/teamTypes';
 
 const initialState: MyTeamState = {
@@ -111,18 +113,19 @@ function* createTeamSaga(action: Action<FormData>) {
   }
 }
 
-function* editTeamSaga(action: Action<FormData>) {
+function* editTeamSaga(action: Action<TeamEditRequest>) {
   try {
     yield put(pending());
 
+    console.log('payload2', action.payload);
     const token: string = yield select((state) => state.auth.token);
-    const teamId: number = yield select((state) => state.myTeam.team.teamId);
     const myTeamResponse: MyTeamResponse = yield call(
       TeamService.editTeam,
       token,
-      teamId,
-      action.payload,
+      action.payload.teamId,
+      action.payload.formData,
     );
+
     const teamInfoResponse: AxiosResponse<TeamInfoResponse> = yield call(
       TeamService.getTeamInfo,
       token,
@@ -153,6 +156,38 @@ function* editTeamSaga(action: Action<FormData>) {
   }
 }
 
+function* deleteTeamSaga(action: Action<number>) {
+  try {
+    yield put(pending());
+    const token: string = yield select((state) => state.auth.token);
+    const response: DeleteTeamResponse = yield call(
+      TeamService.deleteTeam,
+      token,
+      action.payload,
+    );
+
+    yield put(success(null));
+
+    Swal.fire({
+      title: '팀 삭제 완료',
+      text: response.message,
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 2000,
+    });
+
+    yield put(push('/projects/specialization/teams'));
+  } catch (error: any) {
+    Swal.fire({
+      title: '팀 삭제 처리 실패',
+      text: error.response.data.message,
+      icon: 'warning',
+      confirmButtonColor: '#3396f4',
+      confirmButtonText: '확인',
+    });
+  }
+}
+
 function* leaveTeamSaga(action: Action<number>) {
   try {
     yield put(pending());
@@ -168,8 +203,8 @@ function* leaveTeamSaga(action: Action<number>) {
     yield put(success(null));
 
     Swal.fire({
-      title: response.message,
-      text: '새로운 팀을 다시 지원해보세요.',
+      title: '팀 탈퇴 처리 완료',
+      text: response.message,
       icon: 'success',
       showConfirmButton: false,
       timer: 2000,
@@ -192,5 +227,6 @@ function* leaveTeamSaga(action: Action<number>) {
 export function* myTeamSaga() {
   yield takeEvery(`${prefix}/CREATE_TEAM`, createTeamSaga);
   yield takeEvery(`${prefix}/EDIT_TEAM`, editTeamSaga);
+  yield takeEvery(`${prefix}/DELETE_TEAM`, deleteTeamSaga);
   yield takeEvery(`${prefix}/LEAVE_TEAM`, leaveTeamSaga);
 }

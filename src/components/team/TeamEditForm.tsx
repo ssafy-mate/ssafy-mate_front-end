@@ -5,12 +5,16 @@ import { useParams, Link } from 'react-router-dom';
 import { push } from 'connected-react-router';
 
 import { useDispatch } from 'react-redux';
-import { editTeam as editTeamSagaStart } from '../../redux/modules/myTeam';
+import {
+  editTeam as editTeamSagaStart,
+  deleteTeam as deleteTeamSagaStart,
+} from '../../redux/modules/myTeam';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
+import DeleteIcon from '@mui/icons-material/Delete';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import CheckIcon from '@mui/icons-material/Check';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -105,8 +109,15 @@ const TeamEditForm: React.FC = () => {
   }, [dispatch, token, teamId]);
 
   const editTeam = useCallback(
-    (teamFormData: FormData) => {
-      dispatch(editTeamSagaStart(teamFormData));
+    (teamId: number, formData: FormData) => {
+      dispatch(editTeamSagaStart({ teamId, formData }));
+    },
+    [dispatch],
+  );
+
+  const deleteTeam = useCallback(
+    (teamId: number) => {
+      dispatch(deleteTeamSagaStart(teamId));
     },
     [dispatch],
   );
@@ -127,6 +138,23 @@ const TeamEditForm: React.FC = () => {
     setFrontendHeadcount(teamEditInfo.frontendHeadcount);
     setBackendRecruitment(teamEditInfo.backendRecruitment);
     setBackendHeadcount(teamEditInfo.backendHeadcount);
+  };
+
+  const handleOpenDeleteTeamDialog = () => {
+    Swal.fire({
+      title: '정말 팀을 삭제하시겠습니까?',
+      text: '삭제 후 취소는 불가능합니다.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#f5554a',
+      cancelButtonColor: '#919aa1',
+      confirmButtonText: '삭제하기',
+      cancelButtonText: '취소하기',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        deleteTeam(parseInt(teamId));
+      }
+    });
   };
 
   const handleChangeTeamImg = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -268,7 +296,7 @@ const TeamEditForm: React.FC = () => {
         backendRecruitment,
       );
 
-      editTeam(teamFormData);
+      editTeam(parseInt(teamId), teamFormData);
     } else {
       setIsDisplayedWarningText(true);
     }
@@ -300,6 +328,11 @@ const TeamEditForm: React.FC = () => {
   return (
     <Container>
       <Head>팀 정보 수정</Head>
+      <DeleteButtonWrapper>
+        <DeleteButton onClick={handleOpenDeleteTeamDialog}>
+          <DeleteIcon />팀 삭제하기
+        </DeleteButton>
+      </DeleteButtonWrapper>
       <Row>
         <FileInputWrapper>
           <Label>팀 대표 이미지</Label>
@@ -592,8 +625,46 @@ const Container = styled.div`
   }
 `;
 
+const DeleteButtonWrapper = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 30px;
+`;
+
+const DeleteButton = styled.button`
+  display: flex;
+  align-items: center;
+  background-color: transparent;
+  border: none;
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #5f7f90;
+  transition: color 0.08s ease-in-out, transform 0.08s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    color: #f44336;
+    transform: scale(1.05);
+  }
+
+  & svg {
+    margin-right: 4px;
+    font-size: 24px;
+  }
+
+  @media (max-width: 575px) {
+    font-size: 14px;
+
+    & svg {
+      margin-right: 4px;
+      font-size: 22px;
+    }
+  }
+`;
+
 const Head = styled.h1`
-  margin-bottom: 48px;
+  margin-bottom: 18px;
   font-size: 32px;
   font-weight: 600;
   text-align: center;
@@ -617,10 +688,10 @@ const Row = styled.div`
   }
 
   @media (max-width: 575px) {
-    &:first-of-type {
+    &:nth-of-type(2) {
       flex-direction: column;
     }
-    &:nth-of-type(7) {
+    &:nth-of-type(8) {
       flex-direction: column;
     }
   }
@@ -949,28 +1020,6 @@ const ClearButton = styled.button`
 
   &:hover {
     transform: scale(1.15);
-  }
-`;
-
-const SubmitButton = styled.button`
-  width: 100%;
-  height: 40px;
-  border: none;
-  border-radius: 0.25rem;
-  box-sizing: border-box;
-  background-color: #3396f4;
-  font-size: 16px;
-  font-weight: 500;
-  color: #fff;
-  transition: background-color 0.08s ease-in-out;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #2878c3;
-  }
-
-  @media (max-width: 575px) {
-    font-size: 15px;
   }
 `;
 

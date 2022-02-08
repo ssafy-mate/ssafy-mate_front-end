@@ -94,8 +94,12 @@ export interface MyTeamState {
 }
 
 export interface LeaveMyTeamResponse {
-  success: boolean;
   message: string;
+}
+
+export interface TeamEditRequest {
+  teamId: number;
+  formData: FormData;
 }
 
 export interface TeamEditInfoResponse {
@@ -114,4 +118,8 @@ export interface TeamEditInfoResponse {
   frontendHeadcount: number;
   backendRecruitment: number;
   backendHeadcount: number;
+}
+
+export interface DeleteTeamResponse {
+  message: string;
 }
