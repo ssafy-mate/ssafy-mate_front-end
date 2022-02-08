@@ -61,8 +61,9 @@ const reducer = handleActions<MyTeamState, TeamDataType>(
 
 export default reducer;
 
-export const { createTeam, deleteTeam, leaveTeam } = createActions(
+export const { createTeam, editTeam, deleteTeam, leaveTeam } = createActions(
   'CREATE_TEAM',
+  'EDIT_TEAM',
   'DELETE_TEAM',
   'LEAVE_TEAM',
   {
@@ -76,7 +77,7 @@ function* createTeamSaga(action: Action<FormData>) {
 
     const token: string = yield select((state) => state.auth.token);
     const myTeamResponse: MyTeamResponse = yield call(
-      TeamService.createMyTeam,
+      TeamService.createTeam,
       token,
       action.payload,
     );
@@ -102,6 +103,48 @@ function* createTeamSaga(action: Action<FormData>) {
 
     Swal.fire({
       title: '팀 생성 실패',
+      text: error.response.data.message,
+      icon: 'warning',
+      confirmButtonColor: '#3396f4',
+      confirmButtonText: '확인',
+    });
+  }
+}
+
+function* editTeamSaga(action: Action<FormData>) {
+  try {
+    yield put(pending());
+
+    const token: string = yield select((state) => state.auth.token);
+    const teamId: number = yield select((state) => state.myTeam.team.teamId);
+    const myTeamResponse: MyTeamResponse = yield call(
+      TeamService.editTeam,
+      token,
+      teamId,
+      action.payload,
+    );
+    const teamInfoResponse: AxiosResponse<TeamInfoResponse> = yield call(
+      TeamService.getTeamInfo,
+      token,
+      myTeamResponse.teamId,
+    );
+
+    yield put(success(teamInfoResponse.data.teamData));
+
+    Swal.fire({
+      title: '팀 정보 수정 완료',
+      text: myTeamResponse.message,
+      icon: 'success',
+      showConfirmButton: false,
+      timer: 2000,
+    });
+
+    yield put(push(`/teams/${myTeamResponse.teamId}`));
+  } catch (error: any) {
+    yield put(fail(error.response.data));
+
+    Swal.fire({
+      title: '팀 정보 수정 생성 실패',
       text: error.response.data.message,
       icon: 'warning',
       confirmButtonColor: '#3396f4',
@@ -148,5 +191,6 @@ function* leaveTeamSaga(action: Action<number>) {
 
 export function* myTeamSaga() {
   yield takeEvery(`${prefix}/CREATE_TEAM`, createTeamSaga);
+  yield takeEvery(`${prefix}/EDIT_TEAM`, editTeamSaga);
   yield takeEvery(`${prefix}/LEAVE_TEAM`, leaveTeamSaga);
 }

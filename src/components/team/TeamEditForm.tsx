@@ -1,9 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
 
+import { useParams, Link } from 'react-router-dom';
+
 import { push } from 'connected-react-router';
 
 import { useDispatch } from 'react-redux';
-import { createTeam as createTeamSagaStart } from '../../redux/modules/myTeam';
+import { editTeam as editTeamSagaStart } from '../../redux/modules/myTeam';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -17,39 +19,46 @@ import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
 import Swal from 'sweetalert2';
 
 import { TechStackWithImg } from '../../types/commonTypes';
-import { GetMyTeamIdParams } from '../../types/userTypes';
+import { TeamEditInfoResponse } from '../../types/teamTypes';
 
 import { campusListData, projectListData } from '../../data/ssafyData';
 
 import useToken from '../../hooks/useToken';
-import useUserId from '../../hooks/useUserId';
+import useMyTeamTechStacks from '../../hooks/useMyTeamTechStacks';
 import useTechStackList from '../../hooks/useTechStackList';
-import useUserProjectInfo from '../../hooks/useUserProjectInfo';
 
-import UserService from '../../services/UserService';
+import TeamService from '../../services/TeamService';
 
 import TechStackTag from '../common/TechStackTag';
 import WarningMessage from '../common/WarningMessage';
 
-const PROJECT_ID: number = 2;
+type Params = {
+  teamId: string;
+};
 
-const TeamCreateForm: React.FC = () => {
+const TeamEditForm: React.FC = () => {
   const [teamImg, setTeamImg] = useState(null);
   const [previewTeamImg, setPreviewTeamImg] = useState(null);
-  const [campus, project, projectTrack] = useUserProjectInfo(PROJECT_ID);
+  const [campus, setCampus] = useState<string>('');
+  const [project, setProject] = useState<string>('');
+  const [projectTrack, setProjectTrack] = useState<string>('');
   const [teamName, setTeamName] = useState<string>('');
   const [notice, setNotice] = useState<string>('');
-  const [introduction, setIntroduction] = useState<string>('');
-  const [techStacks, setTechStacks] = useState<number[]>([]);
+  const [introduction, setIntroduction] = useState<string | null>('');
+  const [techStacks, setTechStacks] = useState<TechStackWithImg[]>([]);
   const [totalRecruitment, setTotalRecruitment] = useState<number>(0);
+  const [totalHeadcount, setTotalHeadcount] = useState<number>(0);
   const [frontendRecruitment, setFrontendRecruitment] = useState<number>(0);
+  const [frontendHeadcount, setFrontendHeadcount] = useState<number>(0);
   const [backendRecruitment, setBackendRecruitment] = useState<number>(0);
+  const [backendHeadcount, setBackendHeadcount] = useState<number>(0);
   const [isDisplayedWarningText, setIsDisplayedWarningText] =
     useState<boolean>(false);
 
+  const { teamId } = useParams<Params>();
   const dispatch = useDispatch();
   const token = useToken();
-  const userId = useUserId();
+  const initialTechStacks = useMyTeamTechStacks();
   const techStackList: TechStackWithImg[] = useTechStackList();
   const {
     getRootProps,
@@ -66,47 +75,59 @@ const TeamCreateForm: React.FC = () => {
     id: 'search-tech-stack',
     multiple: true,
     options: techStackList,
+    defaultValue: initialTechStacks,
     getOptionLabel: (option) => option.techStackName,
   });
 
   useEffect(() => {
-    async function checkTeam(
-      token: string,
-      userId: number,
-      params: GetMyTeamIdParams,
-    ) {
-      const teamId = await UserService.getMyTeamId(token, userId, params);
+    async function fetchTeamEditInfo(token: string, teamId: number) {
+      try {
+        const teamEditInfo: TeamEditInfoResponse =
+          await TeamService.getTeamEditInfo(token, teamId);
 
-      if (teamId !== null) {
+        initialEditForm(teamEditInfo);
+      } catch (error: any) {
         Swal.fire({
           title: '팀 생성 불가',
-          text: '해당 프로젝트 팀에 이미 합류되어 있어 팀 생성이 불가능합니다.',
+          text: error.response.data.message,
           icon: 'warning',
           confirmButtonColor: '#3396f4',
           confirmButtonText: '확인',
         });
 
-        dispatch(push('/projects/specialization/teams'));
+        dispatch(push(`/teams/${teamId}`));
       }
     }
 
-    if (token !== null && userId !== null && project !== null) {
-      checkTeam(token, userId, { project });
+    if (token !== null && teamId !== null) {
+      fetchTeamEditInfo(token, parseInt(teamId));
     }
-  }, [dispatch, token, userId, project]);
+  }, [dispatch, token, teamId]);
 
-  useEffect(() => {
-    const selectedTechStackCodes = value.map((techStack) => techStack.id);
-
-    setTechStacks(selectedTechStackCodes);
-  }, [value]);
-
-  const createTeam = useCallback(
+  const editTeam = useCallback(
     (teamFormData: FormData) => {
-      dispatch(createTeamSagaStart(teamFormData));
+      dispatch(editTeamSagaStart(teamFormData));
     },
     [dispatch],
   );
+
+  const initialEditForm = (teamEditInfo: TeamEditInfoResponse) => {
+    setTeamName(teamEditInfo.teamName);
+    setTeamImg(teamEditInfo.teamImgUrl);
+    setPreviewTeamImg(teamEditInfo.teamImgUrl);
+    setCampus(teamEditInfo.campus);
+    setProject(teamEditInfo.project);
+    setProjectTrack(teamEditInfo.projectTrack);
+    setNotice(teamEditInfo.notice);
+    setIntroduction(teamEditInfo.introduction);
+    setTechStacks(teamEditInfo.techStacks);
+    setTotalRecruitment(teamEditInfo.totalRecruitment);
+    setTotalHeadcount(teamEditInfo.totalHeadcount);
+    setFrontendRecruitment(teamEditInfo.frontendRecruitment);
+    setFrontendHeadcount(teamEditInfo.frontendHeadcount);
+    setBackendRecruitment(teamEditInfo.backendRecruitment);
+    setBackendHeadcount(teamEditInfo.backendHeadcount);
+  };
 
   const handleChangeTeamImg = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -187,8 +208,8 @@ const TeamCreateForm: React.FC = () => {
     teamName: string,
     teamImg: File | null,
     notice: string,
-    introduction: string,
-    techStacks: number[],
+    introduction: string | null,
+    techStacks: TechStackWithImg[],
     totalRecruitment: number,
     frontendRecruitment: number,
     backendRecruitment: number,
@@ -199,15 +220,20 @@ const TeamCreateForm: React.FC = () => {
       teamFormData.append('teamImg', teamImg);
     }
 
+    if (introduction !== null) {
+      teamFormData.append('introduction', introduction);
+    }
+
     teamFormData.append('campus', campus);
     teamFormData.append('project', project);
     teamFormData.append('projectTrack', projectTrack);
     teamFormData.append('teamName', teamName);
     teamFormData.append('notice', notice);
-    teamFormData.append('introduction', introduction);
     teamFormData.append(
       'techStacks',
-      '[' + techStacks.map((code) => code.toString()).join(',') + ']',
+      '[' +
+        techStacks.map((techStack) => techStack.id.toString()).join(',') +
+        ']',
     );
     teamFormData.append('totalRecruitment', totalRecruitment.toString());
     teamFormData.append('frontendRecruitment', frontendRecruitment.toString());
@@ -242,7 +268,7 @@ const TeamCreateForm: React.FC = () => {
         backendRecruitment,
       );
 
-      createTeam(teamFormData);
+      editTeam(teamFormData);
     } else {
       setIsDisplayedWarningText(true);
     }
@@ -273,7 +299,7 @@ const TeamCreateForm: React.FC = () => {
 
   return (
     <Container>
-      <Head>팀 생성</Head>
+      <Head>팀 정보 수정</Head>
       <Row>
         <FileInputWrapper>
           <Label>팀 대표 이미지</Label>
@@ -303,13 +329,7 @@ const TeamCreateForm: React.FC = () => {
         <SsafyInfoWrapper>
           <InputWrapper>
             <RequirementLabel htmlFor="campus">캠퍼스</RequirementLabel>
-            <Select
-              id="campus"
-              name="campus"
-              defaultValue={campus !== null ? campus : ''}
-              required
-              disabled
-            >
+            <Select id="campus" name="campus" value={campus} required disabled>
               <option value="">- 선택 -</option>
               {campusListData.map((campus) => (
                 <option key={campus.id} value={campus.area}>
@@ -323,7 +343,7 @@ const TeamCreateForm: React.FC = () => {
             <Select
               id="project"
               name="project"
-              defaultValue={project !== null ? project : ''}
+              value={project}
               required
               disabled
             >
@@ -342,7 +362,7 @@ const TeamCreateForm: React.FC = () => {
             <Select
               id="project-track"
               name="project-track"
-              defaultValue={projectTrack !== null ? projectTrack : ''}
+              value={projectTrack}
               required
               disabled
             >
@@ -368,6 +388,7 @@ const TeamCreateForm: React.FC = () => {
             className={
               isDisplayedWarningText && teamName === '' ? 'active-warning' : ''
             }
+            value={teamName}
             onChange={handleChangeTeamName}
             required
           />
@@ -388,6 +409,7 @@ const TeamCreateForm: React.FC = () => {
             className={
               isDisplayedWarningText && notice === '' ? 'active-warning' : ''
             }
+            value={notice}
             onChange={handleChangeNotice}
             required
             placeholder="ex) 최우수상에 도전할 팀원을 모집합니다."
@@ -403,6 +425,7 @@ const TeamCreateForm: React.FC = () => {
           <Textarea
             id="introduction"
             name="introduction"
+            value={introduction !== null ? introduction : ''}
             onKeyPress={handleTextAreaEnterKeyPressed}
             onChange={handleChangeIntroduction}
             placeholder="ex) 팀의 목표, 개발 방향성, 어떤 팀원들을 원하는지 등을 자유롭게 작성해 주세요."
@@ -481,7 +504,7 @@ const TeamCreateForm: React.FC = () => {
             onChange={handleChangeTotalRecruitment}
             required
           >
-            {renderingRecruitmentOptions(4, 6)}
+            {renderingRecruitmentOptions(totalHeadcount <= 5 ? 5 : 6, 6)}
           </Select>
           {isDisplayedWarningText && totalRecruitment === 0 && (
             <WarningMessage text="필수 선택 항목입니다." />
@@ -506,7 +529,10 @@ const TeamCreateForm: React.FC = () => {
             disabled={totalRecruitment === 0}
             required
           >
-            {renderingRecruitmentOptions(1, totalRecruitment - 1)}
+            {renderingRecruitmentOptions(
+              frontendHeadcount >= 1 ? frontendHeadcount : 1,
+              totalRecruitment - 1,
+            )}
           </Select>
           {isDisplayedWarningText && frontendRecruitment === 0 && (
             <WarningMessage text="필수 선택 항목입니다." />
@@ -540,7 +566,10 @@ const TeamCreateForm: React.FC = () => {
         </InputWrapper>
       </Row>
       <Row>
-        <SubmitButton onClick={handleSubmitFormData}>팀 생성</SubmitButton>
+        <CancelButton to="/projects/specialization/teams">
+          취소하기
+        </CancelButton>
+        <EditButton onClick={handleSubmitFormData}>수정하기</EditButton>
       </Row>
     </Container>
   );
@@ -945,6 +974,56 @@ const SubmitButton = styled.button`
   }
 `;
 
+const EditButton = styled.button`
+  width: 100%;
+  height: 40px;
+  border: none;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+  background-color: #ffc00a;
+  font-size: 16px;
+  font-weight: 500;
+  color: #fff;
+  transition: background-color 0.08s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #e5ac09;
+  }
+
+  @media (max-width: 575px) {
+    margin-right: 6px;
+    font-size: 15px;
+  }
+`;
+
+const CancelButton = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  margin-right: 12px;
+  border: none;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+  background-color: #e9ecf3;
+  font-size: 16px;
+  font-weight: 500;
+  color: #263747;
+  transition: background-color 0.08s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #d1d4da;
+  }
+
+  @media (max-width: 575px) {
+    margin-right: 6px;
+    font-size: 15px;
+  }
+`;
+
 const techStackRow = css`
   flex-direction: column;
 `;
@@ -961,4 +1040,4 @@ const rightGap = css`
   }
 `;
 
-export default TeamCreateForm;
+export default TeamEditForm;

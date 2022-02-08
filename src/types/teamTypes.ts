@@ -97,3 +97,21 @@ export interface LeaveMyTeamResponse {
   success: boolean;
   message: string;
 }
+
+export interface TeamEditInfoResponse {
+  teamId: number;
+  teamName: string;
+  teamImgUrl: any | null;
+  campus: string;
+  project: string;
+  projectTrack: string;
+  notice: string;
+  introduction: string | null;
+  techStacks: TechStackWithImg[];
+  totalRecruitment: number;
+  totalHeadcount: number;
+  frontendRecruitment: number;
+  frontendHeadcount: number;
+  backendRecruitment: number;
+  backendHeadcount: number;
+}

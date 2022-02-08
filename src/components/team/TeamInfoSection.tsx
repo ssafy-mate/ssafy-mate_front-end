@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
 import { leaveTeam as leaveTeamSagaStart } from '../../redux/modules/myTeam';
@@ -175,16 +175,14 @@ const TeamInfoSection: React.FC = () => {
     });
   };
 
-  const handleClickMoveEditPageButton = () => {};
-
   const renderingOptionButton = (role: RoleType = 'outsider') => {
     switch (role) {
       case 'owner':
         return (
-          <OptionButton onClick={handleClickMoveEditPageButton} role={role}>
+          <OptionLink to={`/teams/${teamId}/edit`}>
             <EditIcon />
             <span>팀 정보 수정하기</span>
-          </OptionButton>
+          </OptionLink>
         );
       case 'member':
         return (
@@ -546,6 +544,46 @@ const MemberList = styled.ul`
   box-sizing: border-box;
 `;
 
+const OptionLink = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto 0;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: #ffc00a;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #fff;
+  transition: all 0.08s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #e5ac09;
+  }
+
+  & svg {
+    margin-right: 8px;
+    font-size: 22px;
+  }
+
+  @media (max-width: 1199px) {
+    width: 100%;
+    padding-right: 0;
+    padding-left: 0;
+  }
+  @media (max-width: 991px) {
+    font-size: 15px;
+
+    & svg {
+      font-size: 20px;
+    }
+  }
+`;
+
 const OptionButton = styled.button<OptionButtonProps>`
   display: flex;
   justify-content: center;
@@ -556,11 +594,7 @@ const OptionButton = styled.button<OptionButtonProps>`
   border-radius: 4px;
   box-sizing: border-box;
   background-color: ${(props) =>
-    props.role === 'owner'
-      ? '#ffc00a'
-      : props.role === 'member'
-      ? '#f5554a'
-      : '#3396f4'};
+    props.role === 'member' ? '#f5554a' : '#3396f4'};
   font-size: 16px;
   font-weight: 500;
   line-height: 1.5;
@@ -570,11 +604,7 @@ const OptionButton = styled.button<OptionButtonProps>`
 
   &:hover {
     background-color: ${(props) =>
-      props.role === 'owner'
-        ? '#e5ac09'
-        : props.role === 'member'
-        ? '#dc4c42'
-        : '#3396f4'};
+      props.role === 'member' ? '#dc4c42' : '#3396f4'};
   }
 
   & svg {
