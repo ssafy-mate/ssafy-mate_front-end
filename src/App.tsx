@@ -7,7 +7,9 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 
 import { Global } from '@emotion/react';
 
-import reset from './styles/reset';
+import resetStyles from './styles/resetStyles';
+import commonStyles from './styles/commonStyles';
+import sweetAlertStyles from './styles/sweetAlertStyles';
 
 import 'swiper/css/bundle';
 
@@ -36,7 +38,9 @@ import ChattingPage from './pages/ChattingPage';
 const App: React.FC = () => {
   return (
     <ErrorBoundary FallbackComponent={ErrorPage}>
-      <Global styles={reset} />
+      <Global styles={resetStyles} />
+      <Global styles={commonStyles} />
+      <Global styles={sweetAlertStyles} />
       <Router history={history}>
         <ScrollToTop />
         <Switch>

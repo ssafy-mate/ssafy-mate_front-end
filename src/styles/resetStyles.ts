@@ -1,8 +1,7 @@
+/** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-const reset = css`
-  @import url(//spoqa.github.io/spoqa-han-sans/css/SpoqaHanSansNeo.css);
-
+const resetStyles = css`
   html,
   body,
   div,
@@ -91,7 +90,6 @@ const reset = css`
     font: inherit;
     vertical-align: baseline;
   }
-  /* HTML5 display-role reset for older browsers */
   article,
   aside,
   details,
@@ -106,7 +104,6 @@ const reset = css`
     display: block;
   }
   body {
-    font-family: 'Spoqa Han Sans Neo', 'sans-serif';
     line-height: 1;
   }
   ol,
@@ -137,4 +134,4 @@ const reset = css`
   }
 `;
 
-export default reset;
+export default resetStyles;
