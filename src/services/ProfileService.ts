@@ -1,4 +1,6 @@
 import { UserInfoResponse } from '../hooks/useUserInfo';
+import { SignInResponse, updateAuthInfoRequest } from '../types/authTypes';
+import { SignUpResponse } from '../types/signUpTypes';
 import { axiosInstance } from '../utils/axios';
 
 export interface getProfileInfoRequest {
@@ -6,12 +8,49 @@ export interface getProfileInfoRequest {
   userId: number;
 }
 
+interface EditProfileInfoRequest {
+  data: FormData;
+  token: string;
+  userId: number;
+  profileInfo: string;
+}
 class ProfileService {
   public static async getProfileInfo(
     data: getProfileInfoRequest,
   ): Promise<UserInfoResponse> {
     const response = await axiosInstance.get<UserInfoResponse>(
-      `/api/auth/user/info/${data.userId}`,
+      `/api/auth/users/${data.userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${data.token}`,
+        },
+      },
+    );
+
+    return response.data;
+  }
+
+  public static async editProfileInfo(
+    data: EditProfileInfoRequest,
+  ): Promise<SignUpResponse> {
+    const response = await axiosInstance.put<SignUpResponse>(
+      `/api/auth/users/${data.userId}/${data.profileInfo}`,
+      data.data,
+      {
+        headers: {
+          Authorization: `Bearer ${data.token}`,
+        },
+      },
+    );
+
+    return response.data;
+  }
+
+  public static async updateAuthInfo(
+    data: updateAuthInfoRequest,
+  ): Promise<SignInResponse> {
+    const response = await axiosInstance.get<SignInResponse>(
+      `/api/auth/users/${data.userId}/my-info`,
       {
         headers: {
           Authorization: `Bearer ${data.token}`,

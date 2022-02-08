@@ -4,7 +4,7 @@ import { SsafyMateMemberList } from '../database/signIn';
 
 export const signInHandlers = [
   rest.post(
-    'http://i6a402.p.ssafy.io:8081/api/user/sign-in',
+    'http://i6a402.p.ssafy.io:8081/api/users/sign-in',
     async (request: any, response, context) => {
       const data: SignInRequestType = request.body;
       const { userEmail } = data;

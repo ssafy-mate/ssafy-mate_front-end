@@ -10,7 +10,7 @@ import {
 class AuthService {
   public static async getSsafyAuth(data: SsafyAuth): Promise<SignUpResponse> {
     const response = await axiosInstance.get<SignUpResponse>(
-      '/api/user/sign-up/verification/ssafy',
+      '/api/users/sign-up/verification/ssafy',
       {
         params: data,
       },
@@ -23,7 +23,7 @@ class AuthService {
     data: EmailVerificationCodeRequest,
   ): Promise<SignUpResponse> {
     const response = await axiosInstance.get<SignUpResponse>(
-      '/api/user/sign-up/verification/email',
+      '/api/users/sign-up/verification/email',
       {
         params: data,
       },
@@ -36,7 +36,7 @@ class AuthService {
     data: EmailVerificationCodeConfirmRequest,
   ): Promise<{ success: boolean }> {
     const response = await axiosInstance.put<{ success: boolean }>(
-      '/api/user/sign-up/verification/email',
+      '/api/users/sign-up/verification/email',
       data,
     );
 
@@ -45,7 +45,7 @@ class AuthService {
 
   public static async signUp(data: FormData): Promise<SignUpResponse> {
     const response = await axiosInstance.post<SignUpResponse>(
-      '/api/user',
+      '/api/users',
       data,
     );
 
