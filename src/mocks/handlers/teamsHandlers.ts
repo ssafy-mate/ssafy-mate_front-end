@@ -1,4 +1,4 @@
-import { rest } from 'msw';
+import { response, rest } from 'msw';
 
 import { teamListData, teamDataListData, teamEditData } from '../database/team';
 
@@ -204,7 +204,7 @@ export const teamsHandlers = [
     async (request, response, context) => {
       const { teamId } = request.params;
       const token = request.headers['_headers'].authorization.split(' ')[1];
-      const status: number = 500;
+      const status: number = 200;
 
       // 로그인이 안 되어 있을 시
       if (token === null) {
@@ -287,6 +287,45 @@ export const teamsHandlers = [
   ),
 
   rest.delete(
+    `${process.env.REACT_APP_SERVER_URL}/api/auth/teams/:teamId`,
+    async (request, repsons, context) => {
+      const { teamId } = request.params;
+      const token = request.headers['_headers'].authorization.split(' ')[1];
+      const status: number = 200;
+
+      // 팀 삭제 권한이 없을 시
+      if (token === null) {
+        return response(
+          context.status(403),
+          context.json({
+            status: 403,
+            success: false,
+            message: '팀을 삭제할 수 있는 권한이 없습니다.',
+          }),
+        );
+      }
+
+      // 서버 오류 시
+      if (status === 500) {
+        return response(
+          context.status(500),
+          context.json({
+            status: 500,
+            success: false,
+            message: 'Internal Server, 팀 삭제 처리 실패',
+          }),
+        );
+      }
+
+      return response(
+        context.json({
+          message: '새로운 팀에 지원해보세요.',
+        }),
+      );
+    },
+  ),
+
+  rest.delete(
     `${process.env.REACT_APP_SERVER_URL}/api/auth/teams/:teamId/leave`,
     async (request, response, context) => {
       const { teamId } = request.params;
@@ -331,8 +370,7 @@ export const teamsHandlers = [
 
       return response(
         context.json({
-          success: true,
-          message: '탈퇴 처리가 완료되었습니다.',
+          message: '새로운 팀을 다시 지원해보세요.',
         }),
       );
     },
