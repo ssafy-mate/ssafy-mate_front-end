@@ -10,68 +10,23 @@ import {
   getProfileInfoRequest,
   SignInResponse,
 } from '../../types/authTypes';
-import {
-  UserData,
-  UserInfoResponse,
-  UserProject,
-  UserTechStack,
-} from '../../hooks/useUserInfo';
+import { UserData, UserInfoResponse } from '../../hooks/useUserInfo';
 
 import ProfileService, {
   EditProfileProjectsRequest,
 } from '../../services/ProfileService';
 
 export interface ProfileState {
-  userId: number | null;
-  userName: string | null;
-  userEmail: string | null;
-  profileImgUrl: string | null;
-  campus: string | null;
-  ssafyTrack: string | null;
-  selfIntroduction: string | null;
-  job1: string | null;
-  job2: string | null;
-  projects: UserProject[] | null;
-  techStacks: UserTechStack[] | null;
-  githubUrl: string | null;
-  etcUrl: string | null;
+  info: UserData | null;
   loading: boolean | null;
   error: string | null;
 }
 
 export const profileInitialState: ProfileState = {
-  userId: null,
-  userName: null,
-  userEmail: null,
-  profileImgUrl: null,
-  campus: null,
-  ssafyTrack: null,
-  selfIntroduction: null,
-  job1: null,
-  job2: null,
-  projects: null,
-  techStacks: null,
-  githubUrl: null,
-  etcUrl: null,
+  info: null,
   loading: false,
   error: null,
 };
-
-export interface ProfileStateResponse {
-  userId: number;
-  userName: string;
-  userEmail: string;
-  profileImgUrl: string | null;
-  campus: string;
-  ssafyTrack: string;
-  selfIntroduction: string;
-  job1: string;
-  job2: string | null;
-  projects: UserProject[];
-  techStacks: UserTechStack[];
-  githubUrl: string | null;
-  etcUrl: string | null;
-}
 
 const prefix = 'ssafy-mate/profile';
 
@@ -92,20 +47,7 @@ const profile = handleActions<ProfileState, UserData>(
       error: null,
     }),
     UPDATE_PROFILE: (state, action) => ({
-      ...state,
-      userId: action.payload.userId,
-      userName: action.payload.userName,
-      userEmail: action.payload.userEmail,
-      profileImgUrl: action.payload.profileImgUrl,
-      campus: action.payload.campus,
-      ssafyTrack: action.payload.ssafyTrack,
-      selfIntroduction: action.payload.selfIntroduction,
-      job1: action.payload.job1,
-      job2: action.payload.job2,
-      projects: action.payload.projects,
-      techStacks: action.payload.techStacks,
-      githubUrl: action.payload.githubUrl,
-      etcUrl: action.payload.etcUrl,
+      info: action.payload,
       loading: true,
       error: null,
     }),
@@ -133,6 +75,7 @@ export const { updateProfileInfo, editProfileInfo, editProfileProjectsInfo } =
       prefix,
     },
   );
+
 function* editUserProjectSaga(action: Action<EditProfileProjectsRequest>) {
   try {
     yield put(pending());
@@ -159,13 +102,23 @@ function* editUserProjectSaga(action: Action<EditProfileProjectsRequest>) {
   } catch (error: any) {
     yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
 
-    yield put(
-      showSsafyMateAlert({
-        show: true,
-        text: error.response.data.message,
-        type: 'warning',
-      }),
-    );
+    if (error.reponse.data.status === 500) {
+      yield put(
+        showSsafyMateAlert({
+          show: true,
+          text: error.response.data.message,
+          type: 'error',
+        }),
+      );
+    } else {
+      yield put(
+        showSsafyMateAlert({
+          show: true,
+          text: error.response.data.message,
+          type: 'warning',
+        }),
+      );
+    }
   } finally {
     const token: string = yield select((state) => state.auth.token);
     const userId: number = yield select((state) => state.auth.userId);
@@ -216,13 +169,23 @@ function* editUserInfoSaga(action: Action<EditProfileInfoRequest>) {
   } catch (error: any) {
     yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
 
-    yield put(
-      showSsafyMateAlert({
-        show: true,
-        text: error.response.data.message,
-        type: 'warning',
-      }),
-    );
+    if (error.reponse.data.status === 500) {
+      yield put(
+        showSsafyMateAlert({
+          show: true,
+          text: error.response.data.message,
+          type: 'error',
+        }),
+      );
+    } else {
+      yield put(
+        showSsafyMateAlert({
+          show: true,
+          text: error.response.data.message,
+          type: 'warning',
+        }),
+      );
+    }
   } finally {
     const token: string = yield select((state) => state.auth.token);
     const userId: number = yield select((state) => state.auth.userId);
@@ -267,13 +230,23 @@ function* updateUserInfoSaga(action: Action<getProfileInfoRequest>) {
   } catch (error: any) {
     yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
 
-    yield put(
-      showSsafyMateAlert({
-        show: true,
-        text: error.response.data.message,
-        type: 'warning',
-      }),
-    );
+    if (error.reponse.data.status === 500) {
+      yield put(
+        showSsafyMateAlert({
+          show: true,
+          text: error.response.data.message,
+          type: 'error',
+        }),
+      );
+    } else {
+      yield put(
+        showSsafyMateAlert({
+          show: true,
+          text: error.response.data.message,
+          type: 'warning',
+        }),
+      );
+    }
   }
 }
 

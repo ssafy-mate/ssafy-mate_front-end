@@ -1,11 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import { useDispatch } from 'react-redux';
-import { showSsafyMateAlert } from '../../redux/modules/alert';
+import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
 import {
-  editProfileInfo,
-  editProfileProjectsInfo,
+  editProfileInfo as editProfileInfoSagaStart,
+  editProfileProjectsInfo as editProfileProjectsInfoStart,
 } from '../../redux/modules/profile';
+
+import history from '../../history';
 
 import styled from '@emotion/styled';
 import CheckIcon from '@mui/icons-material/Check';
@@ -69,14 +71,24 @@ const SsafyMateInformation: React.FC = () => {
     alertType: Severity,
   ) => {
     dispatch(
-      showSsafyMateAlert({
+      showSsafyMateAlertSagaStart({
         show: alertShow,
         text: alertText,
         type: alertType,
       }),
     );
   };
-
+  useEffect(() => {
+    if (profileInfo === null) {
+      history.push('/');
+    } else {
+      setSelfIntroductionValue(profileInfo.selfIntroduction);
+      setNewJob1(profileInfo.job1);
+      setNewJob2(profileInfo.job2);
+      setNewGitHubUrl(profileInfo.githubUrl);
+      setNewEtcUrl(profileInfo.etcUrl);
+    }
+  }, []);
   const [selfIntroductionDisabled, setSelfIntroductionDisabled] =
     useState<boolean>(true);
   const [selfIntroductionValue, setSelfIntroductionValue] =
@@ -86,14 +98,14 @@ const SsafyMateInformation: React.FC = () => {
     setSelfIntroductionModifyButtonText,
   ] = useState<string>('수정');
   const [newJob1, setNewJob1] = useState<string>('');
-  const [newJob2, setNewJob2] = useState<string>('');
+  const [newJob2, setNewJob2] = useState<string | null>('');
   const [newJobsDisabled, setNewJobsDisabled] = useState<boolean>(true);
   const [newJobsModifyButtonText, setNewJobsModifyButtonText] =
     useState<string>('수정');
-  const [oldcommonProject, setOldCommonProject] = useState<string>('');
-  const [commonProject, setCommonProject] = useState<string>('');
-  const [oldspecialProject, setOldSpecialProject] = useState<string>('');
-  const [specialProject, setSpecialProject] = useState<string>('');
+  const [oldcommonProject, setOldCommonProject] = useState<string | null>('');
+  const [commonProject, setCommonProject] = useState<string | null>('');
+  const [oldspecialProject, setOldSpecialProject] = useState<string | null>('');
+  const [specialProject, setSpecialProject] = useState<string | null>('');
   const [newProjectsDisabled, setNewProjectsDisabled] = useState<boolean>(true);
   const [projectsModifyButtonText, newProjectsModifyButtonText] =
     useState<string>('수정');
@@ -103,8 +115,8 @@ const SsafyMateInformation: React.FC = () => {
   const [specialProjectListData, setSpecialProjectListData] = useState<
     ProjectTrack[]
   >([]);
-  const [newGitHubUrl, setNewGitHubUrl] = useState<string>('');
-  const [newEtcUrl, setNewEtcUrl] = useState<string>('');
+  const [newGitHubUrl, setNewGitHubUrl] = useState<string | null>('');
+  const [newEtcUrl, setNewEtcUrl] = useState<string | null>('');
   const [urlsModifyButtonText, setUrlsModifyButtonText] =
     useState<string>('수정');
   const [newUrlsDisabled, setUrlsDisabled] = useState<boolean>(true);
@@ -118,15 +130,6 @@ const SsafyMateInformation: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (profileInfo.selfIntroduction !== null) {
-      setSelfIntroductionValue(profileInfo.selfIntroduction);
-    }
-    if (profileInfo.job1 !== null) {
-      setNewJob1(profileInfo.job1);
-    }
-    if (profileInfo.job2 !== null) {
-      setNewJob2(profileInfo.job2);
-    }
     if (projectListData[0].projectTracks !== undefined) {
       setCommonProjectListData(projectListData[0].projectTracks);
     }
@@ -135,35 +138,20 @@ const SsafyMateInformation: React.FC = () => {
       setSpecialProjectListData(projectListData[1].projectTracks);
     }
 
-    if (profileInfo.projects !== null) {
-      if (profileInfo.projects[0].projectTrack !== null) {
-        setCommonProject(profileInfo.projects[0].projectTrack);
-        setOldCommonProject(profileInfo.projects[0].projectTrack);
-      }
-      if (profileInfo.projects[1].projectTrack !== null) {
-        setSpecialProject(profileInfo.projects[1].projectTrack);
-        setOldSpecialProject(profileInfo.projects[1].projectTrack);
-      }
+    if (profileInfo?.projects[0].projectTrack !== undefined) {
+      setCommonProject(profileInfo?.projects[0].projectTrack);
+      setOldCommonProject(profileInfo?.projects[0].projectTrack);
     }
-    if (profileInfo.githubUrl !== null) {
-      setNewGitHubUrl(profileInfo.githubUrl);
+
+    if (profileInfo?.projects[1].projectTrack !== undefined) {
+      setSpecialProject(profileInfo?.projects[1].projectTrack);
+      setOldSpecialProject(profileInfo?.projects[1].projectTrack);
     }
-    if (profileInfo.etcUrl !== null) {
-      setNewEtcUrl(profileInfo.etcUrl);
-    }
-  }, [
-    profileInfo.etcUrl,
-    profileInfo.githubUrl,
-    profileInfo.job1,
-    profileInfo.job2,
-    profileInfo.projects,
-    profileInfo.selfIntroduction,
-    profileInfo.techStacks,
-  ]);
+  }, []);
 
   const updateProfileAndAuth = useCallback(
     (requestData: EditProfileInfoRequest) => {
-      dispatch(editProfileInfo(requestData));
+      dispatch(editProfileInfoSagaStart(requestData));
     },
     [dispatch],
   );
@@ -220,7 +208,9 @@ const SsafyMateInformation: React.FC = () => {
   const EditJobs = () => {
     const EditJobsFormDate = new FormData();
     EditJobsFormDate.append('job1', newJob1);
-    EditJobsFormDate.append('job2', newJob2);
+    if (newJob2 !== null) {
+      EditJobsFormDate.append('job2', newJob2);
+    }
 
     return EditJobsFormDate;
   };
@@ -260,15 +250,19 @@ const SsafyMateInformation: React.FC = () => {
   const EditUrls = () => {
     const EditUrlsFormDate = new FormData();
 
-    EditUrlsFormDate.append('githubUrl', newGitHubUrl);
-    EditUrlsFormDate.append('etcUrl', newEtcUrl);
+    if (newGitHubUrl !== null) {
+      EditUrlsFormDate.append('githubUrl', newGitHubUrl);
+    }
+    if (newEtcUrl !== null) {
+      EditUrlsFormDate.append('etcUrl', newEtcUrl);
+    }
 
     return EditUrlsFormDate;
   };
 
   const updateProfileProjectAndAuth = useCallback(
     (requestData: EditProfileProjectsRequest) => {
-      dispatch(editProfileProjectsInfo(requestData));
+      dispatch(editProfileProjectsInfoStart(requestData));
     },
     [dispatch],
   );
@@ -393,7 +387,7 @@ const SsafyMateInformation: React.FC = () => {
         }
         break;
       case 'jobs':
-        if (profileInfo?.job1 !== newJob1 || profileInfo.job2 !== newJob2) {
+        if (profileInfo?.job1 !== newJob1 || profileInfo?.job2 !== newJob2) {
           const RequestFormData: FormData = EditJobs();
 
           if (token !== null && userId !== undefined && userId !== null) {
@@ -442,8 +436,8 @@ const SsafyMateInformation: React.FC = () => {
         break;
       case 'urls':
         if (
-          profileInfo.githubUrl !== newGitHubUrl ||
-          profileInfo.etcUrl !== newEtcUrl
+          profileInfo?.githubUrl !== newGitHubUrl ||
+          profileInfo?.etcUrl !== newEtcUrl
         ) {
           const RequestFormData: FormData = EditUrls();
 
@@ -510,7 +504,7 @@ const SsafyMateInformation: React.FC = () => {
               <InformationLabel htmlFor="job2">희망 직무2</InformationLabel>
               <Select
                 id="job2"
-                value={newJob2}
+                value={newJob2 !== null ? newJob2 : 'default'}
                 name="job2"
                 onChange={handleJobsSelect}
                 disabled={newJobsDisabled}
@@ -541,7 +535,7 @@ const SsafyMateInformation: React.FC = () => {
               <Select
                 id="common-project"
                 name="common-project"
-                value={commonProject}
+                value={commonProject !== null ? commonProject : 'default'}
                 onChange={handleProjectSelect}
                 disabled={newProjectsDisabled}
               >
@@ -561,7 +555,7 @@ const SsafyMateInformation: React.FC = () => {
               <Select
                 id="special-project"
                 name="special-project"
-                value={specialProject}
+                value={specialProject !== null ? specialProject : 'default'}
                 onChange={handleProjectSelect}
                 disabled={newProjectsDisabled}
               >
@@ -666,7 +660,7 @@ const SsafyMateInformation: React.FC = () => {
                 pattern="https://.*"
                 disabled={newUrlsDisabled}
                 onChange={handleUrlsInput}
-                value={newGitHubUrl}
+                value={newGitHubUrl !== null ? newGitHubUrl : ''}
               />
             </SingleInformationWrapper>
           </Row>
@@ -683,7 +677,7 @@ const SsafyMateInformation: React.FC = () => {
                 pattern="https://.*"
                 disabled={newUrlsDisabled}
                 onChange={handleUrlsInput}
-                value={newEtcUrl}
+                value={newEtcUrl !== null ? newEtcUrl : ''}
               />
             </SingleInformationWrapper>
           </Row>

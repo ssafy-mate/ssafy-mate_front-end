@@ -9,7 +9,7 @@ import { SignUpResponse } from '../types/signUpTypes';
 import { axiosInstance } from '../utils/axios';
 export interface project {
   project: string;
-  projectTrack: string;
+  projectTrack: string | null;
 }
 export interface EditProfileProjectsRequest {
   data: project;

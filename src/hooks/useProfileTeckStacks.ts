@@ -11,8 +11,8 @@ export interface convertTechStackWithImg {
 }
 
 const useProfileTechStacks = () => {
-  const profileTechStacks = useSelector<RootState, UserTechStack[] | null>(
-    (state) => state.profile.techStacks,
+  const profileTechStacks = useSelector<RootState, UserTechStack[] | undefined>(
+    (state) => state.profile.info?.techStacks,
   );
   let oldTechStackList: TechStackWithImg[] = [];
   let oldTechStackListWithLevel: TechStacksWithLevel[] = [];

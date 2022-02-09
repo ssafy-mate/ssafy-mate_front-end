@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { editProfileInfo } from '../../redux/modules/profile';
+import { editProfileInfo as editProfileInfoSagaStart } from '../../redux/modules/profile';
 
 import { Link } from 'react-router-dom';
+
+import history from '../../history';
 
 import styled from '@emotion/styled';
 import { Avatar } from '@mui/material';
@@ -14,9 +16,10 @@ import useUserId from '../../hooks/useUserId';
 import useToken from '../../hooks/useToken';
 
 import { EditProfileInfoRequest, RootState } from '../../types/authTypes';
-import { SsafyTrack } from '../../types/signUpTypes';
+import { Severity, SsafyTrack } from '../../types/signUpTypes';
 
 import { campusListData } from '../../data/ssafyData';
+import { showSsafyMateAlert } from '../../redux/modules/alert';
 
 const SsafyInformation: React.FC = () => {
   const dispatch = useDispatch();
@@ -25,12 +28,9 @@ const SsafyInformation: React.FC = () => {
   const userId: number | null = useUserId();
 
   const [profileImg, setProfileImg] = useState(null);
-  const [previewProgileImg, setPreviewProfileImg] = useState<string>('');
+  const [previewProgileImg, setPreviewProfileImg] = useState<string | null>('');
   const studentNumber = useSelector<RootState, string | null>(
     (state) => state.auth.studentNumber,
-  );
-  const ssafyTrack = useSelector<RootState, string | null>(
-    (state) => state.profile.ssafyTrack,
   );
 
   const [newSsafyTrack, setNewSsafyTrack] = useState<string>('');
@@ -38,6 +38,30 @@ const SsafyInformation: React.FC = () => {
   const [ssafyTrackDisabled, setSsafyTrackDisabled] = useState<boolean>(true);
   const [ssafyTrackModifyButtonText, setSsafyTrackModifyButtonText] =
     useState<string>('수정');
+
+  const showAlert = (
+    alertShow: boolean,
+    alertText: string,
+    alertType: Severity,
+  ) => {
+    dispatch(
+      showSsafyMateAlert({
+        show: alertShow,
+        text: alertText,
+        type: alertType,
+      }),
+    );
+  };
+
+  useEffect(() => {
+    if (profileInfo !== null) {
+      setNewSsafyTrack(profileInfo.ssafyTrack);
+      setPreviewProfileImg(profileInfo.profileImgUrl);
+    } else {
+      showAlert(true, '로그인 후 이용해주시기 바랍니다.', 'info');
+      history.push('/');
+    }
+  }, [profileInfo]);
 
   useEffect(() => {
     const selectedCampusIndex = campusListData.findIndex(
@@ -47,15 +71,7 @@ const SsafyInformation: React.FC = () => {
     if (selectedCampusIndex > -1) {
       setSelectedTracks(campusListData[selectedCampusIndex].ssafyTracks);
     }
-
-    if (ssafyTrack !== null) {
-      setNewSsafyTrack(ssafyTrack);
-    }
-
-    if (profileInfo.profileImgUrl !== null) {
-      setPreviewProfileImg(profileInfo.profileImgUrl);
-    }
-  }, [profileInfo.campus, profileInfo.profileImgUrl, ssafyTrack]);
+  }, [profileInfo?.campus]);
 
   useEffect(() => {
     if (profileImg !== null) {
@@ -65,7 +81,7 @@ const SsafyInformation: React.FC = () => {
 
   const updateProfileAndAuth = useCallback(
     (requestData: EditProfileInfoRequest) => {
-      dispatch(editProfileInfo(requestData));
+      dispatch(editProfileInfoSagaStart(requestData));
     },
     [dispatch],
   );
@@ -126,7 +142,7 @@ const SsafyInformation: React.FC = () => {
   const newProfileInfo = (profileInfoSelected: string) => {
     switch (profileInfoSelected) {
       case 'profileImg':
-        if (profileImg !== profileInfo.profileImgUrl) {
+        if (profileImg !== profileInfo?.profileImgUrl) {
           const RequestFormData: FormData = EditProfileImage();
 
           if (token !== null && userId !== undefined && userId !== null) {
@@ -140,7 +156,7 @@ const SsafyInformation: React.FC = () => {
         }
         break;
       case 'ssafyTrack':
-        if (ssafyTrack !== newSsafyTrack) {
+        if (profileInfo?.ssafyTrack !== newSsafyTrack) {
           const RequestFormData: FormData = EditSsafyTrack();
           if (token !== null && userId !== undefined && userId !== null) {
             updateProfileAndAuth({
@@ -160,7 +176,13 @@ const SsafyInformation: React.FC = () => {
       <SsafyInformationWrapper>
         <AvatarWrapperCol>
           <AvatarWrapper>
-            <SsafyMateAvatar src={previewProgileImg} />
+            <SsafyMateAvatar
+              src={
+                previewProgileImg === null
+                  ? '/broken-image.jpg'
+                  : previewProgileImg
+              }
+            />
             <FileInputWrapper>
               <FileInputLabel htmlFor="profile-img">
                 <AddAPhotoIcon />
