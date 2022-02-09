@@ -8,7 +8,7 @@ import AccountEditCard from '../../components/account/AccountEditCard';
 
 const AccountEditPage: React.FC = () => {
   useEffect(() => {
-    document.title = '정보 수정 | 싸피 메이트';
+    document.title = '계정 관리 | 싸피 메이트';
   }, []);
 
   return (

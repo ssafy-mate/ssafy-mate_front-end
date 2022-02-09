@@ -14,7 +14,7 @@ const AccountEditCard: React.FC = () => {
       <Container>
         <Wrapper>
           <CardHeader>
-            <Head>프로필 수정</Head>
+            <Head>계정 관리</Head>
             <AccountEditTaps setAcccountEditTap={setAcccountEditTap} />
             {acccountEditTap === 'ssafyInformation' && <SsafyInformation />}
             {acccountEditTap === 'ssafyMateInformation' && (
