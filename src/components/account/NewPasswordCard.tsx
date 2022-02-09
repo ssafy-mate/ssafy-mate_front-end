@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import { useDispatch } from 'react-redux';
 
-import { showSsafyMateAlert } from '../../redux/modules/alert';
+import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
 
 import styled from '@emotion/styled';
 
@@ -89,7 +89,7 @@ const NewPasswordCard: React.FC = () => {
     alertType: Severity,
   ) => {
     dispatch(
-      showSsafyMateAlert({
+      showSsafyMateAlertSagaStart({
         show: alertShow,
         text: alertText,
         type: alertType,
@@ -162,7 +162,7 @@ const NewPasswordCard: React.FC = () => {
               showAlert(true, message, 'warning');
               break;
             case 500:
-              showAlert(true, message, 'warning');
+              showAlert(true, message, 'error');
               break;
           }
         }
@@ -241,7 +241,7 @@ const NewPasswordCard: React.FC = () => {
               setInputError(message);
               break;
             case 500:
-              showAlert(true, message, 'warning');
+              showAlert(true, message, 'error');
               break;
           }
         }

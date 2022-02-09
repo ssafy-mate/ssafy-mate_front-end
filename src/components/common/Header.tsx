@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../redux/modules/auth';
+import { logout as logoutSagaStart } from '../../redux/modules/auth';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -32,7 +32,7 @@ import useUserId from '../../hooks/useUserId';
 import SsafyMateAlert from './Alert';
 import MenuBar from './MenuBar';
 
-import { updateProfileInfo } from '../../redux/modules/profile';
+import { updateProfileInfo as updateProfileInfoSagaStart } from '../../redux/modules/profile';
 import getProfileInfoRequest from '../../services/ProfileService';
 
 interface MenuListProps {
@@ -93,7 +93,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
   }, [accountBoxOpen, isMobile]);
 
   const handleClickLogoutButton = () => {
-    dispatch(logout());
+    dispatch(logoutSagaStart());
   };
 
   const handleExpandMenu = () => {
@@ -126,7 +126,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
 
   const update = useCallback(
     (requestData: getProfileInfoRequest) => {
-      dispatch(updateProfileInfo(requestData));
+      dispatch(updateProfileInfoSagaStart(requestData));
     },
     [dispatch],
   );

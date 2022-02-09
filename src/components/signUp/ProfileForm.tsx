@@ -30,7 +30,7 @@ import AuthService from '../../services/AuthService';
 import useTechStackList from '../../hooks/useTechStackList';
 import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
 import { useDispatch } from 'react-redux';
-import { showSsafyMateAlert } from '../../redux/modules/alert';
+import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
 
 const ProfileForm: React.FC<ProfileProps> = ({
   campus,
@@ -85,12 +85,19 @@ const ProfileForm: React.FC<ProfileProps> = ({
 
   const signUpFormData = new FormData();
 
-  const showAlert = (type: Severity, message: string) => {
-    setAlertSeverity(type);
-    setAlertText(message);
-    setAlertOpen(true);
+  const showAlert = (
+    alertShow: boolean,
+    alertText: string,
+    alertType: Severity,
+  ) => {
+    dispatch(
+      showSsafyMateAlertSagaStart({
+        show: alertShow,
+        text: alertText,
+        type: alertType,
+      }),
+    );
   };
-
   const alertClose = () => {
     setAlertOpen(false);
   };
@@ -305,14 +312,8 @@ const ProfileForm: React.FC<ProfileProps> = ({
 
     if (validation()) {
       AuthService.signUp(data)
-        .then(({ status, message }) => {
-          dispatch(
-            showSsafyMateAlert({
-              show: true,
-              text: message,
-              type: 'success',
-            }),
-          );
+        .then(({ message }) => {
+          showAlert(true, message, 'warning');
 
           history.push('/users/sign_in');
         })
@@ -322,10 +323,10 @@ const ProfileForm: React.FC<ProfileProps> = ({
 
             switch (status) {
               case 400:
-                showAlert('warning', message);
+                showAlert(true, message, 'warning');
                 break;
               case 500:
-                showAlert('error', message);
+                showAlert(true, message, 'error');
                 break;
             }
           }

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
-import { showSsafyMateAlert } from '../../redux/modules/alert';
+import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
 
 import styled from '@emotion/styled';
 
@@ -11,6 +11,7 @@ import {
   onlyKoreanReg,
   onlyNumberReg,
 } from '../../utils/regularExpressionData';
+import { Severity } from '../../types/signUpTypes';
 
 import FindIdService from '../../services/FindIdService';
 
@@ -24,6 +25,20 @@ const FindUserIdCard: React.FC = () => {
   const [findIdSuccessText, setFindIdSuccessText] = useState<string | null>('');
 
   const dispatch = useDispatch();
+
+  const showAlert = (
+    alertShow: boolean,
+    alertText: string,
+    alertType: Severity,
+  ) => {
+    dispatch(
+      showSsafyMateAlertSagaStart({
+        show: alertShow,
+        text: alertText,
+        type: alertType,
+      }),
+    );
+  };
 
   const onCheckEnter = (event: React.KeyboardEvent) => {
     if (event.code === 'Enter' || event.code === 'NumpadEnter') {
@@ -119,22 +134,10 @@ const FindUserIdCard: React.FC = () => {
 
             switch (status) {
               case 401:
-                dispatch(
-                  showSsafyMateAlert({
-                    show: true,
-                    text: message,
-                    type: 'warning',
-                  }),
-                );
+                showAlert(true, message, 'warning');
                 break;
               case 500:
-                dispatch(
-                  showSsafyMateAlert({
-                    show: true,
-                    text: message,
-                    type: 'warning',
-                  }),
-                );
+                showAlert(true, message, 'error');
                 break;
             }
           }

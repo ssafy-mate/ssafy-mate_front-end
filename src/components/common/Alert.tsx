@@ -7,7 +7,7 @@ import { alertState } from '../../types/alertTypes';
 import { useDispatch } from 'react-redux';
 import {
   alertInitialState,
-  showSsafyMateAlert,
+  showSsafyMateAlert as showSsafyMateAlertSagaStart,
 } from '../../redux/modules/alert';
 
 const SsafyMateAlert: React.FC<alertState> = ({ show, text, type }) => {
@@ -20,7 +20,7 @@ const SsafyMateAlert: React.FC<alertState> = ({ show, text, type }) => {
 
   const alertClose = () => {
     setAlertOpen(false);
-    dispatch(showSsafyMateAlert(alertInitialState));
+    dispatch(showSsafyMateAlertSagaStart(alertInitialState));
   };
 
   return (
