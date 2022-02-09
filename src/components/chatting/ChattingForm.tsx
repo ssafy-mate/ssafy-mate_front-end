@@ -7,7 +7,7 @@ import useSWRInfinite from 'swr/infinite';
 import axios from 'axios';
 
 import { axiosInstance } from '../../utils/axios';
-import { fetcherGet, fetcherGetWithParams } from '../../utils/fetcher';
+import { fetcherGet } from '../../utils/fetcher';
 import useSocket from '../../hooks/useSocket';
 import useToken from '../../hooks/useToken';
 import useTextArea from '../../hooks/useTextArea';
@@ -34,7 +34,7 @@ const socketUrl = 'http://localhost:3095';
 const PAGE_SIZE = 20;
 
 const ChattingForm: React.FC = () => {
-  const userToken = useToken(); // 유저 토큰
+  const myToken = useToken(); // 유저 토큰
 
   const location = useLocation();
   const param = new URLSearchParams(location.search);
@@ -57,7 +57,11 @@ const ChattingForm: React.FC = () => {
     data: roomData,
     error: roomError,
     mutate: mutateRoom,
-  } = useSWR<ChatRoomType[]>(`/api/chats/rooms/${myId}`, fetcherGet);
+  } = useSWR<ChatRoomType[]>(
+    `/api/chats/rooms/${myId}`,
+    (url) => fetcherGet(url, myToken),
+    {},
+  );
 
   // #######
   // 토큰이 없는 상태에서 접근하면 error 페이지로, teamInfoPage 확인
@@ -80,20 +84,25 @@ const ChattingForm: React.FC = () => {
     return `api/chats/logs/${roomId}?nextCursor=${previousPageData.nextCursor}`;
   };
 
-  // 대화 내역 불러오기 - 인피니티 스크롤용
+  // 대화 내역 불러오기
   const {
     data: chatData,
     mutate: mutateChat,
+    isValidating,
     setSize,
-  } = useSWRInfinite<ChatLogResponseType>(getKey, fetcherGet, {
-    onSuccess(data) {
-      if (data?.length === 1) {
-        setTimeout(() => {
-          scrollbarRef.current?.scrollToBottom();
-        }, 100);
-      }
+  } = useSWRInfinite<ChatLogResponseType>(
+    getKey,
+    (url) => fetcherGet(url, myToken),
+    {
+      onSuccess(data) {
+        if (data?.length === 1) {
+          setTimeout(() => {
+            scrollbarRef.current?.scrollToBottom();
+          }, 100);
+        }
+      },
     },
-  });
+  );
 
   const onSubmit = useCallback(
     (event) => {
@@ -113,7 +122,6 @@ const ChattingForm: React.FC = () => {
           prevChatData?.[0].contentList.unshift(params);
           return prevChatData;
         }, false).then(() => {
-          console.log(`onSubmit 후 chatData ${JSON.stringify(chatData?.[0])}`);
           setChat('');
           customChatList();
           if (scrollbarRef.current) scrollbarRef.current.scrollToBottom();
@@ -187,6 +195,7 @@ const ChattingForm: React.FC = () => {
   const onScroll = useCallback(
     (values) => {
       // 가장 위로 올라갔을 때, 다음 페이지 불러오도록 setSize호출
+      // console.log(values.scrollTop);
       if (values.scrollTop === 0 && !isReachingEnd && !isEmpty) {
         setSize((size) => size + 1).then(() => {
           // 스크롤 위치 유지 : 현재 스크롤 높이 - 스크롤바의 높이
