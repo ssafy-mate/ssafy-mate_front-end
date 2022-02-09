@@ -10,7 +10,7 @@ import SignUpForm from './SignUpForm';
 import ProfileForm from './ProfileForm';
 
 const SignUpCard: React.FC = () => {
-  const [signUpStep, setSignUpStep] = useState<number>(2);
+  const [signUpStep, setSignUpStep] = useState<number>(0);
   const [campus, setCampus] = useState<string>('');
   const [ssafyTrack, setSsafyTrack] = useState<string>('');
   const [studentNumber, setStudentNumber] = useState<string>('');
