@@ -25,6 +25,7 @@ import PersistReducerService from '../../services/PersistReducerService';
 import TeamService from '../../services/TeamService';
 
 import { showSsafyMateAlert } from './alert';
+import { profileInitialState, updateProfile } from './profile';
 
 interface SendApplicationResponseType {
   success: boolean;
@@ -70,15 +71,17 @@ const initialState: AuthState = {
 
 const prefix = 'ssafy-mate/auth';
 
-export const { pending, success, updateProjects, fail } = createActions(
-  'PENDING',
-  'SUCCESS',
-  'UPDATE_PROJECTS',
-  'FAIL',
-  {
-    prefix,
-  },
-);
+export const { pending, success, updateProjects, updateAuth, fail } =
+  createActions(
+    'PENDING',
+    'SUCCESS',
+    'UPDATE_PROJECTS',
+    'UPDATE_AUTH',
+    'FAIL',
+    {
+      prefix,
+    },
+  );
 
 const reducer = handleActions<AuthState, SignInResponse, ProjectsState>(
   {
@@ -105,6 +108,18 @@ const reducer = handleActions<AuthState, SignInResponse, ProjectsState>(
       projects: action.payload.projects,
       loading: false,
       message: action.payload.message,
+      error: null,
+    }),
+    UPDATE_AUTH: (state, action) => ({
+      ...state,
+      userId: action.payload.userId,
+      userName: action.payload.userName,
+      userEmail: action.payload.userEmail,
+      studentNumber: action.payload.studentNumber,
+      campus: action.payload.campus,
+      ssafyTrack: action.payload.ssafyTrack,
+      projects: action.payload.projects,
+      loading: false,
       error: null,
     }),
     FAIL: (state, action: any) => ({
@@ -203,6 +218,7 @@ function* logoutSaga() {
     PersistReducerService.remove();
 
     yield put(success(initialState));
+    yield put(updateProfile(profileInitialState));
 
     if (history.location.pathname === '/') {
       yield put(go(0));

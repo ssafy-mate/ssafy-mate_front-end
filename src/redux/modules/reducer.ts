@@ -9,11 +9,14 @@ import history from '../../history';
 import auth from './auth';
 import myTeam from './myTeam';
 import controlAlert from './alert';
+import profile from './profile';
+
+
 
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth'],
+  whitelist: ['auth', 'profile'],
   blacklist: ['router'],
 };
 
@@ -21,6 +24,7 @@ const reducer = combineReducers({
   auth,
   myTeam,
   controlAlert,
+  profile,
   router: connectRouter(history),
 });
 

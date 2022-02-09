@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
 
 import { useDispatch } from 'react-redux';
-
-import { showSsafyMateAlert } from '../../redux/modules/alert';
+import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
 
 import styled from '@emotion/styled';
-
 import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
 
 import {
@@ -14,13 +12,14 @@ import {
   verificationCodeReg,
 } from '../../utils/regularExpressionData';
 
+import { Severity } from '../../types/signUpTypes';
+
 import history from '../../history';
 
 import NewPasswordService from '../../services/NewPasswordService';
 
-import Loading from '../common/Loading';
 import NewPassWordCardSubHead from './NewPassWordCardSubHead';
-import { Severity } from '../../types/signUpTypes';
+import Loading from '../common/Loading';
 
 const NewPasswordCard: React.FC = () => {
   const [loadingColor, setLoadingColor] = useState<string>('#3396f4');
@@ -89,7 +88,7 @@ const NewPasswordCard: React.FC = () => {
     alertType: Severity,
   ) => {
     dispatch(
-      showSsafyMateAlert({
+      showSsafyMateAlertSagaStart({
         show: alertShow,
         text: alertText,
         type: alertType,
@@ -162,7 +161,7 @@ const NewPasswordCard: React.FC = () => {
               showAlert(true, message, 'warning');
               break;
             case 500:
-              showAlert(true, message, 'warning');
+              showAlert(true, message, 'error');
               break;
           }
         }
@@ -241,7 +240,7 @@ const NewPasswordCard: React.FC = () => {
               setInputError(message);
               break;
             case 500:
-              showAlert(true, message, 'warning');
+              showAlert(true, message, 'error');
               break;
           }
         }

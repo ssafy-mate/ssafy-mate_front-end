@@ -1,11 +1,11 @@
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 
 import { Link } from 'react-router-dom';
 
 import { useMediaQuery } from 'react-responsive';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../redux/modules/auth';
+import { logout as logoutSagaStart } from '../../redux/modules/auth';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -33,6 +33,9 @@ import useUserId from '../../hooks/useUserId';
 
 import SsafyMateAlert from './Alert';
 import MenuBar from './MenuBar';
+
+import { updateProfileInfo as updateProfileInfoSagaStart } from '../../redux/modules/profile';
+import getProfileInfoRequest from '../../services/ProfileService';
 
 interface MenuListProps {
   isExpanded: boolean;
@@ -92,7 +95,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
   }, [accountBoxOpen, isMobile]);
 
   const handleClickLogoutButton = () => {
-    dispatch(logout());
+    dispatch(logoutSagaStart());
   };
 
   const handleExpandMenu = () => {
@@ -120,6 +123,19 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
       setAccountBoxOpen(false);
     } else if (event.key === 'Escape') {
       setAccountBoxOpen(false);
+    }
+  };
+
+  const update = useCallback(
+    (requestData: getProfileInfoRequest) => {
+      dispatch(updateProfileInfoSagaStart(requestData));
+    },
+    [dispatch],
+  );
+
+  const handleUserAccountEdit = (evevt: React.MouseEvent) => {
+    if (token !== null && userId !== null) {
+      update({ token: token, userId: userId });
     }
   };
 
@@ -214,7 +230,10 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
                           onKeyDown={handleListKeyDown}
                         >
                           <AccountBoxItem>
-                            <Link to={`/users/${userId}/account`}>
+                            <Link
+                              to={`/users/account/edit`}
+                              onClick={handleUserAccountEdit}
+                            >
                               계정 관리
                             </Link>
                           </AccountBoxItem>
@@ -245,6 +264,13 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
           ) : (
             <>
               <AccountMenuItem>
+
+                <PageLink
+                  to={`/users/account/edit`}
+                  onClick={handleUserAccountEdit}
+                >
+                  계정 관리
+                </PageLink>
                 <PageLink to={`/users/${userId}`}>내 프로필</PageLink>
               </AccountMenuItem>
               <AccountMenuItem>

@@ -3,7 +3,7 @@ import { alertState } from '../../types/alertTypes';
 
 export const alertInitialState: alertState = {
   show: false,
-  text: null,
+  text: '',
   type: 'info',
 };
 

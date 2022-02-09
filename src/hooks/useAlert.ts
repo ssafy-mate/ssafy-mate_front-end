@@ -1,6 +1,6 @@
 import { Severity } from './../types/signUpTypes';
 import { useDispatch } from 'react-redux';
-import { showSsafyMateAlert } from '../redux/modules/alert';
+import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../redux/modules/alert';
 
 //사용법 : userAlert(보일지말지,문구,색);
 const useAlert = (
@@ -11,7 +11,7 @@ const useAlert = (
   const dispatch = useDispatch();
 
   dispatch(
-    showSsafyMateAlert({
+    showSsafyMateAlertSagaStart({
       show: showAlert,
       text: alertText,
       type: alertType,

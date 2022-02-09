@@ -6,6 +6,6 @@ export const HIDE_ALERT = 'HIDE_ALERT';
 
 export interface alertState {
   show: boolean;
-  text: string | null;
+  text: string;
   type: Severity;
 }

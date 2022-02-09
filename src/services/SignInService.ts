@@ -7,7 +7,7 @@ class SignInService {
     requestData: SignInRequestType,
   ): Promise<SignInResponse> {
     const response = await axiosInstance.post<SignInResponse>(
-      '/api/user/sign-in',
+      '/api/users/sign-in',
       requestData,
     );
 

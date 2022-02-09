@@ -13,21 +13,21 @@ interface UserProjectTeam {
   teamName: string;
 }
 
-interface UserProject {
+export interface UserProject {
   id: number;
   name: string;
   projectTrack: string | null;
   projectTeam: UserProjectTeam | null;
 }
 
-interface UserTechStack {
+export interface UserTechStack {
   id: number;
   techStackName: string;
   techStackImgUrl: string;
   techStackLevel: string;
 }
 
-interface UserData {
+export interface UserData {
   userId: number;
   userName: string;
   userEmail: string;
@@ -43,7 +43,7 @@ interface UserData {
   etcUrl: string | null;
 }
 
-interface UserInfoResponse {
+export interface UserInfoResponse {
   userData: UserData;
 }
 

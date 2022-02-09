@@ -1,6 +1,7 @@
 import { RouterState } from 'connected-react-router';
 
 import { AnyAction, Reducer } from 'redux';
+import { ProfileState } from '../redux/modules/profile';
 
 import { alertState } from './alertTypes';
 import { MyTeamState } from './teamTypes';
@@ -71,6 +72,25 @@ export interface ApplicationRequestType {
 export interface RootState {
   auth: AuthState;
   myTeam: MyTeamState;
-  controlAlert: alertState | string;
+  controlAlert: alertState;
+  profile: ProfileState;
   router: Reducer<RouterState<unknown>, AnyAction>;
 }
+
+export interface updateAuthInfoRequest {
+  userId: number;
+  token: string;
+}
+
+export interface EditProfileInfoRequest {
+  data: FormData;
+  token: string;
+  userId: number;
+  profileInfo: string;
+}
+
+export interface getProfileInfoRequest {
+  token: string;
+  userId: number;
+}
+

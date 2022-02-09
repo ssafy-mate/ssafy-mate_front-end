@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
-import { showSsafyMateAlert } from '../../redux/modules/alert';
+import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
 
 import styled from '@emotion/styled';
 
@@ -11,6 +11,7 @@ import {
   onlyKoreanReg,
   onlyNumberReg,
 } from '../../utils/regularExpressionData';
+import { Severity } from '../../types/signUpTypes';
 
 import FindIdService from '../../services/FindIdService';
 
@@ -21,8 +22,23 @@ const FindUserIdCard: React.FC = () => {
   const [studentNameInput, setStudentNameInput] = useState<string>('');
   const [studentNameError, setStudentNameError] = useState<string>('');
   const [findId, setFindId] = useState<string | null>('');
+  const [findIdSuccessText, setFindIdSuccessText] = useState<string | null>('');
 
   const dispatch = useDispatch();
+
+  const showAlert = (
+    alertShow: boolean,
+    alertText: string,
+    alertType: Severity,
+  ) => {
+    dispatch(
+      showSsafyMateAlertSagaStart({
+        show: alertShow,
+        text: alertText,
+        type: alertType,
+      }),
+    );
+  };
 
   const onCheckEnter = (event: React.KeyboardEvent) => {
     if (event.code === 'Enter' || event.code === 'NumpadEnter') {
@@ -108,6 +124,7 @@ const FindUserIdCard: React.FC = () => {
       })
         .then(({ userEmail, message }) => {
           setFindId(userEmail);
+          setFindIdSuccessText(message);
         })
         .catch((error) => {
           setFindId('');
@@ -117,22 +134,10 @@ const FindUserIdCard: React.FC = () => {
 
             switch (status) {
               case 401:
-                dispatch(
-                  showSsafyMateAlert({
-                    show: true,
-                    text: message,
-                    type: 'warning',
-                  }),
-                );
+                showAlert(true, message, 'warning');
                 break;
               case 500:
-                dispatch(
-                  showSsafyMateAlert({
-                    show: true,
-                    text: message,
-                    type: 'warning',
-                  }),
-                );
+                showAlert(true, message, 'error');
                 break;
             }
           }
@@ -150,9 +155,7 @@ const FindUserIdCard: React.FC = () => {
               <SubHead>회원가입 시 등록한 학번과 이름을 입력해주세요.</SubHead>
             ) : (
               <>
-                <SubHead>
-                  {studentNameInput}님의 싸피메이트 계정을 찾았습니다.
-                </SubHead>
+                <SubHead>{findIdSuccessText}</SubHead>
                 <SubInfo>계정 확인 후 로그인 해주세요.</SubInfo>
               </>
             )}

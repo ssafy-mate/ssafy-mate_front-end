@@ -40,7 +40,6 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
     watch,
     register,
     handleSubmit,
-    reset,
     formState: { errors },
   } = useForm<SsafyAuth>({ mode: 'onChange' });
 
@@ -56,7 +55,6 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
 
   const alertClose = () => {
     setAlertOpen(false);
-    reset();
   };
 
   useEffect(() => {

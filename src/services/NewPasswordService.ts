@@ -12,7 +12,7 @@ class NewPasswordService {
     data: emailForNewPassword,
   ): Promise<newPasswordResponse> {
     const response = await axiosInstance.get<newPasswordResponse>(
-      '/api/user/pw-search',
+      '/api/users/password/new',
       {
         params: data,
       },
@@ -25,7 +25,7 @@ class NewPasswordService {
     data: CodeConfirmForNewPassword,
   ): Promise<newPasswordResponse> {
     const response = await axiosInstance.post<newPasswordResponse>(
-      '/api/user/pw-search',
+      '/api/users/password/new',
       data,
     );
 
@@ -36,7 +36,7 @@ class NewPasswordService {
     data: NewPassword,
   ): Promise<newPasswordResponse> {
     const response = await axiosInstance.put<newPasswordResponse>(
-      '/api/user/pw-search',
+      '/api/users/password/new',
       data,
     );
 
