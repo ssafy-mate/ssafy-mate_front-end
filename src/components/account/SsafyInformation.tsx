@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { editProfileInfo as editProfileInfoSagaStart } from '../../redux/modules/profile';
+import { showSsafyMateAlert } from '../../redux/modules/alert';
 
 import { Link } from 'react-router-dom';
 
@@ -14,25 +15,23 @@ import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import useProfileInfo from '../../hooks/useProfileInfo';
 import useUserId from '../../hooks/useUserId';
 import useToken from '../../hooks/useToken';
+import { UserData } from '../../hooks/useUserInfo';
 
 import { EditProfileInfoRequest, RootState } from '../../types/authTypes';
 import { Severity, SsafyTrack } from '../../types/signUpTypes';
 
 import { campusListData } from '../../data/ssafyData';
-import { showSsafyMateAlert } from '../../redux/modules/alert';
 
 const SsafyInformation: React.FC = () => {
   const dispatch = useDispatch();
-  const profileInfo = useProfileInfo();
+  const profileInfo: UserData | null = useProfileInfo();
   const token: string | null = useToken();
   const userId: number | null = useUserId();
-
   const [profileImg, setProfileImg] = useState(null);
   const [previewProgileImg, setPreviewProfileImg] = useState<string | null>('');
   const studentNumber = useSelector<RootState, string | null>(
     (state) => state.auth.studentNumber,
   );
-
   const [newSsafyTrack, setNewSsafyTrack] = useState<string>('');
   const [selectedTracks, setSelectedTracks] = useState<SsafyTrack[]>([]);
   const [ssafyTrackDisabled, setSsafyTrackDisabled] = useState<boolean>(true);
@@ -196,30 +195,25 @@ const SsafyInformation: React.FC = () => {
             </FileInputWrapper>
           </AvatarWrapper>
         </AvatarWrapperCol>
-
         <InfomationWrapper>
           <SingleInformationWrapper>
             <InformationLabel htmlFor="userName">이름</InformationLabel>
             <Information id="userName">{profileInfo?.userName}</Information>
           </SingleInformationWrapper>
-
           <SingleInformationWrapper>
             <InformationLabel htmlFor="userEmail">이메일</InformationLabel>
             <Information id="userEmail">{profileInfo?.userEmail}</Information>
           </SingleInformationWrapper>
-
           <SingleInformationWrapper>
             <InformationLabel htmlFor="ssafyCampus">
               SSAFY 캠퍼스
             </InformationLabel>
             <Information id="ssafyCampus">서울</Information>
           </SingleInformationWrapper>
-
           <SingleInformationWrapper>
             <InformationLabel htmlFor="studentNumber">학번</InformationLabel>
             <Information id="studentNumber">{studentNumber}</Information>
           </SingleInformationWrapper>
-
           <SingleInformationWrapper>
             <InformationLabel className="necessary" htmlFor="ssafyTrack">
               교육 트랙
@@ -242,7 +236,6 @@ const SsafyInformation: React.FC = () => {
               </ModifyButton>
             </SelectWrapper>
           </SingleInformationWrapper>
-
           <SingleInformationWrapper>
             <NewPasswordLinkButton to="/users/password/new">
               비밀번호 재설정 하러가기

@@ -202,7 +202,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
             showAlert('info', message);
           } else if (status === 500) {
             setLoading(false);
-            showAlert('warning', message);
+            showAlert('error', message);
             setEmailCodeRequestButton(false);
             setVerificationCodeButtonText('이메일 재전송');
           }
@@ -234,7 +234,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
             showAndSetError(true, message);
             offCodeInputAndConfirm();
           } else if (status === 500) {
-            showAlert('warning', message);
+            showAlert('error', message);
           }
         }
       });

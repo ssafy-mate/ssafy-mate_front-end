@@ -1,4 +1,5 @@
 import * as React from 'react';
+
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -7,6 +8,7 @@ import { styled } from '@mui/material';
 interface AccountEditTabsProps {
   setAcccountEditTap: (acccountEditTap: string) => void;
 }
+
 const AccountEditTaps: React.FC<AccountEditTabsProps> = ({
   setAcccountEditTap,
 }) => {

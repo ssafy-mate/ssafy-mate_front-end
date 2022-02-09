@@ -33,6 +33,7 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
   const [selectedTechStackLevel, setSelectedTechStackLevel] = useState<
     TechStackLevel | string
   >('중');
+
   useEffect(() => {
     oldTechStacksWithLevel.forEach((techStack) => {
       if (techStack.techStackCode === id) {

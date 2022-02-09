@@ -1,11 +1,9 @@
 import { useEffect, useState } from 'react';
 
 import { useDispatch } from 'react-redux';
-
 import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
 
 import styled from '@emotion/styled';
-
 import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
 
 import {
@@ -14,13 +12,14 @@ import {
   verificationCodeReg,
 } from '../../utils/regularExpressionData';
 
+import { Severity } from '../../types/signUpTypes';
+
 import history from '../../history';
 
 import NewPasswordService from '../../services/NewPasswordService';
 
-import Loading from '../common/Loading';
 import NewPassWordCardSubHead from './NewPassWordCardSubHead';
-import { Severity } from '../../types/signUpTypes';
+import Loading from '../common/Loading';
 
 const NewPasswordCard: React.FC = () => {
   const [loadingColor, setLoadingColor] = useState<string>('#3396f4');
