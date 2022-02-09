@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import dayjs from 'dayjs';
 
+import useSocket from '../../hooks/useSocket';
 import { ChatRoomTypeProps } from '../../types/messageTypes';
 
 import styled from '@emotion/styled';
@@ -30,6 +31,25 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
 
   const email = userEmail.split('@');
 
+  const [socket] = useSocket();
+  const [onlineList, setOnlineList] = useState<number[]>([]);
+
+  useEffect(() => {
+    setOnlineList([]);
+  }, [roomId]);
+
+  // off 되는지 확인하기
+  useEffect(() => {
+    console.log('onlineList 호출');
+    socket?.on('onlineList', (data: number[]) => {
+      setOnlineList(data);
+      console.log(`onlineList : ${onlineList}`);
+    });
+    return () => {
+      socket?.off('onlineList');
+    };
+  }, [socket]);
+
   return (
     <>
       <NavLink
@@ -45,6 +65,9 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
                 <TitleSenderName>{userName}</TitleSenderName>
                 <TitleSubText>
                   <span>{dayjs(sentTime).format('YYYY.MM.DD')}</span>
+                  {onlineList.map((item, index) => {
+                    <span>{item}</span>;
+                  })}
                 </TitleSubText>
               </TitleWrapper>
               <DescriptionWrapper>

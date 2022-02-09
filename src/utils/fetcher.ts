@@ -6,12 +6,9 @@ export const fetcherGet = <Data>(url: string) =>
 export const fetcherPost = <Data>(url: string, params: Data) =>
   axiosInstance.post<Data>(url, params).then((response) => response.data);
 
-export const fetcherGetWithParams = <Data>(
-  url: string,
-  nowPage: number,
-  entryTime: string,
-) => {
-  const params = { nowPage, entryTime };
+export const fetcherGetWithParams = <Data>(url: string, nextCursor: number) => {
+  const params = { nextCursor };
+
   return axiosInstance
     .get(url, {
       params,

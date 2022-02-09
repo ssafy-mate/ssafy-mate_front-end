@@ -13,7 +13,11 @@ import useToken from '../../hooks/useToken';
 import useTextArea from '../../hooks/useTextArea';
 import useUserIdName from '../../hooks/useUserIdName';
 import ChatRoomList from './ChatRoomList';
-import { MessageType, ChatRoomType } from '../../types/messageTypes';
+import {
+  MessageType,
+  ChatRoomType,
+  ChatLogResponseType,
+} from '../../types/messageTypes';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -27,11 +31,7 @@ import { Drawer } from '@mui/material';
 const localUrl = 'http://localhost:3000';
 const socketUrl = 'http://localhost:3095';
 
-const PAGE_SIZE = 10;
-
-type userParams = {
-  myId: string;
-};
+const PAGE_SIZE = 20;
 
 const ChattingForm: React.FC = () => {
   const userToken = useToken(); // 유저 토큰
@@ -41,24 +41,13 @@ const ChattingForm: React.FC = () => {
   const roomId: string | null = param.get('roomId');
   const userId: string | null = param.get('userId');
   const userName: string | null = param.get('userName');
-  const [socket] = useSocket(roomId as string);
 
-  // const { roomId } = useParams<roomParams>();
   const myData = useUserIdName();
-  // const { myId } = useParams<userParams>();
   const myId = myData[0];
   const myName = myData[1];
 
-  // const [numberUserId, setNunberUserId] = useState(Number(userId));
-  // const [userId, setUserId] = useState(2); // 내 아이디
-  // const [userId, setUserId] = useState(1); // 상대방 아이디
-
-  const [entryTime, setEntryTime] = useState(
-    dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS'),
-  );
-
+  const [socket] = useSocket(myId as number);
   const [chat, onChangeChat, setChat] = useTextArea('');
-  const [messageList, setMessageList] = useState<MessageType[]>([]);
   const messageInputRef = useRef<HTMLTextAreaElement>(null);
   const chatRoomMessageRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<Scrollbars>(null);
@@ -68,34 +57,44 @@ const ChattingForm: React.FC = () => {
     data: roomData,
     error: roomError,
     mutate: mutateRoom,
-  } = useSWR<ChatRoomType[]>(`/api/chat/room/${myId}`, fetcherGet);
+  } = useSWR<ChatRoomType[]>(`/api/chats/rooms/${myId}`, fetcherGet);
 
   // #######
   // 토큰이 없는 상태에서 접근하면 error 페이지로, teamInfoPage 확인
   // #######
+
+  const [chatSections, setChatSections] = useState<MessageType[]>([]);
+
+  useEffect(() => {
+    setChatSections([]);
+  }, [roomId]);
+
+  const getKey = (pageIndex: number, previousPageData: ChatLogResponseType) => {
+    // 끝에 도달
+    if (previousPageData && !previousPageData.contentList) return null;
+
+    // 첫 페이지, `previousPageData`가 없음
+    if (pageIndex === 0) return `/api/chats/logs/${roomId}?nextCursor=0`;
+
+    // API의 엔드포인트에 커서 추가
+    return `api/chats/logs/${roomId}?nextCursor=${previousPageData.nextCursor}`;
+  };
 
   // 대화 내역 불러오기 - 인피니티 스크롤용
   const {
     data: chatData,
     mutate: mutateChat,
     setSize,
-  } = useSWRInfinite<MessageType[]>(
-    (index) => {
-      const nextPage: number = index + 1;
-      return [`/api/chat/log/${roomId}`, nextPage, entryTime];
-    },
-    fetcherGetWithParams,
-    {
-      onSuccess(data) {
-        if (data?.length === 1) {
+  } = useSWRInfinite<ChatLogResponseType>(getKey, fetcherGet, {
+    onSuccess(data) {
+      if (data?.length === 1) {
+        setTimeout(() => {
           scrollbarRef.current?.scrollToBottom();
-        }
-      },
+        }, 100);
+      }
     },
-  );
+  });
 
-  // 내가 메시지를 보내거나, 서버 챗 데이터 변경이 일어났을 때 발동하는 콜백
-  // 서버로 메시지 정보 post 요청
   const onSubmit = useCallback(
     (event) => {
       event.preventDefault();
@@ -107,40 +106,23 @@ const ChattingForm: React.FC = () => {
           content: chat,
           senderId: Number(myId),
           sentTime: dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS'),
+          id: 0,
         };
 
         mutateChat((prevChatData) => {
-          prevChatData?.[0].unshift(params);
-          console.log(prevChatData?.[0].toString());
+          prevChatData?.[0].contentList.unshift(params);
           return prevChatData;
         }, false).then(() => {
+          console.log(`onSubmit 후 chatData ${JSON.stringify(chatData?.[0])}`);
           setChat('');
-          if (scrollbarRef.current) {
-            if (
-              scrollbarRef.current.getScrollHeight() <
-              scrollbarRef.current.getClientHeight() +
-                scrollbarRef.current.getScrollTop() +
-                150
-            ) {
-              scrollbarRef.current.scrollToBottom();
-            }
-          }
+          customChatList();
+          if (scrollbarRef.current) scrollbarRef.current.scrollToBottom();
         });
 
         axios
-          .post(`${socketUrl}/api/chat`, params)
+          .post(`${socketUrl}/api/chats`, params)
           .then((response) => {
             console.log(`onSumbit response : ${response}`);
-            if (scrollbarRef.current) {
-              if (
-                scrollbarRef.current.getScrollHeight() <
-                scrollbarRef.current.getClientHeight() +
-                  scrollbarRef.current.getScrollTop() +
-                  150
-              ) {
-                scrollbarRef.current.scrollToBottom();
-              }
-            }
           })
           .catch((error) => {
             console.log(`onSumbit error : ${error}`);
@@ -148,26 +130,19 @@ const ChattingForm: React.FC = () => {
           .finally(() => {
             setChat('');
           });
-
-        // setMessageList((data) => data.concat(params));
       }
     },
-    [chat, roomId, myId, userId, chatData, mutateChat, setChat],
+    [chat, roomId, myId, userId, setChat],
   );
 
-  // onMessage 메시지 받으면 작동하는 콜백
   const onMessage = useCallback(
     (data: MessageType) => {
-      console.log(
-        `senderId : ${data.senderId} / userId:${userId} / myId:${myId}`,
-      );
       if (data.senderId === Number(userId) && Number(myId) !== Number(userId)) {
         mutateChat((chatData) => {
-          chatData?.[0].unshift(data);
+          chatData?.[0].contentList.unshift(data);
           return chatData;
         }, false).then(() => {
           console.log(`onMessage callback 성공`);
-
           if (scrollbarRef.current) {
             if (
               scrollbarRef.current.getScrollHeight() <
@@ -186,7 +161,6 @@ const ChattingForm: React.FC = () => {
     [userId, myId, mutateChat],
   );
 
-  // 소켓 on 달아두는 곳
   useEffect(() => {
     socket?.on('message', onMessage);
     return () => {
@@ -194,16 +168,6 @@ const ChattingForm: React.FC = () => {
     };
   }, [socket, onMessage]);
 
-  // 로딩 시 스크롤바 제일 아래로
-  useEffect(() => {
-    if (chatData?.length === 1) {
-      setTimeout(() => {
-        scrollbarRef.current?.scrollToBottom();
-      }, 100);
-    }
-  }, [chatData]);
-
-  // 엔터 누르면 onSubmit 호출
   const handleMessageSendKeyPress = (event: React.KeyboardEvent) => {
     if (event.code === 'Enter' || event.code === 'NumpadEnter') {
       if (!event.shiftKey) {
@@ -214,29 +178,57 @@ const ChattingForm: React.FC = () => {
   };
 
   // 인피니티 스크롤을 위한, ReachingEnd : 페이지 사이즈 만큼 못가져왔을때 남는거
-  const isEmpty = chatData?.[0]?.length === 0;
+  const isEmpty = chatData?.[chatData.length - 1]?.contentList?.length === 0;
   const isReachingEnd =
-    isEmpty || (chatData && chatData[chatData.length - 1]?.length < PAGE_SIZE);
+    isEmpty ||
+    (chatData &&
+      chatData[chatData.length - 1]?.contentList?.length < PAGE_SIZE);
 
   const onScroll = useCallback(
     (values) => {
-      // 가장 위로 올라갔을 때, 다음 페이지 불러오도록 페이지 셋팅
+      // 가장 위로 올라갔을 때, 다음 페이지 불러오도록 setSize호출
       if (values.scrollTop === 0 && !isReachingEnd && !isEmpty) {
         setSize((size) => size + 1).then(() => {
           // 스크롤 위치 유지 : 현재 스크롤 높이 - 스크롤바의 높이
-          scrollbarRef.current?.scrollTop(
-            scrollbarRef.current?.getScrollHeight() - values.scrollHeight,
-          );
+          setTimeout(() => {
+            scrollbarRef.current?.scrollTop(
+              scrollbarRef.current?.getScrollHeight() - values.scrollHeight,
+            );
+          }, 10);
         });
       }
     },
-    [setSize, scrollbarRef, isReachingEnd, isEmpty],
+    [scrollbarRef, isReachingEnd, isEmpty, setSize],
   );
 
-  // 채팅 메시지 reverse
-  const chatSections = chatData
-    ? ([] as MessageType[]).concat(...chatData).reverse()
-    : [];
+  // 날짜별로 묶기
+  const makeSection = <T extends MessageType>(chatList: T[]) => {
+    const sections: { [key: string]: T[] } = {};
+    chatList.forEach((chat) => {
+      const monthDate = dayjs(chat.sentTime).format('YYYY-MM-DD');
+      if (Array.isArray(sections[monthDate])) {
+        sections[monthDate].push(chat);
+      } else {
+        sections[monthDate] = [chat];
+      }
+    });
+    return sections;
+  };
+
+  // 대화 내용 reverse
+  const customChatList = () => {
+    let list: any = [];
+    if (chatData) {
+      chatData.forEach((chat) => {
+        list.push(chat.contentList);
+      });
+    }
+    setChatSections(([] as MessageType[]).concat(...list).reverse());
+  };
+
+  useEffect(() => {
+    customChatList();
+  }, [chatData]);
 
   return (
     <ChatContianer>
@@ -278,44 +270,7 @@ const ChattingForm: React.FC = () => {
                 <ChatRoomMessageList>
                   <MessageWrapper ref={chatRoomMessageRef}>
                     {chatSections && chatSections.length > 0
-                      ? chatSections?.map((message, index) => {
-                          if (message.senderId === Number(myId)) {
-                            return (
-                              <MessageBoxWrapper key={index}>
-                                <MessageBoxRightContent>
-                                  <MessageTimeBox>
-                                    <div className="message_date">
-                                      {dayjs(message.sentTime).format(
-                                        'YYYY.MM.DD HH:mm',
-                                      )}
-                                    </div>
-                                  </MessageTimeBox>
-                                  <p>{message.content}</p>
-                                </MessageBoxRightContent>
-                              </MessageBoxWrapper>
-                            );
-                          } else {
-                            return (
-                              <MessageBoxWrapper>
-                                <MessageBoxLeftContent key={index}>
-                                  <img></img>
-                                  <p>{message.content}</p>
-                                  <MessageTimeBox>
-                                    <div className="message_date">
-                                      {dayjs(message.sentTime).format(
-                                        'YYYY.MM.DD HH:mm',
-                                      )}
-                                    </div>
-                                  </MessageTimeBox>
-                                </MessageBoxLeftContent>
-                              </MessageBoxWrapper>
-                            );
-                          }
-                        })
-                      : null}
-                    <hr></hr>
-                    {messageList.length > 0
-                      ? messageList.map((message, index) => {
+                      ? chatSections.map((message, index) => {
                           if (message.senderId === Number(myId)) {
                             return (
                               <MessageBoxWrapper key={index}>
