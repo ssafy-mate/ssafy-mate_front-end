@@ -75,6 +75,6 @@ export interface RootState {
   router: Reducer<RouterState<unknown>, AnyAction>;
 }
 
-export interface GetMyTeamIdParams {
+export interface ProjectParams {
   project: string;
 }

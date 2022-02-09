@@ -193,7 +193,7 @@ export const teamsHandlers = [
       return response(
         context.json({
           teamData: teamDataListData[teamIndex].teamData,
-          role: 'owner',
+          role: 'outsider',
         }),
       );
     },

@@ -806,7 +806,7 @@ const OuterLink = styled.a`
 
 const Introduction = styled.p`
   font-size: 15px;
-  line-height: 1.5;
+  line-height: 1.6;
   color: #5f7f90;
 
   @media (max-width: 767px) {

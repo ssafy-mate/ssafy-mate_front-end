@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../redux/modules/auth';
+import { logout as logoutSagaStart } from '../../redux/modules/auth';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -97,7 +97,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
   }, [accountBoxOpen, isMobile]);
 
   const handleClickLogoutButton = () => {
-    dispatch(logout());
+    dispatch(logoutSagaStart());
   };
 
   const handleExpandMenu = () => {
