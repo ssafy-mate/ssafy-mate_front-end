@@ -1122,7 +1122,7 @@ export const userListData = [
   {
     userId: 6,
     userName: '이여진',
-    profileImgUrl: null,
+    profileImgUrl: '/images/projects/sample-student_profile-img6.jpeg',
     campus: '서울',
     projectTrack: '인공지능',
     ssafyTrack: 'Java Track',

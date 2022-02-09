@@ -1,6 +1,7 @@
 import { rest } from 'msw';
 
 import { userDataList, userListData } from '../database/user';
+import { teamDataListData } from '../database/team';
 
 export const usersHandlers = [
   rest.get(
@@ -275,7 +276,45 @@ export const usersHandlers = [
         );
       }
 
-      return response(context.json({ teamId: null }));
+      return response(context.json({ teamId: 1 }));
+    },
+  ),
+
+  rest.get(
+    `${process.env.REACT_APP_SERVER_URL}/api/auth/users/:userId/my-team`,
+    async (request, response, context) => {
+      const token: string =
+        request.headers['_headers'].authorization.split(' ')[1];
+      const status: number = 200;
+
+      if (token === null) {
+        return response(
+          context.status(403),
+          context.json({
+            status: 403,
+            success: false,
+            message: '내 팀 정보 조회 권한이 없습니다."',
+          }),
+        );
+      }
+
+      if (status === 500) {
+        return response(
+          context.status(500),
+          context.json({
+            status: 500,
+            success: false,
+            message: 'Internal Server, 내 팀 정보 조회 실패',
+          }),
+        );
+      }
+
+      return response(
+        context.json({
+          teamData: teamDataListData[0].teamData,
+          role: 'owner',
+        }),
+      );
     },
   ),
 ];

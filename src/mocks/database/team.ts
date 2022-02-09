@@ -18,58 +18,18 @@ export const teamDataListData = [
       techStacks: [
         {
           id: 1,
-          techStackName: 'TypeScript',
-          techStackImgUrl: '/images/assets/tech-stack/TypeScript.png',
+          techStackName: 'HTML5',
+          techStackImgUrl: '/images/assets/tech-stack/HTML5.png',
         },
         {
           id: 2,
-          techStackName: 'React',
-          techStackImgUrl: '/images/assets/tech-stack/React.png',
+          techStackName: 'CSS3',
+          techStackImgUrl: '/images/assets/tech-stack/CSS3.png',
         },
         {
-          id: 4,
-          techStackName: 'Redux',
-          techStackImgUrl: '/images/assets/tech-stack/Redux.png',
-        },
-        {
-          id: 5,
-          techStackName: 'Redux-Saga',
-          techStackImgUrl: '/images/assets/tech-stack/Redux-Saga.png',
-        },
-        {
-          id: 6,
-          techStackName: 'React-Query',
-          techStackImgUrl: '/images/assets/tech-stack/React-Query.png',
-        },
-        {
-          id: 7,
-          techStackName: 'Emotion',
-          techStackImgUrl: '/images/assets/tech-stack/Emotion.png',
-        },
-        {
-          id: 8,
-          techStackName: 'Mock-Service-Worker',
-          techStackImgUrl: '/images/assets/tech-stack/Mock-Service-Worker.png',
-        },
-        {
-          id: 9,
-          techStackName: 'Spring-Boot',
-          techStackImgUrl: '/images/assets/tech-stack/Spring-Boot.png',
-        },
-        {
-          id: 10,
-          techStackName: 'JPA',
-          techStackImgUrl: '/images/assets/tech-stack/JPA.png',
-        },
-        {
-          id: 11,
-          techStackName: 'MySQL',
-          techStackImgUrl: '/images/assets/tech-stack/MySQL.png',
-        },
-        {
-          id: 12,
-          techStackName: 'Swagger',
-          techStackImgUrl: '/images/assets/tech-stack/Swagger.png',
+          id: 3,
+          techStackName: 'JavaScript',
+          techStackImgUrl: '/images/assets/tech-stack/JavaScript.png',
         },
       ],
       members: [
