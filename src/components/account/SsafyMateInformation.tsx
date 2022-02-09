@@ -35,60 +35,16 @@ import {
 import ProfileTechStackTagWithLevel from '../common/ProfileTechStackTagWithLevel';
 
 const SsafyMateInformation: React.FC = () => {
+  const dispatch = useDispatch();
   const profileInfo = useProfileInfo();
   const token: string | null = useToken();
   const userId: number | null = useUserId();
+  const [showError, setShowError] = useState<boolean>(false);
   const [techStacks, setTechStacks] = useState<TechStacksWithLevel[]>([]);
   const techStackList: TechStackWithImg[] = useTechStackList();
   const oldTechStacksListData: convertTechStackWithImg = useProfileTechStacks();
   const oldTechStacksList = oldTechStacksListData.teckStackList;
   const oldTechStacksWithLevel = oldTechStacksListData.teckStackListWithLevel;
-
-  const {
-    getRootProps,
-    getInputLabelProps,
-    getInputProps,
-    getTagProps,
-    getListboxProps,
-    getOptionProps,
-    groupedOptions,
-    value,
-    focused,
-    setAnchorEl,
-  } = useAutocomplete({
-    id: 'search-tech-stack',
-    multiple: true,
-    options: techStackList,
-    defaultValue: oldTechStacksList,
-    getOptionLabel: (option) => option.techStackName,
-  });
-
-  const dispatch = useDispatch();
-
-  const showAlert = (
-    alertShow: boolean,
-    alertText: string,
-    alertType: Severity,
-  ) => {
-    dispatch(
-      showSsafyMateAlertSagaStart({
-        show: alertShow,
-        text: alertText,
-        type: alertType,
-      }),
-    );
-  };
-  useEffect(() => {
-    if (profileInfo === null) {
-      history.push('/');
-    } else {
-      setSelfIntroductionValue(profileInfo.selfIntroduction);
-      setNewJob1(profileInfo.job1);
-      setNewJob2(profileInfo.job2);
-      setNewGitHubUrl(profileInfo.githubUrl);
-      setNewEtcUrl(profileInfo.etcUrl);
-    }
-  }, []);
   const [selfIntroductionDisabled, setSelfIntroductionDisabled] =
     useState<boolean>(true);
   const [selfIntroductionValue, setSelfIntroductionValue] =
@@ -97,6 +53,8 @@ const SsafyMateInformation: React.FC = () => {
     selfIntroductionModifyButtonText,
     setSelfIntroductionModifyButtonText,
   ] = useState<string>('수정');
+  const [selfIntroductionError, setSelfIntroductionError] =
+    useState<boolean>(false);
   const [newJob1, setNewJob1] = useState<string>('');
   const [newJob2, setNewJob2] = useState<string | null>('');
   const [newJobsDisabled, setNewJobsDisabled] = useState<boolean>(true);
@@ -124,6 +82,51 @@ const SsafyMateInformation: React.FC = () => {
     useState<boolean>(true);
   const [newTechStackModifyButtonText, setNewTechStackModifyButtonText] =
     useState<string>('수정');
+  const [techStacksError, setTechStacksError] = useState<boolean>(false);
+
+  const {
+    getRootProps,
+    getInputLabelProps,
+    getInputProps,
+    getTagProps,
+    getListboxProps,
+    getOptionProps,
+    groupedOptions,
+    value,
+    focused,
+    setAnchorEl,
+  } = useAutocomplete({
+    id: 'search-tech-stack',
+    multiple: true,
+    options: techStackList,
+    defaultValue: oldTechStacksList,
+    getOptionLabel: (option) => option.techStackName,
+  });
+
+  const showAlert = (
+    alertShow: boolean,
+    alertText: string,
+    alertType: Severity,
+  ) => {
+    dispatch(
+      showSsafyMateAlertSagaStart({
+        show: alertShow,
+        text: alertText,
+        type: alertType,
+      }),
+    );
+  };
+  useEffect(() => {
+    if (profileInfo === null) {
+      history.push('/');
+    } else {
+      setSelfIntroductionValue(profileInfo.selfIntroduction);
+      setNewJob1(profileInfo.job1);
+      setNewJob2(profileInfo.job2);
+      setNewGitHubUrl(profileInfo.githubUrl);
+      setNewEtcUrl(profileInfo.etcUrl);
+    }
+  }, []);
 
   useEffect(() => {
     setTechStacks(oldTechStacksWithLevel);
@@ -149,6 +152,12 @@ const SsafyMateInformation: React.FC = () => {
     }
   }, []);
 
+  useEffect(() => {
+    techStacks.length >= 2
+      ? setTechStacksError(false)
+      : setTechStacksError(true);
+  }, [techStacks]);
+
   const updateProfileAndAuth = useCallback(
     (requestData: EditProfileInfoRequest) => {
       dispatch(editProfileInfoSagaStart(requestData));
@@ -168,6 +177,9 @@ const SsafyMateInformation: React.FC = () => {
     event: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setSelfIntroductionValue(event.target.value);
+    event.target.value === ''
+      ? setSelfIntroductionError(true)
+      : setSelfIntroductionError(false);
   };
 
   const handleSelfIntroductionModifyButton = (
@@ -177,9 +189,14 @@ const SsafyMateInformation: React.FC = () => {
       setSelfIntroductionModifyButtonText('확인');
       setSelfIntroductionDisabled(false);
     } else {
-      setSelfIntroductionModifyButtonText('수정');
-      setSelfIntroductionDisabled(true);
-      newProfileInfo('self-introduction');
+      if (selfIntroductionValue === '') {
+        setShowError(true);
+      } else {
+        setShowError(false);
+        setSelfIntroductionModifyButtonText('수정');
+        setSelfIntroductionDisabled(true);
+        newProfileInfo('self-introduction');
+      }
     }
   };
 
@@ -361,9 +378,13 @@ const SsafyMateInformation: React.FC = () => {
       setNewTechStackModifyButtonText('확인');
       setNewTechStackDisabled(false);
     } else {
-      newProfileInfo('techStacks');
-      setNewTechStackDisabled(true);
-      setNewTechStackModifyButtonText('수정');
+      if (techStacks.length < 2) {
+        setShowError(true);
+      } else {
+        newProfileInfo('techStacks');
+        setNewTechStackDisabled(true);
+        setNewTechStackModifyButtonText('수정');
+      }
     }
   };
 
@@ -453,6 +474,7 @@ const SsafyMateInformation: React.FC = () => {
         break;
     }
   };
+
   return (
     <>
       <SsafyMateInformationWrapper>
@@ -468,7 +490,14 @@ const SsafyMateInformation: React.FC = () => {
               onKeyPress={handleTextAreaEnterKeyPressed}
               onChange={handleNewSelfIntroduction}
               disabled={selfIntroductionDisabled}
+              required
+              className={selfIntroductionError ? 'have-error' : ''}
             />
+            {showError && selfIntroductionError && (
+              <ErrorMessageWrapper>
+                <ErrorMessage>필수 입력 항목입니다.</ErrorMessage>
+              </ErrorMessageWrapper>
+            )}
             <ModifyButton
               type="button"
               onClick={handleSelfIntroductionModifyButton}
@@ -476,7 +505,6 @@ const SsafyMateInformation: React.FC = () => {
               {selfIntroductionModifyButtonText}
             </ModifyButton>
           </SingleInformationWrapper>
-
           <Row>
             <JobSelectWrapper className="right-gap">
               <InformationLabel htmlFor="job1" className="necessary">
@@ -499,7 +527,6 @@ const SsafyMateInformation: React.FC = () => {
                 ))}
               </Select>
             </JobSelectWrapper>
-
             <JobSelectWrapper className="right-gap">
               <InformationLabel htmlFor="job2">희망 직무2</InformationLabel>
               <Select
@@ -519,14 +546,12 @@ const SsafyMateInformation: React.FC = () => {
                   ))}
               </Select>
             </JobSelectWrapper>
-
             <JobSelectWrapper className="top-gap">
               <ModifyButton type="button" onClick={handlJobsModifyButton}>
                 {newJobsModifyButtonText}
               </ModifyButton>
             </JobSelectWrapper>
           </Row>
-
           <Row>
             <SingleInformationWrapper className="right-gap">
               <InformationLabel htmlFor="common-project">
@@ -547,7 +572,6 @@ const SsafyMateInformation: React.FC = () => {
                 ))}
               </Select>
             </SingleInformationWrapper>
-
             <SingleInformationWrapper className="right-gap">
               <InformationLabel htmlFor="special-project">
                 특화 프로젝트
@@ -574,7 +598,6 @@ const SsafyMateInformation: React.FC = () => {
               </ModifyButton>
             </SingleInformationWrapper>
           </Row>
-
           <Row className="tech-stack-row">
             <SingleInformationWrapper
               {...getRootProps()}
@@ -589,7 +612,11 @@ const SsafyMateInformation: React.FC = () => {
               </InformationLabel>
               <InfoInputWrapper
                 ref={setAnchorEl}
-                className={focused ? 'focused' : ''}
+                className={
+                  focused
+                    ? 'focused'
+                    : '' || (showError && techStacksError ? 'have-error' : '')
+                }
               >
                 <InfoInput
                   type="text"
@@ -625,6 +652,11 @@ const SsafyMateInformation: React.FC = () => {
                   )}
                 </SearchList>
               ) : null}
+              {showError && techStacksError && (
+                <ErrorMessageWrapper>
+                  <ErrorMessage>필수 2가지 이상 선택 사항입니다.</ErrorMessage>
+                </ErrorMessageWrapper>
+              )}
             </SingleInformationWrapper>
             <TechStackList>
               {value.map((option: TechStackWithImg, index: number) => (
@@ -641,12 +673,10 @@ const SsafyMateInformation: React.FC = () => {
                 />
               ))}
             </TechStackList>
-
             <ModifyButton type="button" onClick={handleTechStackModifyButton}>
               {newTechStackModifyButtonText}
             </ModifyButton>
           </Row>
-
           <Row>
             <SingleInformationWrapper className="top-gap">
               <InformationLabel htmlFor="github-url">
@@ -691,157 +721,7 @@ const SsafyMateInformation: React.FC = () => {
     </>
   );
 };
-const TechStackInfo = styled.div`
-  display: flex;
-  align-items: center;
-`;
-const TechStackImg = styled.img`
-  width: 24px;
-  height: 24px;
-  margin-right: 6px;
-  border-radius: 2px;
-  object-fit: fill;
 
-  @media (max-width: 575px) {
-    width: 18px;
-    height: 18px;
-  }
-`;
-const TechStackList = styled.ul``;
-const SearchItemWrapper = styled.div`
-  height: 100%;
-  width: 100%;
-`;
-
-const SearchItem = styled.li`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-  height: 40px;
-  padding: 8px 12px;
-  outline: 0;
-  border-bottom: 1px solid #d7e2eb;
-  box-sizing: border-box;
-  background-color: #fff;
-  font-size: 16px;
-  line-height: 24px;
-  color: #5f7f90;
-  transition: all 0.08s ease-in-out;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #eaf4fd;
-  }
-
-  & svg {
-    color: transparent;
-  }
-
-  &[aria-selected='true'] {
-    background-color: #eaf4fd;
-
-    & svg {
-      color: #3396f4;
-    }
-  }
-
-  @media (max-width: 575px) {
-    font-size: 13px;
-  }
-`;
-const SearchList = styled.ul`
-  overflow-y: scroll;
-  position: absolute;
-  top: 62px;
-  z-index: 10;
-  width: 100%;
-  max-height: 200px;
-  border: 1px solid #d7e2eb;
-  border-radius: 0.25rem;
-  background-color: #fff;
-`;
-
-const InfoInputWrapper = styled.div`
-  width: 100%;
-  height: 40px;
-  margin-bottom: 16px;
-  outline: 0;
-  border-radius: 0.25rem;
-  background-color: #fbfbfd;
-  font-size: 16px;
-  line-height: 24px;
-  color: #263747;
-  transition: all 0.08s ease-in-out;
-
-  &.have-error {
-    margin-bottom: 4px;
-    border-radius: 0.25rem;
-    border: 1px solid #f44336;
-    box-shadow: inset 0 0 0 1px #ff77774d;
-  }
-`;
-
-const InfoInput = styled.input`
-  width: 100%;
-  height: 40px;
-  margin-bottom: 16px;
-  padding: 8px 12px;
-  outline: 0;
-  border: 1px solid #d7e2eb;
-  border-radius: 0.25rem;
-  box-sizing: border-box;
-  background-color: #fbfbfd;
-  font-size: 16px;
-  line-height: 24px;
-  color: #263747;
-  transition: all 0.08s ease-in-out;
-
-  &:hover {
-    border: 1px solid #3396f4;
-    box-shadow: inset 0 0 0 1px#3396f4;
-  }
-  &:focus {
-    border: 1px solid #3396f4;
-    box-shadow: inset 0 0 0 1px #3396f4;
-    background-color: #fff;
-    color: #495057;
-  }
-  &:disabled {
-    cursor: not-allowed;
-  }
-  @media (max-width: 575px) {
-    font-size: 13px;
-  }
-`;
-
-const Row = styled.div`
-  display: flex;
-
-  &:first-of-type {
-    margin-bottom: 12px;
-  }
-
-  &.tech-stack-row {
-    flex-direction: column;
-  }
-
-  @media (max-width: 575px) {
-    flex-direction: column;
-
-    &:nth-of-type(2) {
-      flex-direction: column;
-    }
-
-    &.tech-stack-row {
-      margin-top: 16px;
-    }
-  }
-`;
-const Em = styled.em`
-  font-size: 13px;
-  color: #3396f4;
-`;
 const SsafyMateInformationWrapper = styled.div``;
 
 const InfomationWrapper = styled.div`
@@ -885,34 +765,6 @@ const SingleInformationWrapper = styled.div`
     }
 
     &.top-gap-button {
-      margin-top: 16px;
-      width: 100%;
-    }
-  }
-`;
-
-const JobSelectWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  margin-top: 16px;
-
-  &.right-gap {
-    width: 43%;
-    margin-right: 12px;
-  }
-
-  &.top-gap {
-    width: 13%;
-    margin-top: 41px;
-  }
-
-  @media (max-width: 575px) {
-    &.right-gap {
-      width: 100%;
-    }
-
-    &.top-gap {
       margin-top: 16px;
       width: 100%;
     }
@@ -975,6 +827,16 @@ const Textarea = styled.textarea`
     font-size: 13px;
   }
 `;
+const ErrorMessageWrapper = styled.div`
+  margin-bottom: 8px;
+`;
+
+const ErrorMessage = styled.span`
+  padding-left: 6px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #f44336;
+`;
 
 const ModifyButton = styled.button`
   width: 100%;
@@ -995,6 +857,34 @@ const ModifyButton = styled.button`
 
   @media (max-width: 575px) {
     font-size: 15px;
+  }
+`;
+
+const JobSelectWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin-top: 16px;
+
+  &.right-gap {
+    width: 43%;
+    margin-right: 12px;
+  }
+
+  &.top-gap {
+    width: 13%;
+    margin-top: 41px;
+  }
+
+  @media (max-width: 575px) {
+    &.right-gap {
+      width: 100%;
+    }
+
+    &.top-gap {
+      margin-top: 16px;
+      width: 100%;
+    }
   }
 `;
 
@@ -1034,15 +924,169 @@ const Select = styled.select`
     cursor: not-allowed;
   }
 
+  @media (max-width: 575px) {
+    font-size: 13px;
+    margin-bottom: 0px;
+  }
+`;
+
+const Row = styled.div`
+  display: flex;
+
+  &:first-of-type {
+    margin-bottom: 12px;
+  }
+
+  &.tech-stack-row {
+    flex-direction: column;
+  }
+
+  @media (max-width: 575px) {
+    flex-direction: column;
+
+    &:nth-of-type(2) {
+      flex-direction: column;
+    }
+
+    &.tech-stack-row {
+      margin-top: 16px;
+    }
+  }
+`;
+
+const InfoInputWrapper = styled.div`
+  width: 100%;
+  height: 40px;
+  margin-bottom: 16px;
+  outline: 0;
+  border-radius: 0.25rem;
+  background-color: #fbfbfd;
+  font-size: 16px;
+  line-height: 24px;
+  color: #263747;
+  transition: all 0.08s ease-in-out;
+
   &.have-error {
     margin-bottom: 4px;
+    border-radius: 0.25rem;
     border: 1px solid #f44336;
     box-shadow: inset 0 0 0 1px #ff77774d;
+  }
+`;
+
+const InfoInput = styled.input`
+  width: 100%;
+  height: 40px;
+  margin-bottom: 16px;
+  padding: 8px 12px;
+  outline: 0;
+  border: 1px solid #d7e2eb;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+  background-color: #fbfbfd;
+  font-size: 16px;
+  line-height: 24px;
+  color: #263747;
+  transition: all 0.08s ease-in-out;
+
+  &:hover {
+    border: 1px solid #3396f4;
+    box-shadow: inset 0 0 0 1px#3396f4;
+  }
+
+  &:focus {
+    border: 1px solid #3396f4;
+    box-shadow: inset 0 0 0 1px #3396f4;
+    background-color: #fff;
+    color: #495057;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
   }
 
   @media (max-width: 575px) {
     font-size: 13px;
-    margin-bottom: 0px;
+  }
+`;
+
+const TechStackList = styled.ul``;
+
+const SearchItemWrapper = styled.div`
+  height: 100%;
+  width: 100%;
+`;
+
+const SearchList = styled.ul`
+  overflow-y: scroll;
+  position: absolute;
+  top: 62px;
+  z-index: 10;
+  width: 100%;
+  max-height: 200px;
+  border: 1px solid #d7e2eb;
+  border-radius: 0.25rem;
+  background-color: #fff;
+`;
+
+const SearchItem = styled.li`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 40px;
+  padding: 8px 12px;
+  outline: 0;
+  border-bottom: 1px solid #d7e2eb;
+  box-sizing: border-box;
+  background-color: #fff;
+  font-size: 16px;
+  line-height: 24px;
+  color: #5f7f90;
+  transition: all 0.08s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #eaf4fd;
+  }
+
+  & svg {
+    color: transparent;
+  }
+
+  &[aria-selected='true'] {
+    background-color: #eaf4fd;
+
+    & svg {
+      color: #3396f4;
+    }
+  }
+
+  @media (max-width: 575px) {
+    font-size: 13px;
+  }
+`;
+
+const Em = styled.em`
+  font-size: 13px;
+  color: #3396f4;
+`;
+
+const TechStackInfo = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const TechStackImg = styled.img`
+  width: 24px;
+  height: 24px;
+  margin-right: 6px;
+  border-radius: 2px;
+  object-fit: fill;
+
+  @media (max-width: 575px) {
+    width: 18px;
+    height: 18px;
   }
 `;
 
