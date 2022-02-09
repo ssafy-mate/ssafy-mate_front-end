@@ -484,7 +484,7 @@ const MessageBoxLeftContent = styled.div`
     max-width: 364px;
     margin: 0px;
     padding: 10px 14px;
-    border-radius: 10px 10px 10px 2px;
+    border-radius: 2px 10px 10px 10px;
     background-color: #eaebef;
     line-height: 150%;
     color: #000;
@@ -515,7 +515,7 @@ const MessageBoxRightContent = styled.div`
     max-width: 364px;
     margin: 0px;
     padding: 10px 14px;
-    border-radius: 10px 10px 2px 10px;
+    border-radius: 10px 2px 10px 10px;
     background-color: #3396f4;
     line-height: 150%;
     color: #fff;
