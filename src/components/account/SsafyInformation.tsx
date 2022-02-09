@@ -56,9 +56,6 @@ const SsafyInformation: React.FC = () => {
     if (profileInfo !== null) {
       setNewSsafyTrack(profileInfo?.ssafyTrack);
       setPreviewProfileImg(profileInfo?.profileImgUrl);
-    } else {
-      showAlert(true, '로그인 후 이용해주시기 바랍니다.', 'info');
-      history.push('/');
     }
   }, [profileInfo]);
 
