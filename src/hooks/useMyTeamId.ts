@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 import Swal from 'sweetalert2';
 
-import { GetMyTeamIdParams } from '../types/authTypes';
+import { ProjectParams } from '../types/authTypes';
 
 import UserService from '../services/UserService';
 
@@ -18,7 +18,7 @@ const useMyTeamId = (project: string) => {
     async function fetchMyTeamId(
       token: string,
       userId: number,
-      params: GetMyTeamIdParams,
+      params: ProjectParams,
     ) {
       try {
         const teamId = await UserService.getMyTeamId(token, userId, params);

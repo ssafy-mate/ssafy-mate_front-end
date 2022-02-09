@@ -11,7 +11,6 @@ import useToken from '../../hooks/useToken';
 import Header from '../../components/common/Header';
 import ProjectNavigation from '../../components/projects/ProjectNavigation';
 import TeamEditForm from '../../components/team/TeamEditForm';
-import EditTeamForm from '../../components/team/EditTeamForm';
 import Footer from '../../components/common/Footer';
 
 const TeamEditPage: React.FC = () => {

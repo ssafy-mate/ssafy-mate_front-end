@@ -14,7 +14,7 @@ import {
   ProjectTrackRequestType,
   UserApplicationRequestType,
 } from '../../types/authTypes';
-import { TeamOfferRequestType } from '../../types/teamTypes';
+import { TeamOfferRequestType, TeamInfoResponse } from '../../types/teamTypes';
 
 import history from '../../history';
 
@@ -25,6 +25,7 @@ import RequestService from '../../services/RequestService';
 import PersistReducerService from '../../services/PersistReducerService';
 
 import { showSsafyMateAlert } from './alert';
+import { success as myTeamSuccess } from './myTeam';
 
 interface UserApplicationResponseType {
   success: boolean;
@@ -146,29 +147,38 @@ function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
       password: action.payload.password,
     });
 
-    if (data.token !== null) {
-      TokenService.set(data.token);
+    TokenService.set(data.token);
+    yield put(success(data));
 
-      yield put(success(data));
+    const token: string = yield select((state) => state.auth.token);
+    const project: string = '특화 프로젝트';
+    const userId: number = yield select((state) => state.auth.userId);
+    const teamInfoResponse: TeamInfoResponse = yield call(
+      UserService.getMyTeamInfo,
+      token,
+      userId,
+      { project },
+    );
 
-      yield put(
-        showSsafyMateAlert({
-          show: true,
-          text: data.message,
-          type: 'success',
-        }),
-      );
+    yield put(myTeamSuccess(teamInfoResponse.teamData));
 
-      if (action.payload.IdSave) {
-        localStorage.setItem('ssafy-mate-id', action.payload.userEmail);
-      } else {
-        localStorage.removeItem('ssafy-mate-id');
-      }
+    yield put(
+      showSsafyMateAlert({
+        show: true,
+        text: data.message,
+        type: 'success',
+      }),
+    );
 
-      yield put(push('/'));
+    if (action.payload.IdSave) {
+      localStorage.setItem('ssafy-mate-id', action.payload.userEmail);
+    } else {
+      localStorage.removeItem('ssafy-mate-id');
     }
+
+    yield put(push('/'));
   } catch (error: any) {
-    yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
+    yield put(fail(error.response.data || 'UNKNOWN ERROR'));
 
     yield put(
       showSsafyMateAlert({

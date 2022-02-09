@@ -7,8 +7,10 @@ import { call, put, select, takeEvery } from 'redux-saga/effects';
 
 import Swal from 'sweetalert2';
 
+import UserService from '../../services/UserService';
 import TeamService from '../../services/TeamService';
 
+import { ProjectParams } from '../../types/authTypes';
 import {
   TeamInfoResponse,
   MyTeamState,
@@ -63,15 +65,17 @@ const reducer = handleActions<MyTeamState, TeamDataType>(
 
 export default reducer;
 
-export const { createTeam, editTeam, deleteTeam, leaveTeam } = createActions(
-  'CREATE_TEAM',
-  'EDIT_TEAM',
-  'DELETE_TEAM',
-  'LEAVE_TEAM',
-  {
-    prefix,
-  },
-);
+export const { createTeam, getTeam, editTeam, deleteTeam, leaveTeam } =
+  createActions(
+    'CREATE_TEAM',
+    'GET_TEAM',
+    'EDIT_TEAM',
+    'DELETE_TEAM',
+    'LEAVE_TEAM',
+    {
+      prefix,
+    },
+  );
 
 function* createTeamSaga(action: Action<FormData>) {
   try {
@@ -113,11 +117,37 @@ function* createTeamSaga(action: Action<FormData>) {
   }
 }
 
+function* getTeamSaga(action: Action<ProjectParams>) {
+  try {
+    yield put(pending());
+
+    const token: string = yield select((state) => state.auth.token);
+    const userId: number = yield select((state) => state.auth.userId);
+    const teamInfoResponse: TeamInfoResponse = yield call(
+      UserService.getMyTeamInfo,
+      token,
+      userId,
+      action.payload,
+    );
+
+    yield put(success(teamInfoResponse.teamData));
+  } catch (error: any) {
+    yield put(fail(error.response.data));
+
+    Swal.fire({
+      title: '합류된 팀 정보 조회 실패',
+      text: error.response.data.message,
+      icon: 'warning',
+      confirmButtonColor: '#3396f4',
+      confirmButtonText: '확인',
+    });
+  }
+}
+
 function* editTeamSaga(action: Action<TeamEditRequest>) {
   try {
     yield put(pending());
 
-    console.log('payload2', action.payload);
     const token: string = yield select((state) => state.auth.token);
     const myTeamResponse: MyTeamResponse = yield call(
       TeamService.editTeam,
@@ -125,7 +155,6 @@ function* editTeamSaga(action: Action<TeamEditRequest>) {
       action.payload.teamId,
       action.payload.formData,
     );
-
     const teamInfoResponse: AxiosResponse<TeamInfoResponse> = yield call(
       TeamService.getTeamInfo,
       token,
@@ -226,6 +255,7 @@ function* leaveTeamSaga(action: Action<number>) {
 
 export function* myTeamSaga() {
   yield takeEvery(`${prefix}/CREATE_TEAM`, createTeamSaga);
+  yield takeEvery(`${prefix}/GET_TEAM`, getTeamSaga);
   yield takeEvery(`${prefix}/EDIT_TEAM`, editTeamSaga);
   yield takeEvery(`${prefix}/DELETE_TEAM`, deleteTeamSaga);
   yield takeEvery(`${prefix}/LEAVE_TEAM`, leaveTeamSaga);

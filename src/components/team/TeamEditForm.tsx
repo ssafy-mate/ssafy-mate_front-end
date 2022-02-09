@@ -43,6 +43,7 @@ type Params = {
 const TeamEditForm: React.FC = () => {
   const [teamImg, setTeamImg] = useState(null);
   const [previewTeamImg, setPreviewTeamImg] = useState(null);
+  const [teamImgUrl, setTeamImgUrl] = useState<string>('');
   const [campus, setCampus] = useState<string>('');
   const [project, setProject] = useState<string>('');
   const [projectTrack, setProjectTrack] = useState<string>('');
@@ -64,6 +65,7 @@ const TeamEditForm: React.FC = () => {
   const token = useToken();
   const initialTechStacks = useMyTeamTechStacks();
   const techStackList: TechStackWithImg[] = useTechStackList();
+
   const {
     getRootProps,
     getInputLabelProps,
@@ -76,10 +78,10 @@ const TeamEditForm: React.FC = () => {
     focused,
     setAnchorEl,
   } = useAutocomplete({
-    id: 'search-tech-stack',
+    id: 'customized-hook-demo',
     multiple: true,
-    options: techStackList,
     defaultValue: initialTechStacks,
+    options: techStackList,
     getOptionLabel: (option) => option.techStackName,
   });
 
@@ -108,6 +110,10 @@ const TeamEditForm: React.FC = () => {
     }
   }, [dispatch, token, teamId]);
 
+  useEffect(() => {
+    setTechStacks(value);
+  }, [value]);
+
   const editTeam = useCallback(
     (teamId: number, formData: FormData) => {
       dispatch(editTeamSagaStart({ teamId, formData }));
@@ -126,6 +132,7 @@ const TeamEditForm: React.FC = () => {
     setTeamName(teamEditInfo.teamName);
     setTeamImg(teamEditInfo.teamImgUrl);
     setPreviewTeamImg(teamEditInfo.teamImgUrl);
+    setTeamImgUrl(teamEditInfo.teamImgUrl);
     setCampus(teamEditInfo.campus);
     setProject(teamEditInfo.project);
     setProjectTrack(teamEditInfo.projectTrack);
@@ -237,7 +244,7 @@ const TeamEditForm: React.FC = () => {
     teamImg: File | null,
     notice: string,
     introduction: string | null,
-    techStacks: TechStackWithImg[],
+    deduplicatedTechStacks: number[],
     totalRecruitment: number,
     frontendRecruitment: number,
     backendRecruitment: number,
@@ -245,7 +252,9 @@ const TeamEditForm: React.FC = () => {
     const teamFormData = new FormData();
 
     if (teamImg !== null) {
-      teamFormData.append('teamImg', teamImg);
+      teamImg.toString() === teamImgUrl
+        ? teamFormData.append('teamImgUrl', teamImgUrl)
+        : teamFormData.append('teamImg', teamImg);
     }
 
     if (introduction !== null) {
@@ -259,9 +268,7 @@ const TeamEditForm: React.FC = () => {
     teamFormData.append('notice', notice);
     teamFormData.append(
       'techStacks',
-      '[' +
-        techStacks.map((techStack) => techStack.id.toString()).join(',') +
-        ']',
+      '[' + deduplicatedTechStacks.map((id) => id.toString()).join(',') + ']',
     );
     teamFormData.append('totalRecruitment', totalRecruitment.toString());
     teamFormData.append('frontendRecruitment', frontendRecruitment.toString());
@@ -271,6 +278,10 @@ const TeamEditForm: React.FC = () => {
   };
 
   const handleSubmitFormData = () => {
+    const deduplicatedTechStacks = Array.from(
+      new Set(techStacks.map((techStack) => techStack.id)),
+    );
+
     if (
       campus !== null &&
       project !== null &&
@@ -290,7 +301,7 @@ const TeamEditForm: React.FC = () => {
         teamImg,
         notice,
         introduction,
-        techStacks,
+        deduplicatedTechStacks,
         totalRecruitment,
         frontendRecruitment,
         backendRecruitment,
