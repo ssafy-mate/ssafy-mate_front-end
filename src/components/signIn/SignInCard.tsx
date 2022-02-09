@@ -81,6 +81,18 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
     }
   };
 
+  const SignInWithEnterKey = (event: React.KeyboardEvent) => {
+    if (event.code === 'Enter' || event.code === 'NumpadEnter') {
+      if (validation(inputEmail, inputPassword)) {
+        login({
+          userEmail: inputEmail,
+          password: inputPassword,
+          IdSave: idSaveCheckBox,
+        });
+      }
+    }
+  };
+
   const validation = (emailInput: string, passwordInput: string): boolean => {
     setShowError(true);
     passwordInput === ''
@@ -112,7 +124,7 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
     <>
       <Container>
         <CardHead>로그인</CardHead>
-        <SignInForm>
+        <SignInForm onKeyPress={SignInWithEnterKey}>
           <SignInLabel htmlFor="email">이메일</SignInLabel>
           <SignInInput
             type="email"
