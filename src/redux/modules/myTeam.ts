@@ -207,6 +207,8 @@ function* deleteTeamSaga(action: Action<number>) {
 
     yield put(push('/projects/specialization/teams'));
   } catch (error: any) {
+    yield put(fail(error.response.data));
+
     Swal.fire({
       title: '팀 삭제 처리 실패',
       text: error.response.data.message,
