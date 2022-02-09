@@ -2,7 +2,7 @@ import { Action, createActions, handleActions } from 'redux-actions';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
 
 import { showSsafyMateAlert } from './alert';
-import { success } from './auth';
+import { updateAuth } from './auth';
 
 import { SignUpResponse } from './../../types/signUpTypes';
 import {
@@ -137,8 +137,7 @@ function* editUserProjectSaga(action: Action<EditProfileProjectsRequest>) {
       token: token,
       userId: userId,
     });
-    yield (Authdata.token = token);
-    yield put(success(Authdata));
+    yield put(updateAuth(Authdata));
   }
 }
 
@@ -208,8 +207,7 @@ function* editUserInfoSaga(action: Action<EditProfileInfoRequest>) {
           userId: userId,
         },
       );
-      yield (Authdata.token = token);
-      yield put(success(Authdata));
+      yield put(updateAuth(Authdata));
     }
   }
 }
