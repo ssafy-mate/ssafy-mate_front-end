@@ -12,6 +12,8 @@ import { TechStacksWithLevel, TechStackLevel } from '../../types/signUpTypes';
 
 interface TechStackTagWithLevelProps extends TechStackTagProps {
   techStacks: TechStacksWithLevel[];
+  newTechStackDisabled: boolean;
+  oldTechStacksWithLevel: TechStacksWithLevel[];
   updateTechStacks: (techStack: TechStacksWithLevel) => void;
   deleteTechStacks: (techStackId: number) => void;
 }
@@ -20,15 +22,24 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
   id,
   techStackName,
   techStackImgUrl,
+  newTechStackDisabled,
   onDelete,
   techStacks,
   updateTechStacks,
+  oldTechStacksWithLevel,
   deleteTechStacks,
   ...other
 }) => {
   const [selectedTechStackLevel, setSelectedTechStackLevel] = useState<
     TechStackLevel | string
   >('중');
+  useEffect(() => {
+    oldTechStacksWithLevel.forEach((techStack) => {
+      if (techStack.techStackCode === id) {
+        setSelectedTechStackLevel(techStack.techStackLevel);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     techStacks.forEach((techStack) => {
@@ -89,6 +100,7 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
             className="c"
             size="small"
             aria-label="small button group"
+            disabled={newTechStackDisabled}
           >
             <LevelButton
               key="low"
@@ -116,7 +128,7 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
             </LevelButton>
           </MuiButtonGroup>
         </Box>
-        <DeleteButton onClick={deleteTechStack}>
+        <DeleteButton onClick={deleteTechStack} disabled={newTechStackDisabled}>
           <CloseIcon />
         </DeleteButton>
       </Group>
@@ -174,6 +186,10 @@ const Name = styled.h6`
 
 const MuiButtonGroup = styled(ButtonGroup)`
   margin: 0;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 `;
 
 const DeleteButton = styled.button`
@@ -184,6 +200,9 @@ const DeleteButton = styled.button`
   transition: all 0.12s ease-in-out;
   cursor: pointer;
 
+  &:disabled {
+    cursor: not-allowed;
+  }
   &:hover {
     transform: scale(1.15);
   }

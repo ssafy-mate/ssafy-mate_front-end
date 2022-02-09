@@ -184,7 +184,7 @@ function* editUserProjectSaga(action: Action<EditProfileProjectsRequest>) {
       token: token,
       userId: userId,
     });
-
+    yield (Authdata.token = token);
     yield put(success(Authdata));
   }
 }
@@ -245,7 +245,7 @@ function* editUserInfoSaga(action: Action<EditProfileInfoRequest>) {
           userId: userId,
         },
       );
-
+      yield (Authdata.token = token);
       yield put(success(Authdata));
     }
   }

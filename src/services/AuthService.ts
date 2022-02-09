@@ -23,7 +23,7 @@ class AuthService {
     data: EmailVerificationCodeRequest,
   ): Promise<SignUpResponse> {
     const response = await axiosInstance.get<SignUpResponse>(
-      '/api/users/sign-up/verification/email',
+      '/api/users/sign-up/verification/emails',
       {
         params: data,
       },
@@ -36,7 +36,7 @@ class AuthService {
     data: EmailVerificationCodeConfirmRequest,
   ): Promise<{ success: boolean }> {
     const response = await axiosInstance.put<{ success: boolean }>(
-      '/api/users/sign-up/verification/email',
+      '/api/users/sign-up/verification/emails',
       data,
     );
 

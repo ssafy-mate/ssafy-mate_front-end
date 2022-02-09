@@ -1,32 +1,36 @@
-import CheckIcon from '@mui/icons-material/Check';
-import styled from '@emotion/styled';
-import { TechStackWithImg } from '../../types/commonTypes';
-import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
-import { useAutocomplete } from '@mui/material';
-import useTechStackList from '../../hooks/useTechStackList';
-import { Severity, TechStacksWithLevel } from '../../types/signUpTypes';
-import React, { useCallback, useEffect, useState } from 'react';
-import useProfileInfo from '../../hooks/useProfileInfo';
-import { jobListData } from '../../data/jobListData';
+import { useCallback, useEffect, useState } from 'react';
 
-import useToken from '../../hooks/useToken';
-import useUserId from '../../hooks/useUserId';
+import { useDispatch } from 'react-redux';
+import { showSsafyMateAlert } from '../../redux/modules/alert';
 import {
   editProfileInfo,
   editProfileProjectsInfo,
-  updateProfileInfo,
 } from '../../redux/modules/profile';
-import { useDispatch } from 'react-redux';
-import {
-  EditProfileInfoRequest,
-  getProfileInfoRequest,
-} from '../../types/authTypes';
-import { showSsafyMateAlert } from '../../redux/modules/alert';
+
+import styled from '@emotion/styled';
+import CheckIcon from '@mui/icons-material/Check';
+import { useAutocomplete } from '@mui/material';
+
+import { TechStackWithImg } from '../../types/commonTypes';
+import { Severity, TechStacksWithLevel } from '../../types/signUpTypes';
+import { jobListData } from '../../data/jobListData';
 import { projectListData, ProjectTrack } from '../../data/ssafyData';
+
+import useUserId from '../../hooks/useUserId';
+import useToken from '../../hooks/useToken';
+import { EditProfileInfoRequest } from '../../types/authTypes';
+import useProfileInfo from '../../hooks/useProfileInfo';
+import useTechStackList from '../../hooks/useTechStackList';
+import useProfileTechStacks, {
+  convertTechStackWithImg,
+} from '../../hooks/useProfileTeckStacks';
+
 import {
   EditProfileProjectsRequest,
   project,
 } from '../../services/ProfileService';
+
+import ProfileTechStackTagWithLevel from '../common/ProfileTechStackTagWithLevel';
 
 const SsafyMateInformation: React.FC = () => {
   const profileInfo = useProfileInfo();
@@ -34,6 +38,10 @@ const SsafyMateInformation: React.FC = () => {
   const userId: number | null = useUserId();
   const [techStacks, setTechStacks] = useState<TechStacksWithLevel[]>([]);
   const techStackList: TechStackWithImg[] = useTechStackList();
+  const oldTechStacksListData: convertTechStackWithImg = useProfileTechStacks();
+  const oldTechStacksList = oldTechStacksListData.teckStackList;
+  const oldTechStacksWithLevel = oldTechStacksListData.teckStackListWithLevel;
+
   const {
     getRootProps,
     getInputLabelProps,
@@ -49,6 +57,7 @@ const SsafyMateInformation: React.FC = () => {
     id: 'search-tech-stack',
     multiple: true,
     options: techStackList,
+    defaultValue: oldTechStacksList,
     getOptionLabel: (option) => option.techStackName,
   });
 
@@ -68,25 +77,45 @@ const SsafyMateInformation: React.FC = () => {
     );
   };
 
+  const [selfIntroductionDisabled, setSelfIntroductionDisabled] =
+    useState<boolean>(true);
+  const [selfIntroductionValue, setSelfIntroductionValue] =
+    useState<string>('');
+  const [
+    selfIntroductionModifyButtonText,
+    setSelfIntroductionModifyButtonText,
+  ] = useState<string>('수정');
+  const [newJob1, setNewJob1] = useState<string>('');
+  const [newJob2, setNewJob2] = useState<string>('');
+  const [newJobsDisabled, setNewJobsDisabled] = useState<boolean>(true);
+  const [newJobsModifyButtonText, setNewJobsModifyButtonText] =
+    useState<string>('수정');
+  const [oldcommonProject, setOldCommonProject] = useState<string>('');
+  const [commonProject, setCommonProject] = useState<string>('');
+  const [oldspecialProject, setOldSpecialProject] = useState<string>('');
+  const [specialProject, setSpecialProject] = useState<string>('');
+  const [newProjectsDisabled, setNewProjectsDisabled] = useState<boolean>(true);
+  const [projectsModifyButtonText, newProjectsModifyButtonText] =
+    useState<string>('수정');
   const [commonProjectListData, setCommonProjectListData] = useState<
     ProjectTrack[]
   >([]);
   const [specialProjectListData, setSpecialProjectListData] = useState<
     ProjectTrack[]
   >([]);
-
-  const [selfIntroductionDisabled, setSelfIntroductionDisabled] =
+  const [newGitHubUrl, setNewGitHubUrl] = useState<string>('');
+  const [newEtcUrl, setNewEtcUrl] = useState<string>('');
+  const [urlsModifyButtonText, setUrlsModifyButtonText] =
+    useState<string>('수정');
+  const [newUrlsDisabled, setUrlsDisabled] = useState<boolean>(true);
+  const [newTechStackDisabled, setNewTechStackDisabled] =
     useState<boolean>(true);
+  const [newTechStackModifyButtonText, setNewTechStackModifyButtonText] =
+    useState<string>('수정');
 
-  const [selfIntroductionValue, setSelfIntroductionValue] =
-    useState<string>('');
-
-  const [newJob1, setNewJob1] = useState<string>('');
-  const [newJob2, setNewJob2] = useState<string>('');
-  const [oldcommonProject, setOldCommonProject] = useState<string>('');
-  const [commonProject, setCommonProject] = useState<string>('');
-  const [oldspecialProject, setOldSpecialProject] = useState<string>('');
-  const [specialProject, setSpecialProject] = useState<string>('');
+  useEffect(() => {
+    setTechStacks(oldTechStacksWithLevel);
+  }, []);
 
   useEffect(() => {
     if (profileInfo.selfIntroduction !== null) {
@@ -116,7 +145,15 @@ const SsafyMateInformation: React.FC = () => {
         setOldSpecialProject(profileInfo.projects[1].projectTrack);
       }
     }
+    if (profileInfo.githubUrl !== null) {
+      setNewGitHubUrl(profileInfo.githubUrl);
+    }
+    if (profileInfo.etcUrl !== null) {
+      setNewEtcUrl(profileInfo.etcUrl);
+    }
   }, [
+    profileInfo.etcUrl,
+    profileInfo.githubUrl,
     profileInfo.job1,
     profileInfo.job2,
     profileInfo.projects,
@@ -124,58 +161,12 @@ const SsafyMateInformation: React.FC = () => {
     profileInfo.techStacks,
   ]);
 
-  const [
-    selfIntroductionModifyButtonText,
-    setSelfIntroductionModifyButtonText,
-  ] = useState<string>('수정');
-
-  const updateTechStacks = (selectedTechStack: TechStacksWithLevel): void => {
-    const updateTechStackIndex = techStacks.findIndex(
-      (techStack) =>
-        techStack.techStackCode === selectedTechStack.techStackCode,
-    );
-
-    const tempTechStacks = [...techStacks];
-
-    tempTechStacks[updateTechStackIndex] = {
-      techStackCode: selectedTechStack.techStackCode,
-      techStackLevel: selectedTechStack.techStackLevel,
-    };
-
-    setTechStacks(tempTechStacks);
-  };
-
-  const deleteTechStacks = (seletedTechStackId: number): void => {
-    const findStackIndex = techStacks.findIndex(
-      (techStack) => techStack.techStackCode === seletedTechStackId,
-    );
-
-    const tempTechStacks = [...techStacks];
-
-    if (findStackIndex >= 0) {
-      tempTechStacks.splice(findStackIndex, 1);
-    }
-
-    setTechStacks(tempTechStacks);
-  };
-
-  const controlTechStacks = (selectedTechStackId: number) => {
-    const findTeckStackId = techStacks.findIndex(
-      (techStack) => techStack.techStackCode === selectedTechStackId,
-    );
-
-    if (findTeckStackId === -1) {
-      setTechStacks([
-        ...techStacks,
-        {
-          techStackCode: selectedTechStackId,
-          techStackLevel: '중',
-        },
-      ]);
-    } else {
-      deleteTechStacks(selectedTechStackId);
-    }
-  };
+  const updateProfileAndAuth = useCallback(
+    (requestData: EditProfileInfoRequest) => {
+      dispatch(editProfileInfo(requestData));
+    },
+    [dispatch],
+  );
 
   const handleTextAreaEnterKeyPressed = (event: React.KeyboardEvent) => {
     if (event.code === 'Enter' || event.code === 'NumpadEnter') {
@@ -203,10 +194,6 @@ const SsafyMateInformation: React.FC = () => {
       newProfileInfo('self-introduction');
     }
   };
-
-  const [newJobsDisabled, setNewJobsDisabled] = useState<boolean>(true);
-  const [newJobsModifyButtonText, setNewJobsModifyButtonText] =
-    useState<string>('수정');
 
   const handlJobsModifyButton = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
@@ -263,12 +250,21 @@ const SsafyMateInformation: React.FC = () => {
     return EditProjectsData;
   };
 
-  const updateProfileAndAuth = useCallback(
-    (requestData: EditProfileInfoRequest) => {
-      dispatch(editProfileInfo(requestData));
-    },
-    [dispatch],
-  );
+  const EditTechStacks = () => {
+    const EditTechStacksFormDate = new FormData();
+    EditTechStacksFormDate.append('techStacks', JSON.stringify(techStacks));
+
+    return EditTechStacksFormDate;
+  };
+
+  const EditUrls = () => {
+    const EditUrlsFormDate = new FormData();
+
+    EditUrlsFormDate.append('githubUrl', newGitHubUrl);
+    EditUrlsFormDate.append('etcUrl', newEtcUrl);
+
+    return EditUrlsFormDate;
+  };
 
   const updateProfileProjectAndAuth = useCallback(
     (requestData: EditProfileProjectsRequest) => {
@@ -276,10 +272,6 @@ const SsafyMateInformation: React.FC = () => {
     },
     [dispatch],
   );
-
-  const [newProjectsDisabled, setNewProjectsDisabled] = useState<boolean>(true);
-  const [projectsModifyButtonText, newProjectsModifyButtonText] =
-    useState<string>('수정');
 
   const handleProjectSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
     if (event.target.name === 'common-project') {
@@ -299,9 +291,88 @@ const SsafyMateInformation: React.FC = () => {
       newProfileInfo('projects');
       setNewProjectsDisabled(true);
       newProjectsModifyButtonText('수정');
-      //기존 값과 비교해서 서버로 요청
     }
   };
+
+  const handleUrlsModifyButton = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    if (urlsModifyButtonText === '수정') {
+      setUrlsModifyButtonText('확인');
+      setUrlsDisabled(false);
+    } else {
+      newProfileInfo('urls');
+      setUrlsDisabled(true);
+      setUrlsModifyButtonText('수정');
+    }
+  };
+  const handleUrlsInput = (event: React.ChangeEvent<HTMLInputElement>) => {
+    event.target.name === 'githubUrl'
+      ? setNewGitHubUrl(event.target.value)
+      : setNewEtcUrl(event.target.value);
+  };
+
+  const updateTechStacks = (selectedTechStack: TechStacksWithLevel): void => {
+    const updateTechStackIndex = techStacks.findIndex(
+      (techStack) =>
+        techStack.techStackCode === selectedTechStack.techStackCode,
+    );
+
+    const tempTechStacks = [...techStacks];
+
+    tempTechStacks[updateTechStackIndex] = {
+      techStackCode: selectedTechStack.techStackCode,
+      techStackLevel: selectedTechStack.techStackLevel,
+    };
+
+    setTechStacks(tempTechStacks);
+  };
+
+  const deleteTechStacks = (seletedTechStackId: number): void => {
+    const findStackIndex = techStacks.findIndex(
+      (techStack) => techStack.techStackCode === seletedTechStackId,
+    );
+
+    const tempTechStacks = [...techStacks];
+
+    if (findStackIndex >= 0) {
+      tempTechStacks.splice(findStackIndex, 1);
+    }
+
+    setTechStacks(tempTechStacks);
+  };
+
+  const controlTechStacks = (selectedTechStackId: number) => {
+    const findTeckStackId = techStacks.findIndex(
+      (techStack) => techStack.techStackCode === selectedTechStackId,
+    );
+
+    if (findTeckStackId === -1) {
+      setTechStacks([
+        ...techStacks,
+        {
+          techStackCode: selectedTechStackId,
+          techStackLevel: '중',
+        },
+      ]);
+    } else {
+      deleteTechStacks(selectedTechStackId);
+    }
+  };
+
+  const handleTechStackModifyButton = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    if (newTechStackModifyButtonText === '수정') {
+      setNewTechStackModifyButtonText('확인');
+      setNewTechStackDisabled(false);
+    } else {
+      newProfileInfo('techStacks');
+      setNewTechStackDisabled(true);
+      setNewTechStackModifyButtonText('수정');
+    }
+  };
+
   const newProfileInfo = (profileInfoSelected: string) => {
     switch (profileInfoSelected) {
       case 'self-introduction':
@@ -356,12 +427,38 @@ const SsafyMateInformation: React.FC = () => {
         }
         break;
       case 'techStacks':
+        if (oldTechStacksWithLevel !== techStacks) {
+          const RequestFormData: FormData = EditTechStacks();
+
+          if (token !== null && userId !== undefined && userId !== null) {
+            updateProfileAndAuth({
+              data: RequestFormData,
+              token: token,
+              userId: userId,
+              profileInfo: 'tech-stacks',
+            });
+          }
+        }
         break;
       case 'urls':
+        if (
+          profileInfo.githubUrl !== newGitHubUrl ||
+          profileInfo.etcUrl !== newEtcUrl
+        ) {
+          const RequestFormData: FormData = EditUrls();
+
+          if (token !== null && userId !== undefined && userId !== null) {
+            updateProfileAndAuth({
+              data: RequestFormData,
+              token: token,
+              userId: userId,
+              profileInfo: 'urls',
+            });
+          }
+        }
         break;
     }
   };
-
   return (
     <>
       <SsafyMateInformationWrapper>
@@ -505,6 +602,7 @@ const SsafyMateInformation: React.FC = () => {
                   id="tech-stack-options"
                   name="tech-stack-options"
                   placeholder="ex) Vue.js, django, Spring Boot, MySQL"
+                  disabled={newTechStackDisabled}
                   {...getInputProps()}
                 />
               </InfoInputWrapper>
@@ -536,19 +634,23 @@ const SsafyMateInformation: React.FC = () => {
             </SingleInformationWrapper>
             <TechStackList>
               {value.map((option: TechStackWithImg, index: number) => (
-                <TechStackTagWithLevel
+                <ProfileTechStackTagWithLevel
                   id={option.id}
                   techStackName={option.techStackName}
                   techStackImgUrl={option.techStackImgUrl}
                   techStacks={techStacks}
+                  newTechStackDisabled={newTechStackDisabled}
                   updateTechStacks={updateTechStacks}
                   deleteTechStacks={deleteTechStacks}
+                  oldTechStacksWithLevel={oldTechStacksWithLevel}
                   {...getTagProps({ index })}
                 />
               ))}
             </TechStackList>
 
-            <ModifyButton type="button">수정</ModifyButton>
+            <ModifyButton type="button" onClick={handleTechStackModifyButton}>
+              {newTechStackModifyButtonText}
+            </ModifyButton>
           </Row>
 
           <Row>
@@ -562,6 +664,9 @@ const SsafyMateInformation: React.FC = () => {
                 name="githubUrl"
                 placeholder="https://github.com/ssafy-mate"
                 pattern="https://.*"
+                disabled={newUrlsDisabled}
+                onChange={handleUrlsInput}
+                value={newGitHubUrl}
               />
             </SingleInformationWrapper>
           </Row>
@@ -576,11 +681,16 @@ const SsafyMateInformation: React.FC = () => {
                 name="etcUrl"
                 placeholder="https://velog.io/@ssafy-mate"
                 pattern="https://.*"
+                disabled={newUrlsDisabled}
+                onChange={handleUrlsInput}
+                value={newEtcUrl}
               />
             </SingleInformationWrapper>
           </Row>
           <SingleInformationWrapper>
-            <ModifyButton type="button">수정</ModifyButton>
+            <ModifyButton type="button" onClick={handleUrlsModifyButton}>
+              {urlsModifyButtonText}
+            </ModifyButton>
           </SingleInformationWrapper>
         </InfomationWrapper>
       </SsafyMateInformationWrapper>
@@ -703,7 +813,9 @@ const InfoInput = styled.input`
     background-color: #fff;
     color: #495057;
   }
-
+  &:disabled {
+    cursor: not-allowed;
+  }
   @media (max-width: 575px) {
     font-size: 13px;
   }

@@ -32,7 +32,7 @@ export interface EmailVerificationCodeConfirmRequest {
 
 export interface TechStacksWithLevel {
   techStackCode: number;
-  techStackLevel: TechStackLevel;
+  techStackLevel: TechStackLevel | string;
 }
 
 export type TechStackLevel = '상' | '중' | '하';
