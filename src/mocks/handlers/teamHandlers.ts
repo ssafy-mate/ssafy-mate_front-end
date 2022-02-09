@@ -4,41 +4,44 @@ import { teamDataList } from '../database/team';
 
 export const teamHandlers = [
   rest.post(
-    'http://i6a402.p.ssafy.io:8081/api/auth/team',
+    'https://i6a402.p.ssafy.io:8443/api/auth/team',
     async (request, response, context) => {
+      const token: string | null =
+        request.headers['_headers'].authorization.split(' ')[1];
       const status: number = 200;
 
-      switch (status) {
-        case 200:
-          return response(
-            context.json({
-              status: 200,
-              success: true,
-              message: '',
-            }),
-          );
-        case 500:
-          return response(
-            context.json({
-              status: 500,
-              success: false,
-              message: 'Internal Server, 팀 생성 실패',
-            }),
-          );
-        default:
-          return response(
-            context.json({
-              status: 500,
-              success: false,
-              message: '',
-            }),
-          );
+      if (token === null) {
+        return response(
+          context.status(403),
+          context.json({
+            status: 403,
+            success: false,
+            message: '토큰이 유효하지 않습니다.',
+          }),
+        );
       }
+
+      if (status === 500) {
+        return response(
+          context.json({
+            status: 500,
+            success: false,
+            message: 'Internal Server, 팀 생성 실패',
+          }),
+        );
+      }
+
+      return response(
+        context.json({
+          teamId: 1,
+          message: '팀을 성공적으로 생성하였습니다.',
+        }),
+      );
     },
   ),
 
   rest.get(
-    'http://i6a402.p.ssafy.io:8081/api/auth/team/info/:teamId',
+    'https://i6a402.p.ssafy.io:8443/api/auth/team/info/:teamId',
     async (request, response, context) => {
       const { teamId } = request.params;
       const teamIndex = teamDataList.findIndex(
@@ -76,14 +79,14 @@ export const teamHandlers = [
   ),
 
   rest.post(
-    'http://i6a402.p.ssafy.io:8081/api/auth/team/request',
+    'https://i6a402.p.ssafy.io:8443/api/auth/team/request',
     async (request, response, context) => {
-      const token: string =
+      const token: string | null =
         request.headers['_headers'].authorization.split(' ')[1];
       const status: number = 200;
 
       // 토큰이 유효하지 않을 시
-      if (!token) {
+      if (token === null) {
         return response(
           context.status(403),
           context.json({

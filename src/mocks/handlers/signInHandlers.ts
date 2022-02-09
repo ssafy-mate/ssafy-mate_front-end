@@ -40,7 +40,7 @@ export const signInHandlers = [
   ),
 
   rest.delete(
-    'http://i6a402.p.ssafy.io:8081/',
+    'https://i6a402.p.ssafy.io:8443/',
     async (request, response, context) => {},
   ),
 ];

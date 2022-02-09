@@ -52,7 +52,9 @@ const TeamInfoSection: React.FC = () => {
 
   const dispatch = useDispatch();
   const { teamId } = useParams<Params>();
-  const { isLoading, teamData, isError, errorMessage } = useTeamInfo(teamId);
+  const { isLoading, teamData, isError, errorMessage } = useTeamInfo(
+    parseInt(teamId),
+  );
 
   useEffect(() => {
     if (isError) {
@@ -153,7 +155,11 @@ const TeamInfoSection: React.FC = () => {
             <TitleBox>
               <TeamImgWrapper>
                 <TeamImg
-                  src={teamData.teamImgUrl}
+                  src={
+                    teamData.teamImgUrl !== null
+                      ? teamData.teamImgUrl
+                      : '/images/assets/basic-team-logo.png'
+                  }
                   alt={`${teamData.teamName} 팀의 대표 이미지`}
                 />
               </TeamImgWrapper>

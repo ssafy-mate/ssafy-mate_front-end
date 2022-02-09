@@ -4,6 +4,7 @@ import { AnyAction, Reducer } from 'redux';
 import { ProfileState } from '../redux/modules/profile';
 
 import { alertState } from './alertTypes';
+import { MyTeamState } from './teamTypes';
 
 export type SignInRequestType = {
   userEmail: string;
@@ -48,7 +49,7 @@ export interface AuthState {
   studentNumber: string | null;
   campus: string | null;
   ssafyTrack: string | null;
-  projects: Project[] | null;
+  projects: Project[];
   token: string | null;
   loading: boolean;
   error: string | null;
@@ -57,11 +58,6 @@ export interface AuthState {
 export interface ProjectsState {
   projects: Project[];
 }
-
-// export interface RootState {
-//   auth: AuthState;
-//   router: Reducer<RouterState<unknown>, AnyAction>;
-// }
 
 export interface ProjectTrackRequestType {
   projectId: number;
@@ -75,6 +71,7 @@ export interface ApplicationRequestType {
 
 export interface RootState {
   auth: AuthState;
+  myTeam: MyTeamState;
   controlAlert: alertState;
   profile: ProfileState;
   router: Reducer<RouterState<unknown>, AnyAction>;
@@ -96,3 +93,4 @@ export interface getProfileInfoRequest {
   token: string;
   userId: number;
 }
+

@@ -23,7 +23,26 @@ const createReduxStore = () => {
         studentNumber: null,
         campus: null,
         ssafyTrack: null,
-        projects: null,
+        projects: [
+          {
+            projectId: 1,
+            projectName: '공통 프로젝트',
+            projectTrack: null,
+            projectTeamId: null,
+          },
+          {
+            projectId: 2,
+            projectName: '특화 프로젝트',
+            projectTrack: null,
+            projectTeamId: null,
+          },
+          {
+            projectId: 3,
+            projectName: '자율 프로젝트',
+            projectTrack: null,
+            projectTeamId: null,
+          },
+        ],
         token,
         loading: false,
         error: null,

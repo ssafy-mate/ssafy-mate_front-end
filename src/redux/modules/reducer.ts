@@ -7,8 +7,11 @@ import storage from 'redux-persist/lib/storage';
 import history from '../../history';
 
 import auth from './auth';
+import myTeam from './myTeam';
 import controlAlert from './alert';
 import profile from './profile';
+
+
 
 const persistConfig = {
   key: 'root',
@@ -19,6 +22,7 @@ const persistConfig = {
 
 const reducer = combineReducers({
   auth,
+  myTeam,
   controlAlert,
   profile,
   router: connectRouter(history),

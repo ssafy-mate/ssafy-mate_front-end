@@ -12,6 +12,7 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import ArticleIcon from '@mui/icons-material/Article';
+import ChatIcon from '@mui/icons-material/Chat';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import LogoutIcon from '@mui/icons-material/Logout';
@@ -23,6 +24,7 @@ import Popper from '@mui/material/Popper';
 import MenuList from '@mui/material/MenuList';
 import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import Tooltip from '@mui/material/Tooltip';
 
 import { RootState } from '../../types/authTypes';
 
@@ -172,14 +174,23 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
           ) : !isMobile ? (
             <>
               <AccountMenuItem>
-                <IconLink to={`/users/${userId}`}>
-                  <ArticleIcon css={icon} />
-                </IconLink>
+                <Tooltip title="내 프로필" arrow>
+                  <IconLink to={`/users/${userId}`}>
+                    <ArticleIcon css={icon} />
+                  </IconLink>
+                </Tooltip>
               </AccountMenuItem>
               <AccountMenuItem>
                 <IconLink to="#">
                   <NotificationsIcon css={icon} />
                 </IconLink>
+              </AccountMenuItem>
+              <AccountMenuItem>
+                <Tooltip title="채팅 목록" arrow>
+                  <IconLink to={`/chatting/${userId}`}>
+                    <ChatIcon css={icon} />
+                  </IconLink>
+                </Tooltip>
               </AccountMenuItem>
               <AccountMenuItem>
                 <IconButton
@@ -225,9 +236,6 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
                             >
                               계정 관리
                             </Link>
-                            {/* <Link to={`/users/${userId}/account`}>
-                              계정 관리
-                            </Link> */}
                           </AccountBoxItem>
                           <AccountBoxItem onClick={handleAccountBoxClose}>
                             <Link to={`/users/${userId}/offers`}>
@@ -236,7 +244,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
                           </AccountBoxItem>
                           <AccountBoxItem onClick={handleAccountBoxClose}>
                             <Link to={`/users/${userId}/applications`}>
-                              지원 이력
+                              보낸 요청
                             </Link>
                           </AccountBoxItem>
                           <Divider />
@@ -256,23 +264,27 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
           ) : (
             <>
               <AccountMenuItem>
+
                 <PageLink
                   to={`/users/account/edit`}
                   onClick={handleUserAccountEdit}
                 >
                   계정 관리
                 </PageLink>
-                {/* <PageLink to={`/users/${userId}/account`}>계정 관리</PageLink> */}
+                <PageLink to={`/users/${userId}`}>내 프로필</PageLink>
               </AccountMenuItem>
               <AccountMenuItem>
-                <PageLink to={`/users/${userId}`}>내 프로필</PageLink>
+                <PageLink to={`/chatting/${userId}`}>채팅 목록</PageLink>
+              </AccountMenuItem>
+              <AccountMenuItem>
+                <PageLink to={`/users/${userId}/account`}>계정 관리</PageLink>
               </AccountMenuItem>
               <AccountMenuItem>
                 <PageLink to={`/users/${userId}/offers`}>받은 제안</PageLink>
               </AccountMenuItem>
               <AccountMenuItem>
                 <PageLink to={`/users/${userId}/applications`}>
-                  지원 이력
+                  보낸 요청
                 </PageLink>
               </AccountMenuItem>
               <AccountMenuItem css={line} />
