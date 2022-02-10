@@ -48,7 +48,7 @@ const Container = styled.header<ContainerProps>`
   position: fixed;
   top: 0;
   left: 0;
-  z-index: 10;
+  z-index: 100;
   width: 100%;
   background-color: ${(props) => (props.isScrollActive ? '#fff' : '#3396f4')};
   transition: background-color 0.08s ease-in-out;
