@@ -66,9 +66,18 @@ const ProfileInformationSection: React.FC = () => {
     null,
   );
   const [specialProject, setSpecialProject] = useState<string | null>(null);
-  const [newProjectsDisabled, setNewProjectsDisabled] = useState<boolean>(true);
-  const [projectsModifyButtonText, newProjectsModifyButtonText] =
-    useState<string>('수정');
+  const [newCommonProjectsDisabled, setNewCommonProjectsDisabled] =
+    useState<boolean>(true);
+  const [
+    newCommonProjectsModifyButtonText,
+    setNewCommonProjectsModifyButtonText,
+  ] = useState<string>('수정');
+  const [newSpecialProjectsDisabled, setNewSpecialProjectsDisabled] =
+    useState<boolean>(true);
+  const [
+    newSpecialprojectsModifyButtonText,
+    setNewSpecialProjectsModifyButtonText,
+  ] = useState<string>('수정');
   const [newGitHubUrl, setNewGitHubUrl] = useState<string | null>(null);
   const [newEtcUrl, setNewEtcUrl] = useState<string | null>(null);
   const [urlsModifyButtonText, setUrlsModifyButtonText] =
@@ -153,10 +162,15 @@ const ProfileInformationSection: React.FC = () => {
     if (commonProject === 'default') {
       setCommonProject(null);
     }
+
     if (specialProject === 'default') {
       setSpecialProject(null);
     }
-  }, [commonProject, specialProject]);
+
+    if (newJob2 === 'default') {
+      setNewJob2(null);
+    }
+  }, [commonProject, newJob2, specialProject]);
 
   const updateProfileAndAuth = useCallback(
     (requestData: EditProfileInfoRequest) => {
@@ -244,21 +258,6 @@ const ProfileInformationSection: React.FC = () => {
     return editSelfIntroductionFormDate;
   };
 
-  const getEditProjects = () => {
-    const editProjectsData: ProfileProject[] = [
-      {
-        project: '공통 프로젝트',
-        projectTrack: commonProject,
-      },
-      {
-        project: '특화 프로젝트',
-        projectTrack: specialProject,
-      },
-    ];
-
-    return editProjectsData;
-  };
-
   const getEditTechStacks = () => {
     const editTechStacksFormDate = new FormData();
 
@@ -295,16 +294,29 @@ const ProfileInformationSection: React.FC = () => {
     }
   };
 
-  const handleProjectssModifyButton = (
+  const handleCommonProjectssModifyButton = (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
   ) => {
-    if (projectsModifyButtonText === '수정') {
-      newProjectsModifyButtonText('확인');
-      setNewProjectsDisabled(false);
+    if (newCommonProjectsModifyButtonText === '수정') {
+      setNewCommonProjectsModifyButtonText('확인');
+      setNewCommonProjectsDisabled(false);
     } else {
-      requestEditProfile('projects');
-      setNewProjectsDisabled(true);
-      newProjectsModifyButtonText('수정');
+      requestEditProfile('common-projects');
+      setNewCommonProjectsDisabled(true);
+      setNewCommonProjectsModifyButtonText('수정');
+    }
+  };
+
+  const handleSpecialProjectssModifyButton = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  ) => {
+    if (newSpecialprojectsModifyButtonText === '수정') {
+      setNewSpecialProjectsModifyButtonText('확인');
+      setNewSpecialProjectsDisabled(false);
+    } else {
+      requestEditProfile('special-projects');
+      setNewSpecialProjectsDisabled(true);
+      setNewSpecialProjectsModifyButtonText('수정');
     }
   };
 
@@ -424,21 +436,33 @@ const ProfileInformationSection: React.FC = () => {
           }
         }
         break;
-      case 'projects':
-        if (
-          oldcommonProject !== commonProject ||
-          oldspecialProject !== specialProject
-        ) {
-          const RequestProjectData: ProfileProject[] = getEditProjects();
 
+      case 'common-projects':
+        if (oldcommonProject !== commonProject) {
+          const RequestProjectData: ProfileProject = {
+            project: '공통 프로젝트',
+            projectTrack: commonProject,
+          };
           if (token !== null && userId !== undefined && userId !== null) {
             updateProfileProjectAndAuth({
-              data: RequestProjectData[0],
+              data: RequestProjectData,
               token: token,
               userId: userId,
             });
+          }
+        }
+
+        break;
+      case 'special-projects':
+        if (oldspecialProject !== specialProject) {
+          const RequestProjectData: ProfileProject = {
+            project: '특화 프로젝트',
+            projectTrack: specialProject,
+          };
+
+          if (token !== null && userId !== undefined && userId !== null) {
             updateProfileProjectAndAuth({
-              data: RequestProjectData[1],
+              data: RequestProjectData,
               token: token,
               userId: userId,
             });
@@ -566,7 +590,7 @@ const ProfileInformationSection: React.FC = () => {
                 name="common-project"
                 value={commonProject !== null ? commonProject : 'default'}
                 onChange={handleProjectSelect}
-                disabled={newProjectsDisabled}
+                disabled={newCommonProjectsDisabled}
               >
                 <option value="default">- 선택 -</option>
                 {PROJECT_LIST[0].projectTracks !== undefined &&
@@ -577,6 +601,15 @@ const ProfileInformationSection: React.FC = () => {
                   ))}
               </Select>
             </SingleInformationWrapper>
+            <SingleInformationWrapper className="top-right-gap-button">
+              <ModifyButton
+                type="button"
+                className="project-track-select__edit-button"
+                onClick={handleCommonProjectssModifyButton}
+              >
+                {newCommonProjectsModifyButtonText}
+              </ModifyButton>
+            </SingleInformationWrapper>
             <SingleInformationWrapper className="right-gap">
               <Label htmlFor="special-project">특화 프로젝트 트랙</Label>
               <Select
@@ -584,7 +617,7 @@ const ProfileInformationSection: React.FC = () => {
                 name="special-project"
                 value={specialProject !== null ? specialProject : 'default'}
                 onChange={handleProjectSelect}
-                disabled={newProjectsDisabled}
+                disabled={newSpecialProjectsDisabled}
               >
                 <option value="default">- 선택 -</option>
                 {PROJECT_LIST[1].projectTracks !== undefined &&
@@ -599,9 +632,9 @@ const ProfileInformationSection: React.FC = () => {
               <ModifyButton
                 type="button"
                 className="project-track-select__edit-button"
-                onClick={handleProjectssModifyButton}
+                onClick={handleSpecialProjectssModifyButton}
               >
-                {projectsModifyButtonText}
+                {newSpecialprojectsModifyButtonText}
               </ModifyButton>
             </SingleInformationWrapper>
           </Row>
@@ -747,6 +780,11 @@ const SingleInformationWrapper = styled.div`
     width: 13%;
     margin-top: 25px;
   }
+  &.top-right-gap-button {
+    width: 13%;
+    margin-top: 25px;
+    margin-right: 8px;
+  }
   &.tech-stack-input {
     position: relative;
   }
@@ -760,6 +798,11 @@ const SingleInformationWrapper = styled.div`
     &.top-gap-button {
       width: 100%;
       margin-top: 8px;
+    }
+    &.top-right-gap-button {
+      width: 100%;
+      margin-top: 8px;
+      margin-bottom: 8px;
     }
   }
 `;
