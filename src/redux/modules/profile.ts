@@ -95,24 +95,13 @@ function* editProfileProjectSaga(action: Action<EditProfileProjectsRequest>) {
     );
   } catch (error: any) {
     yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
-
-    if (error.reponse.data.status === 500) {
-      yield put(
-        showSsafyMateAlert({
-          show: true,
-          text: error.response.data.message,
-          type: 'error',
-        }),
-      );
-    } else {
-      yield put(
-        showSsafyMateAlert({
-          show: true,
-          text: error.response.data.message,
-          type: 'warning',
-        }),
-      );
-    }
+    yield put(
+      showSsafyMateAlert({
+        show: true,
+        text: error.response.data.message,
+        type: 'warning',
+      }),
+    );
   } finally {
     const token: string = yield select((state) => state.auth.token);
     const userId: number = yield select((state) => state.auth.userId);
@@ -158,23 +147,13 @@ function* editProfileInfoSaga(action: Action<EditProfileInfoRequest>) {
   } catch (error: any) {
     yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
 
-    if (error.reponse.data.status === 500) {
-      yield put(
-        showSsafyMateAlert({
-          show: true,
-          text: error.response.data.message,
-          type: 'error',
-        }),
-      );
-    } else {
-      yield put(
-        showSsafyMateAlert({
-          show: true,
-          text: error.response.data.message,
-          type: 'warning',
-        }),
-      );
-    }
+    yield put(
+      showSsafyMateAlert({
+        show: true,
+        text: error.response.data.message,
+        type: 'warning',
+      }),
+    );
   } finally {
     const token: string = yield select((state) => state.auth.token);
     const userId: number = yield select((state) => state.auth.userId);
@@ -213,23 +192,13 @@ function* updateProfileInfoSaga(action: Action<getProfileInfoRequest>) {
   } catch (error: any) {
     yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
 
-    if (error.reponse.data.status === 500) {
-      yield put(
-        showSsafyMateAlert({
-          show: true,
-          text: error.response.data.message,
-          type: 'error',
-        }),
-      );
-    } else {
-      yield put(
-        showSsafyMateAlert({
-          show: true,
-          text: error.response.data.message,
-          type: 'warning',
-        }),
-      );
-    }
+    yield put(
+      showSsafyMateAlert({
+        show: true,
+        text: error.response.data.message,
+        type: 'warning',
+      }),
+    );
   }
 }
 
