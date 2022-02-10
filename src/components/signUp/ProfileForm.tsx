@@ -14,7 +14,7 @@ import Alert from '@mui/material/Alert';
 
 import history from '../../history';
 
-import { jobListData } from '../../data/jobListData';
+import { JOB_LIST } from '../../data/jobListData';
 
 import { TechStackWithImg } from '../../types/commonTypes';
 import {
@@ -419,7 +419,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
               <option value="default" disabled>
                 - 선택 -
               </option>
-              {jobListData.map((job) => (
+              {JOB_LIST.map((job) => (
                 <option key={job.id} value={job.name}>
                   {job.name}
                 </option>
@@ -442,13 +442,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
               disabled={job1 === 'default' ? true : false}
             >
               <option value="default">- 선택 -</option>
-              {jobListData
-                .filter((job) => job.name !== job1)
-                .map((job) => (
-                  <option key={job.id} value={job.name}>
-                    {job.name}
-                  </option>
-                ))}
+              {JOB_LIST.filter((job) => job.name !== job1).map((job) => (
+                <option key={job.id} value={job.name}>
+                  {job.name}
+                </option>
+              ))}
             </Select>
           </InputWrapper>
         </Row>

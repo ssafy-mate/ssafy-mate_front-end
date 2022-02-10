@@ -9,7 +9,7 @@ interface Campus {
   ssafyTracks: SsafyTrack[];
 }
 
-export const ssafyTrackListData: SsafyTrack[] = [
+export const SSAFY_TRACK_LIST: SsafyTrack[] = [
   {
     id: 1,
     name: 'Python Track',
@@ -28,7 +28,7 @@ export const ssafyTrackListData: SsafyTrack[] = [
   },
 ];
 
-export const campusListData: Campus[] = [
+export const CAMPUS_LIST: Campus[] = [
   {
     id: 1,
     area: '서울',
@@ -120,7 +120,7 @@ interface Project {
   projectTracks?: ProjectTrack[];
 }
 
-export const projectListData: Project[] = [
+export const PROJECT_LIST: Project[] = [
   {
     id: 1,
     name: '공통 프로젝트',

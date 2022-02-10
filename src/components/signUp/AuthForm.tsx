@@ -13,7 +13,7 @@ import {
   onlyNumberReg,
 } from '../../utils/regularExpressionData';
 
-import { campusListData } from '../../data/ssafyData';
+import { CAMPUS_LIST } from '../../data/ssafyData';
 
 import {
   Severity,
@@ -60,12 +60,12 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
   };
 
   useEffect(() => {
-    const selectedCampusIndex = campusListData.findIndex(
+    const selectedCampusIndex = CAMPUS_LIST.findIndex(
       (campus) => campus.area === selectedCampus,
     );
 
     if (selectedCampusIndex > -1) {
-      setSelectedTracks(campusListData[selectedCampusIndex].ssafyTracks);
+      setSelectedTracks(CAMPUS_LIST[selectedCampusIndex].ssafyTracks);
     }
   }, [selectedCampus]);
 
@@ -140,7 +140,7 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
               <option value="default" disabled>
                 - 선택 -
               </option>
-              {campusListData.map((campus) => (
+              {CAMPUS_LIST.map((campus) => (
                 <option key={campus.id} value={campus.area}>
                   {campus.area}
                 </option>

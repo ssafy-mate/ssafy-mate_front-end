@@ -25,7 +25,7 @@ import Swal from 'sweetalert2';
 import { TechStackWithImg } from '../../types/commonTypes';
 import { TeamEditInfoResponse } from '../../types/teamTypes';
 
-import { campusListData, projectListData } from '../../data/ssafyData';
+import { CAMPUS_LIST, PROJECT_LIST } from '../../data/ssafyData';
 
 import useToken from '../../hooks/useToken';
 import useMyTeamTechStacks from '../../hooks/useMyTeamTechStacks';
@@ -375,7 +375,7 @@ const TeamEditForm: React.FC = () => {
             <RequirementLabel htmlFor="campus">캠퍼스</RequirementLabel>
             <Select id="campus" name="campus" value={campus} required disabled>
               <option value="">- 선택 -</option>
-              {campusListData.map((campus) => (
+              {CAMPUS_LIST.map((campus) => (
                 <option key={campus.id} value={campus.area}>
                   {campus.area}
                 </option>
@@ -392,7 +392,7 @@ const TeamEditForm: React.FC = () => {
               disabled
             >
               <option value="">- 선택 -</option>
-              {projectListData.map((project) => (
+              {PROJECT_LIST.map((project) => (
                 <option key={project.id} value={project.name}>
                   {project.name}
                 </option>

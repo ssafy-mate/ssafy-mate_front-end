@@ -232,7 +232,9 @@ const TeamInfoSection: React.FC = () => {
               </TeamTitleWrapper>
             </TitleBox>
             <ButtonBox>
-              {!isTotalSufficient && renderingOptionButton(role)}
+              {isTotalSufficient && role === 'outsider'
+                ? null
+                : renderingOptionButton(role)}
               <SharingButton>
                 <ShareIcon />
                 <span>공유하기</span>

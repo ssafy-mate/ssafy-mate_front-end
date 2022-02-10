@@ -19,7 +19,7 @@ import Swal from 'sweetalert2';
 import { TechStackWithImg } from '../../types/commonTypes';
 import { GetMyTeamIdParams } from '../../types/userTypes';
 
-import { campusListData, projectListData } from '../../data/ssafyData';
+import { CAMPUS_LIST, PROJECT_LIST } from '../../data/ssafyData';
 
 import useToken from '../../hooks/useToken';
 import useUserId from '../../hooks/useUserId';
@@ -311,7 +311,7 @@ const TeamCreateForm: React.FC = () => {
               disabled
             >
               <option value="">- 선택 -</option>
-              {campusListData.map((campus) => (
+              {CAMPUS_LIST.map((campus) => (
                 <option key={campus.id} value={campus.area}>
                   {campus.area}
                 </option>
@@ -328,7 +328,7 @@ const TeamCreateForm: React.FC = () => {
               disabled
             >
               <option value="">- 선택 -</option>
-              {projectListData.map((project) => (
+              {PROJECT_LIST.map((project) => (
                 <option key={project.id} value={project.name}>
                   {project.name}
                 </option>
