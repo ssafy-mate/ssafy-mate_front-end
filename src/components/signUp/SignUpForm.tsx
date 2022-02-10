@@ -96,6 +96,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
   const signUpEmailOnChange: string = watch('signUpEmail');
   const verificationCodeOnChange: string = watch('verificationCode');
   const signUpPasswordOnChange: string = watch('signUpPassword');
+  const signUpCheckPasswordOnChange: string = watch('signUpCheckPassword');
 
   const updateSignUpProps = (data: SignUp) => {
     const { signUpEmail, signUpPassword } = data;
@@ -446,7 +447,13 @@ const SignUpForm: React.FC<SignUpProps> = ({
                 confirmPasswordInput === signUpPasswordOnChange,
             })}
             placeholder="비밀번호 확인"
-            className={errors.signUpCheckPassword ? 'have-error' : ''}
+            className={
+              errors.signUpCheckPassword ||
+              (signUpCheckPasswordOnChange !== '' &&
+                signUpCheckPasswordOnChange !== signUpPasswordOnChange)
+                ? 'have-error'
+                : ''
+            }
           />
           {errors.signUpCheckPassword?.type === 'required' && (
             <ErrorMessageWrapper>
@@ -455,12 +462,14 @@ const SignUpForm: React.FC<SignUpProps> = ({
               </ErrorMessage>
             </ErrorMessageWrapper>
           )}
-          {errors.signUpCheckPassword?.type !== 'required' &&
-            errors.signUpCheckPassword?.type === 'validate' && (
-              <ErrorMessageWrapper>
-                <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
-              </ErrorMessageWrapper>
-            )}
+          {(errors.signUpCheckPassword?.type !== 'required' &&
+            errors.signUpCheckPassword?.type === 'validate') ||
+          (signUpCheckPasswordOnChange !== '' &&
+            signUpCheckPasswordOnChange !== signUpPasswordOnChange) ? (
+            <ErrorMessageWrapper>
+              <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
+            </ErrorMessageWrapper>
+          ) : null}
         </InputWrapper>
         <SubmitButton type="submit">기본 정보 작성 완료</SubmitButton>
       </Container>
