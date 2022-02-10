@@ -14,8 +14,6 @@ import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
 import CloseIcon from '@mui/icons-material/Close';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import CheckIcon from '@mui/icons-material/Check';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
 
 import { JOB_LIST } from '../../data/jobListData';
 
@@ -55,9 +53,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
     useState<boolean>(false);
   const [agreementError, setAgreementError] = useState<boolean>(false);
   useState<boolean>(false);
-  const [alertOpen, setAlertOpen] = useState<boolean>(false);
-  const [alertText, setAlertText] = useState<string>('');
-  const [alertSeverity, setAlertSeverity] = useState<Severity>('success');
 
   const techStackList: TechStackWithImg[] = useTechStackList();
   const dispatch = useDispatch();
@@ -94,9 +89,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
         type: alertType,
       }),
     );
-  };
-  const alertClose = () => {
-    setAlertOpen(false);
   };
 
   useEffect(() => {
@@ -313,25 +305,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
 
   return (
     <>
-      {alertOpen && (
-        <SsafyAuthSnackBar
-          open={alertOpen}
-          autoHideDuration={2000}
-          onClose={alertClose}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
-        >
-          <ResponseAlert
-            onClose={alertClose}
-            severity={alertSeverity}
-            sx={{ width: '100%' }}
-          >
-            {alertText}
-          </ResponseAlert>
-        </SsafyAuthSnackBar>
-      )}
       <Container>
         <Row>
           <AvatarWrapper>
@@ -912,14 +885,6 @@ const ErrorMessage = styled.span`
   font-size: 13px;
   line-height: 1.5;
   color: #f44336;
-`;
-
-const SsafyAuthSnackBar = styled(Snackbar)`
-  height: 20%;
-`;
-
-const ResponseAlert = styled(Alert)`
-  white-space: pre-line;
 `;
 
 const avatar = css`
