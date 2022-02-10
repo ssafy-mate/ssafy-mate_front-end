@@ -12,7 +12,7 @@ interface LogoWrapperProps extends ContainerProps {}
 
 interface LogoNameProps extends ContainerProps {}
 
-const NotFoundHeader: React.FC = () => {
+const ErrorHeader: React.FC = () => {
   const [isScrollActive, setIsScrollActive] = useState<boolean>(
     window.scrollY !== 0 ? true : false,
   );
@@ -99,4 +99,4 @@ const LogoName = styled.span<LogoNameProps>`
   transition: color 0.08s ease-in-out;
 `;
 
-export default NotFoundHeader;
+export default ErrorHeader;

@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 
-import NotFoundHeader from '../components/common/NotFoundHeader';
-import NotFoundGuidanceSection from '../components/notFound/NotFoundGuidanceSection';
+import ErrorHeader from '../components/error/ErrorHeader';
+import ErrorGuidanceSection from '../components/error/ErrorGuidanceSection';
 import Footer from '../components/common/Footer';
 
 const NotFoundPage: React.FC = () => {
@@ -11,8 +11,13 @@ const NotFoundPage: React.FC = () => {
 
   return (
     <>
-      <NotFoundHeader />
-      <NotFoundGuidanceSection />
+      <ErrorHeader />
+      <ErrorGuidanceSection
+        title="Page Not Found"
+        guidance="요청하신 페이지를 찾을 수 없습니다."
+        subGuidance="입력하신 주소가 정확한지 다시 한번 확인해 주세요."
+        haveHomeLink={true}
+      />
       <Footer offMarginTop={true} />
     </>
   );

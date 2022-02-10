@@ -77,7 +77,7 @@ const App: React.FC = () => {
           <Route exact path="/chatting/:roomId" component={ChattingPage} />
           <Route component={NotFoundPage} />
         </Switch>
-        {/* {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />} */}
+        {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}
       </Router>
     </ErrorBoundary>
   );
