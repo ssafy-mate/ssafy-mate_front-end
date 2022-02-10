@@ -37,7 +37,6 @@ import CommentIcon from '@mui/icons-material/Comment';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 
-const localUrl = 'http://localhost:3095';
 const socketUrl = 'https://i6a402.p.ssafy.io:3100';
 const PAGE_SIZE = 20;
 const drawerWidth = 250;
@@ -135,8 +134,14 @@ const ChattingForm: React.FC = () => {
         });
 
         axios.post(`${socketUrl}/api/chats`, params).then(() => {
-          mutateChat();
           mutateRoom();
+          mutateChat().then(() => {
+            if (scrollbarRef.current) {
+              setTimeout(() => {
+                scrollbarRef?.current?.scrollToBottom();
+              }, 50);
+            }
+          });
         });
       }
     },
@@ -303,7 +308,10 @@ const ChattingForm: React.FC = () => {
                     }`}
                   >
                     <div css={listItemCss}>
-                      <img src={room.profileImgUrl} />
+                      <img
+                        src={room.profileImgUrl}
+                        alt="sender profile image"
+                      />
                       <span>{`${room.userName}@${
                         room.userEmail.split('@')[0]
                       }`}</span>
@@ -350,7 +358,7 @@ const ChattingForm: React.FC = () => {
                   }&userName=${room.userName}@${room.userEmail.split('@')[0]}`}
                 >
                   <div css={listItemCss}>
-                    <img src={room.profileImgUrl} />
+                    <img src={room.profileImgUrl} alt="sender profile image" />
                     <span>{`${room.userName}@${
                       room.userEmail.split('@')[0]
                     }`}</span>
@@ -379,7 +387,12 @@ const ChattingForm: React.FC = () => {
             <ChatRoomMessageWrapper>
               <ChatRoomUserNameBar>
                 <ChatRoomHeaderProfile className="userName">
-                  <img></img>
+                  {roomData &&
+                    roomData?.map((item, index) => {
+                      if (item.userId === Number(userId)) {
+                        return <img src={item.profileImgUrl} />;
+                      }
+                    })}
                   <div className="userName">
                     <span>{userName}</span>
                   </div>
@@ -417,7 +430,12 @@ const ChattingForm: React.FC = () => {
                             return (
                               <MessageBoxWrapper>
                                 <MessageBoxLeftContent key={index}>
-                                  <img></img>
+                                  {roomData &&
+                                    roomData?.map((item, index) => {
+                                      if (item.userId === Number(userId)) {
+                                        return <img src={item.profileImgUrl} />;
+                                      }
+                                    })}
                                   <p>{message.content}</p>
                                   <MessageTimeBox>
                                     <div className="message_date">
