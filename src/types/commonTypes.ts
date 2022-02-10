@@ -24,7 +24,7 @@ export interface HomeBannerCardData {
 
 export interface HomeBannderCardProps extends HomeBannerCardData {}
 
-export interface HomeBannerSlideData extends HomeBannerCardData {
+export interface HomeBannerSlideType extends HomeBannerCardData {
   id: number;
   hexColorCode: string;
 }
@@ -38,7 +38,7 @@ export interface ProjectBannerCardData {
 
 export interface ProjectBannerCardProps extends ProjectBannerCardData {}
 
-export interface ProjectBannerSlideData extends ProjectBannerCardData {
+export interface ProjectBannerSlideType extends ProjectBannerCardData {
   id: number;
   hexColorCode: string;
 }

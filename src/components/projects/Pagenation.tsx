@@ -10,7 +10,6 @@ import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
 
 import useQueryString from '../../hooks/useQueryString';
-import useToken from '../../hooks/useToken';
 
 interface PagenationProps {
   totalPage: number;
