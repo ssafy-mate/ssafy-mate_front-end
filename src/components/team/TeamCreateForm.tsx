@@ -17,26 +17,24 @@ import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
 import Swal from 'sweetalert2';
 
 import { TechStackWithImg } from '../../types/commonTypes';
-import { GetMyTeamIdParams } from '../../types/userTypes';
 
 import { CAMPUS_LIST, PROJECT_LIST } from '../../data/ssafyData';
 
-import useToken from '../../hooks/useToken';
-import useUserId from '../../hooks/useUserId';
 import useTechStackList from '../../hooks/useTechStackList';
 import useUserProjectInfo from '../../hooks/useUserProjectInfo';
-
-import UserService from '../../services/UserService';
+import useMyTeamId from '../../hooks/useMyTeamId';
 
 import TechStackTag from '../common/TechStackTag';
 import WarningMessage from '../common/WarningMessage';
 
-const PROJECT_ID: number = 2;
+const CURRENT_PROJECT_ID: number = 2;
+const CURRENT_PROJECT: string = '특화 프로젝트';
 
 const TeamCreateForm: React.FC = () => {
   const [teamImg, setTeamImg] = useState(null);
   const [previewTeamImg, setPreviewTeamImg] = useState(null);
-  const [campus, project, projectTrack] = useUserProjectInfo(PROJECT_ID);
+  const [campus, project, projectTrack] =
+    useUserProjectInfo(CURRENT_PROJECT_ID);
   const [teamName, setTeamName] = useState<string>('');
   const [notice, setNotice] = useState<string>('');
   const [introduction, setIntroduction] = useState<string>('');
@@ -48,8 +46,7 @@ const TeamCreateForm: React.FC = () => {
     useState<boolean>(false);
 
   const dispatch = useDispatch();
-  const token = useToken();
-  const userId = useUserId();
+  const myTeamId = useMyTeamId(CURRENT_PROJECT);
   const techStackList: TechStackWithImg[] = useTechStackList();
   const {
     getRootProps,
@@ -70,35 +67,23 @@ const TeamCreateForm: React.FC = () => {
   });
 
   useEffect(() => {
-    async function checkTeam(
-      token: string,
-      userId: number,
-      params: GetMyTeamIdParams,
-    ) {
-      const teamId = await UserService.getMyTeamId(token, userId, params);
+    if (myTeamId !== null) {
+      Swal.fire({
+        title: '팀 생성 불가',
+        text: '해당 프로젝트 팀에 이미 합류되어 있어 팀 생성이 불가능합니다.',
+        icon: 'warning',
+        confirmButtonColor: '#3396f4',
+        confirmButtonText: '확인',
+      });
 
-      if (teamId !== null) {
-        Swal.fire({
-          title: '팀 생성 불가',
-          text: '해당 프로젝트 팀에 이미 합류되어 있어 팀 생성이 불가능합니다.',
-          icon: 'warning',
-          confirmButtonColor: '#3396f4',
-          confirmButtonText: '확인',
-        });
-
-        dispatch(push('/projects/specialization/teams'));
-      }
+      dispatch(push('/projects/specialization/teams'));
     }
-
-    if (token !== null && userId !== null && project !== null) {
-      checkTeam(token, userId, { project });
-    }
-  }, [dispatch, token, userId, project]);
+  }, [dispatch, myTeamId]);
 
   useEffect(() => {
-    const selectedTechStackCodes = value.map((techStack) => techStack.id);
+    const selectedTechStacks = value.map((techStack) => techStack.techStackId);
 
-    setTechStacks(selectedTechStackCodes);
+    setTechStacks(selectedTechStacks);
   }, [value]);
 
   const createTeam = useCallback(
@@ -328,9 +313,9 @@ const TeamCreateForm: React.FC = () => {
               disabled
             >
               <option value="">- 선택 -</option>
-              {PROJECT_LIST.map((project) => (
-                <option key={project.id} value={project.name}>
-                  {project.name}
+              {PROJECT_LIST.map((projectItem) => (
+                <option key={projectItem.projectId} value={projectItem.project}>
+                  {projectItem.project}
                 </option>
               ))}
             </Select>
@@ -349,10 +334,13 @@ const TeamCreateForm: React.FC = () => {
               <option value="" disabled>
                 - 선택 -
               </option>
-              <option value="인공지능">인공지능</option>
-              <option value="빅데이터">빅데이터</option>
-              <option value="블록체인">블록체인</option>
-              <option value="IoT 제어">IoT 제어</option>
+              {PROJECT_LIST.find(
+                (project) => project.projectId === CURRENT_PROJECT_ID,
+              )?.projectTracks?.map((projectTrack) => (
+                <option key={projectTrack.id} value={projectTrack.name}>
+                  {projectTrack.name}
+                </option>
+              ))}
             </Select>
           </InputWrapper>
         </SsafyInfoWrapper>
@@ -455,7 +443,7 @@ const TeamCreateForm: React.FC = () => {
         <TechStackList>
           {value.map((option: TechStackWithImg, index: number) => (
             <TechStackTag
-              id={option.id}
+              techStackId={option.techStackId}
               techStackName={option.techStackName}
               techStackImgUrl={option.techStackImgUrl}
               {...getTagProps({ index })}

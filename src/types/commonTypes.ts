@@ -3,7 +3,7 @@ import { AutocompleteGetTagProps } from '@mui/material';
 export type ProjectTrack = string;
 
 export interface TechStack {
-  id: number;
+  techStackId: number;
   techStackName: string;
 }
 
@@ -45,7 +45,7 @@ export interface ProjectBannerSlideType extends ProjectBannerCardData {
 
 export interface ProjectLinkCardType {
   projectId: number;
-  projectName: string;
+  project: string;
   pageUrl: string;
   imgUrl: string;
   hexColorCode: string;

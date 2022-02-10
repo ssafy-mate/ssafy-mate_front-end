@@ -9,22 +9,30 @@ import ProjectLinkCard from './ProjectLinkCard';
 const PROJECT_LINK_CARD_LIST: ProjectLinkCardType[] = [
   {
     projectId: 1,
-    projectName: '공통 프로젝트',
+    project: '공통 프로젝트',
     pageUrl: '/projects/common/teams',
     imgUrl: '/images/projects/common-project_link.png',
     hexColorCode: '#3396f4',
   },
   {
     projectId: 2,
-    projectName: '특화 프로젝트',
+    project: '특화 프로젝트',
     pageUrl: '/projects/specialization/teams',
     imgUrl: '/images/projects/specialization-project_link.png',
     hexColorCode: '#84c0f8',
-    trackOptions: ['인공지능', '빅데이터', '블록체인', 'IoT 제어'],
+    trackOptions: [
+      '인공지능(영상)',
+      '인공지능(음성)',
+      '빅데이터(추천)',
+      '빅데이터(분산)',
+      '블록체인(P2P거래)',
+      '블록체인(디지털화폐)',
+      'IoT 제어',
+    ],
   },
   {
     projectId: 3,
-    projectName: '자율 프로젝트',
+    project: '자율 프로젝트',
     pageUrl: '/projects/autonomy/teams',
     imgUrl: '/images/projects/autonomy-project_link.png',
     hexColorCode: '#385a7b',
@@ -39,7 +47,7 @@ const ProjectsSection: React.FC = () => {
           <ProjectLinkCard
             key={projectLinkCardData.projectId}
             projectId={projectLinkCardData.projectId}
-            projectName={projectLinkCardData.projectName}
+            project={projectLinkCardData.project}
             pageUrl={projectLinkCardData.pageUrl}
             imgUrl={projectLinkCardData.imgUrl}
             hexColorCode={projectLinkCardData.hexColorCode}

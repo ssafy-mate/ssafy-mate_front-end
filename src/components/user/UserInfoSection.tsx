@@ -8,7 +8,6 @@ import { sendTeamOffer as sendTeamOfferSagaStart } from '../../redux/modules/aut
 import styled from '@emotion/styled';
 
 import ShareIcon from '@mui/icons-material/Share';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import SchoolIcon from '@mui/icons-material/School';
 import ComputerIcon from '@mui/icons-material/Computer';
 import IntegrationInstructionsIcon from '@mui/icons-material/IntegrationInstructions';
@@ -263,7 +262,7 @@ const UserInfoSection: React.FC = () => {
                   <InfoItem>
                     <InfoLabel>
                       <ComputerIcon />
-                      {userData.projects[0].name} 트랙
+                      {userData.projects[0].project} 트랙
                     </InfoLabel>
                     <InfoContent>
                       {userData.projects[0].projectTrack !== null
@@ -274,7 +273,7 @@ const UserInfoSection: React.FC = () => {
                   <InfoItem>
                     <InfoLabel>
                       <GroupsIcon />
-                      {userData.projects[0].name} 팀
+                      {userData.projects[0].project} 팀
                     </InfoLabel>
                     {userData.projects[0].projectTeam ? (
                       <InnerLink
@@ -291,7 +290,7 @@ const UserInfoSection: React.FC = () => {
                   <InfoItem>
                     <InfoLabel>
                       <ComputerIcon />
-                      {userData.projects[1].name} 트랙
+                      {userData.projects[1].project} 트랙
                     </InfoLabel>
                     <InfoContent>
                       {userData.projects[1].projectTrack}
@@ -300,7 +299,7 @@ const UserInfoSection: React.FC = () => {
                   <InfoItem>
                     <InfoLabel>
                       <GroupsIcon />
-                      {userData.projects[1].name} 팀
+                      {userData.projects[1].project} 팀
                     </InfoLabel>
                     {userData.projects[1].projectTeam ? (
                       <InnerLink
@@ -317,14 +316,14 @@ const UserInfoSection: React.FC = () => {
                   <InfoItem>
                     <InfoLabel>
                       <ComputerIcon />
-                      {userData.projects[2].name} 트랙
+                      {userData.projects[2].project} 트랙
                     </InfoLabel>
                     <InfoContent>-</InfoContent>
                   </InfoItem>
                   <InfoItem>
                     <InfoLabel>
                       <GroupsIcon />
-                      {userData.projects[2].name} 팀
+                      {userData.projects[2].project} 팀
                     </InfoLabel>
                     {userData.projects[2].projectTeam ? (
                       <InnerLink
@@ -397,7 +396,7 @@ const UserInfoSection: React.FC = () => {
               <TechStackList>
                 {userData.techStacks.map((techStack) => (
                   <UserTechStackTag
-                    key={techStack.id}
+                    key={techStack.techStackId}
                     techStackImgUrl={techStack.techStackImgUrl}
                     techStackName={techStack.techStackName}
                     techStackLevel={techStack.techStackLevel}
@@ -470,6 +469,7 @@ const Container = styled.section`
 
   @media (max-width: 575px) {
     margin-top: 70px;
+    margin-bottom: 90px;
   }
 `;
 

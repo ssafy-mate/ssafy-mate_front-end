@@ -25,7 +25,7 @@ import RequestService from '../../services/RequestService';
 import PersistReducerService from '../../services/PersistReducerService';
 
 import { showSsafyMateAlert } from './alert';
-import { profileInitialState, updateProfile } from './profile';
+import { initialState as profileInitialState, updateProfile } from './profile';
 import { success as myTeamSuccess } from './myTeam';
 
 interface UserApplicationResponseType {
@@ -48,21 +48,21 @@ const initialState: AuthState = {
   projects: [
     {
       projectId: 1,
-      projectName: '공통 프로젝트',
+      project: '공통 프로젝트',
       projectTrack: null,
-      projectTeamId: null,
+      teamId: null,
     },
     {
       projectId: 2,
-      projectName: '특화 프로젝트',
+      project: '특화 프로젝트',
       projectTrack: null,
-      projectTeamId: null,
+      teamId: null,
     },
     {
       projectId: 3,
-      projectName: '자율 프로젝트',
+      project: '자율 프로젝트',
       projectTrack: null,
-      projectTeamId: null,
+      teamId: null,
     },
   ],
   token: null,
@@ -175,7 +175,7 @@ function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
       { project },
     );
 
-    // yield put(myTeamSuccess(teamInfoResponse.teamData));
+    yield put(myTeamSuccess(teamInfoResponse.teamData));
 
     yield put(
       showSsafyMateAlert({
@@ -208,12 +208,6 @@ function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
 function* logoutSaga() {
   try {
     yield put(pending());
-    //const token: string = yield select((state) => state.auth.token);
-    // yield call(SignInService.logout, token);
-    // TokenService.remove();
-    // yield put(success(null));
-    // TokenService.remove();
-    // yield put(success(null));
   } catch (error: any) {
   } finally {
     yield put(

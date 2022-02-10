@@ -12,23 +12,23 @@ interface AccountEditTabsProps {
 const AccountEditTaps: React.FC<AccountEditTabsProps> = ({
   setAcccountEditTap,
 }) => {
-  const [value, setValue] = React.useState<string>('ssafyInformation');
+  const [tab, setTab] = React.useState<string>('basicInformation');
 
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-    setAcccountEditTap(newValue);
+  const handleChangeTab = (event: React.SyntheticEvent, newTab: string) => {
+    setTab(newTab);
+    setAcccountEditTap(newTab);
   };
 
   return (
     <Box sx={{ width: '100%' }}>
       <AccountEditTabs
-        value={value}
-        onChange={handleChange}
+        value={tab}
+        onChange={handleChangeTab}
         textColor="primary"
         indicatorColor="primary"
       >
-        <AccountEditTab value="ssafyInformation" label="기본 정보" />
-        <AccountEditTab value="ssafyMateInformation" label="프로필 정보" />
+        <AccountEditTab value="basicInformation" label="기본 정보" />
+        <AccountEditTab value="profileInformation" label="프로필 정보" />
       </AccountEditTabs>
     </Box>
   );
@@ -37,9 +37,11 @@ const AccountEditTaps: React.FC<AccountEditTabsProps> = ({
 const AccountEditTabs = styled(Tabs)`
   width: 100%;
 `;
+
 const AccountEditTab = styled(Tab)`
   font-family: 'Spoqa Han Sans Neo', 'sans-serif';
   width: 50%;
+
   @media (max-width: 575px) {
     font-size: 13px;
   }

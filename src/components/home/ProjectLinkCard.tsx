@@ -25,7 +25,7 @@ import ProjectTrackDialog from './ProjectTrackDialog';
 
 const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
   projectId,
-  projectName,
+  project,
   pageUrl,
   imgUrl,
   hexColorCode,
@@ -79,9 +79,9 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
             onClick={handleClickCardItem}
             css={{ backgroundColor: hexColorCode }}
           >
-            <CardImg src={imgUrl} alt={`${projectName} 이미지`} />
+            <CardImg src={imgUrl} alt={`${project} 이미지`} />
             <CardTitle>
-              {projectName}
+              {project}
               <br />팀 빌딩 바로가기
             </CardTitle>
           </Card>
@@ -89,7 +89,7 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
             id="ringtone-menu"
             keepMounted
             open={open}
-            projectName={projectName}
+            project={project}
             selectedProjectTrack={selectedProjectTrack}
             pageUrl={pageUrl}
             hexColorCode={hexColorCode}
@@ -103,9 +103,9 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
             onClick={handleClickOpenBlockDialog}
             css={{ backgroundColor: hexColorCode }}
           >
-            <CardImg src={imgUrl} alt={`${projectName} 이미지`} />
+            <CardImg src={imgUrl} alt={`${project} 이미지`} />
             <CardTitle>
-              {projectName}
+              {project}
               <br />팀 빌딩 바로가기
             </CardTitle>
           </Card>

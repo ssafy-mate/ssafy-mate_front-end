@@ -1,28 +1,24 @@
 import { Action, createActions, handleActions } from 'redux-actions';
 import { call, put, select, takeEvery } from 'redux-saga/effects';
-
 import { showSsafyMateAlert } from './alert';
 import { updateAuth } from './auth';
 
-import { SignUpResponse } from './../../types/signUpTypes';
 import {
   EditProfileInfoRequest,
   getProfileInfoRequest,
   SignInResponse,
 } from '../../types/authTypes';
-import { UserData, UserInfoResponse } from '../../hooks/useUserInfo';
-
-import ProfileService, {
+import { SignUpResponse } from './../../types/signUpTypes';
+import {
+  UserData,
+  ProfileState,
+  UserInfoResponse,
   EditProfileProjectsRequest,
-} from '../../services/ProfileService';
+} from '../../types/userTypes';
 
-export interface ProfileState {
-  info: UserData | null;
-  loading: boolean | null;
-  error: string | null;
-}
+import ProfileService from '../../services/ProfileService';
 
-export const profileInitialState: ProfileState = {
+export const initialState: ProfileState = {
   info: null,
   loading: false,
   error: null,
@@ -39,7 +35,7 @@ export const { pending, updateProfile, fail } = createActions(
   },
 );
 
-const profile = handleActions<ProfileState, UserData>(
+const reducer = handleActions<ProfileState, UserData>(
   {
     PENDING: (state) => ({
       ...state,
@@ -57,32 +53,30 @@ const profile = handleActions<ProfileState, UserData>(
       error: action.payload.message,
     }),
   },
-  profileInitialState,
+  initialState,
   {
     prefix,
   },
 );
 
-export default profile;
+export default reducer;
 
-//saga
-export const { updateProfileInfo, editProfileInfo, editProfileProjectsInfo } =
+export const { editProfileProjectsInfo, editProfileInfo, updateProfileInfo } =
   createActions(
-    'UPDATE_PROFILE_INFO',
-    'EDIT_PROFILE_INFO',
     'EDIT_PROFILE_PROJECTS_INFO',
+    'EDIT_PROFILE_INFO',
+    'UPDATE_PROFILE_INFO',
     {
       prefix,
     },
   );
 
-function* editUserProjectSaga(action: Action<EditProfileProjectsRequest>) {
+function* editProfileProjectSaga(action: Action<EditProfileProjectsRequest>) {
   try {
     yield put(pending());
 
     const token: string = yield select((state) => state.auth.token);
     const userId: number = yield select((state) => state.auth.userId);
-
     const response: SignUpResponse = yield call(
       ProfileService.editProfileProjectsInfo,
       {
@@ -122,7 +116,6 @@ function* editUserProjectSaga(action: Action<EditProfileProjectsRequest>) {
   } finally {
     const token: string = yield select((state) => state.auth.token);
     const userId: number = yield select((state) => state.auth.userId);
-
     const profileData: UserInfoResponse = yield call(
       ProfileService.getProfileInfo,
       {
@@ -133,21 +126,21 @@ function* editUserProjectSaga(action: Action<EditProfileProjectsRequest>) {
 
     yield put(updateProfile(profileData.userData));
 
-    const Authdata: SignInResponse = yield call(ProfileService.updateAuthInfo, {
+    const authData: SignInResponse = yield call(ProfileService.updateAuthInfo, {
       token: token,
       userId: userId,
     });
-    yield put(updateAuth(Authdata));
+
+    yield put(updateAuth(authData));
   }
 }
 
-function* editUserInfoSaga(action: Action<EditProfileInfoRequest>) {
+function* editProfileInfoSaga(action: Action<EditProfileInfoRequest>) {
   try {
     yield put(pending());
 
     const token: string = yield select((state) => state.auth.token);
     const userId: number = yield select((state) => state.auth.userId);
-
     const response: SignUpResponse = yield call(
       ProfileService.editProfileInfo,
       {
@@ -188,7 +181,6 @@ function* editUserInfoSaga(action: Action<EditProfileInfoRequest>) {
   } finally {
     const token: string = yield select((state) => state.auth.token);
     const userId: number = yield select((state) => state.auth.userId);
-
     const profileData: UserInfoResponse = yield call(
       ProfileService.getProfileInfo,
       {
@@ -200,25 +192,24 @@ function* editUserInfoSaga(action: Action<EditProfileInfoRequest>) {
     yield put(updateProfile(profileData.userData));
 
     if (action.payload.profileInfo === 'ssafy-track') {
-      const Authdata: SignInResponse = yield call(
+      const authData: SignInResponse = yield call(
         ProfileService.updateAuthInfo,
         {
           token: token,
           userId: userId,
         },
       );
-      yield put(updateAuth(Authdata));
+      yield put(updateAuth(authData));
     }
   }
 }
 
-function* updateUserInfoSaga(action: Action<getProfileInfoRequest>) {
+function* updateProfileInfoSaga(action: Action<getProfileInfoRequest>) {
   try {
     yield put(pending());
 
     const token: string = yield select((state) => state.auth.token);
     const userId: number = yield select((state) => state.auth.userId);
-
     const data: UserInfoResponse = yield call(ProfileService.getProfileInfo, {
       token: token,
       userId: userId,
@@ -249,7 +240,10 @@ function* updateUserInfoSaga(action: Action<getProfileInfoRequest>) {
 }
 
 export function* profileSaga() {
-  yield takeEvery(`${prefix}/UPDATE_PROFILE_INFO`, updateUserInfoSaga);
-  yield takeEvery(`${prefix}/EDIT_PROFILE_INFO`, editUserInfoSaga);
-  yield takeEvery(`${prefix}/EDIT_PROFILE_PROJECTS_INFO`, editUserProjectSaga);
+  yield takeEvery(`${prefix}/EDIT_PROFILE_INFO`, editProfileInfoSaga);
+  yield takeEvery(
+    `${prefix}/EDIT_PROFILE_PROJECTS_INFO`,
+    editProfileProjectSaga,
+  );
+  yield takeEvery(`${prefix}/UPDATE_PROFILE_INFO`, updateProfileInfoSaga);
 }

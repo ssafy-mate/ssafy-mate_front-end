@@ -67,7 +67,7 @@ const TeamItem: React.FC<TeamItemProps> = ({
         </TeamStatusList>
         <TechStackList>
           {techStacks.map((techStack) => (
-            <TechStackItem key={techStack.id}>
+            <TechStackItem key={techStack.techStackId}>
               {techStack.techStackName}
             </TechStackItem>
           ))}

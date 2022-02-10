@@ -7,7 +7,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { TechStackTagProps } from '../../types/commonTypes';
 
 const TechStackTag: React.FC<TechStackTagProps> = ({
-  id,
+  techStackId,
   techStackName,
   techStackImgUrl,
   onDelete,

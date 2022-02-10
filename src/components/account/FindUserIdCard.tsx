@@ -13,7 +13,7 @@ import {
 } from '../../utils/regularExpressionData';
 import { Severity } from '../../types/signUpTypes';
 
-import FindIdService from '../../services/FindIdService';
+import UserService from '../../services/UserService';
 
 const FindUserIdCard: React.FC = () => {
   const [showError, setShowError] = useState<boolean>(false);
@@ -118,7 +118,7 @@ const FindUserIdCard: React.FC = () => {
     setShowError(true);
 
     if (verification(studentNameInput, studentNumberInput)) {
-      FindIdService.getUserId({
+      UserService.getUserEmail({
         studentNumber: studentNumberInput,
         userName: studentNameInput,
       })

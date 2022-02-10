@@ -160,14 +160,13 @@ const ProfileForm: React.FC<ProfileProps> = ({
 
   const updateTechStacks = (selectedTechStack: TechStacksWithLevel): void => {
     const updateTechStackIndex = techStacks.findIndex(
-      (techStack) =>
-        techStack.techStackCode === selectedTechStack.techStackCode,
+      (techStack) => techStack.techStackId === selectedTechStack.techStackId,
     );
 
     const tempTechStacks = [...techStacks];
 
     tempTechStacks[updateTechStackIndex] = {
-      techStackCode: selectedTechStack.techStackCode,
+      techStackId: selectedTechStack.techStackId,
       techStackLevel: selectedTechStack.techStackLevel,
     };
 
@@ -176,7 +175,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
 
   const deleteTechStacks = (seletedTechStackId: number): void => {
     const findStackIndex = techStacks.findIndex(
-      (techStack) => techStack.techStackCode === seletedTechStackId,
+      (techStack) => techStack.techStackId === seletedTechStackId,
     );
 
     const tempTechStacks = [...techStacks];
@@ -190,14 +189,14 @@ const ProfileForm: React.FC<ProfileProps> = ({
 
   const controlTechStacks = (selectedTechStackId: number) => {
     const findTeckStackId = techStacks.findIndex(
-      (techStack) => techStack.techStackCode === selectedTechStackId,
+      (techStack) => techStack.techStackId === selectedTechStackId,
     );
 
     if (findTeckStackId === -1) {
       setTechStacks([
         ...techStacks,
         {
-          techStackCode: selectedTechStackId,
+          techStackId: selectedTechStackId,
           techStackLevel: '중',
         },
       ]);
@@ -442,9 +441,9 @@ const ProfileForm: React.FC<ProfileProps> = ({
                 {(groupedOptions as typeof techStackList).map(
                   (option, index) => (
                     <SearchItemWrapper
-                      key={option.id}
+                      key={option.techStackId}
                       onClick={() => {
-                        controlTechStacks(option.id);
+                        controlTechStacks(option.techStackId);
                       }}
                     >
                       <SearchItem {...getOptionProps({ option, index })}>
@@ -471,7 +470,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
           <TechStackList>
             {value.map((option: TechStackWithImg, index: number) => (
               <TechStackTagWithLevel
-                id={option.id}
+                techStackId={option.techStackId}
                 techStackName={option.techStackName}
                 techStackImgUrl={option.techStackImgUrl}
                 techStacks={techStacks}

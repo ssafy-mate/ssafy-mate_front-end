@@ -1,7 +1,7 @@
 import {
   CodeConfirmForNewPassword,
-  emailForNewPassword,
-  newPasswordResponse,
+  EmailForNewPassword,
+  NewPasswordResponse,
   NewPassword,
 } from '../types/accountTypes';
 
@@ -9,9 +9,9 @@ import { axiosInstance } from '../utils/axios';
 
 class NewPasswordService {
   public static async getVerificationCodeForNewPassword(
-    data: emailForNewPassword,
-  ): Promise<newPasswordResponse> {
-    const response = await axiosInstance.get<newPasswordResponse>(
+    data: EmailForNewPassword,
+  ): Promise<NewPasswordResponse> {
+    const response = await axiosInstance.get<NewPasswordResponse>(
       '/api/users/password/new',
       {
         params: data,
@@ -23,8 +23,8 @@ class NewPasswordService {
 
   public static async confirmVerificationCodeForNewPassword(
     data: CodeConfirmForNewPassword,
-  ): Promise<newPasswordResponse> {
-    const response = await axiosInstance.post<newPasswordResponse>(
+  ): Promise<NewPasswordResponse> {
+    const response = await axiosInstance.post<NewPasswordResponse>(
       '/api/users/password/new',
       data,
     );
@@ -34,8 +34,8 @@ class NewPasswordService {
 
   public static async getNewPassword(
     data: NewPassword,
-  ): Promise<newPasswordResponse> {
-    const response = await axiosInstance.put<newPasswordResponse>(
+  ): Promise<NewPasswordResponse> {
+    const response = await axiosInstance.put<NewPasswordResponse>(
       '/api/users/password/new',
       data,
     );

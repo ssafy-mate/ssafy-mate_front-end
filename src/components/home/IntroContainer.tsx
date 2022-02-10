@@ -11,7 +11,7 @@ const SERVICE_INTRODUCTION_LIST: ServiceIntroductionType[] = [
     headText: '팀 공고',
     subHeadText: '나와 맞는 팀을 빠르게 검색',
     descriptionText:
-      '여러 팀들의 정보를 비교하고 검색 폼을 통해 내가 원하는 프로젝트 트랙, 직무, 기술 스택 등을 검색하여 내게 꼭 맞는 팀을 찾아보세요.',
+      '팀들의 정보를 비교하고 검색 폼을 통해 내가 원하는 프로젝트 트랙, 직무, 기술 스택 등을 검색하여 내게 꼭 맞는 팀을 찾아보세요.',
     imgUrl: '/images/home/pc-team-list-sample.png',
   },
   {
@@ -27,7 +27,7 @@ const SERVICE_INTRODUCTION_LIST: ServiceIntroductionType[] = [
     headText: '교육생 공고',
     subHeadText: '팀에 필요한 역량을 가진 교육생을 빠르게 검색',
     descriptionText:
-      '여러 교육생들의 정보를 한눈에 확인하고 검색 폼을 통해 나의 팀에 필요한 직무, 기술 역량 등을 갖춘 교육생을 찾아보세요.',
+      '교육생들의 정보를 한눈에 확인하고 검색 폼을 통해 나의 팀에 필요한 직무, 기술 역량 등을 갖춘 교육생을 찾아보세요.',
     imgUrl: '/images/home/pc-user-list-sample.png',
   },
   {

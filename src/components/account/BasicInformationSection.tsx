@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -15,10 +15,7 @@ import styled from '@emotion/styled';
 import { Avatar } from '@mui/material';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
-import useProfileInfo from '../../hooks/useProfileInfo';
-import useUserId from '../../hooks/useUserId';
-import useToken from '../../hooks/useToken';
-import { UserData } from '../../hooks/useUserInfo';
+import { UserData } from '../../types/userTypes';
 
 import {
   EditProfileInfoRequest,
@@ -27,9 +24,13 @@ import {
 } from '../../types/authTypes';
 import { Severity, SsafyTrack } from '../../types/signUpTypes';
 
+import useToken from '../../hooks/useToken';
+import useUserId from '../../hooks/useUserId';
+import useProfileInfo from '../../hooks/useProfileInfo';
+
 import { CAMPUS_LIST } from '../../data/ssafyData';
 
-const SsafyInformation: React.FC = () => {
+const BasicInformationSection: React.FC = () => {
   const profileInfo: UserData | null = useProfileInfo();
   const token: string | null = useToken();
   const userId: number | null = useUserId();
@@ -193,7 +194,7 @@ const SsafyInformation: React.FC = () => {
 
   return (
     <>
-      <SsafyInformationWrapper>
+      <Container>
         <AvatarWrapperCol>
           <AvatarWrapper>
             <SsafyMateAvatar
@@ -218,27 +219,23 @@ const SsafyInformation: React.FC = () => {
         </AvatarWrapperCol>
         <InfomationWrapper>
           <SingleInformationWrapper>
-            <InformationLabel htmlFor="userName">이름</InformationLabel>
+            <Label htmlFor="userName">이름</Label>
             <Information id="userName">{profileInfo?.userName}</Information>
           </SingleInformationWrapper>
           <SingleInformationWrapper>
-            <InformationLabel htmlFor="userEmail">이메일</InformationLabel>
+            <Label htmlFor="userEmail">이메일</Label>
             <Information id="userEmail">{profileInfo?.userEmail}</Information>
           </SingleInformationWrapper>
           <SingleInformationWrapper>
-            <InformationLabel htmlFor="ssafyCampus">
-              SSAFY 캠퍼스
-            </InformationLabel>
+            <Label htmlFor="ssafyCampus">SSAFY 캠퍼스</Label>
             <Information id="ssafyCampus">서울</Information>
           </SingleInformationWrapper>
           <SingleInformationWrapper>
-            <InformationLabel htmlFor="studentNumber">학번</InformationLabel>
+            <Label htmlFor="studentNumber">학번</Label>
             <Information id="studentNumber">{studentNumber}</Information>
           </SingleInformationWrapper>
           <SingleInformationWrapper>
-            <InformationLabel className="necessary" htmlFor="ssafyTrack">
-              교육 트랙
-            </InformationLabel>
+            <RequirementLabel htmlFor="ssafyTrack">교육 트랙</RequirementLabel>
             <SelectWrapper>
               <Select
                 id="ssafyTrack"
@@ -263,12 +260,12 @@ const SsafyInformation: React.FC = () => {
             </NewPasswordLinkButton>
           </SingleInformationWrapper>
         </InfomationWrapper>
-      </SsafyInformationWrapper>
+      </Container>
     </>
   );
 };
 
-const SsafyInformationWrapper = styled.div``;
+const Container = styled.div``;
 
 const AvatarWrapperCol = styled.div`
   display: flex;
@@ -331,25 +328,33 @@ const SingleInformationWrapper = styled.div`
   width: 100%;
 `;
 
-const InformationLabel = styled.label`
+const Label = styled.label`
   margin-bottom: 4px;
-  padding-left: 6px;
   font-size: 14px;
   line-height: 1.5;
   color: #263747;
 
-  &.necessary {
-    &::before {
-      content: '*';
-      display: inline-block;
-      vertical-align: top;
-      margin: 0 0.125rem 0 0;
-      -webkit-font-smoothing: antialiased;
-      font-size: 1.25rem;
-      font-weight: 700;
-      line-height: 1.25rem;
-      color: #f44336;
-    }
+  @media (max-width: 575px) {
+    font-size: 13px;
+  }
+`;
+
+const RequirementLabel = styled.label`
+  margin-bottom: 4px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #263747;
+
+  &::before {
+    content: '*';
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 0.125rem 0 0;
+    -webkit-font-smoothing: antialiased;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.25rem;
+    color: #f44336;
   }
 
   @media (max-width: 575px) {
@@ -403,14 +408,12 @@ const Select = styled.select`
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px#3396f4;
   }
-
   &:focus {
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px #3396f4;
     background-color: #fff;
     color: #495057;
   }
-
   &:disabled {
     border: 1px solid #d7e2eb;
     box-shadow: none;
@@ -451,6 +454,7 @@ const ModifyButton = styled.button`
     cursor: not-allowed;
   }
 `;
+
 const NewPasswordLinkButton = styled(Link)`
   display: flex;
   justify-content: center;
@@ -482,4 +486,4 @@ const NewPasswordLinkButton = styled(Link)`
   }
 `;
 
-export default SsafyInformation;
+export default BasicInformationSection;

@@ -11,7 +11,7 @@ export const usersHandlers = [
       const campus = request.url.searchParams.get('campus');
       const project_track = request.url.searchParams.get('project_track');
       const job1 = request.url.searchParams.get('job1');
-      const techstack_code = request.url.searchParams.get('techstack_code');
+      const techstack_id = request.url.searchParams.get('techstack_id');
       const user_name = request.url.searchParams.get('user_name');
       const ssafy_track = request.url.searchParams.get('ssafy_track');
       const exclusion = request.url.searchParams.get('exclusion');
@@ -26,9 +26,9 @@ export const usersHandlers = [
         .filter((user) => job1 === 'all' || user.job1 === job1)
         .filter(
           (team) =>
-            techstack_code === null ||
+            techstack_id === null ||
             team.techStacks.filter(
-              (techStack) => techStack.id === Number(techstack_code),
+              (techStack) => techStack.id === Number(techstack_id),
             ).length > 0,
         )
         .filter(
@@ -223,21 +223,21 @@ export const usersHandlers = [
           projects: [
             {
               projectId: 1,
-              projectName: '공통 프로젝트',
+              project: '공통 프로젝트',
               projectTrack: '웹 기술',
-              projectTeamId: 1,
+              teamId: 1,
             },
             {
               projectId: 2,
-              projectName: '특화 프로젝트',
+              project: '특화 프로젝트',
               projectTrack: '빅데이터',
-              projectTeamId: null,
+              teamId: null,
             },
             {
               projectId: 3,
-              projectName: '자율 프로젝트',
+              project: '자율 프로젝트',
               projectTrack: null,
-              projectTeamId: null,
+              teamId: null,
             },
           ],
         }),

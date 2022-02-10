@@ -1,14 +1,14 @@
 import { RootState } from './../types/authTypes';
 import { useSelector } from 'react-redux';
 
-import { UserData } from './useUserInfo';
+import { UserData } from '../types/userTypes';
 
 const useProfileInfo = () => {
-  const profile = useSelector<RootState, UserData | null>(
+  const profileInfo = useSelector<RootState, UserData | null>(
     (state) => state.profile.info,
   );
 
-  return profile;
+  return profileInfo;
 };
 
 export default useProfileInfo;

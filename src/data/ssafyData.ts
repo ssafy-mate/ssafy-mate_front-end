@@ -115,15 +115,15 @@ export interface ProjectTrack {
 }
 
 interface Project {
-  id: number;
-  name: string;
+  projectId: number;
+  project: string;
   projectTracks?: ProjectTrack[];
 }
 
 export const PROJECT_LIST: Project[] = [
   {
-    id: 1,
-    name: '공통 프로젝트',
+    projectId: 1,
+    project: '공통 프로젝트',
     projectTracks: [
       {
         id: 1,
@@ -140,8 +140,8 @@ export const PROJECT_LIST: Project[] = [
     ],
   },
   {
-    id: 2,
-    name: '특화 프로젝트',
+    projectId: 2,
+    project: '특화 프로젝트',
     projectTracks: [
       {
         id: 1,
@@ -174,7 +174,7 @@ export const PROJECT_LIST: Project[] = [
     ],
   },
   {
-    id: 3,
-    name: '자율 프로젝트',
+    projectId: 3,
+    project: '자율 프로젝트',
   },
 ];
