@@ -37,6 +37,7 @@ import CommentIcon from '@mui/icons-material/Comment';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 
+const localUrl = 'http://localhost:3095';
 const socketUrl = 'https://i6a402.p.ssafy.io:3100';
 const PAGE_SIZE = 20;
 const drawerWidth = 250;
@@ -128,7 +129,11 @@ const ChattingForm: React.FC = () => {
           setChat('');
           mutateChat();
           mutateRoom();
-          if (scrollbarRef.current) scrollbarRef.current.scrollToBottom();
+          if (scrollbarRef.current) {
+            setTimeout(() => {
+              scrollbarRef?.current?.scrollToBottom();
+            }, 100);
+          }
         });
 
         axios.post(`${socketUrl}/api/chats`, params);
@@ -196,7 +201,7 @@ const ChattingForm: React.FC = () => {
             scrollbarRef.current?.scrollTop(
               scrollbarRef.current?.getScrollHeight() - values.scrollHeight,
             );
-          }, 50);
+          }, 100);
         });
       }
     },
