@@ -91,6 +91,34 @@ const UserInfoSection: React.FC = () => {
     [dispatch],
   );
 
+  const sendKakaoSharingMessage = () => {
+    window.Kakao.Link.sendDefault({
+      objectType: 'feed',
+      content: {
+        title: '싸피 메이트(SSAFY MATE)',
+        description: `${
+          userData !== undefined ? userData.userName : ''
+        } 교육생 상세 정보`,
+        imageUrl: 'https://avatars.githubusercontent.com/u/97279195?s=200&v=4',
+        link: {
+          webUrl: `https://www.ssafymate.site${
+            userData !== undefined ? `/users/${userData.userId}` : ''
+          }`,
+        },
+      },
+      buttons: [
+        {
+          title: '교육생 상세 정보 보러가기',
+          link: {
+            webUrl: `https://www.ssafymate.site${
+              userData !== undefined ? `/users/${userData.userId}` : ''
+            }`,
+          },
+        },
+      ],
+    });
+  };
+
   const handleOpenOfferDialog = () => {
     setOpenOfferDialog(true);
   };
@@ -187,10 +215,9 @@ const UserInfoSection: React.FC = () => {
                 <VolunteerActivismIcon />
                 <span>팀 합류 요청하기</span>
               </RequestButton>
-              <SharingButton>
+              <SharingButton onClick={sendKakaoSharingMessage}>
                 <ShareIcon />
                 <span>공유하기</span>
-                <ArrowDropDownIcon />
               </SharingButton>
             </ButtonBox>
           </HeadContainer>
@@ -642,12 +669,8 @@ const SharingButton = styled.button`
   }
 
   & svg {
-    font-size: 22px;
     margin-right: 8px;
-
-    &:last-of-type {
-      margin-right: 0;
-    }
+    font-size: 22px;
   }
 
   @media (max-width: 1199px) {

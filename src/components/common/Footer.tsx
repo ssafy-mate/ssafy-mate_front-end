@@ -67,7 +67,7 @@ const Footer: React.FC<FooterProps> = ({ offMarginTop }) => {
           </SubMenuList>
           <SnsList>
             <SnsItem
-              href="https://github.com/ssafy-mate"
+              href="https://github.com/ssafy-mate/ssafy-mate_service"
               target="_blank"
               rel="noopener noreferrer"
             >

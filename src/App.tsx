@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { Switch, Route } from 'react-router-dom';
 import { ConnectedRouter as Router } from 'connected-react-router';
 
@@ -34,6 +36,10 @@ import NotFoundPage from './pages/NotFoundPage';
 import ChattingPage from './pages/ChattingPage';
 
 const App: React.FC = () => {
+  useEffect(() => {
+    window.Kakao.init(process.env.REACT_APP_KAKAO_KEY);
+  }, []);
+
   return (
     <ErrorBoundary FallbackComponent={ErrorPage}>
       <Global styles={resetStyles} />
