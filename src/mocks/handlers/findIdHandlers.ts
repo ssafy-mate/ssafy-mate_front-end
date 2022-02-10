@@ -2,7 +2,7 @@ import { rest } from 'msw';
 
 export const findIdHandlers = [
   rest.get(
-    'http://localhost:3000/api/users/id/searching',
+    `${process.env.REACT_APP_SERVER_URL}/api/users/id/searching`,
     async (request, response, context) => {
       const userName = request.url.searchParams.get('userName');
 
