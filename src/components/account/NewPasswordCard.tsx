@@ -21,8 +21,6 @@ import NewPasswordService from '../../services/NewPasswordService';
 import NewPassWordCardSubHead from './NewPassWordCardSubHead';
 import Loading from '../common/Loading';
 
-import useToken from '../../hooks/useToken';
-
 const NewPasswordCard: React.FC = () => {
   const [loadingColor, setLoadingColor] = useState<string>('#3396f4');
   const [minutes, setMinutes] = useState<number>(3);
@@ -45,23 +43,14 @@ const NewPasswordCard: React.FC = () => {
     useState<string>('');
   const [newPasswordCheckInputError, setNewPasswordCheckInputError] =
     useState<string>('');
-  const [timestop, setTimeStop] = useState<number>(0);
+  const [timeStop, setTimeStop] = useState<number>(0);
 
   const dispatch = useDispatch();
-
-  const token = useToken();
-
-  useEffect(() => {
-    if (token === null) {
-      showAlert(true, '로그인 후 이용해주세요.', 'warning');
-      history.push('/');
-    }
-  }, [token]);
 
   useEffect(() => {
     const timer = setInterval(() => {
       if (seconds > 0) {
-        setSeconds(seconds - timestop);
+        setSeconds(seconds - timeStop);
       }
 
       if (seconds === 0) {
@@ -69,18 +58,18 @@ const NewPasswordCard: React.FC = () => {
           clearInterval(timer);
           setInputError('인증코드가 만료되었습니다.');
 
-          if (timestop === 1) {
+          if (timeStop === 1) {
             verificationCodeButtonsOff();
           }
         } else {
-          setMinutes(minutes - timestop);
+          setMinutes(minutes - timeStop);
           setSeconds(59);
         }
       }
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [minutes, seconds, timestop]);
+  }, [minutes, seconds, timeStop]);
 
   useEffect(() => {
     bottomConfirmButtonDisalbed
@@ -150,7 +139,7 @@ const NewPasswordCard: React.FC = () => {
 
   const verificationCodeRequst = (emailInput: string) => {
     setLoading(true);
-
+    setVerificationCodeInput('');
     NewPasswordService.getVerificationCodeForNewPassword({
       userEmail: emailInput,
     })
@@ -200,9 +189,9 @@ const NewPasswordCard: React.FC = () => {
         setInputError('');
         setCodeConfirmButtonDisabled(false);
       }
-    } else if (codeOnChange.length === 8 && timestop !== 0) {
+    } else if (codeOnChange.length === 8 && timeStop !== 0) {
       setCodeConfirmButtonDisabled(false);
-    } else if (codeOnChange.length === 8 && timestop === 1) {
+    } else if (codeOnChange.length === 8 && timeStop === 1) {
       if (seconds === 0 && minutes === 0) {
         verificationCodeButtonsOff();
         setInputError('인증코드가 만료되었습니다.');
@@ -414,7 +403,9 @@ const NewPasswordCard: React.FC = () => {
                         placeholder="인증코드 8자리 입력"
                         required
                         maxLength={8}
+                        value={verificationCodeInput}
                         onChange={handleVerificationCodeInput}
+                        disabled={minutes === 0 && seconds === 0}
                       />
                       {(minutes !== 0 || seconds !== 0) && (
                         <TimeLimit>
@@ -438,7 +429,7 @@ const NewPasswordCard: React.FC = () => {
                     )}
                   </VerificationCodeConfirmWrapper>
                 </VerificationCodeWrapper>
-                {timestop === 1 ? (
+                {timeStop === 1 ? (
                   <ResendEmailWrapper>
                     <ResendEmailMessage>
                       <ResendEmailIcon />
@@ -494,6 +485,7 @@ const NewPasswordCard: React.FC = () => {
                 type="submit"
                 onClick={handleCheckEmailFormat}
                 disabled={bottomConfirmButtonDisalbed}
+                className={loading ? 'cursor-wait' : ''}
               >
                 {loading ? (
                   <Loading selectColor="#fff" />
@@ -711,6 +703,10 @@ const VerificationCodeInput = styled.input`
   background-color: #fbfbfd;
   font-size: 15px;
   line-height: 15px;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
 `;
 
 const TimeLimit = styled.span`
@@ -805,6 +801,10 @@ const SubmitButton = styled.button`
     background-color: #ebf0fe;
     color: #8e888e;
     cursor: not-allowed;
+  }
+
+  &.cursor-wait {
+    cursor: wait;
   }
 
   @media (max-width: 575px) {

@@ -52,6 +52,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
   const [showCodeBox, setShowCodeBox] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingColor, setLoadingColor] = useState<string>('##fff');
+  const [timeStop, setTimeStop] = useState<number>(0);
 
   const {
     register,
@@ -65,23 +66,26 @@ const SignUpForm: React.FC<SignUpProps> = ({
   useEffect(() => {
     const timer = setInterval(() => {
       if (seconds > 0) {
-        setSeconds(seconds - 1);
+        setSeconds(seconds - timeStop);
       }
 
       if (seconds === 0) {
         if (minutes === 0) {
           clearInterval(timer);
           showAndSetError(true, '인증코드가 만료되었습니다.');
-          offCodeInputAndConfirm();
+
+          if (timeStop === 1) {
+            offCodeInputAndConfirm();
+          }
         } else {
-          setMinutes(minutes - 1);
+          setMinutes(minutes - timeStop);
           setSeconds(59);
         }
       }
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [minutes, seconds]);
+  }, [minutes, seconds, timeStop]);
 
   useEffect(() => {
     emailCodeRequestButton
@@ -181,6 +185,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
       setEmailCodeRequestButton(true);
       setLoading(false);
     }
+
     AuthService.getEmailVerificationCode(data)
       .then(({ success, message }) => {
         if (success) {
@@ -189,6 +194,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
           showAlert('success', message);
           offEmailCodeInput();
           setShowCodeBox(true);
+          setTimeStop(1);
           resetTimer();
           setVerificationCodeButtonText('이메일 인증');
         }
@@ -222,6 +228,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
         setEmailInputDisabled(true);
         setEmailInputError('');
         setShowCodeBox(false);
+        setTimeStop(0);
       })
       .catch((error) => {
         if (error.response) {
@@ -297,6 +304,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
               type="button"
               disabled={emailCodeRequestButton}
               onClick={verificationCodeRequest}
+              className={loading ? 'cursor-wait' : ''}
             >
               {loading ? (
                 <Loading selectColor={loadingColor} />
@@ -321,66 +329,75 @@ const SignUpForm: React.FC<SignUpProps> = ({
             <RequirementLabel htmlFor="verification-code">
               인증코드 입력
             </RequirementLabel>
-            <EmailInputWrapper>
-              <VerificationCodeWrapper>
-                <InfoInput
-                  type="text"
-                  id="verification-code"
-                  {...register('verificationCode', {
-                    required: true,
-                    pattern: verificationCodeReg,
-                    minLength: 8,
-                    maxLength: 8,
-                  })}
-                  maxLength={8}
-                  placeholder="인증코드 8자리 입력"
-                  disabled={codeInputDisabled}
-                  className={
-                    errors.verificationCode ? 'have-error' : 'no-error'
-                  }
-                />
-                {!codeInputDisabled && (
-                  <TimeLimit>
-                    {minutes.toString().padStart(2, '0')}:
-                    {seconds.toString().padStart(2, '0')}
-                  </TimeLimit>
-                )}
-              </VerificationCodeWrapper>
-              <AuthButton
-                type="button"
-                onClick={EmailVerificationCodeConfirm}
-                disabled={codeConfirmButton}
-                {...register('signUpConfiromButton', {
-                  required: true,
-                })}
+            <VerificationCodeWrapper>
+              <VerificationCodeConfirmWrapper
+                className={
+                  errors.verificationCode ||
+                  codeVerificationError ||
+                  codeInputDisabled
+                    ? 'have-error'
+                    : ''
+                }
               >
-                확인
-              </AuthButton>
-            </EmailInputWrapper>
-            {(() => {
-              if (codeVerificationError) {
-                return (
-                  <ErrorMessageWrapper>
-                    <ErrorMessage>{codeVerificationErrorText}</ErrorMessage>
-                  </ErrorMessageWrapper>
-                );
-              } else if (errors.verificationCode) {
-                return (
-                  <ErrorMessageWrapper>
-                    <ErrorMessage>{codeVerificationErrorText}</ErrorMessage>
-                  </ErrorMessageWrapper>
-                );
-              }
-            })()}
-            <ResendEmailWrapper>
-              <ResendEmailMessage>
-                <ResendEmailIcon />
-                이메일을 받지 못하셨나요?
-                <ResendLink onClick={verificationCodeRequest}>
-                  이메일 재전송하기
-                </ResendLink>
-              </ResendEmailMessage>
-            </ResendEmailWrapper>
+                <VerificationCodeInputWrapper>
+                  <VerificationCodeInput
+                    type="text"
+                    id="verification-code"
+                    {...register('verificationCode', {
+                      required: true,
+                      pattern: verificationCodeReg,
+                      minLength: 8,
+                      maxLength: 8,
+                    })}
+                    maxLength={8}
+                    placeholder="인증코드 8자리 입력"
+                    disabled={codeInputDisabled}
+                  />
+                  {!codeInputDisabled && (
+                    <TimeLimit>
+                      {minutes.toString().padStart(2, '0')}:
+                      {seconds.toString().padStart(2, '0')}
+                    </TimeLimit>
+                  )}
+                  <CodeConfimtButton
+                    type="button"
+                    onClick={EmailVerificationCodeConfirm}
+                    disabled={codeConfirmButton}
+                    {...register('signUpConfiromButton', {
+                      required: true,
+                    })}
+                  >
+                    확인
+                  </CodeConfimtButton>
+                </VerificationCodeInputWrapper>
+                {(() => {
+                  if (codeVerificationError) {
+                    return (
+                      <ErrorMessageWrapper>
+                        <ErrorMessage>{codeVerificationErrorText}</ErrorMessage>
+                      </ErrorMessageWrapper>
+                    );
+                  } else if (errors.verificationCode) {
+                    return (
+                      <ErrorMessageWrapper>
+                        <ErrorMessage>{codeVerificationErrorText}</ErrorMessage>
+                      </ErrorMessageWrapper>
+                    );
+                  }
+                })()}
+              </VerificationCodeConfirmWrapper>
+            </VerificationCodeWrapper>
+            {timeStop === 1 ? (
+              <ResendEmailWrapper>
+                <ResendEmailMessage>
+                  <ResendEmailIcon />
+                  이메일을 받지 못하셨나요?
+                  <ResendLink onClick={verificationCodeRequest}>
+                    이메일 재전송하기
+                  </ResendLink>
+                </ResendEmailMessage>
+              </ResendEmailWrapper>
+            ) : null}
           </InputWrapper>
         ) : null}
         <InputWrapper>
@@ -480,9 +497,13 @@ const AuthButton = styled.button`
   cursor: pointer;
 
   &:disabled {
-    background-color: #ededed;
+    background-color: #ebf0fe;
     color: #8e888e;
     cursor: not-allowed;
+  }
+
+  &.cursor-wait {
+    cursor: wait;
   }
 
   @media (max-width: 575px) {
@@ -522,6 +543,82 @@ const VerificationCodeWrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
+`;
+
+const VerificationCodeConfirmWrapper = styled.div`
+  overflow: hidden;
+  width: 100%;
+  min-height: 45px;
+  margin-bottom: 10px;
+  padding: 0px 16px;
+  outline: 0;
+  border: 1px solid #d7e2eb;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+  background-color: #fbfbfd;
+  font-size: 16px;
+  line-height: 24px;
+  color: #263747;
+  transition: all 0.08s ease-in-out;
+
+  &:hover {
+    border: 1px solid #3396f4;
+    box-shadow: inset 0 0 0 1px#3396f4;
+  }
+  &:focus {
+    border: 1px solid #3396f4;
+    box-shadow: inset 0 0 0 1px #3396f4;
+    background-color: #fff;
+    color: #495057;
+  }
+
+  &.have-error {
+    border: 1px solid #f44336;
+    box-shadow: inset 0 0 0 1px #ff77774d;
+  }
+`;
+
+const VerificationCodeInputWrapper = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: 45px;
+`;
+
+const VerificationCodeInput = styled.input`
+  flex: 1 0 0px;
+  width: 100%;
+  border: none;
+  background-color: #fbfbfd;
+  font-size: 15px;
+  line-height: 15px;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+`;
+
+const CodeConfimtButton = styled.button`
+  height: 30px;
+  margin-left: 8px;
+  padding: 7px 10px;
+  border: none;
+  border-radius: 0.25rem;
+  box-sizing: border-box;
+  background-color: #3396f4;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 15px;
+  transition: background-color 0.08s ease-in-out;
+  color: #fff;
+  cursor: pointer;
+
+  &:disabled {
+    background-color: #ebf0fe;
+    color: #8e888e;
+    cursor: not-allowed;
+  }
 `;
 
 const InfoInput = styled.input`
@@ -661,21 +758,6 @@ const TimeLimit = styled.span`
 
 const SignUpSnackBar = styled(Snackbar)`
   height: 20%;
-`;
-
-const LoadingWrapper = styled.div`
-  width: 100px;
-  height: 40px;
-  margin-left: 8px;
-  border: none;
-  border-radius: 0.25rem;
-  box-sizing: border-box;
-  transition: background-color 0.08s ease-in-out;
-  cursor: wait;
-
-  @media (max-width: 575px) {
-    font-size: 12px;
-  }
 `;
 
 export default SignUpForm;

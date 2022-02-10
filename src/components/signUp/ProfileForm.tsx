@@ -289,7 +289,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
     if (validation()) {
       AuthService.signUp(data)
         .then(({ message }) => {
-          showAlert(true, message, 'warning');
+          showAlert(true, message, 'success');
 
           history.push('/users/sign_in');
         })

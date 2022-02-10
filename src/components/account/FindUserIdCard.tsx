@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
 import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
-
-import history from '../../history';
 
 import styled from '@emotion/styled';
 
@@ -16,7 +14,6 @@ import {
 import { Severity } from '../../types/signUpTypes';
 
 import FindIdService from '../../services/FindIdService';
-import useToken from '../../hooks/useToken';
 
 const FindUserIdCard: React.FC = () => {
   const [showError, setShowError] = useState<boolean>(false);
@@ -28,8 +25,6 @@ const FindUserIdCard: React.FC = () => {
   const [findIdSuccessText, setFindIdSuccessText] = useState<string | null>('');
 
   const dispatch = useDispatch();
-
-  const token = useToken();
 
   const showAlert = (
     alertShow: boolean,
@@ -44,13 +39,6 @@ const FindUserIdCard: React.FC = () => {
       }),
     );
   };
-
-  useEffect(() => {
-    if (token === null) {
-      showAlert(true, '로그인 후 이용해주세요.', 'warning');
-      history.push('/');
-    }
-  }, [token]);
 
   const onCheckEnter = (event: React.KeyboardEvent) => {
     if (event.code === 'Enter' || event.code === 'NumpadEnter') {
