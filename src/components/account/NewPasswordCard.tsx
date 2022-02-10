@@ -5,7 +5,7 @@ import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/m
 
 import { push } from 'connected-react-router';
 
-import NewPasswordService from '../../services/NewPasswordService';
+import UserService from '../../services/UserService';
 
 import styled from '@emotion/styled';
 import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
@@ -140,7 +140,7 @@ const NewPasswordCard: React.FC = () => {
   const verificationCodeRequst = (emailInput: string) => {
     setLoading(true);
     setVerificationCodeInput('');
-    NewPasswordService.getVerificationCodeForNewPassword({
+    UserService.getVerificationCodeForNewPassword({
       userEmail: emailInput,
     })
       .then(({ message }) => {
@@ -218,7 +218,7 @@ const NewPasswordCard: React.FC = () => {
   };
 
   const verificationCodeConfirmRequest = (verificationCodeInput: string) => {
-    NewPasswordService.confirmVerificationCodeForNewPassword({
+    UserService.confirmVerificationCodeForNewPassword({
       code: verificationCodeInput,
       userEmail: emailInput,
     })
@@ -341,7 +341,7 @@ const NewPasswordCard: React.FC = () => {
   };
 
   const NewPasswordRequest = () => {
-    NewPasswordService.getNewPassword({
+    UserService.getNewPassword({
       userEmail: emailInput,
       password: newPasswordInput,
     })

@@ -18,7 +18,6 @@ import { TeamOfferRequestType, TeamInfoResponse } from '../../types/teamTypes';
 
 import history from '../../history';
 
-import SignInService from '../../services/SignInService';
 import TokenService from '../../services/TokenService';
 import UserService from '../../services/UserService';
 import RequestService from '../../services/RequestService';
@@ -157,7 +156,7 @@ function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
   try {
     yield put(pending());
 
-    const data: SignInResponse = yield call(SignInService.login, {
+    const data: SignInResponse = yield call(UserService.login, {
       userEmail: action.payload.userEmail,
       password: action.payload.password,
     });
