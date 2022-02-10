@@ -84,6 +84,8 @@ const TeamEditForm: React.FC = () => {
     multiple: true,
     defaultValue: initialTechStacks,
     options: techStackList,
+    isOptionEqualToValue: (option, value) =>
+      option.techStackId === value.techStackId,
     getOptionLabel: (option) => option.techStackName,
   });
 
