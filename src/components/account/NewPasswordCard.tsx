@@ -21,6 +21,8 @@ import NewPasswordService from '../../services/NewPasswordService';
 import NewPassWordCardSubHead from './NewPassWordCardSubHead';
 import Loading from '../common/Loading';
 
+import useToken from '../../hooks/useToken';
+
 const NewPasswordCard: React.FC = () => {
   const [loadingColor, setLoadingColor] = useState<string>('#3396f4');
   const [minutes, setMinutes] = useState<number>(3);
@@ -46,6 +48,15 @@ const NewPasswordCard: React.FC = () => {
   const [timestop, setTimeStop] = useState<number>(0);
 
   const dispatch = useDispatch();
+
+  const token = useToken();
+
+  useEffect(() => {
+    if (token === null) {
+      showAlert(true, '로그인 후 이용해주세요.', 'warning');
+      history.push('/');
+    }
+  }, [token]);
 
   useEffect(() => {
     const timer = setInterval(() => {
