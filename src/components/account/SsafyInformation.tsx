@@ -30,12 +30,13 @@ import { Severity, SsafyTrack } from '../../types/signUpTypes';
 import { CAMPUS_LIST } from '../../data/ssafyData';
 
 const SsafyInformation: React.FC = () => {
-  const dispatch = useDispatch();
   const profileInfo: UserData | null = useProfileInfo();
   const token: string | null = useToken();
   const userId: number | null = useUserId();
-  const [profileImg, setProfileImg] = useState(null);
-  const [previewProgileImg, setPreviewProfileImg] = useState<string | null>('');
+  const [profileImg, setProfileImg] = useState<Blob | null>(null);
+  const [previewProgileImg, setPreviewProfileImg] = useState<string | null>(
+    null,
+  );
   const studentNumber = useSelector<RootState, string | null>(
     (state) => state.auth.studentNumber,
   );
@@ -44,6 +45,8 @@ const SsafyInformation: React.FC = () => {
   const [ssafyTrackDisabled, setSsafyTrackDisabled] = useState<boolean>(true);
   const [ssafyTrackModifyButtonText, setSsafyTrackModifyButtonText] =
     useState<string>('수정');
+
+  const dispatch = useDispatch();
 
   const showAlert = (
     alertShow: boolean,

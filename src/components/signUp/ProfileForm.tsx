@@ -40,13 +40,15 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const [showError, setShowError] = useState<number>(0);
   const [techStacks, setTechStacks] = useState<TechStacksWithLevel[]>([]);
   const [techStacksError, setTechStacksError] = useState<boolean>(false);
-  const [profileImg, setProfileImg] = useState(null);
-  const [previewProgileImg, setPreviewProfileImg] = useState(null);
+  const [profileImg, setProfileImg] = useState<Blob | null>(null);
+  const [previewProgileImg, setPreviewProfileImg] = useState<string | null>(
+    null,
+  );
   const [job1, setJob1] = useState<string>('default');
-  const [job2, setJob2] = useState<string>('');
+  const [job2, setJob2] = useState<string | null>(null);
   const [selfIntroduction, setSelfIntroduction] = useState<string>('');
-  const [githubUrl, setGithubUrl] = useState<string>('');
-  const [etcUrl, setEtcUrl] = useState<string>('');
+  const [githubUrl, setGithubUrl] = useState<string | null>(null);
+  const [etcUrl, setEtcUrl] = useState<string | null>(null);
   const [agreement, setAgreement] = useState<boolean>(false);
   const [job1Error, setJob1Error] = useState<boolean>(false);
   const [selfIntroductionError, setSelfIntroductionError] =
@@ -55,6 +57,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
   useState<boolean>(false);
 
   const techStackList: TechStackWithImg[] = useTechStackList();
+
   const dispatch = useDispatch();
 
   const {
@@ -254,9 +257,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
   };
 
   const getSignUpInformation = () => {
-    if (profileImg !== null) {
-      signUpFormData.append('profileImg', profileImg);
-    }
     signUpFormData.append('campus', campus);
     signUpFormData.append('ssafyTrack', ssafyTrack);
     signUpFormData.append('studentNumber', studentNumber);
@@ -265,11 +265,22 @@ const ProfileForm: React.FC<ProfileProps> = ({
     signUpFormData.append('password', signUpPassword);
     signUpFormData.append('selfIntroduction', selfIntroduction);
     signUpFormData.append('job1', job1);
-    signUpFormData.append('job2', job2);
     signUpFormData.append('techStacks', JSON.stringify(techStacks));
-    signUpFormData.append('githubUrl', githubUrl);
-    signUpFormData.append('etcUrl', etcUrl);
     signUpFormData.append('agreement', String(agreement));
+
+    if (profileImg !== null) {
+      signUpFormData.append('profileImg', profileImg);
+    }
+
+    if (job2 !== null) {
+      signUpFormData.append('job2', job2);
+    }
+    if (githubUrl !== null) {
+      signUpFormData.append('githubUrl', githubUrl);
+    }
+    if (etcUrl !== null) {
+      signUpFormData.append('etcUrl', etcUrl);
+    }
 
     return signUpFormData;
   };
