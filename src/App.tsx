@@ -33,8 +33,10 @@ import TeamCreatePage from './pages/projects/TeamCreatePage';
 import SpecializationProjectTeamListPage from './pages/projects/SpecializationProjectTeamListPage';
 import SpecializationProjectUserListPage from './pages/projects/SpecializationProjectUserListPage';
 import SpecializationProjectOfferListPage from './pages/projects/SpecializationProjectOfferListPage';
-import NotFoundPage from './pages/NotFoundPage';
 import ChattingPage from './pages/ChattingPage';
+import PrivacyPage from './pages/policy/PrivacyPage';
+import TermsOfServicePage from './pages/policy/TermsOfServicePage';
+import NotFoundPage from './pages/NotFoundPage';
 
 const App: React.FC = () => {
   useEffect(() => {
@@ -75,6 +77,12 @@ const App: React.FC = () => {
             component={SpecializationProjectOfferListPage}
           />
           <Route exact path="/chatting/:myId" component={ChattingPage} />
+          <Route exact path="/privacy" component={PrivacyPage} />
+          <Route
+            exact
+            path="/terms_of_service"
+            component={TermsOfServicePage}
+          />
           <Route component={NotFoundPage} />
         </Switch>
         {process.env.NODE_ENV === 'development' && <ReactQueryDevtools />}
