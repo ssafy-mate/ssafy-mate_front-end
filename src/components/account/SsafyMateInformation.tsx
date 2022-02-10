@@ -168,7 +168,11 @@ const SsafyMateInformation: React.FC = () => {
     if (specialProject === 'default') {
       setSpecialProject(null);
     }
-  }, [commonProject, specialProject]);
+
+    if (newJob2 === 'default') {
+      setNewJob2(null);
+    }
+  }, [commonProject, newJob2, specialProject]);
 
   const updateProfileAndAuth = useCallback(
     (requestData: EditProfileInfoRequest) => {
