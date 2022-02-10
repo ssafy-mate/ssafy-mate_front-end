@@ -12,13 +12,15 @@ import CheckIcon from '@mui/icons-material/Check';
 
 import { TechStackWithImg } from '../../types/commonTypes';
 
-import { campusListData, projectListData } from '../../data/ssafyData';
-import { jobListData } from '../../data/jobListData';
+import { CAMPUS_LIST, PROJECT_LIST } from '../../data/ssafyData';
+import { JOB_LIST } from '../../data/jobListData';
 
 import useQueryString from '../../hooks/useQueryString';
 import useTechStackList from '../../hooks/useTechStackList';
 
 interface TeamListSearchFormProps {
+  campus: string;
+  projectTrack: string;
   setCampus: (campus: string) => void;
   setProjectTrack: (projectTrack: string) => void;
   setJob1: (job1: string) => void;
@@ -26,20 +28,24 @@ interface TeamListSearchFormProps {
   setTeamName: (teamName: string) => void;
 }
 
+const CURRENT_PROJECT_CODE: number = 1;
+
 const TeamListSearchForm: React.FC<TeamListSearchFormProps> = ({
+  campus,
+  projectTrack,
   setCampus,
   setProjectTrack,
   setJob1,
   setTechStackCode,
   setTeamName,
 }) => {
-  const [project, onSetProject] = useQueryString('project');
-  const [projectTrack, onSetProjectTrack] = useQueryString('project_track');
-  const [campus, onSetCampus] = useQueryString('campus');
-  const [job1, onSetJob1] = useQueryString('job1');
-  const [page, onSetPage] = useQueryString('page');
-  const [techStackCode, onSetTechStackCode] = useQueryString('techstack_code');
-  const [teamName, onSetTeamName] = useQueryString('team_name');
+  const [, onSetProject] = useQueryString('project');
+  const [, onSetProjectTrack] = useQueryString('project_track');
+  const [, onSetCampus] = useQueryString('campus');
+  const [, onSetJob1] = useQueryString('job1');
+  const [, onSetPage] = useQueryString('page');
+  const [, onSetTechStackCode] = useQueryString('techstack_code');
+  const [, onSetTeamName] = useQueryString('team_name');
 
   const techStackList: TechStackWithImg[] = useTechStackList();
 
@@ -56,13 +62,15 @@ const TeamListSearchForm: React.FC<TeamListSearchFormProps> = ({
   });
 
   useEffect(() => {
-    onSetCampus('all');
+    onSetCampus(campus);
     onSetProject('특화 프로젝트');
-    onSetProjectTrack('all');
+    onSetProjectTrack(projectTrack);
     onSetJob1('all');
     onSetTeamName('');
     onSetPage(1);
   }, [
+    campus,
+    projectTrack,
     onSetProject,
     onSetProjectTrack,
     onSetCampus,
@@ -111,9 +119,13 @@ const TeamListSearchForm: React.FC<TeamListSearchFormProps> = ({
     <Container>
       <Wrapper>
         <FilterList>
-          <FilterSelect name="campus" onChange={handleChangeCampus}>
+          <FilterSelect
+            name="campus"
+            defaultValue={campus}
+            onChange={handleChangeCampus}
+          >
             <option value="all">전체 캠퍼스</option>
-            {campusListData.map((campus) => (
+            {CAMPUS_LIST.map((campus) => (
               <option key={campus.id} value={campus.area}>
                 {campus.area}
               </option>
@@ -121,19 +133,22 @@ const TeamListSearchForm: React.FC<TeamListSearchFormProps> = ({
           </FilterSelect>
           <FilterSelect
             name="specializaion-project-track"
+            defaultValue={projectTrack}
             onChange={handleChangeProjectTrack}
             css={{ margin: '0 12px' }}
           >
             <option value="all">전체 특화 프로젝트 트랙</option>
-            {projectListData[1].projectTracks?.map((projectTrack) => (
-              <option key={projectTrack.id} value={projectTrack.name}>
-                {projectTrack.name}
-              </option>
-            ))}
+            {PROJECT_LIST[CURRENT_PROJECT_CODE].projectTracks?.map(
+              (projectTrack) => (
+                <option key={projectTrack.id} value={projectTrack.name}>
+                  {projectTrack.name}
+                </option>
+              ),
+            )}
           </FilterSelect>
           <FilterSelect name="job1" onChange={handleChangeJob1}>
             <option value="all">전체 희망 직무</option>
-            {jobListData.map((job) => (
+            {JOB_LIST.map((job) => (
               <option key={job.id} value={job.name}>
                 {job.name}
               </option>
