@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { useParams, useLocation } from 'react-router';
+import { useLocation } from 'react-router';
 import { NavLink } from 'react-router-dom';
 
 import dayjs from 'dayjs';
@@ -32,33 +32,34 @@ import Drawer from '@mui/material/Drawer';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
 import SendIcon from '@mui/icons-material/Send';
 import CommentIcon from '@mui/icons-material/Comment';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 
-const drawerWidth = 250;
-const localUrl = 'http://localhost:3000';
-const socketUrl = 'http://localhost:3095';
-
+const socketUrl = 'https://i6a402.p.ssafy.io:3100';
 const PAGE_SIZE = 20;
+const drawerWidth = 250;
 
 const ChattingForm: React.FC = () => {
-  const myToken = useToken(); // 유저 토큰
-
   const location = useLocation();
+  const myToken = useToken();
+  const myData = useUserIdName();
+
+  const myId = myData[0];
+  const myName = myData[1];
+
   const param = new URLSearchParams(location.search);
   const roomId: string | null = param.get('roomId');
   const userId: string | null = param.get('userId');
   const userName: string | null = param.get('userName');
 
-  const myData = useUserIdName();
-  const myId = myData[0];
-  const myName = myData[1];
+  const [chatSections, setChatSections] = useState<MessageType[]>([]);
+  const [open, setOpen] = useState(false);
 
   const [socket] = useSocket(myId as number);
   const [chat, onChangeChat, setChat] = useTextArea('');
+
   const messageInputRef = useRef<HTMLTextAreaElement>(null);
   const chatRoomMessageRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<Scrollbars>(null);
@@ -68,13 +69,9 @@ const ChattingForm: React.FC = () => {
     data: roomData,
     error: roomError,
     mutate: mutateRoom,
-  } = useSWR<ChatRoomType[]>(
-    `/api/chats/rooms/${myId}`,
-    (url) => fetcherGet(url, myToken),
-    {},
+  } = useSWR<ChatRoomType[]>(`/api/chats/rooms/${myId}`, (url) =>
+    fetcherGet(url, myToken),
   );
-
-  const [chatSections, setChatSections] = useState<MessageType[]>([]);
 
   useEffect(() => {
     setChatSections([]);
@@ -95,7 +92,6 @@ const ChattingForm: React.FC = () => {
   const {
     data: chatData,
     mutate: mutateChat,
-    isValidating,
     setSize,
   } = useSWRInfinite<ChatLogResponseType>(
     getKey,
@@ -137,10 +133,6 @@ const ChattingForm: React.FC = () => {
           .post(`${socketUrl}/api/chats`, params)
           .then((response) => {
             mutateChat();
-            console.log(`onSumbit response : ${response}`);
-          })
-          .catch((error) => {
-            console.log(`onSumbit error : ${error}`);
           })
           .finally(() => {
             setChat('');
@@ -157,7 +149,6 @@ const ChattingForm: React.FC = () => {
           chatData?.[0].contentList.unshift(data);
           return chatData;
         }, false).then(() => {
-          console.log(`onMessage callback 성공`);
           if (scrollbarRef.current) {
             if (
               scrollbarRef.current.getScrollHeight() <
@@ -192,7 +183,7 @@ const ChattingForm: React.FC = () => {
     }
   };
 
-  // 인피니티 스크롤을 위한, ReachingEnd : 페이지 사이즈 만큼 못가져왔을때 남는거
+  // infinity scroll checking
   const isEmpty = chatData?.[chatData.length - 1]?.contentList?.length === 0;
   const isReachingEnd =
     isEmpty ||
@@ -201,10 +192,6 @@ const ChattingForm: React.FC = () => {
 
   const onScroll = useCallback(
     (values) => {
-      // 가장 위로 올라갔을 때, 다음 페이지 불러오도록 setSize호출
-      console.log(`scrollTop : ${values.scrollTop}`);
-      console.log(`scrollHeight : ${values.scrollHeight}`);
-
       if (values.scrollTop === 0 && !isReachingEnd && !isEmpty) {
         setSize((size) => size + 1).then(() => {
           // 스크롤 위치 유지 : 현재 스크롤 높이 - 스크롤바의 높이
@@ -212,15 +199,6 @@ const ChattingForm: React.FC = () => {
             scrollbarRef.current?.scrollTop(
               scrollbarRef.current?.getScrollHeight() - values.scrollHeight,
             );
-
-            console.log(
-              'getScrollHeight' + scrollbarRef.current?.getScrollHeight(),
-            );
-
-            /* //jquery 방식
-            scrollbarRef.current?.scrollTop(
-              chatRoomMessageRef?.current?.offsetTop as number,
-            );*/
           }, 50);
         });
       }
@@ -228,8 +206,7 @@ const ChattingForm: React.FC = () => {
     [scrollbarRef, isReachingEnd, isEmpty, setSize],
   );
 
-  // 날짜별로 묶기
-  const makeSection = <T extends MessageType>(chatList: T[]) => {
+  const clustByDate = <T extends MessageType>(chatList: T[]) => {
     const sections: { [key: string]: T[] } = {};
     chatList.forEach((chat) => {
       const monthDate = dayjs(chat.sentTime).format('YYYY-MM-DD');
@@ -242,8 +219,7 @@ const ChattingForm: React.FC = () => {
     return sections;
   };
 
-  // 대화 내용 reverse
-  const customChatList = () => {
+  const reverseChatList = () => {
     let list: any = [];
     if (chatData) {
       chatData.forEach((chat) => {
@@ -254,11 +230,8 @@ const ChattingForm: React.FC = () => {
   };
 
   useEffect(() => {
-    customChatList();
+    reverseChatList();
   }, [chatData]);
-
-  // Drawer
-  const [open, setOpen] = useState(false);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -740,7 +713,6 @@ const ChatTypingWrapper = styled.div`
   display: flex;
   flex-direction: row;
   position: relative;
-  /* height: 40px; */
   height: 85px;
   margin: 20px;
   padding: 0px 10px;
