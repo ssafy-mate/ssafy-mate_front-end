@@ -45,7 +45,7 @@ const Wrapper = styled.div`
   max-width: 1200px;
   height: 100%;
   margin: 0 auto;
-  padding: 320px 16px;
+  padding: 380px 16px;
   box-sizing: border-box;
 
   @media (max-width: 991px) {
@@ -54,7 +54,7 @@ const Wrapper = styled.div`
   @media (max-width: 575px) {
     flex-direction: column;
     padding-top: 140px;
-    padding-bottom: 660px;
+    padding-bottom: 655px;
   }
 `;
 
