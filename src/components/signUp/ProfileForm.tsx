@@ -95,6 +95,12 @@ const ProfileForm: React.FC<ProfileProps> = ({
   };
 
   useEffect(() => {
+    if (job2 === 'default') {
+      setJob2(null);
+    }
+  }, [job2]);
+
+  useEffect(() => {
     techStacks.length >= 2
       ? setTechStacksError(false)
       : setTechStacksError(true);
@@ -521,11 +527,19 @@ const ProfileForm: React.FC<ProfileProps> = ({
               className={agreementError ? 'have-error' : ''}
             />
             <CheckBoxLabel htmlFor="sign-up-agreement">
-              <AgreementLink href="#" target="_blank" rel="noopener noreferrer">
+              <AgreementLink
+                href="/terms_of_service"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 이용약관
               </AgreementLink>
               &nbsp;및&nbsp;
-              <AgreementLink href="#" target="_blank" rel="noopener noreferrer">
+              <AgreementLink
+                href="/privacy"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 개인정보 처리방침
               </AgreementLink>
               에 동의합니다.
