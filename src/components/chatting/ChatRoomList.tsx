@@ -1,6 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 
+import dayjs from 'dayjs';
+
+import useSocket from '../../hooks/useSocket';
 import { ChatRoomTypeProps } from '../../types/messageTypes';
 
 import styled from '@emotion/styled';
@@ -13,6 +16,7 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
   profileImgUrl,
   content,
   sentTime,
+  userEmail,
 }) => {
   const [roomInfo, setRoomInfo] = useState<ChatRoomTypeProps>({
     myId: myId,
@@ -22,12 +26,34 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
     profileImgUrl: profileImgUrl,
     content: content,
     sentTime: sentTime,
+    userEmail: userEmail,
   });
+
+  const email = userEmail.split('@');
+
+  const [socket] = useSocket();
+  const [onlineList, setOnlineList] = useState<number[]>([]);
+
+  useEffect(() => {
+    setOnlineList([]);
+  }, [roomId]);
+
+  // off 되는지 확인하기
+  useEffect(() => {
+    console.log('onlineList 호출');
+    socket?.on('onlineList', (data: number[]) => {
+      setOnlineList(data);
+      console.log(`onlineList : ${onlineList}`);
+    });
+    return () => {
+      socket?.off('onlineList');
+    };
+  }, [socket]);
 
   return (
     <>
       <NavLink
-        to={`/chatting/${myId}?roomId=${roomId}&userId=${userId}&userName=${userName}`}
+        to={`/chatting/${myId}?roomId=${roomId}&userId=${userId}&userName=${userName}@${email[0]}`}
       >
         <ChatListItem>
           <ChatListItemWrapper>
@@ -38,7 +64,7 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
               <TitleWrapper>
                 <TitleSenderName>{userName}</TitleSenderName>
                 <TitleSubText>
-                  <span>22.01.25</span>
+                  <span>{dayjs(sentTime).format('YYYY.MM.DD')}</span>
                 </TitleSubText>
               </TitleWrapper>
               <DescriptionWrapper>
@@ -61,7 +87,7 @@ const ChatListItem = styled.li`
   }
 `;
 
-const ChatListItemWrapper = styled.a`
+const ChatListItemWrapper = styled.div`
   display: flex;
   overflow: hidden;
   align-items: center;
@@ -94,9 +120,8 @@ const ProfileWrapper = styled.div`
   }
 
   @media (max-width: 575px) {
-    display: flex;
-    width: 100%;
     display: none;
+    width: 100%;
   }
 `;
 
@@ -105,9 +130,8 @@ const ContentWrapper = styled.div`
   width: 100%;
 
   @media (max-width: 575px) {
-    display: flex;
-    width: 100%;
     display: none;
+    width: 100%;
   }
 `;
 
@@ -116,9 +140,8 @@ const TitleWrapper = styled.div`
   width: 100%;
 
   @media (max-width: 575px) {
-    display: flex;
-    width: 100%;
     display: none;
+    width: 100%;
   }
 `;
 

@@ -13,7 +13,6 @@ type ReturnTypes<T = any> = [
 ];
 
 const useTextArea = <T>(initialData: T): ReturnTypes<T> => {
-  // generic으로 선언
   const [value, setValue] = useState(initialData);
   const handler = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value as unknown as T);

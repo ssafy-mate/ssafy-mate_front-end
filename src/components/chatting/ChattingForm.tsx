@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams, useLocation } from 'react-router';
+import { NavLink } from 'react-router-dom';
 
 import dayjs from 'dayjs';
 import useSWR from 'swr';
@@ -7,54 +8,57 @@ import useSWRInfinite from 'swr/infinite';
 import axios from 'axios';
 
 import { axiosInstance } from '../../utils/axios';
-import { fetcherGet, fetcherGetWithParams } from '../../utils/fetcher';
+import { fetcherGet } from '../../utils/fetcher';
 import useSocket from '../../hooks/useSocket';
 import useToken from '../../hooks/useToken';
 import useTextArea from '../../hooks/useTextArea';
+import useUserIdName from '../../hooks/useUserIdName';
 import ChatRoomList from './ChatRoomList';
-import { MessageType, ChatRoomType } from '../../types/messageTypes';
+import {
+  MessageType,
+  ChatRoomType,
+  ChatLogResponseType,
+} from '../../types/messageTypes';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import { Scrollbars } from 'react-custom-scrollbars-2';
-import SendIcon from '@mui/icons-material/Send';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
-import { Drawer } from '@mui/material';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import Drawer from '@mui/material/Drawer';
+import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import SendIcon from '@mui/icons-material/Send';
+import CommentIcon from '@mui/icons-material/Comment';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
 
+const drawerWidth = 250;
 const localUrl = 'http://localhost:3000';
 const socketUrl = 'http://localhost:3095';
 
-const PAGE_SIZE = 10;
-
-type userParams = {
-  myId: string;
-};
+const PAGE_SIZE = 20;
 
 const ChattingForm: React.FC = () => {
-  const userToken = useToken(); // 유저 토큰
-  const [socket] = useSocket();
+  const myToken = useToken(); // 유저 토큰
 
   const location = useLocation();
   const param = new URLSearchParams(location.search);
-  const roomId = param.get('roomId');
-  const userId = param.get('userId');
-  const userName = param.get('userName');
+  const roomId: string | null = param.get('roomId');
+  const userId: string | null = param.get('userId');
+  const userName: string | null = param.get('userName');
 
-  // const { roomId } = useParams<roomParams>();
-  const { myId } = useParams<userParams>();
+  const myData = useUserIdName();
+  const myId = myData[0];
+  const myName = myData[1];
 
-  // const [numberUserId, setNunberUserId] = useState(Number(userId));
-  // const [userId, setUserId] = useState(2); // 내 아이디
-  // const [userId, setUserId] = useState(1); // 상대방 아이디
-
-  const [entryTime, setEntryTime] = useState(
-    dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS'),
-  );
-
+  const [socket] = useSocket(myId as number);
   const [chat, onChangeChat, setChat] = useTextArea('');
-  const [messageList, setMessageList] = useState<MessageType[]>([]);
   const messageInputRef = useRef<HTMLTextAreaElement>(null);
   const chatRoomMessageRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<Scrollbars>(null);
@@ -64,82 +68,76 @@ const ChattingForm: React.FC = () => {
     data: roomData,
     error: roomError,
     mutate: mutateRoom,
-  } = useSWR<ChatRoomType[]>(`/api/chat/room/${myId}`, fetcherGet);
+  } = useSWR<ChatRoomType[]>(
+    `/api/chats/rooms/${myId}`,
+    (url) => fetcherGet(url, myToken),
+    {},
+  );
 
-  // #######
-  // 토큰이 없는 상태에서 접근하면 error 페이지로, teamInfoPage 확인
-  // #######
+  const [chatSections, setChatSections] = useState<MessageType[]>([]);
 
-  // 대화 내역 불러오기 - 인피니티 스크롤용
+  useEffect(() => {
+    setChatSections([]);
+  }, [roomId]);
+
+  const getKey = (pageIndex: number, previousPageData: ChatLogResponseType) => {
+    // 끝에 도달
+    if (previousPageData && !previousPageData.contentList) return null;
+
+    // 첫 페이지, `previousPageData`가 없음
+    if (pageIndex === 0) return `/api/chats/logs/${roomId}?nextCursor=0`;
+
+    // API의 엔드포인트에 커서 추가
+    return `api/chats/logs/${roomId}?nextCursor=${previousPageData.nextCursor}`;
+  };
+
+  // 대화 내역 불러오기
   const {
     data: chatData,
     mutate: mutateChat,
+    isValidating,
     setSize,
-  } = useSWRInfinite<MessageType[]>(
-    (index) => {
-      console.log(`인피니티 스크롤 index:${index}`);
-      const nextPage: number = index + 1;
-      return [`/api/chat/log/${roomId}`, nextPage, entryTime];
-    },
-    fetcherGetWithParams,
+  } = useSWRInfinite<ChatLogResponseType>(
+    getKey,
+    (url) => fetcherGet(url, myToken),
     {
       onSuccess(data) {
         if (data?.length === 1) {
-          scrollbarRef.current?.scrollToBottom();
+          setTimeout(() => {
+            scrollbarRef.current?.scrollToBottom();
+          }, 100);
         }
       },
     },
   );
 
-  // 내가 메시지를 보내거나, 서버 챗 데이터 변경이 일어났을 때 발동하는 콜백
-  // 서버로 메시지 정보 post 요청
   const onSubmit = useCallback(
     (event) => {
       event.preventDefault();
 
       if (chat?.trim()) {
         const params: MessageType = {
-          userName: '조원빈',
+          userName: myName as string,
           roomId: roomId as string,
           content: chat,
           senderId: Number(myId),
           sentTime: dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS'),
+          id: 0,
         };
 
-        /*
         mutateChat((prevChatData) => {
-          prevChatData?.[0].unshift(params);
-          console.log(prevChatData?.[0].toString());
+          prevChatData?.[0].contentList.unshift(params);
           return prevChatData;
-        }, true).then(() => {
+        }, false).then(() => {
           setChat('');
-          if (scrollbarRef.current) {
-            if (
-              scrollbarRef.current.getScrollHeight() <
-              scrollbarRef.current.getClientHeight() +
-                scrollbarRef.current.getScrollTop() +
-                150
-            ) {
-              scrollbarRef.current.scrollToBottom();
-            }
-          }
+          if (scrollbarRef.current) scrollbarRef.current.scrollToBottom();
         });
-        */
 
         axios
-          .post(`${socketUrl}/api/chat`, params)
+          .post(`${socketUrl}/api/chats`, params)
           .then((response) => {
+            mutateChat();
             console.log(`onSumbit response : ${response}`);
-            if (scrollbarRef.current) {
-              if (
-                scrollbarRef.current.getScrollHeight() <
-                scrollbarRef.current.getClientHeight() +
-                  scrollbarRef.current.getScrollTop() +
-                  150
-              ) {
-                scrollbarRef.current.scrollToBottom();
-              }
-            }
           })
           .catch((error) => {
             console.log(`onSumbit error : ${error}`);
@@ -147,26 +145,19 @@ const ChattingForm: React.FC = () => {
           .finally(() => {
             setChat('');
           });
-
-        setMessageList((data) => data.concat(params));
       }
     },
-    [chat, roomId, myId, userId, chatData, mutateChat, setChat],
+    [chat, roomId, myId, userId, setChat],
   );
 
-  // onMessage 메시지 받으면 작동하는 콜백
   const onMessage = useCallback(
     (data: MessageType) => {
-      // roomId 중 하나가 상대것인지 검사 => 일단 임시로 내, 상대방 아이디 셋팅
-
-      // onSubmit에서 콜백이 변경된 데이터를 감지해 호출됨
       if (data.senderId === Number(userId) && Number(myId) !== Number(userId)) {
         mutateChat((chatData) => {
-          chatData?.[0].unshift(data);
+          chatData?.[0].contentList.unshift(data);
           return chatData;
         }, false).then(() => {
           console.log(`onMessage callback 성공`);
-
           if (scrollbarRef.current) {
             if (
               scrollbarRef.current.getScrollHeight() <
@@ -185,7 +176,6 @@ const ChattingForm: React.FC = () => {
     [userId, myId, mutateChat],
   );
 
-  // 소켓 on 달아두는 곳
   useEffect(() => {
     socket?.on('message', onMessage);
     return () => {
@@ -193,16 +183,6 @@ const ChattingForm: React.FC = () => {
     };
   }, [socket, onMessage]);
 
-  // 로딩 시 스크롤바 제일 아래로
-  useEffect(() => {
-    if (chatData?.length === 1) {
-      setTimeout(() => {
-        scrollbarRef.current?.scrollToBottom();
-      }, 100);
-    }
-  }, [chatData]);
-
-  // 엔터 누르면 onSubmit 호출
   const handleMessageSendKeyPress = (event: React.KeyboardEvent) => {
     if (event.code === 'Enter' || event.code === 'NumpadEnter') {
       if (!event.shiftKey) {
@@ -213,29 +193,92 @@ const ChattingForm: React.FC = () => {
   };
 
   // 인피니티 스크롤을 위한, ReachingEnd : 페이지 사이즈 만큼 못가져왔을때 남는거
-  const isEmpty = chatData?.[0]?.length === 0;
+  const isEmpty = chatData?.[chatData.length - 1]?.contentList?.length === 0;
   const isReachingEnd =
-    isEmpty || (chatData && chatData[chatData.length - 1]?.length < PAGE_SIZE);
+    isEmpty ||
+    (chatData &&
+      chatData[chatData.length - 1]?.contentList?.length < PAGE_SIZE);
 
   const onScroll = useCallback(
     (values) => {
-      // 가장 위로 올라갔을 때, 다음 페이지 불러오도록 페이지 셋팅
+      // 가장 위로 올라갔을 때, 다음 페이지 불러오도록 setSize호출
+      console.log(`scrollTop : ${values.scrollTop}`);
+      console.log(`scrollHeight : ${values.scrollHeight}`);
+
       if (values.scrollTop === 0 && !isReachingEnd && !isEmpty) {
         setSize((size) => size + 1).then(() => {
           // 스크롤 위치 유지 : 현재 스크롤 높이 - 스크롤바의 높이
-          scrollbarRef.current?.scrollTop(
-            scrollbarRef.current?.getScrollHeight() - values.scrollHeight,
-          );
+          setTimeout(() => {
+            scrollbarRef.current?.scrollTop(
+              scrollbarRef.current?.getScrollHeight() - values.scrollHeight,
+            );
+
+            console.log(
+              'getScrollHeight' + scrollbarRef.current?.getScrollHeight(),
+            );
+
+            /* //jquery 방식
+            scrollbarRef.current?.scrollTop(
+              chatRoomMessageRef?.current?.offsetTop as number,
+            );*/
+          }, 50);
         });
       }
     },
-    [setSize, scrollbarRef, isReachingEnd, isEmpty],
+    [scrollbarRef, isReachingEnd, isEmpty, setSize],
   );
 
-  // 채팅 메시지 reverse
-  const chatSections = chatData
-    ? ([] as MessageType[]).concat(...chatData).reverse()
-    : [];
+  // 날짜별로 묶기
+  const makeSection = <T extends MessageType>(chatList: T[]) => {
+    const sections: { [key: string]: T[] } = {};
+    chatList.forEach((chat) => {
+      const monthDate = dayjs(chat.sentTime).format('YYYY-MM-DD');
+      if (Array.isArray(sections[monthDate])) {
+        sections[monthDate].push(chat);
+      } else {
+        sections[monthDate] = [chat];
+      }
+    });
+    return sections;
+  };
+
+  // 대화 내용 reverse
+  const customChatList = () => {
+    let list: any = [];
+    if (chatData) {
+      chatData.forEach((chat) => {
+        list.push(chat.contentList);
+      });
+    }
+    setChatSections(([] as MessageType[]).concat(...list).reverse());
+  };
+
+  useEffect(() => {
+    customChatList();
+  }, [chatData]);
+
+  // Drawer
+  const [open, setOpen] = useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  const toggleDrawer = (open: boolean) => (event: any) => {
+    if (
+      event &&
+      event.type === 'keydown' &&
+      (event.key === 'Tab' || event.key === 'Shift')
+    ) {
+      return;
+    }
+
+    setOpen(open);
+  };
 
   return (
     <ChatContianer>
@@ -250,15 +293,109 @@ const ChattingForm: React.FC = () => {
               profileImgUrl={room.profileImgUrl}
               content={room.content}
               sentTime={room.sentTime}
+              userEmail={room.userEmail}
             />
           ))}
+          <SwipeableDrawer
+            sx={{
+              'width': drawerWidth,
+              'flexShrink': 0,
+              '& .MuiDrawer-paper': {
+                width: drawerWidth,
+                boxSizing: 'border-box',
+              },
+            }}
+            variant="persistent"
+            anchor="right"
+            open={open}
+            onOpen={toggleDrawer(true)}
+            onClose={toggleDrawer(false)}
+          >
+            <DrawerHeader>
+              <IconButton onClick={handleDrawerClose}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </DrawerHeader>
+            <List>
+              {roomData?.map((room: ChatRoomType) => (
+                <ListItem button key={room.roomId}>
+                  <NavLink
+                    to={`/chatting/${Number(myId)}?roomId=${
+                      room.roomId
+                    }&userId=${room.userId}&userName=${room.userName}@${
+                      room.userEmail.split('@')[0]
+                    }`}
+                  >
+                    <div css={listItemCss}>
+                      <img></img>
+                      <span>{`${room.userName}@${
+                        room.userEmail.split('@')[0]
+                      }`}</span>
+                    </div>
+                  </NavLink>
+                </ListItem>
+              ))}
+            </List>
+          </SwipeableDrawer>
         </ChatRoomListWrapper>
       </ChatRoomListSidebar>
       <ChatRoomSection>
+        <SwipeableDrawer
+          sx={{
+            'width': drawerWidth,
+            'flexShrink': 0,
+            '& .MuiDrawer-paper': {
+              width: drawerWidth,
+              boxSizing: 'border-box',
+            },
+          }}
+          variant="persistent"
+          anchor="right"
+          open={open}
+          onOpen={toggleDrawer(true)}
+          onClose={toggleDrawer(false)}
+        >
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </DrawerHeader>
+          <List>
+            {roomData?.map((room: ChatRoomType) => (
+              <ListItem
+                button
+                key={room.roomId}
+                onClick={toggleDrawer(false)}
+                onKeyDown={toggleDrawer(false)}
+              >
+                <NavLink
+                  to={`/chatting/${Number(myId)}?roomId=${room.roomId}&userId=${
+                    room.userId
+                  }&userName=${room.userName}@${room.userEmail.split('@')[0]}`}
+                >
+                  <div css={listItemCss}>
+                    <img></img>
+                    <span>{`${room.userName}@${
+                      room.userEmail.split('@')[0]
+                    }`}</span>
+                  </div>
+                </NavLink>
+              </ListItem>
+            ))}
+          </List>
+        </SwipeableDrawer>
         {!roomId ? (
           <ChatRoomEmpty>
             <ChatRoomEmptyContentWrapper>
               <span>대화할 상대를 선택해주세요.</span>
+              <Button
+                variant="contained"
+                css={chatListButtonCss}
+                onClick={handleDrawerOpen}
+              >
+                <MailOutlineIcon css={{ padding: '5px' }} />
+                채팅 목록
+              </Button>
             </ChatRoomEmptyContentWrapper>
           </ChatRoomEmpty>
         ) : (
@@ -271,49 +408,20 @@ const ChattingForm: React.FC = () => {
                     <span>{userName}</span>
                   </div>
                 </ChatRoomHeaderProfile>
+                <IconButton
+                  css={listIcon}
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start"
+                >
+                  <CommentIcon fontSize="large" />
+                </IconButton>
               </ChatRoomUserNameBar>
               <Scrollbars autoHide ref={scrollbarRef} onScrollFrame={onScroll}>
-                <ChatRoomMessageList>
-                  <MessageWrapper ref={chatRoomMessageRef}>
+                <ChatRoomMessageList ref={chatRoomMessageRef}>
+                  <MessageWrapper>
                     {chatSections && chatSections.length > 0
-                      ? chatSections?.map((message, index) => {
-                          if (message.senderId === Number(myId)) {
-                            return (
-                              <MessageBoxWrapper key={index}>
-                                <MessageBoxRightContent>
-                                  <MessageTimeBox>
-                                    <div className="message_date">
-                                      {dayjs(message.sentTime).format(
-                                        'YYYY.MM.DD HH:mm',
-                                      )}
-                                    </div>
-                                  </MessageTimeBox>
-                                  <p>{message.content}</p>
-                                </MessageBoxRightContent>
-                              </MessageBoxWrapper>
-                            );
-                          } else {
-                            return (
-                              <MessageBoxWrapper>
-                                <MessageBoxLeftContent key={index}>
-                                  <img></img>
-                                  <p>{message.content}</p>
-                                  <MessageTimeBox>
-                                    <div className="message_date">
-                                      {dayjs(message.sentTime).format(
-                                        'YYYY.MM.DD HH:mm',
-                                      )}
-                                    </div>
-                                  </MessageTimeBox>
-                                </MessageBoxLeftContent>
-                              </MessageBoxWrapper>
-                            );
-                          }
-                        })
-                      : null}
-                    <hr></hr>
-                    {messageList.length > 0
-                      ? messageList.map((message, index) => {
+                      ? chatSections.map((message, index) => {
                           if (message.senderId === Number(myId)) {
                             return (
                               <MessageBoxWrapper key={index}>
@@ -373,6 +481,12 @@ const ChattingForm: React.FC = () => {
     </ChatContianer>
   );
 };
+
+const DrawerHeader = styled.div`
+  display: flex,
+  align-items: center,
+  justify-content: flex-end,
+`;
 
 const ChatContianer = styled.div`
   display: flex;
@@ -442,8 +556,45 @@ const ChatRoomEmptyContentWrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  color: #383838;
   font-size: 18px;
+
+  & span {
+    color: #383838;
+    padding: 20px;
+  }
+`;
+
+const chatListButtonCss = css`
+  display: none;
+  font-size: 15px;
+
+  @media (max-width: 575px) {
+    display: flex;
+  }
+`;
+
+const listItemCss = css`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+
+  & img {
+    width: 40px;
+    height: 40px;
+    margin-right: 8px;
+    border: 1px solid #b4b4b4;
+    border-radius: 50%;
+  }
+
+  & span {
+    overflow-x: hidden;
+    font-size: 16px;
+    font-weight: 500;
+    color: #6d6d6d;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 `;
 
 const ChatRoomWrapper = styled.div`
@@ -468,9 +619,18 @@ const ChatRoomUserNameBar = styled.div`
   align-items: center;
   height: 80px;
   min-height: 80px;
-  padding: 0 20px;
+  padding: 0 16px;
   border-bottom: 1px solid #dfdfdf;
   box-sizing: border-box;
+`;
+
+const listIcon = css`
+  display: none;
+  color: inherit;
+
+  @media (max-width: 575px) {
+    display: flex;
+  }
 `;
 
 const ChatRoomHeaderProfile = styled.div`
@@ -491,6 +651,9 @@ const ChatRoomHeaderProfile = styled.div`
   & .userName {
     display: inline-flex;
     align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #6d6d6d;
   }
 `;
 
@@ -518,7 +681,7 @@ const MessageBoxLeftContent = styled.div`
     max-width: 364px;
     margin: 0px;
     padding: 10px 14px;
-    border-radius: 10px 10px 10px 2px;
+    border-radius: 2px 10px 10px 10px;
     background-color: #eaebef;
     line-height: 150%;
     color: #000;
@@ -549,7 +712,7 @@ const MessageBoxRightContent = styled.div`
     max-width: 364px;
     margin: 0px;
     padding: 10px 14px;
-    border-radius: 10px 10px 2px 10px;
+    border-radius: 10px 2px 10px 10px;
     background-color: #3396f4;
     line-height: 150%;
     color: #fff;
