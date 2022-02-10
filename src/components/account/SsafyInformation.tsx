@@ -27,7 +27,7 @@ import {
 } from '../../types/authTypes';
 import { Severity, SsafyTrack } from '../../types/signUpTypes';
 
-import { campusListData } from '../../data/ssafyData';
+import { CAMPUS_LIST } from '../../data/ssafyData';
 
 const SsafyInformation: React.FC = () => {
   const dispatch = useDispatch();
@@ -81,12 +81,12 @@ const SsafyInformation: React.FC = () => {
   }, [profileInfo, token, userId]);
 
   useEffect(() => {
-    const selectedCampusIndex = campusListData.findIndex(
+    const selectedCampusIndex = CAMPUS_LIST.findIndex(
       (campus) => campus.area === profileInfo?.campus,
     );
 
     if (selectedCampusIndex > -1) {
-      setSelectedTracks(campusListData[selectedCampusIndex].ssafyTracks);
+      setSelectedTracks(CAMPUS_LIST[selectedCampusIndex].ssafyTracks);
     }
   }, [profileInfo?.campus]);
 

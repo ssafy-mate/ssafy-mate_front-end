@@ -15,8 +15,8 @@ import { useAutocomplete } from '@mui/material';
 
 import { TechStackWithImg } from '../../types/commonTypes';
 import { Severity, TechStacksWithLevel } from '../../types/signUpTypes';
-import { jobListData } from '../../data/jobListData';
-import { projectListData, ProjectTrack } from '../../data/ssafyData';
+import { JOB_LIST } from '../../data/jobListData';
+import { PROJECT_LIST, ProjectTrack } from '../../data/ssafyData';
 
 import useUserId from '../../hooks/useUserId';
 import useToken from '../../hooks/useToken';
@@ -133,12 +133,12 @@ const SsafyMateInformation: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (projectListData[0].projectTracks !== undefined) {
-      setCommonProjectListData(projectListData[0].projectTracks);
+    if (PROJECT_LIST[0].projectTracks !== undefined) {
+      setCommonProjectListData(PROJECT_LIST[0].projectTracks);
     }
 
-    if (projectListData[1].projectTracks !== undefined) {
-      setSpecialProjectListData(projectListData[1].projectTracks);
+    if (PROJECT_LIST[1].projectTracks !== undefined) {
+      setSpecialProjectListData(PROJECT_LIST[1].projectTracks);
     }
 
     if (profileInfo?.projects[0].projectTrack !== undefined) {
@@ -520,7 +520,7 @@ const SsafyMateInformation: React.FC = () => {
                 <option value="default" disabled>
                   - 선택 -
                 </option>
-                {jobListData.map((job) => (
+                {JOB_LIST.map((job) => (
                   <option key={job.id} value={job.name}>
                     {job.name}
                   </option>
@@ -537,13 +537,11 @@ const SsafyMateInformation: React.FC = () => {
                 disabled={newJobsDisabled}
               >
                 <option value="default">- 선택 -</option>
-                {jobListData
-                  .filter((job) => job.name !== newJob1)
-                  .map((job) => (
-                    <option key={job.id} value={job.name}>
-                      {job.name}
-                    </option>
-                  ))}
+                {JOB_LIST.filter((job) => job.name !== newJob1).map((job) => (
+                  <option key={job.id} value={job.name}>
+                    {job.name}
+                  </option>
+                ))}
               </Select>
             </JobSelectWrapper>
             <JobSelectWrapper className="top-gap">

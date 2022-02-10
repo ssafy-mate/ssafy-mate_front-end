@@ -1,5 +1,7 @@
 import { TechStack, TechStackWithImg } from './commonTypes';
 
+export type RoleType = 'owner' | 'member' | 'outsider';
+
 interface TeamOwner {
   userId: number;
   userName: string;
@@ -77,6 +79,7 @@ export interface TeamDataType {
 
 export interface TeamInfoResponse {
   teamData: TeamDataType;
+  role: RoleType;
 }
 
 export interface MyTeamResponse {
@@ -88,4 +91,35 @@ export interface MyTeamState {
   team: TeamDataType | null;
   loading: boolean;
   error: string | null;
+}
+
+export interface LeaveMyTeamResponse {
+  message: string;
+}
+
+export interface TeamEditRequest {
+  teamId: number;
+  formData: FormData;
+}
+
+export interface TeamEditInfoResponse {
+  teamId: number;
+  teamName: string;
+  teamImgUrl: any | null;
+  campus: string;
+  project: string;
+  projectTrack: string;
+  notice: string;
+  introduction: string | null;
+  techStacks: TechStackWithImg[];
+  totalRecruitment: number;
+  totalHeadcount: number;
+  frontendRecruitment: number;
+  frontendHeadcount: number;
+  backendRecruitment: number;
+  backendHeadcount: number;
+}
+
+export interface DeleteTeamResponse {
+  message: string;
 }

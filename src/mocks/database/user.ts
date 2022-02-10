@@ -352,7 +352,7 @@ export const userDataList = [
       campus: '서울',
       ssafyTrack: 'Java Track',
       selfIntroduction:
-        '안녕하세요. 개발을 좋아하고 UI/UX 개선을 고민하는 프론트엔드 개발자 박정환입니다. 1학기 최우수상 수상 이력을 갖고 있습니다.',
+        '안녕하세요. 개발을 좋아하고 UI/UX 개선을 고민하는 프론트엔드 개발자 박정환입니다. 1학기 최우수상 수상 이력을 갖고 있습니다. 이번 프로젝트에서는 실사용자를 받아 볼 수 있는 서비스 개발에 도전해보고 싶습니다.',
       job1: '프론트엔드 (Front-end)',
       job2: null,
       projects: [
@@ -435,6 +435,12 @@ export const userDataList = [
         },
         {
           id: 10,
+          techStackName: 'Sass(SCSS)',
+          techStackImgUrl: '/images/assets/tech-stack/Sass(SCSS).png',
+          techStackLevel: '상',
+        },
+        {
+          id: 11,
           techStackName: 'Mock-Service-Worker',
           techStackImgUrl: '/images/assets/tech-stack/Mock-Service-Worker.png',
           techStackLevel: '중',
@@ -1122,7 +1128,7 @@ export const userListData = [
   {
     userId: 6,
     userName: '이여진',
-    profileImgUrl: null,
+    profileImgUrl: '/images/projects/sample-student_profile-img6.jpeg',
     campus: '서울',
     projectTrack: '인공지능',
     ssafyTrack: 'Java Track',

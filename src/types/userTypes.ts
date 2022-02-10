@@ -42,6 +42,6 @@ export interface UserListResponse {
   totalElement: number;
 }
 
-export interface CheckBelongToTeamRequestParams {
-  selectedProject: string;
+export interface GetMyTeamIdParams {
+  project: string;
 }

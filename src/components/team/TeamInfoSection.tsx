@@ -1,8 +1,9 @@
 import { useState, useEffect, useMemo, useCallback } from 'react';
 
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
+import { leaveTeam as leaveTeamSagaStart } from '../../redux/modules/myTeam';
 
 import styled from '@emotion/styled';
 
@@ -13,6 +14,8 @@ import FlagIcon from '@mui/icons-material/Flag';
 import SchoolIcon from '@mui/icons-material/School';
 import ComputerIcon from '@mui/icons-material/Computer';
 import StyleIcon from '@mui/icons-material/Style';
+import LogoutIcon from '@mui/icons-material/Logout';
+import EditIcon from '@mui/icons-material/Edit';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -20,16 +23,19 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
-import { ApplicationRequestType } from '../../types/authTypes';
+import Swal from 'sweetalert2';
 
-import { sendApplication as sendApplicationSagaStart } from '../../redux/modules/auth';
+import { RoleType } from '../../types/teamTypes';
+import { UserApplicationRequestType } from '../../types/authTypes';
+
+import { sendUserApplication as sendUserApplicationSagaStart } from '../../redux/modules/auth';
 
 import useTeamInfo from '../../hooks/useTeamInfo';
 
 import UserLabel from '../user/UserLabel';
 import RecruitStatusBadge from '../projects/RecruitStatusBadge';
 import TeamTechStackTag from './TeamTechStackTag';
-import MemberItem from './MemberItem';
+import TeamMemberItem from './TeamMemberItem';
 import TeamMembersStatusBox from './TeamMembersStatus';
 import JobChart from '../chart/JobChart';
 import RecruitingStatusChart from '../chart/RecruitingStatusChart';
@@ -44,6 +50,10 @@ interface MessageTextFieldProps {
   warning: string;
 }
 
+interface OptionButtonProps {
+  role: RoleType;
+}
+
 const TeamInfoSection: React.FC = () => {
   const [applicationMessage, setApplicationMessage] = useState<string>('');
   const [onMessageWarning, setOnMessageWarning] = useState<boolean>(false);
@@ -52,7 +62,7 @@ const TeamInfoSection: React.FC = () => {
 
   const dispatch = useDispatch();
   const { teamId } = useParams<Params>();
-  const { isLoading, teamData, isError, errorMessage } = useTeamInfo(
+  const { isLoading, teamData, role, isError, errorMessage } = useTeamInfo(
     parseInt(teamId),
   );
 
@@ -71,50 +81,6 @@ const TeamInfoSection: React.FC = () => {
       setOnMessageWarning(false);
     }
   }, [applicationMessage]);
-
-  const sendApplication = useCallback(
-    (application: ApplicationRequestType) => {
-      dispatch(sendApplicationSagaStart(application));
-    },
-    [dispatch],
-  );
-
-  const handleOpenApplicationDialog = () => {
-    setOpenApplicationDialog(true);
-  };
-
-  const handleCloseApplicationDialog = () => {
-    setOnMessageWarning(false);
-    setOpenApplicationDialog(false);
-    setApplicationMessage('');
-  };
-
-  const handleChangeApplicationMessage = (
-    event: React.ChangeEvent<HTMLInputElement>,
-  ) => {
-    setApplicationMessage(event.target.value);
-  };
-
-  const handleSendApplication = () => {
-    if (applicationMessage === '') {
-      alert('합류 지원 메시지를 입력해주세요.');
-      setOnMessageWarning(true);
-      return;
-    }
-
-    const application = {
-      teamId: parseInt(teamId),
-      message: applicationMessage,
-    };
-
-    if (onMessageWarning) {
-      setOnMessageWarning(false);
-    }
-
-    sendApplication(application);
-    setApplicationMessage('');
-    setOpenApplicationDialog(false);
-  };
 
   const isTotalSufficient = useMemo(
     () =>
@@ -140,6 +106,128 @@ const TeamInfoSection: React.FC = () => {
         : false,
     [teamData?.backendRecruitment, teamData?.backendHeadcount],
   );
+
+  const sendUserApplication = useCallback(
+    (userApplication: UserApplicationRequestType) => {
+      dispatch(sendUserApplicationSagaStart(userApplication));
+    },
+    [dispatch],
+  );
+
+  const leaveTeam = useCallback(
+    (teamId: number) => {
+      dispatch(leaveTeamSagaStart(teamId));
+    },
+    [dispatch],
+  );
+
+  const sendKakaoSharingMessage = () => {
+    window.Kakao.Link.sendDefault({
+      objectType: 'feed',
+      content: {
+        title: '싸피 메이트(SSAFY MATE)',
+        description: `${
+          teamData !== undefined ? teamData.teamName : ''
+        } 팀 상세 정보`,
+        imageUrl: 'https://avatars.githubusercontent.com/u/97279195?s=200&v=4',
+        link: {
+          webUrl: `https://www.ssafymate.site${
+            teamData !== undefined ? `/teams/${teamData.teamId}` : ''
+          }`,
+        },
+      },
+      buttons: [
+        {
+          title: '팀 상세 정보 보러가기',
+          link: {
+            webUrl: `https://www.ssafymate.site${
+              teamData !== undefined ? `/teams/${teamData.teamId}` : ''
+            }`,
+          },
+        },
+      ],
+    });
+  };
+
+  const handleOpenApplicationDialog = () => {
+    setOpenApplicationDialog(true);
+  };
+
+  const handleCloseApplicationDialog = () => {
+    setOnMessageWarning(false);
+    setOpenApplicationDialog(false);
+    setApplicationMessage('');
+  };
+
+  const handleChangeApplicationMessage = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setApplicationMessage(event.target.value);
+  };
+
+  const handleSendUserApplication = () => {
+    if (applicationMessage === '') {
+      alert('합류 지원 메시지를 입력해주세요.');
+      setOnMessageWarning(true);
+      return;
+    }
+
+    const userApplication = {
+      teamId: parseInt(teamId),
+      message: applicationMessage,
+    };
+
+    if (onMessageWarning) {
+      setOnMessageWarning(false);
+    }
+
+    sendUserApplication(userApplication);
+    setApplicationMessage('');
+    setOpenApplicationDialog(false);
+  };
+
+  const handleClickLeaveButton = () => {
+    Swal.fire({
+      title: '정말 팀을 탈퇴하시겠습니까?',
+      text: '탈퇴 처리 후 취소는 불가능합니다.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#f5554a',
+      cancelButtonColor: '#919aa1',
+      confirmButtonText: '탈퇴하기',
+      cancelButtonText: '취소하기',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        leaveTeam(parseInt(teamId));
+      }
+    });
+  };
+
+  const renderingOptionButton = (role: RoleType = 'outsider') => {
+    switch (role) {
+      case 'owner':
+        return (
+          <OptionLink to={`/teams/${teamId}/edit`}>
+            <EditIcon />
+            <span>팀 정보 수정하기</span>
+          </OptionLink>
+        );
+      case 'member':
+        return (
+          <OptionButton onClick={handleClickLeaveButton} role={role}>
+            <LogoutIcon />
+            <span>팀 탈퇴하기</span>
+          </OptionButton>
+        );
+      default:
+        return (
+          <OptionButton onClick={handleOpenApplicationDialog} role={role}>
+            <BorderColorIcon />
+            <span>지원하기</span>
+          </OptionButton>
+        );
+    }
+  };
 
   if (isError) {
     return <ErrorSection errorMessage={errorMessage} />;
@@ -172,14 +260,12 @@ const TeamInfoSection: React.FC = () => {
               </TeamTitleWrapper>
             </TitleBox>
             <ButtonBox>
-              <ApplicationButton onClick={handleOpenApplicationDialog}>
-                <BorderColorIcon />
-                <span>지원하기</span>
-              </ApplicationButton>
-              <SharingButton>
+              {isTotalSufficient && role === 'outsider'
+                ? null
+                : renderingOptionButton(role)}
+              <SharingButton onClick={sendKakaoSharingMessage}>
                 <ShareIcon />
                 <span>공유하기</span>
-                <ArrowDropDownIcon />
               </SharingButton>
             </ButtonBox>
           </HeadContainer>
@@ -243,7 +329,7 @@ const TeamInfoSection: React.FC = () => {
               <SubHead>팀원 모집 현황</SubHead>
               <MemberList>
                 {teamData.members.map((member, index) => (
-                  <MemberItem
+                  <TeamMemberItem
                     key={member.userId}
                     userId={member.userId}
                     userName={member.userName}
@@ -301,7 +387,7 @@ const TeamInfoSection: React.FC = () => {
               <DialogButton onClick={handleCloseApplicationDialog}>
                 취소
               </DialogButton>
-              <DialogButton onClick={handleSendApplication}>
+              <DialogButton onClick={handleSendUserApplication}>
                 보내기
               </DialogButton>
             </DialogActions>
@@ -487,7 +573,7 @@ const MemberList = styled.ul`
   box-sizing: border-box;
 `;
 
-const ApplicationButton = styled.button`
+const OptionLink = styled(Link)`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -496,7 +582,7 @@ const ApplicationButton = styled.button`
   border: none;
   border-radius: 4px;
   box-sizing: border-box;
-  background-color: #3396f4;
+  background-color: #ffc00a;
   font-size: 16px;
   font-weight: 500;
   line-height: 1.5;
@@ -505,7 +591,49 @@ const ApplicationButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background-color: #2878c3;
+    background-color: #e5ac09;
+  }
+
+  & svg {
+    margin-right: 8px;
+    font-size: 22px;
+  }
+
+  @media (max-width: 1199px) {
+    width: 100%;
+    padding-right: 0;
+    padding-left: 0;
+  }
+  @media (max-width: 991px) {
+    font-size: 15px;
+
+    & svg {
+      font-size: 20px;
+    }
+  }
+`;
+
+const OptionButton = styled.button<OptionButtonProps>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto 0;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: ${(props) =>
+    props.role === 'member' ? '#f5554a' : '#3396f4'};
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #fff;
+  transition: all 0.08s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) =>
+      props.role === 'member' ? '#dc4c42' : '#3396f4'};
   }
 
   & svg {
@@ -549,12 +677,8 @@ const SharingButton = styled.button`
   }
 
   & svg {
-    font-size: 22px;
     margin-right: 8px;
-
-    &:last-of-type {
-      margin-right: 0;
-    }
+    font-size: 22px;
   }
 
   @media (max-width: 1199px) {
@@ -642,7 +766,7 @@ const InfoContent = styled.p`
 
 const Introduction = styled.p`
   font-size: 15px;
-  line-height: 1.5;
+  line-height: 1.6;
   color: #5f7f90;
 
   @media (max-width: 767px) {

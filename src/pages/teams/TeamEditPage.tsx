@@ -10,7 +10,7 @@ import useToken from '../../hooks/useToken';
 
 import Header from '../../components/common/Header';
 import ProjectNavigation from '../../components/projects/ProjectNavigation';
-import EditTeamForm from '../../components/team/EditTeamForm';
+import TeamEditForm from '../../components/team/TeamEditForm';
 import Footer from '../../components/common/Footer';
 
 const TeamEditPage: React.FC = () => {
@@ -32,7 +32,7 @@ const TeamEditPage: React.FC = () => {
       <Header />
       <ProjectNavigation />
       <Container>
-        <EditTeamForm />
+        <TeamEditForm />
       </Container>
       {!smallMedia && <Footer />}
     </>
@@ -50,6 +50,7 @@ const Container = styled.div`
   }
   @media (max-width: 575px) {
     margin-top: 70px;
+    margin-bottom: 90px;
   }
 `;
 

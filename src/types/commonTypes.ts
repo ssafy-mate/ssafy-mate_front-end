@@ -24,7 +24,7 @@ export interface HomeBannerCardData {
 
 export interface HomeBannderCardProps extends HomeBannerCardData {}
 
-export interface HomeBannerSlideData extends HomeBannerCardData {
+export interface HomeBannerSlideType extends HomeBannerCardData {
   id: number;
   hexColorCode: string;
 }
@@ -38,12 +38,12 @@ export interface ProjectBannerCardData {
 
 export interface ProjectBannerCardProps extends ProjectBannerCardData {}
 
-export interface ProjectBannerSlideData extends ProjectBannerCardData {
+export interface ProjectBannerSlideType extends ProjectBannerCardData {
   id: number;
   hexColorCode: string;
 }
 
-export interface ProjectLinkCardData {
+export interface ProjectLinkCardType {
   projectId: number;
   projectName: string;
   pageUrl: string;
@@ -52,10 +52,18 @@ export interface ProjectLinkCardData {
   trackOptions?: string[];
 }
 
-export interface ProjectLinkCardProps extends ProjectLinkCardData {}
+export interface ProjectLinkCardProps extends ProjectLinkCardType {}
 
 export interface ErrorResponse {
   status: number;
   success: boolean;
   message: string;
+}
+
+export interface ServiceIntroductionType {
+  id: number;
+  headText: string;
+  subHeadText: string;
+  descriptionText: string;
+  imgUrl: string;
 }

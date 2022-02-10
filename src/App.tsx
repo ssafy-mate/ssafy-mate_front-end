@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { Switch, Route } from 'react-router-dom';
 import { ConnectedRouter as Router } from 'connected-react-router';
 
@@ -7,7 +9,9 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 
 import { Global } from '@emotion/react';
 
-import reset from './styles/reset';
+import resetStyles from './styles/resetStyles';
+import commonStyles from './styles/commonStyles';
+import sweetAlertStyles from './styles/sweetAlertStyles';
 
 import 'swiper/css/bundle';
 
@@ -24,20 +28,24 @@ import FindUserIdPage from './pages/users/FindUserIdPage';
 import AccountEditPage from './pages/users/AccountEditPage';
 import UserInfoPage from './pages/users/UserInfoPage';
 import TeamInfoPage from './pages/teams/TeamInfoPage';
+import TeamEditPage from './pages/teams/TeamEditPage';
 import TeamCreatePage from './pages/projects/TeamCreatePage';
-import TeamEditPage from './pages/projects/TeamEditPage';
-import CommonProjectPage from './pages/CommonProjectPage';
 import SpecializationProjectTeamListPage from './pages/projects/SpecializationProjectTeamListPage';
 import SpecializationProjectUserListPage from './pages/projects/SpecializationProjectUserListPage';
 import SpecializationProjectOfferListPage from './pages/projects/SpecializationProjectOfferListPage';
-import AutonomyProjectPage from './pages/AutonomyProjectPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ChattingPage from './pages/ChattingPage';
 
 const App: React.FC = () => {
+  useEffect(() => {
+    window.Kakao.init(process.env.REACT_APP_KAKAO_KEY);
+  }, []);
+
   return (
     <ErrorBoundary FallbackComponent={ErrorPage}>
-      <Global styles={reset} />
+      <Global styles={resetStyles} />
+      <Global styles={commonStyles} />
+      <Global styles={sweetAlertStyles} />
       <Router history={history}>
         <ScrollToTop />
         <Switch>
@@ -49,13 +57,8 @@ const App: React.FC = () => {
           <Route exact path="/users/account/edit" component={AccountEditPage} />
           <Route exact path="/users/:userId" component={UserInfoPage} />
           <Route exact path="/teams/:teamId" component={TeamInfoPage} />
-          <Route
-            exact
-            path="/projects/team/create"
-            component={TeamCreatePage}
-          />
-          <Route exact path="/projects/team/edit" component={TeamEditPage} />
-          <Route exact path="/projects/common" component={CommonProjectPage} />
+          <Route exact path="/teams/:teamId/edit" component={TeamEditPage} />
+          <Route exact path="/projects/teams/new" component={TeamCreatePage} />
           <Route
             exact
             path="/projects/specialization/teams"
@@ -70,11 +73,6 @@ const App: React.FC = () => {
             exact
             path="/projects/specialization/offer_list"
             component={SpecializationProjectOfferListPage}
-          />
-          <Route
-            exact
-            path="/projects/autonomy/"
-            component={AutonomyProjectPage}
           />
           <Route exact path="/chatting/:myId" component={ChattingPage} />
           <Route component={NotFoundPage} />

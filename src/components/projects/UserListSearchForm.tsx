@@ -13,13 +13,17 @@ import useTechStackList from '../../hooks/useTechStackList';
 import { TechStackWithImg } from '../../types/commonTypes';
 
 import {
-  ssafyTrackListData,
-  campusListData,
-  projectListData,
+  SSAFY_TRACK_LIST,
+  CAMPUS_LIST,
+  PROJECT_LIST,
 } from '../../data/ssafyData';
-import { jobListData } from '../../data/jobListData';
+import { JOB_LIST } from '../../data/jobListData';
+
+const CURRENT_PROJECT_CODE: number = 1;
 
 interface UserListSearchFormProps {
+  campus: string;
+  projectTrack: string;
   setCampus: (campus: string) => void;
   setProjectTrack: (projectTrack: string) => void;
   setJob1: (job1: string) => void;
@@ -29,6 +33,8 @@ interface UserListSearchFormProps {
 }
 
 const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
+  campus,
+  projectTrack,
   setCampus,
   setProjectTrack,
   setJob1,
@@ -36,14 +42,14 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
   setUserName,
   setSsafyTrack,
 }) => {
-  const [project, onSetProject] = useQueryString('project');
-  const [projectTrack, onSetProjectTrack] = useQueryString('project_track');
-  const [campus, onSetCampus] = useQueryString('campus');
-  const [job1, onSetJob1] = useQueryString('job1');
-  const [page, onSetPage] = useQueryString('page');
-  const [techStackCode, onSetTechStackCode] = useQueryString('techstack_code');
-  const [userName, onSetUserName] = useQueryString('user_name');
-  const [ssafyTrack, onSetSsafyTrack] = useQueryString('ssafy_track');
+  const [, onSetProject] = useQueryString('project');
+  const [, onSetProjectTrack] = useQueryString('project_track');
+  const [, onSetCampus] = useQueryString('campus');
+  const [, onSetJob1] = useQueryString('job1');
+  const [, onSetPage] = useQueryString('page');
+  const [, onSetTechStackCode] = useQueryString('techstack_code');
+  const [, onSetUserName] = useQueryString('user_name');
+  const [, onSetSsafyTrack] = useQueryString('ssafy_track');
 
   const techStackList: TechStackWithImg[] = useTechStackList();
 
@@ -60,14 +66,16 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
   });
 
   useEffect(() => {
-    onSetCampus('all');
+    onSetCampus(campus);
     onSetProject('특화 프로젝트');
-    onSetProjectTrack('all');
+    onSetProjectTrack(projectTrack);
     onSetJob1('all');
     onSetUserName('');
     onSetSsafyTrack('all');
     onSetPage(1);
   }, [
+    campus,
+    projectTrack,
     onSetProject,
     onSetProjectTrack,
     onSetCampus,
@@ -124,9 +132,13 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
     <Container>
       <Wrapper>
         <FilterList>
-          <FilterSelect name="campus" onChange={handleChangeCampus}>
+          <FilterSelect
+            name="campus"
+            defaultValue={campus}
+            onChange={handleChangeCampus}
+          >
             <option value="all">전체 캠퍼스</option>
-            {campusListData.map((campus) => (
+            {CAMPUS_LIST.map((campus) => (
               <option key={campus.id} value={campus.area}>
                 {campus.area}
               </option>
@@ -134,19 +146,22 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
           </FilterSelect>
           <FilterSelect
             name="specializaion-project-track"
+            defaultValue={projectTrack}
             onChange={handleChangeProjectTrack}
             css={{ margin: '0 12px' }}
           >
             <option value="all">전체 특화 프로젝트 트랙</option>
-            {projectListData[1].projectTracks?.map((projectTrack) => (
-              <option key={projectTrack.id} value={projectTrack.name}>
-                {projectTrack.name}
-              </option>
-            ))}
+            {PROJECT_LIST[CURRENT_PROJECT_CODE].projectTracks?.map(
+              (projectTrack) => (
+                <option key={projectTrack.id} value={projectTrack.name}>
+                  {projectTrack.name}
+                </option>
+              ),
+            )}
           </FilterSelect>
           <FilterSelect name="job1" onChange={handleChangeJob1}>
             <option value="all">전체 희망 직무</option>
-            {jobListData.map((job) => (
+            {JOB_LIST.map((job) => (
               <option key={job.id} value={job.name}>
                 {job.name}
               </option>
@@ -185,7 +200,7 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
           />
           <FilterSelect name="ssafy-track" onChange={handleChangeSsafyTrack}>
             <option value="all">전체 교육 트랙</option>
-            {ssafyTrackListData.map((ssafyTrack) => (
+            {SSAFY_TRACK_LIST.map((ssafyTrack) => (
               <option key={ssafyTrack.id} value={ssafyTrack.name}>
                 {ssafyTrack.name}
               </option>

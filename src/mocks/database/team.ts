@@ -1,4 +1,4 @@
-export const teamDataList = [
+export const teamDataListData = [
   {
     teamData: {
       teamId: 1,
@@ -18,58 +18,18 @@ export const teamDataList = [
       techStacks: [
         {
           id: 1,
-          techStackName: 'TypeScript',
-          techStackImgUrl: '/images/assets/tech-stack/TypeScript.png',
+          techStackName: 'HTML5',
+          techStackImgUrl: '/images/assets/tech-stack/HTML5.png',
         },
         {
           id: 2,
-          techStackName: 'React',
-          techStackImgUrl: '/images/assets/tech-stack/React.png',
+          techStackName: 'CSS3',
+          techStackImgUrl: '/images/assets/tech-stack/CSS3.png',
         },
         {
-          id: 4,
-          techStackName: 'Redux',
-          techStackImgUrl: '/images/assets/tech-stack/Redux.png',
-        },
-        {
-          id: 5,
-          techStackName: 'Redux-Saga',
-          techStackImgUrl: '/images/assets/tech-stack/Redux-Saga.png',
-        },
-        {
-          id: 6,
-          techStackName: 'React-Query',
-          techStackImgUrl: '/images/assets/tech-stack/React-Query.png',
-        },
-        {
-          id: 7,
-          techStackName: 'Emotion',
-          techStackImgUrl: '/images/assets/tech-stack/Emotion.png',
-        },
-        {
-          id: 8,
-          techStackName: 'Mock-Service-Worker',
-          techStackImgUrl: '/images/assets/tech-stack/Mock-Service-Worker.png',
-        },
-        {
-          id: 9,
-          techStackName: 'Spring-Boot',
-          techStackImgUrl: '/images/assets/tech-stack/Spring-Boot.png',
-        },
-        {
-          id: 10,
-          techStackName: 'JPA',
-          techStackImgUrl: '/images/assets/tech-stack/JPA.png',
-        },
-        {
-          id: 11,
-          techStackName: 'MySQL',
-          techStackImgUrl: '/images/assets/tech-stack/MySQL.png',
-        },
-        {
-          id: 12,
-          techStackName: 'Swagger',
-          techStackImgUrl: '/images/assets/tech-stack/Swagger.png',
+          id: 3,
+          techStackName: 'JavaScript',
+          techStackImgUrl: '/images/assets/tech-stack/JavaScript.png',
         },
       ],
       members: [
@@ -132,11 +92,11 @@ export const teamDataList = [
         userId: 1,
         userName: '조원빈',
       },
-      teamImgUrl: '/images/projects/sample-team_logo5.png',
+      teamImgUrl: '/images/projects/sample-team_logo1.jpeg',
       campus: '서울',
       project: '특화 프로젝트',
       projectTrack: '빅데이터',
-      teamName: '하우저',
+      teamName: '디벨로파시토',
       notice: '최우수상 수상에 도전할 분들을 모집합니다.',
       introduction:
         '실사용자를 받는 플랫폼 개발에 도전하실 분들을 찾고 있습니다. 개발 효율성을 높이기 위해 API First Design 설계 방식으로 진행하려고 합니다. 서버에서는 Swagger를 이용하여 API 테스트를 진행하고, 클라이언트 팀은 정식 API가 배포되기 이전까지 Mock Service Worker를 이용하여 Mock을 만들어 개발을 진행하려고 합니다.',
@@ -228,8 +188,8 @@ export const teamDataList = [
         },
         {
           userId: 8,
-          userName: '신지수',
-          profileImgUrl: '/images/assets/basic-profile-img.png',
+          userName: '이여진',
+          profileImgUrl: '/images/projects/sample-student_profile-img6.jpeg',
           ssafyTrack: 'Java Track',
           job1: '프론트엔드 (Front-end)',
         },
@@ -327,19 +287,31 @@ export const teamListData = [
   {
     teamId: 3,
     teamName: '디벨로파시토',
-    teamImgUrl: '/images/projects/sample-team_logo1.png',
+    teamImgUrl: '/images/projects/sample-team_logo1.jpeg',
     campus: '서울',
     project: '특화 프로젝트',
     projectTrack: '빅데이터',
     notice: '실제 운영할 서비스 개발을 도전할 분들을 모집합니다.',
     techStacks: [
       {
-        id: 1,
-        techStackName: 'HTML5',
+        id: 6,
+        techStackName: 'React',
       },
       {
-        id: 2,
-        techStackName: 'CSS3',
+        id: 11,
+        techStackName: 'Redux',
+      },
+      {
+        id: 23,
+        techStackName: 'Emotion',
+      },
+      {
+        id: 44,
+        techStackName: 'Spring-Boot',
+      },
+      {
+        id: 52,
+        techStackName: 'JPA',
       },
     ],
     totalRecruitment: 6,
@@ -348,7 +320,7 @@ export const teamListData = [
     frontendHeadcount: 2,
     backendRecruitment: 3,
     backendHeadcount: 3,
-    createDateTime: new Date('2022-01-29'),
+    createDateTime: '2022-01-29',
     isRecruiting: true,
   },
   {
@@ -362,11 +334,23 @@ export const teamListData = [
     techStacks: [
       {
         id: 6,
-        techStackName: 'React',
+        techStackName: 'Vue.js',
       },
       {
         id: 2,
-        techStackName: 'CSS3',
+        techStackName: 'Vuex',
+      },
+      {
+        id: 3,
+        techStackName: 'Vuetify',
+      },
+      {
+        id: 4,
+        techStackName: 'django',
+      },
+      {
+        id: 4,
+        techStackName: 'MySQL',
       },
     ],
     totalRecruitment: 6,
@@ -384,16 +368,28 @@ export const teamListData = [
     teamImgUrl: '/images/projects/sample-team_logo2.png',
     campus: '서울',
     project: '특화 프로젝트',
-    projectTrack: '인공지능',
+    projectTrack: 'IoT 제어',
     notice: '최우수상에 도전할 팀원 분들 모집',
     techStacks: [
       {
         id: 5,
-        techStackName: 'Vue.js',
+        techStackName: 'TypeScript',
       },
       {
-        id: 2,
-        techStackName: 'CSS3',
+        id: 6,
+        techStackName: 'React',
+      },
+      {
+        id: 8,
+        techStackName: 'Python',
+      },
+      {
+        id: 9,
+        techStackName: 'Raspberry-Pi',
+      },
+      {
+        id: 10,
+        techStackName: 'Spring-Boot',
       },
     ],
     totalRecruitment: 6,
@@ -402,7 +398,7 @@ export const teamListData = [
     frontendHeadcount: 2,
     backendRecruitment: 3,
     backendHeadcount: 1,
-    createDateTime: new Date('2022-02-01'),
+    createDateTime: '2022-02-01',
     isRecruiting: true,
   },
   {
@@ -411,52 +407,150 @@ export const teamListData = [
     teamImgUrl: '/images/projects/sample-team_logo3.png',
     campus: '서울',
     project: '특화 프로젝트',
-    projectTrack: 'IoT 제어',
-    notice: '워라벨을 지향하는 팀원들을 모집합니다.',
+    projectTrack: '인공지능',
+    notice: '딥러닝에 도전할 팀원들을 모집합니다.',
     techStacks: [
       {
-        id: 45,
-        techStackName: 'Spring-Boot',
+        id: 1,
+        techStackName: 'Vue.js',
+      },
+      {
+        id: 2,
+        techStackName: 'Python',
       },
       {
         id: 3,
-        techStackName: 'JavaScript',
+        techStackName: 'TensorFlow',
+      },
+      {
+        id: 4,
+        techStackName: 'PyTorch',
+      },
+      {
+        id: 5,
+        techStackName: 'django',
       },
     ],
     totalRecruitment: 6,
-    totalHeadcount: 6,
+    totalHeadcount: 5,
     frontendRecruitment: 3,
-    frontendHeadcount: 3,
+    frontendHeadcount: 2,
     backendRecruitment: 3,
     backendHeadcount: 3,
-    createDateTime: new Date('2022-02-06'),
-    isRecruiting: false,
+    createDateTime: '2022-02-06',
+    isRecruiting: true,
   },
   {
     teamId: 7,
-    teamName: '크로켓',
-    teamImgUrl: '/images/projects/sample-team_logo4.png',
+    teamName: 'ssafe',
+    teamImgUrl: '/images/projects/sample-team_logo6.png',
     campus: '서울',
     project: '특화 프로젝트',
-    projectTrack: '블록체인',
-    notice: '우수상에 도전할 팀원 분들 모집',
+    projectTrack: '빅데이터',
+    notice: '싸피만의 커뮤니티를 만들 팀원들을 모집합니다.',
     techStacks: [
       {
-        id: 45,
-        techStackName: 'Spring-Boot',
+        id: 1,
+        techStackName: 'React',
+      },
+      {
+        id: 2,
+        techStackName: 'Recoil',
       },
       {
         id: 3,
-        techStackName: 'JavaScript',
+        techStackName: 'Storybook',
+      },
+      {
+        id: 4,
+        techStackName: 'Spring-Boot',
+      },
+      {
+        id: 5,
+        techStackName: 'JPA',
+      },
+      {
+        id: 6,
+        techStackName: 'docker',
       },
     ],
     totalRecruitment: 6,
-    totalHeadcount: 6,
+    totalHeadcount: 5,
     frontendRecruitment: 3,
     frontendHeadcount: 3,
     backendRecruitment: 3,
-    backendHeadcount: 3,
-    createDateTime: new Date('2022-02-10'),
-    isRecruiting: false,
+    backendHeadcount: 2,
+    createDateTime: '2022-02-10',
+    isRecruiting: true,
+  },
+  {
+    teamId: 8,
+    teamName: '크로켓',
+    teamImgUrl: '/images/projects/sample-team_logo4.png',
+    campus: '구미',
+    project: '특화 프로젝트',
+    projectTrack: '블록체인',
+    notice: '블록체인 의료 시스템 개발에 도전할 팀원들을 모집합니다.',
+    techStacks: [
+      {
+        id: 1,
+        techStackName: 'TypeScript',
+      },
+      {
+        id: 2,
+        techStackName: 'Angular',
+      },
+      {
+        id: 3,
+        techStackName: 'MobX',
+      },
+      {
+        id: 4,
+        techStackName: 'Spring',
+      },
+    ],
+    totalRecruitment: 6,
+    totalHeadcount: 4,
+    frontendRecruitment: 3,
+    frontendHeadcount: 3,
+    backendRecruitment: 3,
+    backendHeadcount: 1,
+    createDateTime: '2022-02-10',
+    isRecruiting: true,
   },
 ];
+
+export const teamEditData = {
+  teamId: 1,
+  teamName: '디벨로파시토',
+  teamImgUrl: '/images/common/ssafy-mate_logo.png',
+  campus: '서울',
+  project: '공통 프로젝트',
+  projectTrack: '웹 기술',
+  notice: '실제 운영할 서비스 개발을 도전할 분들을 모집합니다.',
+  introduction:
+    '실사용자를 받는 플랫폼 개발에 도전하실 분들을 찾고 있습니다. 개발 효율성을 높이기 위해 API First Design 설계 방식으로 진행하려고 합니다. 서버에서는 Swagger를 이용하여 API 테스트를 진행하고, 클라이언트 팀은 정식 API가 배포되기 이전까지 Mock Service Worker를 이용하여 Mock을 만들어 개발을 진행하려고 합니다.',
+  techStacks: [
+    {
+      id: 1,
+      techStackName: 'HTML5',
+      techStackImgUrl: '/images/assets/tech-stack/HTML5.png',
+    },
+    {
+      id: 2,
+      techStackName: 'CSS3',
+      techStackImgUrl: '/images/assets/tech-stack/CSS3.png',
+    },
+    {
+      id: 43,
+      techStackName: 'Vuex',
+      techStackImgUrl: '/images/assets/tech-stack/Vuex.png',
+    },
+  ],
+  totalRecruitment: 6,
+  totalHeadcount: 3,
+  frontendRecruitment: 3,
+  frontendHeadcount: 2,
+  backendRecruitment: 3,
+  backendHeadcount: 1,
+};

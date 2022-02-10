@@ -3,7 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { push } from 'connected-react-router';
 
 import { useDispatch } from 'react-redux';
-import { createMyTeam as createMyTeamSagaStart } from '../../redux/modules/myTeam';
+import { createTeam as createTeamSagaStart } from '../../redux/modules/myTeam';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -17,11 +17,12 @@ import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
 import Swal from 'sweetalert2';
 
 import { TechStackWithImg } from '../../types/commonTypes';
-import { CheckBelongToTeamRequestParams } from '../../types/userTypes';
+import { GetMyTeamIdParams } from '../../types/userTypes';
 
-import { campusListData, projectListData } from '../../data/ssafyData';
+import { CAMPUS_LIST, PROJECT_LIST } from '../../data/ssafyData';
 
 import useToken from '../../hooks/useToken';
+import useUserId from '../../hooks/useUserId';
 import useTechStackList from '../../hooks/useTechStackList';
 import useUserProjectInfo from '../../hooks/useUserProjectInfo';
 
@@ -48,6 +49,7 @@ const TeamCreateForm: React.FC = () => {
 
   const dispatch = useDispatch();
   const token = useToken();
+  const userId = useUserId();
   const techStackList: TechStackWithImg[] = useTechStackList();
   const {
     getRootProps,
@@ -70,14 +72,15 @@ const TeamCreateForm: React.FC = () => {
   useEffect(() => {
     async function checkTeam(
       token: string,
-      params: CheckBelongToTeamRequestParams,
+      userId: number,
+      params: GetMyTeamIdParams,
     ) {
-      const response = await UserService.checkBelongToTeam(token, params);
+      const teamId = await UserService.getMyTeamId(token, userId, params);
 
-      if (response.data.belongToTeam) {
+      if (teamId !== null) {
         Swal.fire({
           title: '팀 생성 불가',
-          text: '이미 해당 프로젝트의 팀에 속해 있습니다.',
+          text: '해당 프로젝트 팀에 이미 합류되어 있어 팀 생성이 불가능합니다.',
           icon: 'warning',
           confirmButtonColor: '#3396f4',
           confirmButtonText: '확인',
@@ -87,14 +90,10 @@ const TeamCreateForm: React.FC = () => {
       }
     }
 
-    if (token !== null && project !== null) {
-      const params = {
-        selectedProject: project,
-      };
-
-      checkTeam(token, params);
+    if (token !== null && userId !== null && project !== null) {
+      checkTeam(token, userId, { project });
     }
-  }, [dispatch, token, project]);
+  }, [dispatch, token, userId, project]);
 
   useEffect(() => {
     const selectedTechStackCodes = value.map((techStack) => techStack.id);
@@ -102,9 +101,9 @@ const TeamCreateForm: React.FC = () => {
     setTechStacks(selectedTechStackCodes);
   }, [value]);
 
-  const createMyTeam = useCallback(
+  const createTeam = useCallback(
     (teamFormData: FormData) => {
-      dispatch(createMyTeamSagaStart(teamFormData));
+      dispatch(createTeamSagaStart(teamFormData));
     },
     [dispatch],
   );
@@ -243,7 +242,7 @@ const TeamCreateForm: React.FC = () => {
         backendRecruitment,
       );
 
-      createMyTeam(teamFormData);
+      createTeam(teamFormData);
     } else {
       setIsDisplayedWarningText(true);
     }
@@ -312,7 +311,7 @@ const TeamCreateForm: React.FC = () => {
               disabled
             >
               <option value="">- 선택 -</option>
-              {campusListData.map((campus) => (
+              {CAMPUS_LIST.map((campus) => (
                 <option key={campus.id} value={campus.area}>
                   {campus.area}
                 </option>
@@ -329,7 +328,7 @@ const TeamCreateForm: React.FC = () => {
               disabled
             >
               <option value="">- 선택 -</option>
-              {projectListData.map((project) => (
+              {PROJECT_LIST.map((project) => (
                 <option key={project.id} value={project.name}>
                   {project.name}
                 </option>

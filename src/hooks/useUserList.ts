@@ -5,10 +5,10 @@ import { useQuery } from 'react-query';
 import { UserListResponse } from '../types/userTypes';
 import { ErrorResponse } from '../types/commonTypes';
 
-import ProjectService from '../services/ProjectService';
+import UserService from '../services/UserService';
 
-const useUserList = (params: object) => {
-  const queryFn = () => ProjectService.getUserList(params);
+const useUserList = (token: string | null, params: object) => {
+  const queryFn = () => UserService.getUserList(token, params);
   const { isLoading, data, isError, error } = useQuery<
     AxiosResponse<UserListResponse>,
     AxiosError<ErrorResponse>

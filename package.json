@@ -18,6 +18,8 @@
     "@types/react-dom": "^17.0.9",
     "@types/sockjs-client": "^1.5.1",
     "autosize": "^5.0.1",
+    "animate.css": "^4.1.1",
+    "animate.css-react": "^1.1.0",
     "axios": "^0.24.0",
     "chart.js": "^3.7.0",
     "connected-react-router": "^6.9.2",

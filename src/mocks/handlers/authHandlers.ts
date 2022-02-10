@@ -148,6 +148,7 @@ export const authHandlers = [
           }),
         );
       }
+
       if (
         CodeIndex >= 0 &&
         EmailVerificationCodes[CodeIndex].timeout &&
@@ -162,6 +163,7 @@ export const authHandlers = [
           }),
         );
       }
+
       if (code === '55555555') {
         return response(
           context.status(500),
@@ -172,6 +174,7 @@ export const authHandlers = [
           }),
         );
       }
+
       return response(
         context.json({
           success: true,
@@ -197,6 +200,7 @@ export const authHandlers = [
           }),
         );
       }
+
       if (selfIntroduction === '서버실패') {
         return response(
           context.status(500),
@@ -207,6 +211,7 @@ export const authHandlers = [
           }),
         );
       }
+
       return response(
         context.json({
           message: '계정 생성이 완료되었습니다.',

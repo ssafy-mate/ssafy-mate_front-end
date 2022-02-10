@@ -9,7 +9,7 @@ interface Campus {
   ssafyTracks: SsafyTrack[];
 }
 
-export const ssafyTrackListData: SsafyTrack[] = [
+export const SSAFY_TRACK_LIST: SsafyTrack[] = [
   {
     id: 1,
     name: 'Python Track',
@@ -28,7 +28,7 @@ export const ssafyTrackListData: SsafyTrack[] = [
   },
 ];
 
-export const campusListData: Campus[] = [
+export const CAMPUS_LIST: Campus[] = [
   {
     id: 1,
     area: '서울',
@@ -120,7 +120,7 @@ interface Project {
   projectTracks?: ProjectTrack[];
 }
 
-export const projectListData: Project[] = [
+export const PROJECT_LIST: Project[] = [
   {
     id: 1,
     name: '공통 프로젝트',
@@ -145,18 +145,30 @@ export const projectListData: Project[] = [
     projectTracks: [
       {
         id: 1,
-        name: '인공지능',
+        name: '인공지능(영상)',
       },
       {
         id: 2,
-        name: '빅데이터',
+        name: '인공지능(음성)',
       },
       {
         id: 3,
-        name: '블록체인',
+        name: '빅데이터(추천)',
       },
       {
         id: 4,
+        name: '빅데이터(분산)',
+      },
+      {
+        id: 5,
+        name: '블록체인(P2P거래)',
+      },
+      {
+        id: 6,
+        name: '블록체인(디지털화폐)',
+      },
+      {
+        id: 7,
         name: 'IoT 제어',
       },
     ],

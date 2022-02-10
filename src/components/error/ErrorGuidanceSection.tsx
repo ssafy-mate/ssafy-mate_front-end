@@ -2,18 +2,36 @@ import { Link } from 'react-router-dom';
 
 import styled from '@emotion/styled';
 
-const NotFoundGuidanceSection: React.FC = () => {
+interface ErrorGuidanceSectionProps {
+  title: string;
+  guidance: string;
+  subGuidance?: string;
+  haveHomeLink: boolean;
+}
+
+const ErrorGuidanceSection: React.FC<ErrorGuidanceSectionProps> = ({
+  title,
+  guidance,
+  subGuidance,
+  haveHomeLink,
+}) => {
   return (
     <Container>
       <Wrapper>
         <Row>
-          <Title>Page Not Found</Title>
+          <Title>{title}</Title>
           <Guidance>
-            요청하신 페이지를 찾을 수 없습니다.
-            <br />
-            입력하신 주소가 정확한지 다시 한번 확인해 주세요.
+            {guidance}
+            {subGuidance !== null && (
+              <>
+                <br />
+                {subGuidance}
+              </>
+            )}
           </Guidance>
-          <HomeLink to="/">싸피 메이트 홈으로 바로가기 </HomeLink>
+          {haveHomeLink && (
+            <HomeLink to="/">싸피 메이트 홈으로 바로가기</HomeLink>
+          )}
         </Row>
         <Row>
           <SvgWrapper>
@@ -1716,7 +1734,7 @@ const Guidance = styled.p`
   margin-bottom: 30px;
   font-size: 18px;
   line-height: 1.6;
-  color: #e8e8e8;
+  color: #e9e9e9;
 
   @media (max-width: 767px) {
     margin-bottom: 20px;
@@ -1876,4 +1894,4 @@ const SvgWrapper = styled.div`
   }
 `;
 
-export default NotFoundGuidanceSection;
+export default ErrorGuidanceSection;

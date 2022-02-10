@@ -18,7 +18,7 @@ const ProjectNavigation: React.FC = () => {
       <NavItem
         className={
           location.pathname === '/projects/specialization/teams' ||
-          location.pathname === '/info/team/1'
+          location.pathname === '/info/teams/1'
             ? 'active'
             : ''
         }
@@ -60,11 +60,9 @@ const ProjectNavigation: React.FC = () => {
         </NavLink>
       </NavItem>
       <NavItem
-        className={
-          location.pathname === '/projects/team/create' ? 'active' : ''
-        }
+        className={location.pathname === '/projects/teams/new' ? 'active' : ''}
       >
-        <NavLink to="/projects/team/create">
+        <NavLink to="/projects/teams/new">
           <GroupsIcon css={navLinkIcon} />팀 생성
         </NavLink>
       </NavItem>

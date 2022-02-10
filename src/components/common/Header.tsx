@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 import { Link } from 'react-router-dom';
 
@@ -15,9 +15,9 @@ import styled from '@emotion/styled';
 
 import ArticleIcon from '@mui/icons-material/Article';
 import ChatIcon from '@mui/icons-material/Chat';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import LogoutIcon from '@mui/icons-material/Logout';
+import GroupsIcon from '@mui/icons-material/Groups';
 import MenuItem from '@mui/material/MenuItem';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Grow from '@mui/material/Grow';
@@ -28,11 +28,14 @@ import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Tooltip from '@mui/material/Tooltip';
 
+import Swal from 'sweetalert2';
+
 import { getProfileInfoRequest, RootState } from '../../types/authTypes';
 import { Severity } from '../../types/signUpTypes';
 
 import useToken from '../../hooks/useToken';
 import useUserId from '../../hooks/useUserId';
+import useMyTeamId from '../../hooks/useMyTeamId';
 
 import SsafyMateAlert from './Alert';
 import MenuBar from './MenuBar';
@@ -49,6 +52,8 @@ interface ContainerProps {
   offFixed?: boolean;
 }
 
+const CURRENT_PROJECT: string = '특화 프로젝트';
+
 const Header: React.FC<HeaderProps> = ({ offFixed }) => {
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -58,9 +63,9 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
   const prevAccoutBoxOpen = useRef(accountBoxOpen);
 
   const dispatch = useDispatch();
-
   const token = useToken();
   const userId = useUserId();
+  const myTeamId = useMyTeamId(CURRENT_PROJECT);
 
   const isMobile = useMediaQuery({
     query: '(max-width: 991px)',
@@ -93,6 +98,13 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
 
     prevAccoutBoxOpen.current = accountBoxOpen;
   }, [accountBoxOpen, isMobile]);
+
+  const update = useCallback(
+    (requestData: getProfileInfoRequest) => {
+      dispatch(updateProfileInfoSagaStart(requestData));
+    },
+    [dispatch],
+  );
 
   const showAlert = (
     alertShow: boolean,
@@ -140,19 +152,24 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
     }
   };
 
-  const update = useCallback(
-    (requestData: getProfileInfoRequest) => {
-      dispatch(updateProfileInfoSagaStart(requestData));
-    },
-    [dispatch],
-  );
-
   const handleUserAccountEdit = (evevt: React.MouseEvent) => {
     if (token === null) {
       showAlert(true, '로그인 후 이용해주세요.', 'warning');
     }
     if (token !== null && userId !== null) {
       update({ token: token, userId: userId });
+    }
+  };
+
+  const handleClickMyTeamLink = () => {
+    if (myTeamId === null) {
+      Swal.fire({
+        title: '아직 합류된 팀이 없습니다.',
+        text: '팁을 합류하거나 팀을 생성하세요.',
+        icon: 'warning',
+        confirmButtonColor: '#3396f4',
+        confirmButtonText: '확인',
+      });
     }
   };
 
@@ -197,10 +214,12 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
                   </IconLink>
                 </Tooltip>
               </AccountMenuItem>
-              <AccountMenuItem>
-                <IconLink to="#">
-                  <NotificationsIcon css={icon} />
-                </IconLink>
+              <AccountMenuItem onClick={handleClickMyTeamLink}>
+                <Tooltip title="내 팀 정보" arrow>
+                  <IconLink to={myTeamId !== null ? `/teams/${myTeamId}` : '#'}>
+                    <GroupsIcon css={icon} />
+                  </IconLink>
+                </Tooltip>
               </AccountMenuItem>
               <AccountMenuItem>
                 <Tooltip title="채팅 목록" arrow>
@@ -283,6 +302,11 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
               <AccountMenuItem>
                 <PageLink to={`/users/${userId}`}>내 프로필</PageLink>
               </AccountMenuItem>
+              <AccountMenuItem onClick={handleClickMyTeamLink}>
+                <PageLink to={myTeamId !== null ? `/teams/${myTeamId}` : '#'}>
+                  내 팀 정보
+                </PageLink>
+              </AccountMenuItem>
               <AccountMenuItem>
                 <PageLink to={`/chatting/${userId}`}>채팅 목록</PageLink>
               </AccountMenuItem>
@@ -320,7 +344,7 @@ const Container = styled.header<ContainerProps>`
   position: ${(props) => (props.offFixed ? 'relative' : 'fixed')};
   top: 0;
   left: 0;
-  z-index: 10;
+  z-index: 50;
   width: 100%;
   background-color: #0d161c;
 `;

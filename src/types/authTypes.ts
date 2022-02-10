@@ -36,8 +36,8 @@ export interface SignInResponse {
 }
 
 export interface Project {
-  projectId: number | null;
-  projectName: string | null;
+  projectId: number;
+  projectName: string;
   projectTrack: string | null;
   projectTeamId: string | null;
 }
@@ -64,7 +64,7 @@ export interface ProjectTrackRequestType {
   projectTrack: string;
 }
 
-export interface ApplicationRequestType {
+export interface UserApplicationRequestType {
   teamId: number;
   message: string;
 }
@@ -94,3 +94,6 @@ export interface getProfileInfoRequest {
   userId: number;
 }
 
+export interface ProjectParams {
+  project: string;
+}

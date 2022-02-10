@@ -4,6 +4,10 @@ import { Redirect } from 'react-router-dom';
 
 import { useMediaQuery } from 'react-responsive';
 
+import { useSelector } from 'react-redux';
+
+import { RootState } from '../../types/authTypes';
+
 import useToken from '../../hooks/useToken';
 import useUserList from '../../hooks/useUserList';
 
@@ -15,10 +19,22 @@ import UserRecruitmentSection from '../../components/projects/UserRecruitmentSec
 import Pagenation from '../../components/projects/Pagenation';
 import Footer from '../../components/common/Footer';
 
+const CURRENT_PROJECT_CODE: number = 1;
+
 const SpecializationProjectUserListPage: React.FC = () => {
-  const [campus, setCampus] = useState<string>('all');
+  const myCampus = useSelector<RootState, string | null>(
+    (state) => state.auth.campus,
+  );
+  const myProjectTrack = useSelector<RootState, string | null>(
+    (state) => state.auth.projects[CURRENT_PROJECT_CODE].projectTrack,
+  );
+  const [campus, setCampus] = useState<string>(
+    myCampus !== null ? myCampus : 'all',
+  );
   const [project, setProject] = useState<string>('특화 프로젝트');
-  const [projectTrack, setProjectTrack] = useState<string>('all');
+  const [projectTrack, setProjectTrack] = useState<string>(
+    myProjectTrack !== null ? myProjectTrack : 'all',
+  );
   const [job1, setJob1] = useState<string>('all');
   const [techStackCode, setTechStackCode] = useState<number | null>(null);
   const [userName, setUserName] = useState<string>('');
@@ -28,7 +44,7 @@ const SpecializationProjectUserListPage: React.FC = () => {
   const [page, setPage] = useState<number>(1);
 
   const token = useToken();
-  const { isLoading, data, isError, errorMessage } = useUserList({
+  const { isLoading, data, isError, errorMessage } = useUserList(token, {
     campus,
     project,
     project_track: projectTrack,
@@ -59,6 +75,8 @@ const SpecializationProjectUserListPage: React.FC = () => {
       <ProjectNavigation />
       <ProjectBannerSection />
       <UserListSearchForm
+        campus={campus}
+        projectTrack={projectTrack}
         setCampus={setCampus}
         setProjectTrack={setProjectTrack}
         setJob1={setJob1}

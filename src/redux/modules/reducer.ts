@@ -11,12 +11,10 @@ import myTeam from './myTeam';
 import controlAlert from './alert';
 import profile from './profile';
 
-
-
 const persistConfig = {
   key: 'root',
   storage,
-  whitelist: ['auth', 'profile'],
+  whitelist: ['auth', 'profile', 'myTeam'],
   blacklist: ['router'],
 };
 
