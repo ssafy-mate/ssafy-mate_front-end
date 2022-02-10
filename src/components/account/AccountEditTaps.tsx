@@ -43,10 +43,10 @@ const AccountEditTab = styled(Tab)`
   width: 50%;
 
   @media (max-width: 575px) {
-    font-size: 13px;
+    font-size: 14px;
   }
   @media (max-width: 349px) {
-    font-size: 12px;
+    font-size: 13px;
   }
 `;
 export default AccountEditTaps;

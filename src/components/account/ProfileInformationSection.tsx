@@ -16,7 +16,7 @@ import { useAutocomplete } from '@mui/material';
 import { TechStackWithImg } from '../../types/commonTypes';
 import { Severity, TechStacksWithLevel } from '../../types/signUpTypes';
 import { JOB_LIST } from '../../data/jobListData';
-import { PROJECT_LIST, ProjectTrack } from '../../data/ssafyData';
+import { PROJECT_LIST } from '../../data/ssafyData';
 
 import useUserId from '../../hooks/useUserId';
 import useToken from '../../hooks/useToken';
@@ -481,10 +481,10 @@ const ProfileInformationSection: React.FC = () => {
     <>
       <SsafyMateInformationWrapper>
         <InfomationWrapper>
-          <SingleInformationWrapper className="self-introduction">
-            <InformationLabel htmlFor="self-introduction" className="necessary">
+          <SingleInformationWrapper>
+            <RequirementLabel htmlFor="self-introduction">
               자기소개
-            </InformationLabel>
+            </RequirementLabel>
             <Textarea
               id="self-introduction"
               name="selfIntroduction"
@@ -507,11 +507,10 @@ const ProfileInformationSection: React.FC = () => {
               {selfIntroductionModifyButtonText}
             </ModifyButton>
           </SingleInformationWrapper>
+          <Hr />
           <Row>
             <JobSelectWrapper className="right-gap">
-              <InformationLabel htmlFor="job1" className="necessary">
-                희망 직무1
-              </InformationLabel>
+              <RequirementLabel htmlFor="job1">희망 직무1</RequirementLabel>
               <Select
                 id="job1"
                 name="job1"
@@ -530,7 +529,7 @@ const ProfileInformationSection: React.FC = () => {
               </Select>
             </JobSelectWrapper>
             <JobSelectWrapper className="right-gap">
-              <InformationLabel htmlFor="job2">희망 직무2</InformationLabel>
+              <Label htmlFor="job2">희망 직무2</Label>
               <Select
                 id="job2"
                 value={newJob2 !== null ? newJob2 : 'default'}
@@ -547,16 +546,19 @@ const ProfileInformationSection: React.FC = () => {
               </Select>
             </JobSelectWrapper>
             <JobSelectWrapper className="top-gap">
-              <ModifyButton type="button" onClick={handlJobsModifyButton}>
+              <ModifyButton
+                type="button"
+                className="job-select__edit-button"
+                onClick={handlJobsModifyButton}
+              >
                 {newJobsModifyButtonText}
               </ModifyButton>
             </JobSelectWrapper>
           </Row>
+          <Hr />
           <Row>
             <SingleInformationWrapper className="right-gap">
-              <InformationLabel htmlFor="common-project">
-                공통 프로젝트
-              </InformationLabel>
+              <Label htmlFor="common-project">공통 프로젝트 트랙</Label>
               <Select
                 id="common-project"
                 name="common-project"
@@ -574,9 +576,7 @@ const ProfileInformationSection: React.FC = () => {
               </Select>
             </SingleInformationWrapper>
             <SingleInformationWrapper className="right-gap">
-              <InformationLabel htmlFor="special-project">
-                특화 프로젝트
-              </InformationLabel>
+              <Label htmlFor="special-project">특화 프로젝트 트랙</Label>
               <Select
                 id="special-project"
                 name="special-project"
@@ -594,23 +594,27 @@ const ProfileInformationSection: React.FC = () => {
               </Select>
             </SingleInformationWrapper>
             <SingleInformationWrapper className="top-gap-button">
-              <ModifyButton type="button" onClick={handleProjectssModifyButton}>
+              <ModifyButton
+                type="button"
+                className="project-track-select__edit-button"
+                onClick={handleProjectssModifyButton}
+              >
                 {projectsModifyButtonText}
               </ModifyButton>
             </SingleInformationWrapper>
           </Row>
+          <Hr />
           <Row className="tech-stack-row">
             <SingleInformationWrapper
               {...getRootProps()}
               className="tech-stack-input"
             >
-              <InformationLabel
-                className="necessary"
+              <RequirementLabel
                 htmlFor="tech-stack-options"
                 {...getInputLabelProps()}
               >
                 기술 스택 <Em>(필수 2가지 이상 기입)</Em>
-              </InformationLabel>
+              </RequirementLabel>
               <InfoInputWrapper
                 ref={setAnchorEl}
                 className={
@@ -678,16 +682,15 @@ const ProfileInformationSection: React.FC = () => {
               {newTechStackModifyButtonText}
             </ModifyButton>
           </Row>
+          <Hr />
           <Row>
-            <SingleInformationWrapper className="top-gap">
-              <InformationLabel htmlFor="github-url">
-                GitHub URL <Em>(선택)</Em>
-              </InformationLabel>
+            <SingleInformationWrapper>
+              <Label htmlFor="github-url">GitHub URL</Label>
               <InfoInput
                 type="url"
                 id="github-url"
                 name="githubUrl"
-                placeholder="https://github.com/ssafy-mate"
+                placeholder="ex) https://github.com/ssafy-mate"
                 pattern="https://.*"
                 disabled={newUrlsDisabled}
                 onChange={handleUrlsInput}
@@ -697,14 +700,12 @@ const ProfileInformationSection: React.FC = () => {
           </Row>
           <Row>
             <SingleInformationWrapper>
-              <InformationLabel htmlFor="etc-url">
-                기술 블로그 URL 또는 기타 URL <Em>(선택)</Em>
-              </InformationLabel>
+              <Label htmlFor="etc-url">기술 블로그 URL 또는 기타 URL</Label>
               <InfoInput
                 type="url"
                 id="etc-url"
                 name="etcUrl"
-                placeholder="https://velog.io/@ssafy-mate"
+                placeholder="ex) https://velog.io/@ssafy-mate"
                 pattern="https://.*"
                 value={newEtcUrl !== null ? newEtcUrl : ''}
                 onChange={handleUrlsInput}
@@ -738,59 +739,56 @@ const SingleInformationWrapper = styled.div`
 
   &.right-gap {
     width: 43%;
-    margin-right: 12px;
+    margin-right: 8px;
   }
-
   &.top-gap-button {
     width: 13%;
     margin-top: 25px;
   }
-
-  &.top-gap {
-    margin-top: 16px;
-  }
-
   &.tech-stack-input {
     position: relative;
   }
 
-  &.self-introduction {
-    margin-top: 32px;
-  }
-
   @media (max-width: 575px) {
     &.right-gap {
-      margin-top: 16px;
       margin-right: 0px;
       width: 100%;
     }
 
     &.top-gap-button {
-      margin-top: 16px;
       width: 100%;
+      margin-top: 8px;
     }
   }
 `;
 
-const InformationLabel = styled.label`
+const Label = styled.label`
   margin-bottom: 4px;
-  padding-left: 6px;
   font-size: 14px;
   line-height: 1.5;
   color: #263747;
 
-  &.necessary {
-    &::before {
-      content: '*';
-      display: inline-block;
-      vertical-align: top;
-      margin: 0 0.125rem 0 0;
-      -webkit-font-smoothing: antialiased;
-      font-size: 1.25rem;
-      font-weight: 700;
-      line-height: 1.25rem;
-      color: #f44336;
-    }
+  @media (max-width: 575px) {
+    font-size: 13px;
+  }
+`;
+
+const RequirementLabel = styled.label`
+  margin-bottom: 4px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #263747;
+
+  &::before {
+    content: '*';
+    display: inline-block;
+    vertical-align: top;
+    margin: 0 0.125rem 0 0;
+    -webkit-font-smoothing: antialiased;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.25rem;
+    color: #f44336;
   }
 
   @media (max-width: 575px) {
@@ -814,7 +812,22 @@ const Textarea = styled.textarea`
   color: #263747;
   transition: all 0.08s ease-in-out;
 
+  &:not(:disabled) {
+    &:hover {
+      border: 1px solid #3396f4;
+      box-shadow: inset 0 0 0 1px#3396f4;
+    }
+    &:focus {
+      border: 1px solid #3396f4;
+      box-shadow: inset 0 0 0 1px #3396f4;
+      background-color: #fff;
+      color: #495057;
+    }
+  }
+
   &:disabled {
+    background-color: #fcfcfe;
+    color: #a6adb4;
     cursor: not-allowed;
   }
 
@@ -842,6 +855,7 @@ const ErrorMessage = styled.span`
 const ModifyButton = styled.button`
   width: 100%;
   height: 40px;
+  margin-top: 8px;
   border: none;
   border-radius: 0.25rem;
   box-sizing: border-box;
@@ -856,8 +870,20 @@ const ModifyButton = styled.button`
     background-color: #2878c3;
   }
 
+  &.job-select__edit-button,
+  &.project-track-select__edit-button {
+    margin-top: 0;
+    width: 60px;
+    font-size: 15px;
+  }
+
   @media (max-width: 575px) {
     font-size: 15px;
+
+    &.job-select__edit-button,
+    &.project-track-select__edit-button {
+      width: 100%;
+    }
   }
 `;
 
@@ -865,25 +891,25 @@ const JobSelectWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-top: 16px;
 
   &.right-gap {
     width: 43%;
-    margin-right: 12px;
+    margin-right: 8px;
   }
 
   &.top-gap {
     width: 13%;
-    margin-top: 41px;
+    margin-top: 25px;
   }
 
   @media (max-width: 575px) {
     &.right-gap {
       width: 100%;
+      margin-right: 0;
     }
 
     &.top-gap {
-      margin-top: 16px;
+      margin-top: 8px;
       width: 100%;
     }
   }
@@ -892,7 +918,6 @@ const JobSelectWrapper = styled.div`
 const Select = styled.select`
   width: 100%;
   height: 40px;
-  margin-bottom: 16px;
   padding: 8px 12px;
   outline: 0;
   border: 1px solid #d7e2eb;
@@ -909,16 +934,17 @@ const Select = styled.select`
   transition: all 0.08s ease-in-out;
   appearance: none;
 
-  &:hover {
-    border: 1px solid #3396f4;
-    box-shadow: inset 0 0 0 1px#3396f4;
-  }
-
-  &:focus {
-    border: 1px solid #3396f4;
-    box-shadow: inset 0 0 0 1px #3396f4;
-    background-color: #fff;
-    color: #495057;
+  &:not(:disabled) {
+    &:hover {
+      border: 1px solid #3396f4;
+      box-shadow: inset 0 0 0 1px#3396f4;
+    }
+    &:focus {
+      border: 1px solid #3396f4;
+      box-shadow: inset 0 0 0 1px #3396f4;
+      background-color: #fff;
+      color: #495057;
+    }
   }
 
   &:disabled {
@@ -926,8 +952,8 @@ const Select = styled.select`
   }
 
   @media (max-width: 575px) {
+    margin-bottom: 16px;
     font-size: 13px;
-    margin-bottom: 0px;
   }
 `;
 
@@ -947,10 +973,6 @@ const Row = styled.div`
 
     &:nth-of-type(2) {
       flex-direction: column;
-    }
-
-    &.tech-stack-row {
-      margin-top: 16px;
     }
   }
 `;
@@ -990,19 +1012,22 @@ const InfoInput = styled.input`
   color: #263747;
   transition: all 0.08s ease-in-out;
 
-  &:hover {
-    border: 1px solid #3396f4;
-    box-shadow: inset 0 0 0 1px#3396f4;
-  }
-
-  &:focus {
-    border: 1px solid #3396f4;
-    box-shadow: inset 0 0 0 1px #3396f4;
-    background-color: #fff;
-    color: #495057;
+  &:not(:disabled) {
+    &:hover {
+      border: 1px solid #3396f4;
+      box-shadow: inset 0 0 0 1px#3396f4;
+    }
+    &:focus {
+      border: 1px solid #3396f4;
+      box-shadow: inset 0 0 0 1px #3396f4;
+      background-color: #fff;
+      color: #495057;
+    }
   }
 
   &:disabled {
+    background-color: #fcfcfe;
+    color: #a6adb4;
     cursor: not-allowed;
   }
 
@@ -1089,6 +1114,12 @@ const TechStackImg = styled.img`
     width: 18px;
     height: 18px;
   }
+`;
+
+const Hr = styled.hr`
+  width: 100%;
+  border: 1px dashed #d7e2eb;
+  margin: 24px 0;
 `;
 
 export default ProfileInformationSection;

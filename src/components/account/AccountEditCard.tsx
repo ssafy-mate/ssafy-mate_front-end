@@ -16,11 +16,11 @@ const AccountEditCard: React.FC = () => {
           <CardHeader>
             <Head>계정 관리</Head>
             <AccountEditTaps setAcccountEditTap={setSelectedTap} />
-            {selectedTap === 'basicInformation' && <BasicInformationSection />}
-            {selectedTap === 'profileInformation' && (
-              <ProfileInformationSection />
-            )}
           </CardHeader>
+          {selectedTap === 'basicInformation' && <BasicInformationSection />}
+          {selectedTap === 'profileInformation' && (
+            <ProfileInformationSection />
+          )}
         </Wrapper>
       </Container>
     </>
@@ -49,6 +49,10 @@ const Wrapper = styled.div`
 
 const CardHeader = styled.div`
   margin-bottom: 40px;
+
+  @media (max-width: 575px) {
+    margin-bottom: 36px;
+  }
 `;
 
 const Head = styled.h1`
