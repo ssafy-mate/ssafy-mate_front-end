@@ -27,11 +27,9 @@ import UserInfoPage from './pages/users/UserInfoPage';
 import TeamInfoPage from './pages/teams/TeamInfoPage';
 import TeamEditPage from './pages/teams/TeamEditPage';
 import TeamCreatePage from './pages/projects/TeamCreatePage';
-import CommonProjectPage from './pages/CommonProjectPage';
 import SpecializationProjectTeamListPage from './pages/projects/SpecializationProjectTeamListPage';
 import SpecializationProjectUserListPage from './pages/projects/SpecializationProjectUserListPage';
 import SpecializationProjectOfferListPage from './pages/projects/SpecializationProjectOfferListPage';
-import AutonomyProjectPage from './pages/AutonomyProjectPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ChattingPage from './pages/ChattingPage';
 
@@ -53,7 +51,6 @@ const App: React.FC = () => {
           <Route exact path="/teams/:teamId" component={TeamInfoPage} />
           <Route exact path="/teams/:teamId/edit" component={TeamEditPage} />
           <Route exact path="/projects/teams/new" component={TeamCreatePage} />
-          <Route exact path="/projects/common" component={CommonProjectPage} />
           <Route
             exact
             path="/projects/specialization/teams"
@@ -68,11 +65,6 @@ const App: React.FC = () => {
             exact
             path="/projects/specialization/offer_list"
             component={SpecializationProjectOfferListPage}
-          />
-          <Route
-            exact
-            path="/projects/autonomy/"
-            component={AutonomyProjectPage}
           />
           <Route exact path="/chatting/:roomId" component={ChattingPage} />
           <Route component={NotFoundPage} />
