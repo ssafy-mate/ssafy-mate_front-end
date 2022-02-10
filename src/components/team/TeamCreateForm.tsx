@@ -17,29 +17,24 @@ import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
 import Swal from 'sweetalert2';
 
 import { TechStackWithImg } from '../../types/commonTypes';
-import { GetMyTeamIdParams } from '../../types/userTypes';
 
 import { CAMPUS_LIST, PROJECT_LIST } from '../../data/ssafyData';
 
-import useToken from '../../hooks/useToken';
-import useUserId from '../../hooks/useUserId';
 import useTechStackList from '../../hooks/useTechStackList';
 import useUserProjectInfo from '../../hooks/useUserProjectInfo';
 import useMyTeamId from '../../hooks/useMyTeamId';
 
-import UserService from '../../services/UserService';
-
 import TechStackTag from '../common/TechStackTag';
 import WarningMessage from '../common/WarningMessage';
 
-const PROJECT_ID: number = 2;
-
+const CURRENT_PROJECT_ID: number = 2;
 const CURRENT_PROJECT: string = '특화 프로젝트';
 
 const TeamCreateForm: React.FC = () => {
   const [teamImg, setTeamImg] = useState(null);
   const [previewTeamImg, setPreviewTeamImg] = useState(null);
-  const [campus, project, projectTrack] = useUserProjectInfo(PROJECT_ID);
+  const [campus, project, projectTrack] =
+    useUserProjectInfo(CURRENT_PROJECT_ID);
   const [teamName, setTeamName] = useState<string>('');
   const [notice, setNotice] = useState<string>('');
   const [introduction, setIntroduction] = useState<string>('');
@@ -51,8 +46,6 @@ const TeamCreateForm: React.FC = () => {
     useState<boolean>(false);
 
   const dispatch = useDispatch();
-  const token = useToken();
-  const userId = useUserId();
   const myTeamId = useMyTeamId(CURRENT_PROJECT);
   const techStackList: TechStackWithImg[] = useTechStackList();
   const {
@@ -341,10 +334,13 @@ const TeamCreateForm: React.FC = () => {
               <option value="" disabled>
                 - 선택 -
               </option>
-              <option value="인공지능">인공지능</option>
-              <option value="빅데이터">빅데이터</option>
-              <option value="블록체인">블록체인</option>
-              <option value="IoT 제어">IoT 제어</option>
+              {PROJECT_LIST.find(
+                (project) => project.projectId === CURRENT_PROJECT_ID,
+              )?.projectTracks?.map((projectTrack) => (
+                <option key={projectTrack.id} value={projectTrack.name}>
+                  {projectTrack.name}
+                </option>
+              ))}
             </Select>
           </InputWrapper>
         </SsafyInfoWrapper>

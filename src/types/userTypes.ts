@@ -45,3 +45,59 @@ export interface UserListResponse {
 export interface GetMyTeamIdParams {
   project: string;
 }
+
+interface UserProjectTeam {
+  teamId: number;
+  teamName: string;
+}
+
+interface UserProject {
+  projectId: number;
+  project: string;
+  projectTrack: string | null;
+  projectTeam: UserProjectTeam | null;
+}
+
+export interface UserTechStack {
+  techStackId: number;
+  techStackName: string;
+  techStackImgUrl: string;
+  techStackLevel: string;
+}
+
+export interface UserData {
+  userId: number;
+  userName: string;
+  userEmail: string;
+  profileImgUrl: string | null;
+  campus: string;
+  ssafyTrack: string;
+  selfIntroduction: string;
+  job1: string;
+  job2: string | null;
+  projects: UserProject[];
+  techStacks: UserTechStack[];
+  githubUrl: string | null;
+  etcUrl: string | null;
+}
+
+export interface UserInfoResponse {
+  userData: UserData;
+}
+
+export interface ProfileProject {
+  project: string;
+  projectTrack: string | null;
+}
+
+export interface EditProfileProjectsRequest {
+  data: ProfileProject;
+  token: string;
+  userId: number;
+}
+
+export interface ProfileState {
+  info: UserData | null;
+  loading: boolean | null;
+  error: string | null;
+}

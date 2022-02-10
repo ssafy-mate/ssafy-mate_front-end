@@ -5,7 +5,7 @@ import { profileSaga } from './profile';
 import { myTeamSaga } from './myTeam';
 
 function* rootSaga() {
-  yield all([authSaga(), myTeamSaga(),profileSaga()]);
+  yield all([authSaga(), myTeamSaga(), profileSaga()]);
 }
 
 export default rootSaga;

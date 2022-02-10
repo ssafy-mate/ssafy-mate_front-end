@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -15,10 +15,7 @@ import styled from '@emotion/styled';
 import { Avatar } from '@mui/material';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
-import useProfileInfo from '../../hooks/useProfileInfo';
-import useUserId from '../../hooks/useUserId';
-import useToken from '../../hooks/useToken';
-import { UserData } from '../../hooks/useUserInfo';
+import { UserData } from '../../types/userTypes';
 
 import {
   EditProfileInfoRequest,
@@ -26,6 +23,10 @@ import {
   RootState,
 } from '../../types/authTypes';
 import { Severity, SsafyTrack } from '../../types/signUpTypes';
+
+import useToken from '../../hooks/useToken';
+import useUserId from '../../hooks/useUserId';
+import useProfileInfo from '../../hooks/useProfileInfo';
 
 import { CAMPUS_LIST } from '../../data/ssafyData';
 

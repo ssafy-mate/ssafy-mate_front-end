@@ -1,9 +1,9 @@
 import { RootState } from '../types/authTypes';
 import { useSelector } from 'react-redux';
 
-import { UserTechStack } from './useUserInfo';
 import { TechStackWithImg } from '../types/commonTypes';
 import { TechStacksWithLevel } from '../types/signUpTypes';
+import { UserTechStack } from '../types/userTypes';
 
 export interface convertTechStackWithImg {
   teckStackList: TechStackWithImg[];

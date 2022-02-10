@@ -262,7 +262,7 @@ const UserInfoSection: React.FC = () => {
                   <InfoItem>
                     <InfoLabel>
                       <ComputerIcon />
-                      {userData.projects[0].name} 트랙
+                      {userData.projects[0].project} 트랙
                     </InfoLabel>
                     <InfoContent>
                       {userData.projects[0].projectTrack !== null
@@ -273,7 +273,7 @@ const UserInfoSection: React.FC = () => {
                   <InfoItem>
                     <InfoLabel>
                       <GroupsIcon />
-                      {userData.projects[0].name} 팀
+                      {userData.projects[0].project} 팀
                     </InfoLabel>
                     {userData.projects[0].projectTeam ? (
                       <InnerLink
@@ -290,7 +290,7 @@ const UserInfoSection: React.FC = () => {
                   <InfoItem>
                     <InfoLabel>
                       <ComputerIcon />
-                      {userData.projects[1].name} 트랙
+                      {userData.projects[1].project} 트랙
                     </InfoLabel>
                     <InfoContent>
                       {userData.projects[1].projectTrack}
@@ -299,7 +299,7 @@ const UserInfoSection: React.FC = () => {
                   <InfoItem>
                     <InfoLabel>
                       <GroupsIcon />
-                      {userData.projects[1].name} 팀
+                      {userData.projects[1].project} 팀
                     </InfoLabel>
                     {userData.projects[1].projectTeam ? (
                       <InnerLink
@@ -316,14 +316,14 @@ const UserInfoSection: React.FC = () => {
                   <InfoItem>
                     <InfoLabel>
                       <ComputerIcon />
-                      {userData.projects[2].name} 트랙
+                      {userData.projects[2].project} 트랙
                     </InfoLabel>
                     <InfoContent>-</InfoContent>
                   </InfoItem>
                   <InfoItem>
                     <InfoLabel>
                       <GroupsIcon />
-                      {userData.projects[2].name} 팀
+                      {userData.projects[2].project} 팀
                     </InfoLabel>
                     {userData.projects[2].projectTeam ? (
                       <InnerLink

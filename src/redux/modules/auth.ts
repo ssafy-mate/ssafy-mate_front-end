@@ -25,7 +25,7 @@ import RequestService from '../../services/RequestService';
 import PersistReducerService from '../../services/PersistReducerService';
 
 import { showSsafyMateAlert } from './alert';
-import { profileInitialState, updateProfile } from './profile';
+import { initialState as profileInitialState, updateProfile } from './profile';
 import { success as myTeamSuccess } from './myTeam';
 
 interface UserApplicationResponseType {
@@ -208,12 +208,6 @@ function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
 function* logoutSaga() {
   try {
     yield put(pending());
-    //const token: string = yield select((state) => state.auth.token);
-    // yield call(SignInService.logout, token);
-    // TokenService.remove();
-    // yield put(success(null));
-    // TokenService.remove();
-    // yield put(success(null));
   } catch (error: any) {
   } finally {
     yield put(

@@ -30,7 +30,7 @@ import useProfileTechStacks, {
 import {
   EditProfileProjectsRequest,
   ProfileProject,
-} from '../../services/ProfileService';
+} from '../../types/userTypes';
 
 import ProfileTechStackTagWithLevel from '../common/ProfileTechStackTagWithLevel';
 

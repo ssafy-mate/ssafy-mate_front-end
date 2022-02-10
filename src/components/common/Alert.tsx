@@ -3,14 +3,14 @@ import { useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 
 import { Alert, Snackbar } from '@mui/material';
-import { alertState } from '../../types/alertTypes';
+import { AlertState } from '../../types/alertTypes';
 import { useDispatch } from 'react-redux';
 import {
-  alertInitialState,
+  initialState as alertInitialState,
   showSsafyMateAlert as showSsafyMateAlertSagaStart,
 } from '../../redux/modules/alert';
 
-const SsafyMateAlert: React.FC<alertState> = ({ show, text, type }) => {
+const SsafyMateAlert: React.FC<AlertState> = ({ show, text, type }) => {
   const [alertOpen, setAlertOpen] = useState<boolean>(true);
   const dispatch = useDispatch();
 

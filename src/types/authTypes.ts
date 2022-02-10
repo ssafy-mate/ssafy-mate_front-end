@@ -1,21 +1,21 @@
 import { RouterState } from 'connected-react-router';
 
 import { AnyAction, Reducer } from 'redux';
-import { ProfileState } from '../redux/modules/profile';
 
-import { alertState } from './alertTypes';
+import { ProfileState } from './userTypes';
+import { AlertState } from './alertTypes';
 import { MyTeamState } from './teamTypes';
 
-export type SignInRequestType = {
+export interface SignInRequestType {
   userEmail: string;
   password: string;
-};
+}
 
-export type SignInRequestTypeWithIdSave = {
+export interface SignInRequestTypeWithIdSave {
   userEmail: string;
   password: string;
   IdSave: boolean;
-};
+}
 
 export interface SignInResponse {
   payload: Error | null;
@@ -69,14 +69,6 @@ export interface UserApplicationRequestType {
   message: string;
 }
 
-export interface RootState {
-  auth: AuthState;
-  myTeam: MyTeamState;
-  controlAlert: alertState;
-  profile: ProfileState;
-  router: Reducer<RouterState<unknown>, AnyAction>;
-}
-
 export interface updateAuthInfoRequest {
   userId: number;
   token: string;
@@ -96,4 +88,12 @@ export interface getProfileInfoRequest {
 
 export interface ProjectParams {
   project: string;
+}
+
+export interface RootState {
+  auth: AuthState;
+  myTeam: MyTeamState;
+  controlAlert: AlertState;
+  profile: ProfileState;
+  router: Reducer<RouterState<unknown>, AnyAction>;
 }

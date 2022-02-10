@@ -1,7 +1,7 @@
 import { createAction, handleActions } from 'redux-actions';
-import { alertState } from '../../types/alertTypes';
+import { AlertState } from '../../types/alertTypes';
 
-export const alertInitialState: alertState = {
+export const initialState: AlertState = {
   show: false,
   text: '',
   type: 'info',
@@ -9,7 +9,7 @@ export const alertInitialState: alertState = {
 
 export const showSsafyMateAlert = createAction('SHOW_ALERT');
 
-const controlAlert = handleActions<alertState, alertState>(
+const reducer = handleActions<AlertState, AlertState>(
   {
     SHOW_ALERT: (state, action) => ({
       ...state,
@@ -18,7 +18,7 @@ const controlAlert = handleActions<alertState, alertState>(
       type: action.payload.type,
     }),
   },
-  alertInitialState,
+  initialState,
 );
 
-export default controlAlert;
+export default reducer;

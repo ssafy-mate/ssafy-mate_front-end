@@ -5,20 +5,12 @@ import {
   updateAuthInfoRequest,
 } from '../types/authTypes';
 import { SignUpResponse } from '../types/signUpTypes';
-
-import { UserInfoResponse } from '../hooks/useUserInfo';
+import {
+  UserInfoResponse,
+  EditProfileProjectsRequest,
+} from '../types/userTypes';
 
 import { axiosInstance } from '../utils/axios';
-
-export interface ProfileProject {
-  project: string;
-  projectTrack: string | null;
-}
-export interface EditProfileProjectsRequest {
-  data: ProfileProject;
-  token: string;
-  userId: number;
-}
 
 class ProfileService {
   public static async getProfileInfo(

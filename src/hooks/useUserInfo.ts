@@ -2,50 +2,12 @@ import { useQuery } from 'react-query';
 
 import { AxiosResponse, AxiosError } from 'axios';
 
+import { UserInfoResponse } from '../types/userTypes';
 import { ErrorResponse } from '../types/commonTypes';
 
 import UserService from '../services/UserService';
 
 import useToken from './useToken';
-
-interface UserProjectTeam {
-  teamId: number;
-  teamName: string;
-}
-
-export interface UserProject {
-  id: number;
-  name: string;
-  projectTrack: string | null;
-  projectTeam: UserProjectTeam | null;
-}
-
-export interface UserTechStack {
-  techStackId: number;
-  techStackName: string;
-  techStackImgUrl: string;
-  techStackLevel: string;
-}
-
-export interface UserData {
-  userId: number;
-  userName: string;
-  userEmail: string;
-  profileImgUrl: string | null;
-  campus: string;
-  ssafyTrack: string;
-  selfIntroduction: string;
-  job1: string;
-  job2: string | null;
-  projects: UserProject[];
-  techStacks: UserTechStack[];
-  githubUrl: string | null;
-  etcUrl: string | null;
-}
-
-export interface UserInfoResponse {
-  userData: UserData;
-}
 
 const useUserInfo = (userId: string) => {
   const token: string | null = useToken();
