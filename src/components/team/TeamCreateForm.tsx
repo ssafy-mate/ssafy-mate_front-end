@@ -25,6 +25,7 @@ import useToken from '../../hooks/useToken';
 import useUserId from '../../hooks/useUserId';
 import useTechStackList from '../../hooks/useTechStackList';
 import useUserProjectInfo from '../../hooks/useUserProjectInfo';
+import useMyTeamId from '../../hooks/useMyTeamId';
 
 import UserService from '../../services/UserService';
 
@@ -32,6 +33,8 @@ import TechStackTag from '../common/TechStackTag';
 import WarningMessage from '../common/WarningMessage';
 
 const PROJECT_ID: number = 2;
+
+const CURRENT_PROJECT: string = '특화 프로젝트';
 
 const TeamCreateForm: React.FC = () => {
   const [teamImg, setTeamImg] = useState(null);
@@ -50,6 +53,7 @@ const TeamCreateForm: React.FC = () => {
   const dispatch = useDispatch();
   const token = useToken();
   const userId = useUserId();
+  const myTeamId = useMyTeamId(CURRENT_PROJECT);
   const techStackList: TechStackWithImg[] = useTechStackList();
   const {
     getRootProps,
@@ -70,30 +74,18 @@ const TeamCreateForm: React.FC = () => {
   });
 
   useEffect(() => {
-    async function checkTeam(
-      token: string,
-      userId: number,
-      params: GetMyTeamIdParams,
-    ) {
-      const teamId = await UserService.getMyTeamId(token, userId, params);
+    if (myTeamId !== null) {
+      Swal.fire({
+        title: '팀 생성 불가',
+        text: '해당 프로젝트 팀에 이미 합류되어 있어 팀 생성이 불가능합니다.',
+        icon: 'warning',
+        confirmButtonColor: '#3396f4',
+        confirmButtonText: '확인',
+      });
 
-      if (teamId !== null) {
-        Swal.fire({
-          title: '팀 생성 불가',
-          text: '해당 프로젝트 팀에 이미 합류되어 있어 팀 생성이 불가능합니다.',
-          icon: 'warning',
-          confirmButtonColor: '#3396f4',
-          confirmButtonText: '확인',
-        });
-
-        dispatch(push('/projects/specialization/teams'));
-      }
+      dispatch(push('/projects/specialization/teams'));
     }
-
-    if (token !== null && userId !== null && project !== null) {
-      checkTeam(token, userId, { project });
-    }
-  }, [dispatch, token, userId, project]);
+  }, [dispatch, myTeamId]);
 
   useEffect(() => {
     const selectedTechStackCodes = value.map((techStack) => techStack.id);
