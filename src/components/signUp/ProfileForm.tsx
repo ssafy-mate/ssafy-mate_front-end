@@ -23,8 +23,6 @@ import {
   TechStacksWithLevel,
 } from '../../types/signUpTypes';
 
-import { validUrlReg } from '../../utils/regularExpressionData';
-
 import AuthService from '../../services/AuthService';
 
 import useTechStackList from '../../hooks/useTechStackList';
@@ -55,9 +53,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const [selfIntroductionError, setSelfIntroductionError] =
     useState<boolean>(false);
   const [agreementError, setAgreementError] = useState<boolean>(false);
-  const [etcUrlPatternError, setEtcUrlPatternError] = useState<boolean>(false);
-  const [gitHubUrlPatternError, setGitHubUrlPatternError] =
-    useState<boolean>(false);
+  useState<boolean>(false);
   const [alertOpen, setAlertOpen] = useState<boolean>(false);
   const [alertText, setAlertText] = useState<string>('');
   const [alertSeverity, setAlertSeverity] = useState<Severity>('success');
@@ -220,18 +216,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
     event.target.name === 'githubUrl'
       ? setGithubUrl(event.target.value)
       : setEtcUrl(event.target.value);
-
-    if (event.target.name === 'githubUrl') {
-      !validUrlReg.test(githubUrl)
-        ? setGitHubUrlPatternError(true)
-        : setGitHubUrlPatternError(false);
-    }
-
-    if (event.target.name === 'etcUrl') {
-      !validUrlReg.test(etcUrl)
-        ? setEtcUrlPatternError(true)
-        : setEtcUrlPatternError(false);
-    }
   };
 
   const handleCheckAgreement = (
@@ -262,14 +246,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
     if (!agreement) {
       setAgreementError(true);
     }
-
-    !validUrlReg.test(githubUrl)
-      ? setGitHubUrlPatternError(true)
-      : setGitHubUrlPatternError(false);
-
-    !validUrlReg.test(etcUrl)
-      ? setEtcUrlPatternError(true)
-      : setEtcUrlPatternError(false);
 
     if (
       selfIntroduction !== '' &&
@@ -527,13 +503,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
           <InputWrapper>
             <Label htmlFor="github-url">
               GitHub URL <Em>(선택)</Em>
-              {githubUrl !== '' && showError === 1 && gitHubUrlPatternError && (
-                <ErrorMessageWrapper>
-                  <ErrorMessage className="url">
-                    유효한 URL이 아닙니다.
-                  </ErrorMessage>
-                </ErrorMessageWrapper>
-              )}
             </Label>
             <InfoInput
               type="url"
@@ -549,13 +518,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
           <InputWrapper>
             <Label htmlFor="etc-url">
               기술 블로그 URL 또는 기타 URL <Em>(선택)</Em>
-              {etcUrl !== '' && showError === 1 && etcUrlPatternError && (
-                <ErrorMessageWrapper>
-                  <ErrorMessage className="url">
-                    유효한 URL이 아닙니다.
-                  </ErrorMessage>
-                </ErrorMessageWrapper>
-              )}
             </Label>
             <InfoInput
               type="url"
