@@ -6,6 +6,8 @@ import { useMediaQuery } from 'react-responsive';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { logout as logoutSagaStart } from '../../redux/modules/auth';
+import { updateProfileInfo as updateProfileInfoSagaStart } from '../../redux/modules/profile';
+import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
@@ -26,16 +28,14 @@ import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Tooltip from '@mui/material/Tooltip';
 
-import { RootState } from '../../types/authTypes';
+import { getProfileInfoRequest, RootState } from '../../types/authTypes';
+import { Severity } from '../../types/signUpTypes';
 
 import useToken from '../../hooks/useToken';
 import useUserId from '../../hooks/useUserId';
 
 import SsafyMateAlert from './Alert';
 import MenuBar from './MenuBar';
-
-import { updateProfileInfo as updateProfileInfoSagaStart } from '../../redux/modules/profile';
-import getProfileInfoRequest from '../../services/ProfileService';
 
 interface MenuListProps {
   isExpanded: boolean;
@@ -94,6 +94,20 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
     prevAccoutBoxOpen.current = accountBoxOpen;
   }, [accountBoxOpen, isMobile]);
 
+  const showAlert = (
+    alertShow: boolean,
+    alertText: string,
+    alertType: Severity,
+  ) => {
+    dispatch(
+      showSsafyMateAlertSagaStart({
+        show: alertShow,
+        text: alertText,
+        type: alertType,
+      }),
+    );
+  };
+
   const handleClickLogoutButton = () => {
     dispatch(logoutSagaStart());
   };
@@ -134,6 +148,9 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
   );
 
   const handleUserAccountEdit = (evevt: React.MouseEvent) => {
+    if (token === null) {
+      showAlert(true, '로그인 후 이용해주세요.', 'warning');
+    }
     if (token !== null && userId !== null) {
       update({ token: token, userId: userId });
     }
@@ -264,20 +281,18 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
           ) : (
             <>
               <AccountMenuItem>
-
-                <PageLink
-                  to={`/users/account/edit`}
-                  onClick={handleUserAccountEdit}
-                >
-                  계정 관리
-                </PageLink>
                 <PageLink to={`/users/${userId}`}>내 프로필</PageLink>
               </AccountMenuItem>
               <AccountMenuItem>
                 <PageLink to={`/chatting/${userId}`}>채팅 목록</PageLink>
               </AccountMenuItem>
               <AccountMenuItem>
-                <PageLink to={`/users/${userId}/account`}>계정 관리</PageLink>
+                <PageLink
+                  to={`/users/account/edit`}
+                  onClick={handleUserAccountEdit}
+                >
+                  계정 관리
+                </PageLink>
               </AccountMenuItem>
               <AccountMenuItem>
                 <PageLink to={`/users/${userId}/offers`}>받은 제안</PageLink>

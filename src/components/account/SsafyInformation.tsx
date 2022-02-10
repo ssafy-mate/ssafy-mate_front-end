@@ -1,7 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { editProfileInfo as editProfileInfoSagaStart } from '../../redux/modules/profile';
+import {
+  editProfileInfo as editProfileInfoSagaStart,
+  updateProfileInfo as updateProfileInfoSagaStart,
+} from '../../redux/modules/profile';
 import { showSsafyMateAlert } from '../../redux/modules/alert';
 
 import { Link } from 'react-router-dom';
@@ -17,7 +20,11 @@ import useUserId from '../../hooks/useUserId';
 import useToken from '../../hooks/useToken';
 import { UserData } from '../../hooks/useUserInfo';
 
-import { EditProfileInfoRequest, RootState } from '../../types/authTypes';
+import {
+  EditProfileInfoRequest,
+  getProfileInfoRequest,
+  RootState,
+} from '../../types/authTypes';
 import { Severity, SsafyTrack } from '../../types/signUpTypes';
 
 import { campusListData } from '../../data/ssafyData';
@@ -52,12 +59,26 @@ const SsafyInformation: React.FC = () => {
     );
   };
 
+  const update = useCallback(
+    (requestData: getProfileInfoRequest) => {
+      dispatch(updateProfileInfoSagaStart(requestData));
+    },
+    [dispatch],
+  );
+
   useEffect(() => {
     if (profileInfo !== null) {
       setNewSsafyTrack(profileInfo?.ssafyTrack);
       setPreviewProfileImg(profileInfo?.profileImgUrl);
     }
-  }, [profileInfo]);
+
+    if (token === null) {
+      showAlert(true, '로그인 후 이용해주세요.', 'warning');
+      history.push('/');
+    } else if (token !== null && userId !== null && profileInfo === null) {
+      update({ token: token, userId: userId });
+    }
+  }, [profileInfo, token, userId]);
 
   useEffect(() => {
     const selectedCampusIndex = campusListData.findIndex(
