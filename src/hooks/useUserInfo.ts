@@ -21,7 +21,7 @@ export interface UserProject {
 }
 
 export interface UserTechStack {
-  id: number;
+  techStackId: number;
   techStackName: string;
   techStackImgUrl: string;
   techStackLevel: string;

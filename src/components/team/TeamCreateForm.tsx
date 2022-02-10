@@ -88,9 +88,9 @@ const TeamCreateForm: React.FC = () => {
   }, [dispatch, myTeamId]);
 
   useEffect(() => {
-    const selectedTechStackCodes = value.map((techStack) => techStack.id);
+    const selectedTechStacks = value.map((techStack) => techStack.techStackId);
 
-    setTechStacks(selectedTechStackCodes);
+    setTechStacks(selectedTechStacks);
   }, [value]);
 
   const createTeam = useCallback(
@@ -320,9 +320,9 @@ const TeamCreateForm: React.FC = () => {
               disabled
             >
               <option value="">- 선택 -</option>
-              {PROJECT_LIST.map((project) => (
-                <option key={project.id} value={project.name}>
-                  {project.name}
+              {PROJECT_LIST.map((projectItem) => (
+                <option key={projectItem.projectId} value={projectItem.project}>
+                  {projectItem.project}
                 </option>
               ))}
             </Select>
@@ -447,7 +447,7 @@ const TeamCreateForm: React.FC = () => {
         <TechStackList>
           {value.map((option: TechStackWithImg, index: number) => (
             <TechStackTag
-              id={option.id}
+              techStackId={option.techStackId}
               techStackName={option.techStackName}
               techStackImgUrl={option.techStackImgUrl}
               {...getTagProps({ index })}

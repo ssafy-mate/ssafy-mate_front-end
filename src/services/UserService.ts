@@ -1,6 +1,10 @@
 import { axiosInstance } from '../utils/axios';
 
 import { ProjectTrackRequestType, ProjectParams } from '../types/authTypes';
+import {
+  FindUserEmailRequest,
+  FindUserEmailResponse,
+} from '../types/accountTypes';
 
 class UserService {
   public static async getUserList(token: string | null, params: object) {
@@ -85,6 +89,19 @@ class UserService {
         headers: {
           Authorization: `Bearer ${token}`,
         },
+      },
+    );
+
+    return response.data;
+  }
+
+  public static async getUserEmail(
+    data: FindUserEmailRequest,
+  ): Promise<FindUserEmailResponse> {
+    const response = await axiosInstance.get<FindUserEmailResponse>(
+      '/api/users/id/searching',
+      {
+        params: data,
       },
     );
 

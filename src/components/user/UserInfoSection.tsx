@@ -8,7 +8,6 @@ import { sendTeamOffer as sendTeamOfferSagaStart } from '../../redux/modules/aut
 import styled from '@emotion/styled';
 
 import ShareIcon from '@mui/icons-material/Share';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import SchoolIcon from '@mui/icons-material/School';
 import ComputerIcon from '@mui/icons-material/Computer';
 import IntegrationInstructionsIcon from '@mui/icons-material/IntegrationInstructions';
@@ -397,7 +396,7 @@ const UserInfoSection: React.FC = () => {
               <TechStackList>
                 {userData.techStacks.map((techStack) => (
                   <UserTechStackTag
-                    key={techStack.id}
+                    key={techStack.techStackId}
                     techStackImgUrl={techStack.techStackImgUrl}
                     techStackName={techStack.techStackName}
                     techStackLevel={techStack.techStackLevel}

@@ -17,17 +17,17 @@ export const teamDataListData = [
         '실사용자를 받는 플랫폼 개발에 도전하실 분들을 찾고 있습니다. 개발 효율성을 높이기 위해 API First Design 설계 방식으로 진행하려고 합니다. 서버에서는 Swagger를 이용하여 API 테스트를 진행하고, 클라이언트 팀은 정식 API가 배포되기 이전까지 Mock Service Worker를 이용하여 Mock을 만들어 개발을 진행하려고 합니다.',
       techStacks: [
         {
-          id: 1,
+          techStackId: 1,
           techStackName: 'HTML5',
           techStackImgUrl: '/images/assets/tech-stack/HTML5.png',
         },
         {
-          id: 2,
+          techStackId: 2,
           techStackName: 'CSS3',
           techStackImgUrl: '/images/assets/tech-stack/CSS3.png',
         },
         {
-          id: 3,
+          techStackId: 3,
           techStackName: 'JavaScript',
           techStackImgUrl: '/images/assets/tech-stack/JavaScript.png',
         },
@@ -102,57 +102,57 @@ export const teamDataListData = [
         '실사용자를 받는 플랫폼 개발에 도전하실 분들을 찾고 있습니다. 개발 효율성을 높이기 위해 API First Design 설계 방식으로 진행하려고 합니다. 서버에서는 Swagger를 이용하여 API 테스트를 진행하고, 클라이언트 팀은 정식 API가 배포되기 이전까지 Mock Service Worker를 이용하여 Mock을 만들어 개발을 진행하려고 합니다.',
       techStacks: [
         {
-          id: 1,
+          techStackId: 1,
           techStackName: 'TypeScript',
           techStackImgUrl: '/images/assets/tech-stack/TypeScript.png',
         },
         {
-          id: 2,
+          techStackId: 2,
           techStackName: 'React',
           techStackImgUrl: '/images/assets/tech-stack/React.png',
         },
         {
-          id: 4,
+          techStackId: 4,
           techStackName: 'Redux',
           techStackImgUrl: '/images/assets/tech-stack/Redux.png',
         },
         {
-          id: 5,
+          techStackId: 5,
           techStackName: 'Redux-Saga',
           techStackImgUrl: '/images/assets/tech-stack/Redux-Saga.png',
         },
         {
-          id: 6,
+          techStackId: 6,
           techStackName: 'React-Query',
           techStackImgUrl: '/images/assets/tech-stack/React-Query.png',
         },
         {
-          id: 7,
+          techStackId: 7,
           techStackName: 'Styled-Components',
           techStackImgUrl: '/images/assets/tech-stack/Styled-Components.png',
         },
         {
-          id: 8,
+          techStackId: 8,
           techStackName: 'Mock-Service-Worker',
           techStackImgUrl: '/images/assets/tech-stack/Mock-Service-Worker.png',
         },
         {
-          id: 9,
+          techStackId: 9,
           techStackName: 'Spring-Boot',
           techStackImgUrl: '/images/assets/tech-stack/Spring-Boot.png',
         },
         {
-          id: 10,
+          techStackId: 10,
           techStackName: 'JPA',
           techStackImgUrl: '/images/assets/tech-stack/JPA.png',
         },
         {
-          id: 11,
+          techStackId: 11,
           techStackName: 'MySQL',
           techStackImgUrl: '/images/assets/tech-stack/MySQL.png',
         },
         {
-          id: 12,
+          techStackId: 12,
           techStackName: 'Swagger',
           techStackImgUrl: '/images/assets/tech-stack/Swagger.png',
         },
@@ -220,32 +220,32 @@ export const teamDataListData = [
         '실사용자를 받는 플랫폼 개발에 도전하실 분들을 찾고 있습니다. 개발 효율성을 높이기 위해 API First Design 설계 방식으로 진행하려고 합니다. 서버에서는 Swagger를 이용하여 API 테스트를 진행하고, 클라이언트 팀은 정식 API가 배포되기 이전까지 Mock Service Worker를 이용하여 Mock을 만들어 개발을 진행하려고 합니다.',
       techStacks: [
         {
-          id: 1,
+          techStackId: 1,
           techStackName: 'TypeScript',
           techStackImgUrl: '/images/assets/tech-stack/TypeScript.png',
         },
         {
-          id: 2,
+          techStackId: 2,
           techStackName: 'Vue.js',
           techStackImgUrl: '/images/assets/tech-stack/Vue.js.png',
         },
         {
-          id: 43,
+          techStackId: 43,
           techStackName: 'Vuex',
           techStackImgUrl: '/images/assets/tech-stack/Vuex.png',
         },
         {
-          id: 4,
+          techStackId: 4,
           techStackName: 'Vuetify',
           techStackImgUrl: '/images/assets/tech-stack/Vuetify.png',
         },
         {
-          id: 5,
+          techStackId: 5,
           techStackName: 'Sass(SCSS)',
           techStackImgUrl: '/images/assets/tech-stack/Sass(SCSS).png',
         },
         {
-          id: 6,
+          techStackId: 6,
           techStackName: 'django',
           techStackImgUrl: '/images/assets/tech-stack/django.png',
         },
@@ -294,23 +294,23 @@ export const teamListData = [
     notice: '실제 운영할 서비스 개발을 도전할 분들을 모집합니다.',
     techStacks: [
       {
-        id: 6,
+        techStackId: 6,
         techStackName: 'React',
       },
       {
-        id: 11,
+        techStackId: 11,
         techStackName: 'Redux',
       },
       {
-        id: 23,
+        techStackId: 23,
         techStackName: 'Emotion',
       },
       {
-        id: 44,
+        techStackId: 44,
         techStackName: 'Spring-Boot',
       },
       {
-        id: 52,
+        techStackId: 52,
         techStackName: 'JPA',
       },
     ],
@@ -333,23 +333,23 @@ export const teamListData = [
     notice: '실장소 기반 여행 기록 서비스 개발 도전할 팀원 모집',
     techStacks: [
       {
-        id: 6,
+        techStackId: 6,
         techStackName: 'Vue.js',
       },
       {
-        id: 2,
+        techStackId: 2,
         techStackName: 'Vuex',
       },
       {
-        id: 3,
+        techStackId: 3,
         techStackName: 'Vuetify',
       },
       {
-        id: 4,
+        techStackId: 4,
         techStackName: 'django',
       },
       {
-        id: 4,
+        techStackId: 4,
         techStackName: 'MySQL',
       },
     ],
@@ -372,23 +372,23 @@ export const teamListData = [
     notice: '최우수상에 도전할 팀원 분들 모집',
     techStacks: [
       {
-        id: 5,
+        techStackId: 5,
         techStackName: 'TypeScript',
       },
       {
-        id: 6,
+        techStackId: 6,
         techStackName: 'React',
       },
       {
-        id: 8,
+        techStackId: 8,
         techStackName: 'Python',
       },
       {
-        id: 9,
+        techStackId: 9,
         techStackName: 'Raspberry-Pi',
       },
       {
-        id: 10,
+        techStackId: 10,
         techStackName: 'Spring-Boot',
       },
     ],
@@ -411,23 +411,23 @@ export const teamListData = [
     notice: '딥러닝에 도전할 팀원들을 모집합니다.',
     techStacks: [
       {
-        id: 1,
+        techStackId: 1,
         techStackName: 'Vue.js',
       },
       {
-        id: 2,
+        techStackId: 2,
         techStackName: 'Python',
       },
       {
-        id: 3,
+        techStackId: 3,
         techStackName: 'TensorFlow',
       },
       {
-        id: 4,
+        techStackId: 4,
         techStackName: 'PyTorch',
       },
       {
-        id: 5,
+        techStackId: 5,
         techStackName: 'django',
       },
     ],
@@ -450,27 +450,27 @@ export const teamListData = [
     notice: '싸피만의 커뮤니티를 만들 팀원들을 모집합니다.',
     techStacks: [
       {
-        id: 1,
+        techStackId: 1,
         techStackName: 'React',
       },
       {
-        id: 2,
+        techStackId: 2,
         techStackName: 'Recoil',
       },
       {
-        id: 3,
+        techStackId: 3,
         techStackName: 'Storybook',
       },
       {
-        id: 4,
+        techStackId: 4,
         techStackName: 'Spring-Boot',
       },
       {
-        id: 5,
+        techStackId: 5,
         techStackName: 'JPA',
       },
       {
-        id: 6,
+        techStackId: 6,
         techStackName: 'docker',
       },
     ],
@@ -493,19 +493,19 @@ export const teamListData = [
     notice: '블록체인 의료 시스템 개발에 도전할 팀원들을 모집합니다.',
     techStacks: [
       {
-        id: 1,
+        techStackId: 1,
         techStackName: 'TypeScript',
       },
       {
-        id: 2,
+        techStackId: 2,
         techStackName: 'Angular',
       },
       {
-        id: 3,
+        techStackId: 3,
         techStackName: 'MobX',
       },
       {
-        id: 4,
+        techStackId: 4,
         techStackName: 'Spring',
       },
     ],
@@ -532,17 +532,17 @@ export const teamEditData = {
     '실사용자를 받는 플랫폼 개발에 도전하실 분들을 찾고 있습니다. 개발 효율성을 높이기 위해 API First Design 설계 방식으로 진행하려고 합니다. 서버에서는 Swagger를 이용하여 API 테스트를 진행하고, 클라이언트 팀은 정식 API가 배포되기 이전까지 Mock Service Worker를 이용하여 Mock을 만들어 개발을 진행하려고 합니다.',
   techStacks: [
     {
-      id: 1,
+      techStackId: 1,
       techStackName: 'HTML5',
       techStackImgUrl: '/images/assets/tech-stack/HTML5.png',
     },
     {
-      id: 2,
+      techStackId: 2,
       techStackName: 'CSS3',
       techStackImgUrl: '/images/assets/tech-stack/CSS3.png',
     },
     {
-      id: 43,
+      techStackId: 43,
       techStackName: 'Vuex',
       techStackImgUrl: '/images/assets/tech-stack/Vuex.png',
     },

@@ -36,7 +36,7 @@ const SpecializationProjectTeamListPage: React.FC = () => {
     myProjectTrack !== null ? myProjectTrack : 'all',
   );
   const [job1, setJob1] = useState<string>('all');
-  const [techStackCode, setTechStackCode] = useState<number | null>(null);
+  const [techStackId, setTechStackId] = useState<number | null>(null);
   const [teamName, setTeamName] = useState<string>('');
   const [exclusion, setExclusion] = useState<boolean>(false);
   const [sort, setSort] = useState<string>('recent');
@@ -48,7 +48,7 @@ const SpecializationProjectTeamListPage: React.FC = () => {
     project,
     project_track: projectTrack,
     job1,
-    techstack_code: techStackCode,
+    techstack_id: techStackId,
     team_name: teamName,
     exclusion,
     sort,
@@ -78,7 +78,7 @@ const SpecializationProjectTeamListPage: React.FC = () => {
         setCampus={setCampus}
         setProjectTrack={setProjectTrack}
         setJob1={setJob1}
-        setTechStackCode={setTechStackCode}
+        setTechStackId={setTechStackId}
         setTeamName={setTeamName}
       />
       <TeamRecruitmentSection

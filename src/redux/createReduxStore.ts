@@ -26,21 +26,21 @@ const createReduxStore = () => {
         projects: [
           {
             projectId: 1,
-            projectName: '공통 프로젝트',
+            project: '공통 프로젝트',
             projectTrack: null,
-            projectTeamId: null,
+            teamId: null,
           },
           {
             projectId: 2,
-            projectName: '특화 프로젝트',
+            project: '특화 프로젝트',
             projectTrack: null,
-            projectTeamId: null,
+            teamId: null,
           },
           {
             projectId: 3,
-            projectName: '자율 프로젝트',
+            project: '자율 프로젝트',
             projectTrack: null,
-            projectTeamId: null,
+            teamId: null,
           },
         ],
         token,

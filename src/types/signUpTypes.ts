@@ -31,13 +31,12 @@ export interface EmailVerificationCodeConfirmRequest {
 }
 
 export interface TechStacksWithLevel {
-  techStackCode: number;
+  techStackId: number;
   techStackLevel: TechStackLevel | string;
 }
 
 export type TechStackLevel = '상' | '중' | '하';
 
-// 회원가입 3단계 프로필 작성
 export interface SignUpProfile {
   campus: string;
   ssafyTrack: string;
@@ -55,21 +54,18 @@ export interface SignUpProfile {
   agreement: boolean;
 }
 
-// 회원가입 모든 단계 응답
 export interface SignUpResponse {
   status: number | null;
   success: boolean;
   message: string;
 }
 
-// 회원가입 2단계 인자
 export interface SignUpProps {
   setSignUpStep: (signUpStep: number) => void;
   setSignUpEmail: (email: string) => void;
   setSignUpPassword: (password: string) => void;
 }
 
-// 회원가입 2단계 정보
 export interface SignUp {
   signUpEmail: string;
   verificationCode: string;
@@ -78,7 +74,6 @@ export interface SignUp {
   signUpConfiromButton: string | undefined;
 }
 
-// 회원가입 3단계 인자
 export interface ProfileProps {
   campus: string;
   ssafyTrack: string;
@@ -88,5 +83,4 @@ export interface ProfileProps {
   signUpPassword: string;
 }
 
-// Alert
 export type Severity = 'error' | 'success' | 'info' | 'warning' | undefined;

@@ -48,21 +48,21 @@ const initialState: AuthState = {
   projects: [
     {
       projectId: 1,
-      projectName: '공통 프로젝트',
+      project: '공통 프로젝트',
       projectTrack: null,
-      projectTeamId: null,
+      teamId: null,
     },
     {
       projectId: 2,
-      projectName: '특화 프로젝트',
+      project: '특화 프로젝트',
       projectTrack: null,
-      projectTeamId: null,
+      teamId: null,
     },
     {
       projectId: 3,
-      projectName: '자율 프로젝트',
+      project: '자율 프로젝트',
       projectTrack: null,
-      projectTeamId: null,
+      teamId: null,
     },
   ],
   token: null,
@@ -175,7 +175,7 @@ function* loginSaga(action: Action<SignInRequestTypeWithIdSave>) {
       { project },
     );
 
-    // yield put(myTeamSuccess(teamInfoResponse.teamData));
+    yield put(myTeamSuccess(teamInfoResponse.teamData));
 
     yield put(
       showSsafyMateAlert({

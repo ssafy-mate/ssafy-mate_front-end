@@ -40,6 +40,8 @@ type Params = {
   teamId: string;
 };
 
+const CURRENT_PROJECT = '특화 프로젝트';
+
 const TeamEditForm: React.FC = () => {
   const [teamImg, setTeamImg] = useState(null);
   const [previewTeamImg, setPreviewTeamImg] = useState(null);
@@ -279,7 +281,7 @@ const TeamEditForm: React.FC = () => {
 
   const handleSubmitFormData = () => {
     const deduplicatedTechStacks = Array.from(
-      new Set(techStacks.map((techStack) => techStack.id)),
+      new Set(techStacks.map((techStack) => techStack.techStackId)),
     );
 
     if (
@@ -392,9 +394,9 @@ const TeamEditForm: React.FC = () => {
               disabled
             >
               <option value="">- 선택 -</option>
-              {PROJECT_LIST.map((project) => (
-                <option key={project.id} value={project.name}>
-                  {project.name}
+              {PROJECT_LIST.map((projectItem) => (
+                <option key={projectItem.projectId} value={projectItem.project}>
+                  {projectItem.project}
                 </option>
               ))}
             </Select>
@@ -413,10 +415,13 @@ const TeamEditForm: React.FC = () => {
               <option value="" disabled>
                 - 선택 -
               </option>
-              <option value="인공지능">인공지능</option>
-              <option value="빅데이터">빅데이터</option>
-              <option value="블록체인">블록체인</option>
-              <option value="IoT 제어">IoT 제어</option>
+              {PROJECT_LIST.find(
+                (projectItem) => projectItem.project === CURRENT_PROJECT,
+              )?.projectTracks?.map((projectTrack) => (
+                <option key={projectTrack.id} value={projectTrack.name}>
+                  {projectTrack.name}
+                </option>
+              ))}
             </Select>
           </InputWrapper>
         </SsafyInfoWrapper>
@@ -522,7 +527,7 @@ const TeamEditForm: React.FC = () => {
         <TechStackList>
           {value.map((option: TechStackWithImg, index: number) => (
             <TechStackTag
-              id={option.id}
+              techStackId={option.techStackId}
               techStackName={option.techStackName}
               techStackImgUrl={option.techStackImgUrl}
               {...getTagProps({ index })}

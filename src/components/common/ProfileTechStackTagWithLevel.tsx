@@ -19,7 +19,7 @@ interface TechStackTagWithLevelProps extends TechStackTagProps {
 }
 
 const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
-  id,
+  techStackId,
   techStackName,
   techStackImgUrl,
   newTechStackDisabled,
@@ -36,7 +36,7 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
 
   useEffect(() => {
     oldTechStacksWithLevel.forEach((techStack) => {
-      if (techStack.techStackCode === id) {
+      if (techStack.techStackId === techStackId) {
         setSelectedTechStackLevel(techStack.techStackLevel);
       }
     });
@@ -44,11 +44,11 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
 
   useEffect(() => {
     techStacks.forEach((techStack) => {
-      if (techStack.techStackCode === id) {
+      if (techStack.techStackId === techStackId) {
         setSelectedTechStackLevel(techStack.techStackLevel);
       }
     });
-  }, [id, techStacks]);
+  }, [techStackId, techStacks]);
 
   const handleTechStackLevel = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -70,13 +70,13 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
 
     updateTechStacks({
       techStackLevel: updateTechStackLevel,
-      techStackCode: id,
+      techStackId,
     });
   };
 
   const deleteTechStack = (event: React.MouseEvent<HTMLButtonElement>) => {
     onDelete(event);
-    deleteTechStacks(id);
+    deleteTechStacks(techStackId);
   };
 
   return (

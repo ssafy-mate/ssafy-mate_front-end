@@ -9,7 +9,6 @@ import styled from '@emotion/styled';
 
 import BorderColorIcon from '@mui/icons-material/BorderColor';
 import ShareIcon from '@mui/icons-material/Share';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import FlagIcon from '@mui/icons-material/Flag';
 import SchoolIcon from '@mui/icons-material/School';
 import ComputerIcon from '@mui/icons-material/Computer';

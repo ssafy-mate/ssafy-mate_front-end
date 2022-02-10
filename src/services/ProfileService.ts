@@ -1,4 +1,3 @@
-import { UserInfoResponse } from '../hooks/useUserInfo';
 import {
   EditProfileInfoRequest,
   getProfileInfoRequest,
@@ -6,13 +5,17 @@ import {
   updateAuthInfoRequest,
 } from '../types/authTypes';
 import { SignUpResponse } from '../types/signUpTypes';
+
+import { UserInfoResponse } from '../hooks/useUserInfo';
+
 import { axiosInstance } from '../utils/axios';
-export interface project {
+
+export interface ProfileProject {
   project: string;
   projectTrack: string | null;
 }
 export interface EditProfileProjectsRequest {
-  data: project;
+  data: ProfileProject;
   token: string;
   userId: number;
 }

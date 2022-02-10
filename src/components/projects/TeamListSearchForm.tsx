@@ -24,7 +24,7 @@ interface TeamListSearchFormProps {
   setCampus: (campus: string) => void;
   setProjectTrack: (projectTrack: string) => void;
   setJob1: (job1: string) => void;
-  setTechStackCode: (techStackCode: number | null) => void;
+  setTechStackId: (techStackId: number | null) => void;
   setTeamName: (teamName: string) => void;
 }
 
@@ -36,7 +36,7 @@ const TeamListSearchForm: React.FC<TeamListSearchFormProps> = ({
   setCampus,
   setProjectTrack,
   setJob1,
-  setTechStackCode,
+  setTechStackId,
   setTeamName,
 }) => {
   const [, onSetProject] = useQueryString('project');
@@ -44,7 +44,7 @@ const TeamListSearchForm: React.FC<TeamListSearchFormProps> = ({
   const [, onSetCampus] = useQueryString('campus');
   const [, onSetJob1] = useQueryString('job1');
   const [, onSetPage] = useQueryString('page');
-  const [, onSetTechStackCode] = useQueryString('techstack_code');
+  const [, onSetTechStackId] = useQueryString('techstack_id');
   const [, onSetTeamName] = useQueryString('team_name');
 
   const techStackList: TechStackWithImg[] = useTechStackList();
@@ -81,13 +81,13 @@ const TeamListSearchForm: React.FC<TeamListSearchFormProps> = ({
 
   useEffect(() => {
     if (value !== null) {
-      setTechStackCode(value.id);
-      onSetTechStackCode(value.id);
+      setTechStackId(value.techStackId);
+      onSetTechStackId(value.techStackId);
     } else {
-      setTechStackCode(null);
-      onSetTechStackCode(null);
+      setTechStackId(null);
+      onSetTechStackId(null);
     }
-  }, [setTechStackCode, onSetTechStackCode, value]);
+  }, [setTechStackId, onSetTechStackId, value]);
 
   const handleChangeCampus = (
     event: React.ChangeEvent<HTMLSelectElement>,

@@ -27,7 +27,7 @@ interface UserListSearchFormProps {
   setCampus: (campus: string) => void;
   setProjectTrack: (projectTrack: string) => void;
   setJob1: (job1: string) => void;
-  setTechStackCode: (techStackCode: number | null) => void;
+  setTechStackId: (techStackId: number | null) => void;
   setUserName: (userName: string) => void;
   setSsafyTrack: (ssafyTrack: string) => void;
 }
@@ -38,7 +38,7 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
   setCampus,
   setProjectTrack,
   setJob1,
-  setTechStackCode,
+  setTechStackId,
   setUserName,
   setSsafyTrack,
 }) => {
@@ -47,7 +47,7 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
   const [, onSetCampus] = useQueryString('campus');
   const [, onSetJob1] = useQueryString('job1');
   const [, onSetPage] = useQueryString('page');
-  const [, onSetTechStackCode] = useQueryString('techstack_code');
+  const [, onSetTechStackId] = useQueryString('techstack_id');
   const [, onSetUserName] = useQueryString('user_name');
   const [, onSetSsafyTrack] = useQueryString('ssafy_track');
 
@@ -87,13 +87,13 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
 
   useEffect(() => {
     if (value !== null) {
-      setTechStackCode(value.id);
-      onSetTechStackCode(value.id);
+      setTechStackId(value.techStackId);
+      onSetTechStackId(value.techStackId);
     } else {
-      setTechStackCode(null);
-      onSetTechStackCode(null);
+      setTechStackId(null);
+      onSetTechStackId(null);
     }
-  }, [setTechStackCode, onSetTechStackCode, value]);
+  }, [setTechStackId, onSetTechStackId, value]);
 
   const handleChangeCampus = (
     event: React.ChangeEvent<HTMLSelectElement>,

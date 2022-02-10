@@ -21,7 +21,7 @@ interface ConfirmationDialogRawProps {
   id: string;
   keepMounted: boolean;
   open: boolean;
-  projectName: string;
+  project: string;
   selectedProjectTrack: ProjectTrack;
   pageUrl: string;
   hexColorCode: string;
@@ -48,7 +48,7 @@ interface ProjectTrackRequestType {
 
 const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
   open,
-  projectName,
+  project,
   selectedProjectTrack: selectedProjectTrackProp,
   pageUrl,
   hexColorCode,
@@ -87,7 +87,7 @@ const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
 
   const handleOk = () => {
     selectProjectTrack({
-      project: projectName,
+      project,
       projectTrack: selectedProjectTrack,
     });
 
@@ -107,7 +107,7 @@ const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
       {...other}
     >
       <ProjectTrackTitle hexcolorcode={hexColorCode}>
-        {projectName} 트랙 선택
+        {project} 트랙 선택
       </ProjectTrackTitle>
       <DialogContent dividers>
         <RadioGroup

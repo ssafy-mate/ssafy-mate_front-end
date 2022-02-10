@@ -58,7 +58,7 @@ export const teamsHandlers = [
       const campus = request.url.searchParams.get('campus');
       const project_track = request.url.searchParams.get('project_track');
       const job1 = request.url.searchParams.get('job1');
-      const techstack_code = request.url.searchParams.get('techstack_code');
+      const techstack_id = request.url.searchParams.get('techstack_id');
       const team_name = request.url.searchParams.get('team_name');
       const exclusion = request.url.searchParams.get('exclusion');
       const sort = request.url.searchParams.get('sort');
@@ -80,8 +80,8 @@ export const teamsHandlers = [
           (team) =>
             team.techStacks.filter(
               (techStack) =>
-                techstack_code === null ||
-                techStack.id === Number(techstack_code),
+                techstack_id === null ||
+                techStack.techStackId === Number(techstack_id),
             ).length > 0,
         )
         .filter(

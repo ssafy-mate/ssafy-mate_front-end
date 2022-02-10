@@ -1,13 +1,13 @@
-import styled from '@emotion/styled';
 import { useState } from 'react';
 
+import styled from '@emotion/styled';
+
 import AccountEditTaps from './AccountEditTaps';
-import SsafyMateInformation from './SsafyMateInformation';
-import SsafyInformation from './SsafyInformation';
+import BasicInformationSection from './BasicInformationSection';
+import ProfileInformationSection from './ProfileInformationSection';
 
 const AccountEditCard: React.FC = () => {
-  const [acccountEditTap, setAcccountEditTap] =
-    useState<string>('ssafyInformation');
+  const [selectedTap, setSelectedTap] = useState<string>('basicInformation');
 
   return (
     <>
@@ -15,10 +15,10 @@ const AccountEditCard: React.FC = () => {
         <Wrapper>
           <CardHeader>
             <Head>계정 관리</Head>
-            <AccountEditTaps setAcccountEditTap={setAcccountEditTap} />
-            {acccountEditTap === 'ssafyInformation' && <SsafyInformation />}
-            {acccountEditTap === 'ssafyMateInformation' && (
-              <SsafyMateInformation />
+            <AccountEditTaps setAcccountEditTap={setSelectedTap} />
+            {selectedTap === 'basicInformation' && <BasicInformationSection />}
+            {selectedTap === 'profileInformation' && (
+              <ProfileInformationSection />
             )}
           </CardHeader>
         </Wrapper>

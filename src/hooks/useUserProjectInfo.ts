@@ -7,16 +7,16 @@ const useUserProjectInfo = (projectId: number) => {
     (state) => state.auth.campus,
   );
   const project: string | null = useSelector<RootState, string | null>(
-    (state) => state.auth.projects[projectId - 1].projectName,
+    (state) => state.auth.projects[projectId - 1].project,
   );
   const projectTrack: string | null = useSelector<RootState, string | null>(
     (state) => state.auth.projects[projectId - 1].projectTrack,
   );
-  const projectTeamId: string | null = useSelector<RootState, string | null>(
-    (state) => state.auth.projects[projectId - 1].projectTeamId,
+  const teamId: string | null = useSelector<RootState, string | null>(
+    (state) => state.auth.projects[projectId - 1].teamId,
   );
 
-  return [campus, project, projectTrack, projectTeamId];
+  return [campus, project, projectTrack, teamId];
 };
 
 export default useUserProjectInfo;

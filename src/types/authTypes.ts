@@ -37,9 +37,9 @@ export interface SignInResponse {
 
 export interface Project {
   projectId: number;
-  projectName: string;
+  project: string;
   projectTrack: string | null;
-  projectTeamId: string | null;
+  teamId: string | null;
 }
 
 export interface AuthState {

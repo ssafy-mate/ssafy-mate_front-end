@@ -36,7 +36,7 @@ const SpecializationProjectUserListPage: React.FC = () => {
     myProjectTrack !== null ? myProjectTrack : 'all',
   );
   const [job1, setJob1] = useState<string>('all');
-  const [techStackCode, setTechStackCode] = useState<number | null>(null);
+  const [techStackId, setTechStackId] = useState<number | null>(null);
   const [userName, setUserName] = useState<string>('');
   const [ssafyTrack, setSsafyTrack] = useState<string>('all');
   const [exclusion, setExclusion] = useState<boolean>(false);
@@ -49,7 +49,7 @@ const SpecializationProjectUserListPage: React.FC = () => {
     project,
     project_track: projectTrack,
     job1,
-    techstack_code: techStackCode,
+    techstack_id: techStackId,
     user_name: userName,
     ssafy_track: ssafyTrack,
     exclusion,
@@ -80,7 +80,7 @@ const SpecializationProjectUserListPage: React.FC = () => {
         setCampus={setCampus}
         setProjectTrack={setProjectTrack}
         setJob1={setJob1}
-        setTechStackCode={setTechStackCode}
+        setTechStackId={setTechStackId}
         setUserName={setUserName}
         setSsafyTrack={setSsafyTrack}
       />
