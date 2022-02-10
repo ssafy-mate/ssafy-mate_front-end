@@ -95,6 +95,8 @@ const ProfileInformationSection: React.FC = () => {
     id: 'search-tech-stack',
     multiple: true,
     options: techStackList,
+    isOptionEqualToValue: (option, value) =>
+      option.techStackId === value.techStackId,
     defaultValue: oldTechStacksList,
     getOptionLabel: (option) => option.techStackName,
   });
