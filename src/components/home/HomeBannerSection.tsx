@@ -64,7 +64,7 @@ const HomeBannerSection: React.FC = () => {
           keyboard={true}
           loop={true}
           autoplay={{
-            delay: 8000,
+            delay: 10000,
             disableOnInteraction: false,
           }}
           className="mySwiper"

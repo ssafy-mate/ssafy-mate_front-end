@@ -20,36 +20,63 @@ const PROJECTS_BANNER_SLIDE_LIST: ProjectBannerSlideType[] = [
   {
     id: 1,
     head: '특화 프로젝트',
-    subHead: 'Track 1. 인공지능 (AI)',
+    subHead: 'Track 1. 인공지능 (영상)',
     description:
-      '인간의 학습능력과 추론능력, 지각능력, 자연언어의 이해능력 등을 컴퓨터 프로그램으로 실현한 기술',
+      '이미지 입력이 들어 갔을 때, 해당 이미지를 묘사하는 텍스트를 생성하는 이미지 캡셔닝 모델 구현 프로젝트',
     imgUrl: '/images/projects/ai_animation.gif',
     hexColorCode: '#ffc107',
   },
   {
     id: 2,
     head: '특화 프로젝트',
-    subHead: 'Track 2. 빅데이터 (Big Data)',
+    subHead: 'Track 2. 인공지능 (음성)',
     description:
-      '정형·반정형·비정형 데이터세트의 집적물, 그리고 이로부터 경제적 가치를 추출 및 분석할 수 있는 기술',
-    imgUrl: '/images/projects/bigdata_animation.gif',
-    hexColorCode: '#52c5b5',
+      '딥러닝 알고리즘의 동작 과정 이해 및 구현, 각 팀 별로 개성있는 인공지능 서비스 구축 프로젝트',
+    imgUrl: '/images/projects/ai_animation.gif',
+    hexColorCode: '#ffc107',
   },
   {
     id: 3,
     head: '특화 프로젝트',
-    subHead: 'Track 3. 블록체인 (Block Chain)',
+    subHead: 'Track 3. 빅데이터 (추천)',
     description:
-      '누구나 열람할 수 있는 장부에 거래 내역을 투명하게 기록하고, 여러 대의 컴퓨터에 이를 복제해 저장하는 분산형 데이터 저장기술',
-    imgUrl: '/images/projects/blockchain_animation.gif',
-    hexColorCode: '#000',
+      '사용자에 대한 이해, 추천되는 요소에 대한 이해를 통한 정보 필터링 서비스 제공, 기존의 서비스 이용 기록을 통한 인사이트 도출 및 적용 프로젝트',
+    imgUrl: '/images/projects/bigdata_animation.gif',
+    hexColorCode: '#52c5b5',
   },
   {
     id: 4,
     head: '특화 프로젝트',
+    subHead: 'Track 4. 빅데이터 (분산)',
+    description:
+      '분산 파일 시스템을 활용한 데이터 처리 과정에 대해 이해하고 효율적인 병렬 연산을 위한 알고리즘 구현 및 서비스 적용 프로젝트',
+    imgUrl: '/images/projects/bigdata_animation.gif',
+    hexColorCode: '#52c5b5',
+  },
+  {
+    id: 5,
+    head: '특화 프로젝트',
+    subHead: 'Track 5. 블록체인 (P2P 거래)',
+    description:
+      '블록체인 오픈소스로 네트워크 인프라를 구축하여 이를 활용하는 프로젝트',
+    imgUrl: '/images/projects/blockchain_animation.gif',
+    hexColorCode: '#000',
+  },
+  {
+    id: 6,
+    head: '특화 프로젝트',
+    subHead: 'Track 6. 블록체인 (디지털화폐)',
+    description:
+      'NFT(대체 불가한 토큰) 스마트 컨트랙트 구현하여 NFT를 거래할 수 있도록 하는 프로젝트',
+    imgUrl: '/images/projects/blockchain_animation.gif',
+    hexColorCode: '#000',
+  },
+  {
+    id: 7,
+    head: '특화 프로젝트',
     subHead: 'Track 4. IoT 제어 (Internet of Things)',
     description:
-      '인터넷을 기반으로 모든 사물을 연결하여 정보를 상호 소통하는 지능형 기술 및 서비스',
+      '가전기기나 센서들을 무선 통신으로 연결하여, 네트워킹, S/W, AI 기술을 기반으로 외부망과 가정을 연결하여 융합 콘텐츠 서비스를 제공하는 프로젝트',
     imgUrl: '/images/projects/iot_animation.gif',
     hexColorCode: '#2e4f87',
   },
@@ -67,7 +94,7 @@ const ProjectBannerSection: React.FC = () => {
           keyboard={true}
           loop={true}
           autoplay={{
-            delay: 8000,
+            delay: 10000,
             disableOnInteraction: false,
           }}
           className="mySwiper"
