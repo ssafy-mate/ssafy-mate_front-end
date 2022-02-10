@@ -176,7 +176,7 @@ const Img = styled.img`
   }
 `;
 
-const Name = styled.h6`
+const Name = styled.span`
   font-size: 14px;
   color: #5f7f90;
 

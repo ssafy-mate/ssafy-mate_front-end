@@ -271,7 +271,6 @@ const AvatarWrapperCol = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 30px;
 
   @media (max-width: 575px) {
     &:nth-of-type(2) {
@@ -372,11 +371,14 @@ const Information = styled.div`
   border: 1px solid #d7e2eb;
   border-radius: 0.25rem;
   box-sizing: border-box;
-  background-color: #e8f0fe;
+  background-color: #fcfcfe;
   font-size: 16px;
   line-height: 24px;
-  color: #263747;
-  transition: all 0.08s ease-in-out;
+  color: #a6adb4;
+
+  @media (max-width: 575px) {
+    font-size: 13px;
+  }
 `;
 
 const SelectWrapper = styled.div`
@@ -404,21 +406,22 @@ const Select = styled.select`
   transition: all 0.08s ease-in-out;
   appearance: none;
 
-  &:hover {
-    border: 1px solid #3396f4;
-    box-shadow: inset 0 0 0 1px#3396f4;
+  &:not(:disabled) {
+    &:hover {
+      border: 1px solid #3396f4;
+      box-shadow: inset 0 0 0 1px#3396f4;
+    }
+    &:focus {
+      border: 1px solid #3396f4;
+      box-shadow: inset 0 0 0 1px #3396f4;
+      background-color: #fff;
+      color: #495057;
+    }
   }
-  &:focus {
-    border: 1px solid #3396f4;
-    box-shadow: inset 0 0 0 1px #3396f4;
-    background-color: #fff;
-    color: #495057;
-  }
-  &:disabled {
-    border: 1px solid #d7e2eb;
-    box-shadow: none;
-    background-color: #e8f0fe;
 
+  &:disabled {
+    background-color: #fcfcfe;
+    color: #7d8891;
     cursor: not-allowed;
   }
 
@@ -434,19 +437,23 @@ const Select = styled.select`
 `;
 
 const ModifyButton = styled.button`
-  width: 13%;
+  width: 60px;
   height: 40px;
-  margin-left: 5px;
+  margin-left: 8px;
   border: none;
   border-radius: 0.25rem;
   box-sizing: border-box;
   background-color: #3396f4;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
   line-height: 15px;
-  transition: background-color 0.08s ease-in-out;
   color: #fff;
+  transition: background-color 0.08s ease-in-out;
   cursor: pointer;
+
+  &:hover {
+    background-color: #2878c3;
+  }
 
   &:disabled {
     background-color: #ebf0fe;

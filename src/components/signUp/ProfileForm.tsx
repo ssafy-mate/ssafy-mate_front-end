@@ -490,7 +490,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
               type="url"
               id="github-url"
               name="githubUrl"
-              placeholder="https://github.com/ssafy-mate"
+              placeholder="ex) https://github.com/ssafy-mate"
               onChange={handleUrlInput}
               pattern="https://.*"
             />
@@ -505,7 +505,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
               type="url"
               id="etc-url"
               name="etcUrl"
-              placeholder="https://velog.io/@ssafy-mate"
+              placeholder="ex) https://velog.io/@ssafy-mate"
               onChange={handleUrlInput}
               pattern="https://.*"
             />
