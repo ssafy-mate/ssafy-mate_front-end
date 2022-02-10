@@ -127,8 +127,6 @@ const ChattingForm: React.FC = () => {
           return prevChatData;
         }, false).then(() => {
           setChat('');
-          mutateChat();
-          mutateRoom();
           if (scrollbarRef.current) {
             setTimeout(() => {
               scrollbarRef?.current?.scrollToBottom();
@@ -136,7 +134,10 @@ const ChattingForm: React.FC = () => {
           }
         });
 
-        axios.post(`${socketUrl}/api/chats`, params);
+        axios.post(`${socketUrl}/api/chats`, params).then(() => {
+          mutateChat();
+          mutateRoom();
+        });
       }
     },
     [chat, roomId, myId, userId, setChat],
