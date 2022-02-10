@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
 
+import { useDispatch } from 'react-redux';
+import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
+
+import { push } from 'connected-react-router';
+
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
@@ -9,10 +14,6 @@ import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
 import CloseIcon from '@mui/icons-material/Close';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import CheckIcon from '@mui/icons-material/Check';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
-
-import history from '../../history';
 
 import { JOB_LIST } from '../../data/jobListData';
 
@@ -27,8 +28,6 @@ import AuthService from '../../services/AuthService';
 
 import useTechStackList from '../../hooks/useTechStackList';
 import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
-import { useDispatch } from 'react-redux';
-import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
 
 const ProfileForm: React.FC<ProfileProps> = ({
   campus,
@@ -41,24 +40,24 @@ const ProfileForm: React.FC<ProfileProps> = ({
   const [showError, setShowError] = useState<number>(0);
   const [techStacks, setTechStacks] = useState<TechStacksWithLevel[]>([]);
   const [techStacksError, setTechStacksError] = useState<boolean>(false);
-  const [profileImg, setProfileImg] = useState(null);
-  const [previewProgileImg, setPreviewProfileImg] = useState(null);
+  const [profileImg, setProfileImg] = useState<Blob | null>(null);
+  const [previewProgileImg, setPreviewProfileImg] = useState<string | null>(
+    null,
+  );
   const [job1, setJob1] = useState<string>('default');
-  const [job2, setJob2] = useState<string>('');
+  const [job2, setJob2] = useState<string | null>(null);
   const [selfIntroduction, setSelfIntroduction] = useState<string>('');
-  const [githubUrl, setGithubUrl] = useState<string>('');
-  const [etcUrl, setEtcUrl] = useState<string>('');
+  const [githubUrl, setGithubUrl] = useState<string | null>(null);
+  const [etcUrl, setEtcUrl] = useState<string | null>(null);
   const [agreement, setAgreement] = useState<boolean>(false);
   const [job1Error, setJob1Error] = useState<boolean>(false);
   const [selfIntroductionError, setSelfIntroductionError] =
     useState<boolean>(false);
   const [agreementError, setAgreementError] = useState<boolean>(false);
   useState<boolean>(false);
-  const [alertOpen, setAlertOpen] = useState<boolean>(false);
-  const [alertText, setAlertText] = useState<string>('');
-  const [alertSeverity, setAlertSeverity] = useState<Severity>('success');
 
   const techStackList: TechStackWithImg[] = useTechStackList();
+
   const dispatch = useDispatch();
 
   const {
@@ -93,9 +92,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
         type: alertType,
       }),
     );
-  };
-  const alertClose = () => {
-    setAlertOpen(false);
   };
 
   useEffect(() => {
@@ -261,9 +257,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
   };
 
   const getSignUpInformation = () => {
-    if (profileImg !== null) {
-      signUpFormData.append('profileImg', profileImg);
-    }
     signUpFormData.append('campus', campus);
     signUpFormData.append('ssafyTrack', ssafyTrack);
     signUpFormData.append('studentNumber', studentNumber);
@@ -272,11 +265,22 @@ const ProfileForm: React.FC<ProfileProps> = ({
     signUpFormData.append('password', signUpPassword);
     signUpFormData.append('selfIntroduction', selfIntroduction);
     signUpFormData.append('job1', job1);
-    signUpFormData.append('job2', job2);
     signUpFormData.append('techStacks', JSON.stringify(techStacks));
-    signUpFormData.append('githubUrl', githubUrl);
-    signUpFormData.append('etcUrl', etcUrl);
     signUpFormData.append('agreement', String(agreement));
+
+    if (profileImg !== null) {
+      signUpFormData.append('profileImg', profileImg);
+    }
+
+    if (job2 !== null) {
+      signUpFormData.append('job2', job2);
+    }
+    if (githubUrl !== null) {
+      signUpFormData.append('githubUrl', githubUrl);
+    }
+    if (etcUrl !== null) {
+      signUpFormData.append('etcUrl', etcUrl);
+    }
 
     return signUpFormData;
   };
@@ -291,7 +295,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
         .then(({ message }) => {
           showAlert(true, message, 'success');
 
-          history.push('/users/sign_in');
+          dispatch(push('/users/sign_in'));
         })
         .catch((error) => {
           if (error.response) {
@@ -312,25 +316,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
 
   return (
     <>
-      {alertOpen && (
-        <SsafyAuthSnackBar
-          open={alertOpen}
-          autoHideDuration={2000}
-          onClose={alertClose}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
-        >
-          <ResponseAlert
-            onClose={alertClose}
-            severity={alertSeverity}
-            sx={{ width: '100%' }}
-          >
-            {alertText}
-          </ResponseAlert>
-        </SsafyAuthSnackBar>
-      )}
       <Container>
         <Row>
           <AvatarWrapper>
@@ -911,14 +896,6 @@ const ErrorMessage = styled.span`
   font-size: 13px;
   line-height: 1.5;
   color: #f44336;
-`;
-
-const SsafyAuthSnackBar = styled(Snackbar)`
-  height: 20%;
-`;
-
-const ResponseAlert = styled(Alert)`
-  white-space: pre-line;
 `;
 
 const avatar = css`

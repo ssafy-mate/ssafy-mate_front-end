@@ -2,10 +2,10 @@ import { useState, useEffect } from 'react';
 
 import { useForm } from 'react-hook-form';
 
-import styled from '@emotion/styled';
+import { useDispatch } from 'react-redux';
+import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
 
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
+import styled from '@emotion/styled';
 
 import {
   exceptDefaultReg,
@@ -32,9 +32,6 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
   setStudentName,
 }) => {
   const [selectedTracks, setSelectedTracks] = useState<SsafyTrack[]>([]);
-  const [alertOpen, setAlertOpen] = useState<boolean>(false);
-  const [alertMessage, setAlertMessage] = useState<string>('');
-  const [alertSeverity, setAlertSeverity] = useState<Severity>('success');
 
   const {
     watch,
@@ -47,14 +44,20 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
 
   const selectedCampus = watch('campus', '');
 
-  const showAlert = (type: Severity, message: string) => {
-    setAlertSeverity(type);
-    setAlertMessage(message);
-    setAlertOpen(true);
-  };
+  const dispatch = useDispatch();
 
-  const alertClose = () => {
-    setAlertOpen(false);
+  const showAlert = (
+    alertShow: boolean,
+    alertText: string,
+    alertType: Severity,
+  ) => {
+    dispatch(
+      showSsafyMateAlertSagaStart({
+        show: alertShow,
+        text: alertText,
+        type: alertType,
+      }),
+    );
   };
 
   useEffect(() => {
@@ -85,6 +88,7 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
     AuthService.getSsafyAuth(data)
       .then((response) => {
         if (response.success) {
+          showAlert(true, response.message, 'success');
           updateSsafyAuthProps(data);
         }
       })
@@ -93,9 +97,9 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
           const { status, message } = error.response.data;
 
           if (status === 401 || status === 409) {
-            showAlert('warning', message);
+            showAlert(true, message, 'warning');
           } else if (status === 500) {
-            showAlert('error', message);
+            showAlert(true, message, 'error');
           }
         }
       });
@@ -103,25 +107,6 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
 
   return (
     <>
-      {alertOpen && (
-        <SsafyAuthSnackBar
-          open={alertOpen}
-          autoHideDuration={3000}
-          onClose={alertClose}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
-        >
-          <MuiAlert
-            onClose={alertClose}
-            severity={alertSeverity}
-            sx={{ width: '100%' }}
-          >
-            {alertMessage}
-          </MuiAlert>
-        </SsafyAuthSnackBar>
-      )}
       <Container onSubmit={handleSubmit(onSubmit)}>
         <SsafyInfo>
           <InputWrapper>
@@ -413,14 +398,6 @@ const ErrorMessage = styled.span`
   font-size: 13px;
   line-height: 1.5;
   color: #f44336;
-`;
-
-const SsafyAuthSnackBar = styled(Snackbar)`
-  height: 20%;
-`;
-
-const MuiAlert = styled(Alert)`
-  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
 `;
 
 export default AuthForm;

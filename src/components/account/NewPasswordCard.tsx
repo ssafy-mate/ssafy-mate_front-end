@@ -3,6 +3,10 @@ import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
 
+import { push } from 'connected-react-router';
+
+import NewPasswordService from '../../services/NewPasswordService';
+
 import styled from '@emotion/styled';
 import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
 
@@ -13,10 +17,6 @@ import {
 } from '../../utils/regularExpressionData';
 
 import { Severity } from '../../types/signUpTypes';
-
-import history from '../../history';
-
-import NewPasswordService from '../../services/NewPasswordService';
 
 import NewPassWordCardSubHead from './NewPassWordCardSubHead';
 import Loading from '../common/Loading';
@@ -348,7 +348,7 @@ const NewPasswordCard: React.FC = () => {
       .then(({ message }) => {
         showAlert(true, message, 'success');
 
-        history.push('/users/sign_in');
+        dispatch(push('/users/sign_in'));
       })
       .catch((error) => {
         if (error.response) {

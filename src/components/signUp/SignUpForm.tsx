@@ -5,8 +5,6 @@ import { useForm } from 'react-hook-form';
 import styled from '@emotion/styled';
 
 import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
-import Snackbar from '@mui/material/Snackbar';
-import Alert from '@mui/material/Alert';
 
 import {
   EmailVerificationCodeConfirmRequest,
@@ -25,16 +23,14 @@ import {
 import AuthService from '../../services/AuthService';
 
 import Loading from '../common/Loading';
+import { useDispatch } from 'react-redux';
+import { showSsafyMateAlert } from '../../redux/modules/alert';
 
 const SignUpForm: React.FC<SignUpProps> = ({
   setSignUpStep,
   setSignUpEmail,
   setSignUpPassword,
 }) => {
-  const [alertOpen, setAlertOpen] = useState<boolean>(true);
-  const [alertSeverity, setAlertSeverity] = useState<Severity>('success');
-  const [alertText, setAlertText] =
-    useState<string>('교육생 인증에 성공했습니다.');
   const [emailCodeRequestButton, setEmailCodeRequestButton] =
     useState<boolean>(true);
   const [codeConfirmButton, setCodeConfirmButton] = useState<boolean>(true);
@@ -53,6 +49,22 @@ const SignUpForm: React.FC<SignUpProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingColor, setLoadingColor] = useState<string>('##fff');
   const [timeStop, setTimeStop] = useState<number>(0);
+
+  const dispatch = useDispatch();
+
+  const showAlert = (
+    alertShow: boolean,
+    alertText: string,
+    alertType: Severity,
+  ) => {
+    dispatch(
+      showSsafyMateAlert({
+        show: alertShow,
+        text: alertText,
+        type: alertType,
+      }),
+    );
+  };
 
   const {
     register,
@@ -96,6 +108,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
   const signUpEmailOnChange: string = watch('signUpEmail');
   const verificationCodeOnChange: string = watch('verificationCode');
   const signUpPasswordOnChange: string = watch('signUpPassword');
+  const signUpCheckPasswordOnChange: string = watch('signUpCheckPassword');
 
   const updateSignUpProps = (data: SignUp) => {
     const { signUpEmail, signUpPassword } = data;
@@ -108,16 +121,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
   const resetTimer = () => {
     setMinutes(3);
     setSeconds(0);
-  };
-
-  const showAlert = (type: Severity, message: string) => {
-    setAlertSeverity(type);
-    setAlertText(message);
-    setAlertOpen(true);
-  };
-
-  const alertClose = () => {
-    setAlertOpen(false);
   };
 
   const showAndSetError = (isError: boolean, errorMessage: string) => {
@@ -191,7 +194,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
         if (success) {
           setLoading(false);
           resetCodeVerificationError();
-          showAlert('success', message);
+          showAlert(true, message, 'success');
           offEmailCodeInput();
           setShowCodeBox(true);
           setTimeStop(1);
@@ -205,10 +208,10 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
           if (status === 409) {
             setLoading(false);
-            showAlert('info', message);
+            showAlert(true, message, 'info');
           } else if (status === 500) {
             setLoading(false);
-            showAlert('error', message);
+            showAlert(true, message, 'error');
             setEmailCodeRequestButton(false);
             setVerificationCodeButtonText('이메일 재전송');
           }
@@ -241,7 +244,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
             showAndSetError(true, message);
             offCodeInputAndConfirm();
           } else if (status === 500) {
-            showAlert('error', message);
+            showAlert(true, message, 'error');
           }
         }
       });
@@ -257,25 +260,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
   return (
     <>
-      {alertOpen && (
-        <SignUpSnackBar
-          open={alertOpen}
-          autoHideDuration={2000}
-          onClose={alertClose}
-          anchorOrigin={{
-            vertical: 'top',
-            horizontal: 'center',
-          }}
-        >
-          <ResponseAlert
-            onClose={alertClose}
-            severity={alertSeverity}
-            sx={{ width: '100%' }}
-          >
-            {alertText}
-          </ResponseAlert>
-        </SignUpSnackBar>
-      )}
       <Container onSubmit={handleSubmit(onSubmit)}>
         <InputWrapper>
           <RequirementLabel htmlFor="signup-email">이메일</RequirementLabel>
@@ -446,7 +430,13 @@ const SignUpForm: React.FC<SignUpProps> = ({
                 confirmPasswordInput === signUpPasswordOnChange,
             })}
             placeholder="비밀번호 확인"
-            className={errors.signUpCheckPassword ? 'have-error' : ''}
+            className={
+              errors.signUpCheckPassword ||
+              (signUpCheckPasswordOnChange !== '' &&
+                signUpCheckPasswordOnChange !== signUpPasswordOnChange)
+                ? 'have-error'
+                : ''
+            }
           />
           {errors.signUpCheckPassword?.type === 'required' && (
             <ErrorMessageWrapper>
@@ -455,12 +445,14 @@ const SignUpForm: React.FC<SignUpProps> = ({
               </ErrorMessage>
             </ErrorMessageWrapper>
           )}
-          {errors.signUpCheckPassword?.type !== 'required' &&
-            errors.signUpCheckPassword?.type === 'validate' && (
-              <ErrorMessageWrapper>
-                <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
-              </ErrorMessageWrapper>
-            )}
+          {(errors.signUpCheckPassword?.type !== 'required' &&
+            errors.signUpCheckPassword?.type === 'validate') ||
+          (signUpCheckPasswordOnChange !== '' &&
+            signUpCheckPasswordOnChange !== signUpPasswordOnChange) ? (
+            <ErrorMessageWrapper>
+              <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
+            </ErrorMessageWrapper>
+          ) : null}
         </InputWrapper>
         <SubmitButton type="submit">기본 정보 작성 완료</SubmitButton>
       </Container>
@@ -728,10 +720,6 @@ const ResendEmailIcon = styled(ForwardToInboxIcon)`
   height: 16px;
 `;
 
-const ResponseAlert = styled(Alert)`
-  white-space: pre-line;
-`;
-
 const ResendLink = styled.a`
   margin-left: 4px;
   font-weight: 500;
@@ -754,10 +742,6 @@ const TimeLimit = styled.span`
   @media (max-width: 575px) {
     font-size: 13px;
   }
-`;
-
-const SignUpSnackBar = styled(Snackbar)`
-  height: 20%;
 `;
 
 export default SignUpForm;

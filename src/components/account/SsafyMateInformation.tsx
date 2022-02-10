@@ -7,7 +7,7 @@ import {
   editProfileProjectsInfo as editProfileProjectsInfoStart,
 } from '../../redux/modules/profile';
 
-import history from '../../history';
+import { push } from 'connected-react-router';
 
 import styled from '@emotion/styled';
 import CheckIcon from '@mui/icons-material/Check';
@@ -56,14 +56,16 @@ const SsafyMateInformation: React.FC = () => {
   const [selfIntroductionError, setSelfIntroductionError] =
     useState<boolean>(false);
   const [newJob1, setNewJob1] = useState<string>('');
-  const [newJob2, setNewJob2] = useState<string | null>('');
+  const [newJob2, setNewJob2] = useState<string | null>(null);
   const [newJobsDisabled, setNewJobsDisabled] = useState<boolean>(true);
   const [newJobsModifyButtonText, setNewJobsModifyButtonText] =
     useState<string>('수정');
-  const [oldcommonProject, setOldCommonProject] = useState<string | null>('');
-  const [commonProject, setCommonProject] = useState<string | null>('');
-  const [oldspecialProject, setOldSpecialProject] = useState<string | null>('');
-  const [specialProject, setSpecialProject] = useState<string | null>('');
+  const [oldcommonProject, setOldCommonProject] = useState<string | null>(null);
+  const [commonProject, setCommonProject] = useState<string | null>(null);
+  const [oldspecialProject, setOldSpecialProject] = useState<string | null>(
+    null,
+  );
+  const [specialProject, setSpecialProject] = useState<string | null>(null);
   const [newProjectsDisabled, setNewProjectsDisabled] = useState<boolean>(true);
   const [projectsModifyButtonText, newProjectsModifyButtonText] =
     useState<string>('수정');
@@ -73,8 +75,8 @@ const SsafyMateInformation: React.FC = () => {
   const [specialProjectListData, setSpecialProjectListData] = useState<
     ProjectTrack[]
   >([]);
-  const [newGitHubUrl, setNewGitHubUrl] = useState<string | null>('');
-  const [newEtcUrl, setNewEtcUrl] = useState<string | null>('');
+  const [newGitHubUrl, setNewGitHubUrl] = useState<string | null>(null);
+  const [newEtcUrl, setNewEtcUrl] = useState<string | null>(null);
   const [urlsModifyButtonText, setUrlsModifyButtonText] =
     useState<string>('수정');
   const [newUrlsDisabled, setUrlsDisabled] = useState<boolean>(true);
@@ -116,9 +118,10 @@ const SsafyMateInformation: React.FC = () => {
       }),
     );
   };
+
   useEffect(() => {
     if (profileInfo === null) {
-      history.push('/');
+      dispatch(push('/'));
     } else {
       setSelfIntroductionValue(profileInfo.selfIntroduction);
       setNewJob1(profileInfo.job1);
@@ -157,6 +160,15 @@ const SsafyMateInformation: React.FC = () => {
       ? setTechStacksError(false)
       : setTechStacksError(true);
   }, [techStacks]);
+
+  useEffect(() => {
+    if (commonProject === 'default') {
+      setCommonProject(null);
+    }
+    if (specialProject === 'default') {
+      setSpecialProject(null);
+    }
+  }, [commonProject, specialProject]);
 
   const updateProfileAndAuth = useCallback(
     (requestData: EditProfileInfoRequest) => {
@@ -225,6 +237,7 @@ const SsafyMateInformation: React.FC = () => {
   const EditJobs = () => {
     const EditJobsFormDate = new FormData();
     EditJobsFormDate.append('job1', newJob1);
+
     if (newJob2 !== null) {
       EditJobsFormDate.append('job2', newJob2);
     }
