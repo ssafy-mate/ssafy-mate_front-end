@@ -1,27 +1,11 @@
 import styled from '@emotion/styled';
 
+import { ServiceIntroductionType } from '../../types/commonTypes';
+
 import IntroSection from './IntroSection';
 import MobileServiceIntroSection from './MobileServiceIntroSection';
 
-const IntroContainer = () => {
-  return (
-    <Container id="intro-container">
-      {INTRODUCTION_LIST_DATA.map((introduction) => (
-        <IntroSection
-          key={introduction.id}
-          headText={introduction.headText}
-          subHeadText={introduction.subHeadText}
-          descriptionText={introduction.descriptionText}
-          imgUrl={introduction.imgUrl}
-          reversed={introduction.id % 2 === 0 ? true : false}
-        />
-      ))}
-      <MobileServiceIntroSection />
-    </Container>
-  );
-};
-
-const INTRODUCTION_LIST_DATA = [
+const SERVICE_INTRODUCTION_LIST: ServiceIntroductionType[] = [
   {
     id: 1,
     headText: '팀 공고',
@@ -55,6 +39,24 @@ const INTRODUCTION_LIST_DATA = [
     imgUrl: '/images/home/pc-user-info-sample.png',
   },
 ];
+
+const IntroContainer: React.FC = () => {
+  return (
+    <Container id="intro-container">
+      {SERVICE_INTRODUCTION_LIST.map((introduction) => (
+        <IntroSection
+          key={introduction.id}
+          headText={introduction.headText}
+          subHeadText={introduction.subHeadText}
+          descriptionText={introduction.descriptionText}
+          imgUrl={introduction.imgUrl}
+          reversed={introduction.id % 2 === 0 ? true : false}
+        />
+      ))}
+      <MobileServiceIntroSection />
+    </Container>
+  );
+};
 
 const Container = styled.div``;
 

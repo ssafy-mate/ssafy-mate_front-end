@@ -2,39 +2,11 @@ import styled from '@emotion/styled';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
-import { ProjectLinkCardData } from '../../types/commonTypes';
+import { ProjectLinkCardType } from '../../types/commonTypes';
 
 import ProjectLinkCard from './ProjectLinkCard';
 
-const ProjectsSection: React.FC = () => {
-  return (
-    <Container>
-      <Wrapper>
-        {PROJECT_LINK_CARD_DATA_LIST.map((projectLinkCardData) => (
-          <ProjectLinkCard
-            key={projectLinkCardData.projectId}
-            projectId={projectLinkCardData.projectId}
-            projectName={projectLinkCardData.projectName}
-            pageUrl={projectLinkCardData.pageUrl}
-            imgUrl={projectLinkCardData.imgUrl}
-            hexColorCode={projectLinkCardData.hexColorCode}
-            trackOptions={projectLinkCardData.trackOptions}
-          />
-        ))}
-        <ArrowButtonWrapper>
-          <ArrowButtonText>
-            싸피 메이트 이용이 처음이시라면 아래로
-          </ArrowButtonText>
-          <ArrowButton href="#intro-container">
-            <ArrowIcon />
-          </ArrowButton>
-        </ArrowButtonWrapper>
-      </Wrapper>
-    </Container>
-  );
-};
-
-const PROJECT_LINK_CARD_DATA_LIST: ProjectLinkCardData[] = [
+const PROJECT_LINK_CARD_LIST: ProjectLinkCardType[] = [
   {
     projectId: 1,
     projectName: '공통 프로젝트',
@@ -58,6 +30,34 @@ const PROJECT_LINK_CARD_DATA_LIST: ProjectLinkCardData[] = [
     hexColorCode: '#385a7b',
   },
 ];
+
+const ProjectsSection: React.FC = () => {
+  return (
+    <Container>
+      <Wrapper>
+        {PROJECT_LINK_CARD_LIST.map((projectLinkCardData) => (
+          <ProjectLinkCard
+            key={projectLinkCardData.projectId}
+            projectId={projectLinkCardData.projectId}
+            projectName={projectLinkCardData.projectName}
+            pageUrl={projectLinkCardData.pageUrl}
+            imgUrl={projectLinkCardData.imgUrl}
+            hexColorCode={projectLinkCardData.hexColorCode}
+            trackOptions={projectLinkCardData.trackOptions}
+          />
+        ))}
+        <ArrowButtonWrapper>
+          <ArrowButtonText>
+            싸피 메이트 이용이 처음이신가요? 아래 화살표를 클릭!
+          </ArrowButtonText>
+          <ArrowButton href="#intro-container">
+            <ArrowIcon />
+          </ArrowButton>
+        </ArrowButtonWrapper>
+      </Wrapper>
+    </Container>
+  );
+};
 
 const Container = styled.main`
   padding: 0 16px;

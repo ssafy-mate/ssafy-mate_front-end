@@ -43,7 +43,7 @@ export interface ProjectBannerSlideData extends ProjectBannerCardData {
   hexColorCode: string;
 }
 
-export interface ProjectLinkCardData {
+export interface ProjectLinkCardType {
   projectId: number;
   projectName: string;
   pageUrl: string;
@@ -52,10 +52,18 @@ export interface ProjectLinkCardData {
   trackOptions?: string[];
 }
 
-export interface ProjectLinkCardProps extends ProjectLinkCardData {}
+export interface ProjectLinkCardProps extends ProjectLinkCardType {}
 
 export interface ErrorResponse {
   status: number;
   success: boolean;
   message: string;
+}
+
+export interface ServiceIntroductionType {
+  id: number;
+  headText: string;
+  subHeadText: string;
+  descriptionText: string;
+  imgUrl: string;
 }
