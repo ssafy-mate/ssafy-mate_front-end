@@ -126,17 +126,12 @@ const ChattingForm: React.FC = () => {
           return prevChatData;
         }, false).then(() => {
           setChat('');
+          mutateChat();
+          mutateRoom();
           if (scrollbarRef.current) scrollbarRef.current.scrollToBottom();
         });
 
-        axios
-          .post(`${socketUrl}/api/chats`, params)
-          .then((response) => {
-            mutateChat();
-          })
-          .finally(() => {
-            setChat('');
-          });
+        axios.post(`${socketUrl}/api/chats`, params);
       }
     },
     [chat, roomId, myId, userId, setChat],
@@ -149,6 +144,8 @@ const ChattingForm: React.FC = () => {
           chatData?.[0].contentList.unshift(data);
           return chatData;
         }, false).then(() => {
+          mutateChat();
+          mutateRoom();
           if (scrollbarRef.current) {
             if (
               scrollbarRef.current.getScrollHeight() <
@@ -164,7 +161,7 @@ const ChattingForm: React.FC = () => {
         });
       }
     },
-    [userId, myId, mutateChat],
+    [chatData, scrollbarRef, userId, myId, mutateChat],
   );
 
   useEffect(() => {
@@ -300,7 +297,7 @@ const ChattingForm: React.FC = () => {
                     }`}
                   >
                     <div css={listItemCss}>
-                      <img></img>
+                      <img src={room.profileImgUrl} />
                       <span>{`${room.userName}@${
                         room.userEmail.split('@')[0]
                       }`}</span>
@@ -347,7 +344,7 @@ const ChattingForm: React.FC = () => {
                   }&userName=${room.userName}@${room.userEmail.split('@')[0]}`}
                 >
                   <div css={listItemCss}>
-                    <img></img>
+                    <img src={room.profileImgUrl} />
                     <span>{`${room.userName}@${
                       room.userEmail.split('@')[0]
                     }`}</span>

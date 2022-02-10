@@ -56,7 +56,7 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
         <ChatListItem>
           <ChatListItemWrapper>
             <ProfileWrapper>
-              <img></img>
+              <img src={profileImgUrl} />
             </ProfileWrapper>
             <ContentWrapper>
               <TitleWrapper>
