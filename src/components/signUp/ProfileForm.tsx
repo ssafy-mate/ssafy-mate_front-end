@@ -1,5 +1,10 @@
 import { useState, useEffect } from 'react';
 
+import { useDispatch } from 'react-redux';
+import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
+
+import { push } from 'connected-react-router';
+
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
@@ -11,8 +16,6 @@ import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import CheckIcon from '@mui/icons-material/Check';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
-
-import history from '../../history';
 
 import { JOB_LIST } from '../../data/jobListData';
 
@@ -27,8 +30,6 @@ import AuthService from '../../services/AuthService';
 
 import useTechStackList from '../../hooks/useTechStackList';
 import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
-import { useDispatch } from 'react-redux';
-import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
 
 const ProfileForm: React.FC<ProfileProps> = ({
   campus,
@@ -291,7 +292,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
         .then(({ message }) => {
           showAlert(true, message, 'success');
 
-          history.push('/users/sign_in');
+          dispatch(push('/users/sign_in'));
         })
         .catch((error) => {
           if (error.response) {

@@ -9,7 +9,7 @@ import { showSsafyMateAlert } from '../../redux/modules/alert';
 
 import { Link } from 'react-router-dom';
 
-import history from '../../history';
+import { push } from 'connected-react-router';
 
 import styled from '@emotion/styled';
 import { Avatar } from '@mui/material';
@@ -74,7 +74,7 @@ const SsafyInformation: React.FC = () => {
 
     if (token === null) {
       showAlert(true, '로그인 후 이용해주세요.', 'warning');
-      history.push('/');
+      dispatch(push('/'));
     } else if (token !== null && userId !== null && profileInfo === null) {
       update({ token: token, userId: userId });
     }

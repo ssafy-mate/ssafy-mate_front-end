@@ -7,7 +7,7 @@ import {
   editProfileProjectsInfo as editProfileProjectsInfoStart,
 } from '../../redux/modules/profile';
 
-import history from '../../history';
+import { push } from 'connected-react-router';
 
 import styled from '@emotion/styled';
 import CheckIcon from '@mui/icons-material/Check';
@@ -116,9 +116,10 @@ const SsafyMateInformation: React.FC = () => {
       }),
     );
   };
+
   useEffect(() => {
     if (profileInfo === null) {
-      history.push('/');
+      dispatch(push('/'));
     } else {
       setSelfIntroductionValue(profileInfo.selfIntroduction);
       setNewJob1(profileInfo.job1);
