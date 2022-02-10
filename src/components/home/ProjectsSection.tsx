@@ -91,8 +91,11 @@ const ArrowButtonText = styled.span`
   font-weight: 500;
   color: #98a8b9;
 
-  @media (max-width: 575px) {
+  @media (max-width: 991px) {
     font-size: 16px;
+  }
+  @media (max-width: 575px) {
+    font-size: 14px;
   }
 `;
 

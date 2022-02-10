@@ -33,6 +33,7 @@ const MobileServiceIntroSection: React.FC = () => {
 };
 
 const Section = styled.section`
+  overflow: hidden;
   position: relative;
   width: 100%;
   height: 100%;
@@ -202,7 +203,7 @@ const IphoneInner = styled.div`
   }
 
   @media (max-width: 575px) {
-    top: 120px;
+    top: 110px;
     width: calc(600px * 0.7);
     height: calc(936px * 0.7);
   }

@@ -44,22 +44,31 @@ const Button = styled.div<ButtonProps>`
   position: fixed;
   right: 30px;
   bottom: 30px;
-  z-index: 20;
-  width: 42px;
-  height: 42px;
+  z-index: 30;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   cursor: pointer;
+
+  @media (max-width: 575px) {
+    width: 42px;
+    height: 42px;
+  }
 `;
 
 const ArrowIcon = styled(ArrowCircleUpIcon)`
   border-radius: 50%;
   background-color: #fff;
-  font-size: 50px;
+  font-size: 48px;
   color: #798694;
   transition: color 0.08s ease-in-out;
 
   &:hover {
     color: #606b76;
+  }
+
+  @media (max-width: 575px) {
+    font-size: 42px;
   }
 `;
 
