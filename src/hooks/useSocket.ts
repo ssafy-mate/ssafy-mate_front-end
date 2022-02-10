@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 
 import { io, Socket } from 'socket.io-client';
 
-const backUrl = 'http://localhost:3095';
+const backUrl = 'https://i6a402.p.ssafy.io:3100';
 
 const sockets: { [key: number]: Socket } = {};
 
@@ -14,7 +14,6 @@ const useSocket = (myId?: number): [Socket | undefined, () => void] => {
     }
   }, [myId]);
 
-  // namespace - room 을 구분해야함
   if (!myId) {
     return [undefined, disconnect];
   }

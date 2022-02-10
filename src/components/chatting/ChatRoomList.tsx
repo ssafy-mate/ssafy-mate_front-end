@@ -40,10 +40,8 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
 
   // off 되는지 확인하기
   useEffect(() => {
-    console.log('onlineList 호출');
     socket?.on('onlineList', (data: number[]) => {
       setOnlineList(data);
-      console.log(`onlineList : ${onlineList}`);
     });
     return () => {
       socket?.off('onlineList');
