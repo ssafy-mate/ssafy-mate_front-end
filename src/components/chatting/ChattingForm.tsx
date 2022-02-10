@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useParams, useLocation } from 'react-router';
+import { NavLink } from 'react-router-dom';
 
 import dayjs from 'dayjs';
 import useSWR from 'swr';
@@ -24,10 +25,20 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import { Scrollbars } from 'react-custom-scrollbars-2';
-import SendIcon from '@mui/icons-material/Send';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
-import { Drawer } from '@mui/material';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import Drawer from '@mui/material/Drawer';
+import SwipeableDrawer from '@mui/material/SwipeableDrawer';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import SendIcon from '@mui/icons-material/Send';
+import CommentIcon from '@mui/icons-material/Comment';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import MailOutlineIcon from '@mui/icons-material/MailOutline';
 
+const drawerWidth = 250;
 const localUrl = 'http://localhost:3000';
 const socketUrl = 'http://localhost:3095';
 
@@ -62,10 +73,6 @@ const ChattingForm: React.FC = () => {
     (url) => fetcherGet(url, myToken),
     {},
   );
-
-  // #######
-  // 토큰이 없는 상태에서 접근하면 error 페이지로, teamInfoPage 확인
-  // #######
 
   const [chatSections, setChatSections] = useState<MessageType[]>([]);
 
@@ -123,13 +130,13 @@ const ChattingForm: React.FC = () => {
           return prevChatData;
         }, false).then(() => {
           setChat('');
-          customChatList();
           if (scrollbarRef.current) scrollbarRef.current.scrollToBottom();
         });
 
         axios
           .post(`${socketUrl}/api/chats`, params)
           .then((response) => {
+            mutateChat();
             console.log(`onSumbit response : ${response}`);
           })
           .catch((error) => {
@@ -195,7 +202,9 @@ const ChattingForm: React.FC = () => {
   const onScroll = useCallback(
     (values) => {
       // 가장 위로 올라갔을 때, 다음 페이지 불러오도록 setSize호출
-      // console.log(values.scrollTop);
+      console.log(`scrollTop : ${values.scrollTop}`);
+      console.log(`scrollHeight : ${values.scrollHeight}`);
+
       if (values.scrollTop === 0 && !isReachingEnd && !isEmpty) {
         setSize((size) => size + 1).then(() => {
           // 스크롤 위치 유지 : 현재 스크롤 높이 - 스크롤바의 높이
@@ -203,7 +212,16 @@ const ChattingForm: React.FC = () => {
             scrollbarRef.current?.scrollTop(
               scrollbarRef.current?.getScrollHeight() - values.scrollHeight,
             );
-          }, 10);
+
+            console.log(
+              'getScrollHeight' + scrollbarRef.current?.getScrollHeight(),
+            );
+
+            /* //jquery 방식
+            scrollbarRef.current?.scrollTop(
+              chatRoomMessageRef?.current?.offsetTop as number,
+            );*/
+          }, 50);
         });
       }
     },
@@ -239,6 +257,29 @@ const ChattingForm: React.FC = () => {
     customChatList();
   }, [chatData]);
 
+  // Drawer
+  const [open, setOpen] = useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
+  const toggleDrawer = (open: boolean) => (event: any) => {
+    if (
+      event &&
+      event.type === 'keydown' &&
+      (event.key === 'Tab' || event.key === 'Shift')
+    ) {
+      return;
+    }
+
+    setOpen(open);
+  };
+
   return (
     <ChatContianer>
       <ChatRoomListSidebar>
@@ -255,13 +296,106 @@ const ChattingForm: React.FC = () => {
               userEmail={room.userEmail}
             />
           ))}
+          <SwipeableDrawer
+            sx={{
+              'width': drawerWidth,
+              'flexShrink': 0,
+              '& .MuiDrawer-paper': {
+                width: drawerWidth,
+                boxSizing: 'border-box',
+              },
+            }}
+            variant="persistent"
+            anchor="right"
+            open={open}
+            onOpen={toggleDrawer(true)}
+            onClose={toggleDrawer(false)}
+          >
+            <DrawerHeader>
+              <IconButton onClick={handleDrawerClose}>
+                <ChevronLeftIcon />
+              </IconButton>
+            </DrawerHeader>
+            <List>
+              {roomData?.map((room: ChatRoomType) => (
+                <ListItem button key={room.roomId}>
+                  <NavLink
+                    to={`/chatting/${Number(myId)}?roomId=${
+                      room.roomId
+                    }&userId=${room.userId}&userName=${room.userName}@${
+                      room.userEmail.split('@')[0]
+                    }`}
+                  >
+                    <div css={listItemCss}>
+                      <img></img>
+                      <span>{`${room.userName}@${
+                        room.userEmail.split('@')[0]
+                      }`}</span>
+                    </div>
+                  </NavLink>
+                </ListItem>
+              ))}
+            </List>
+          </SwipeableDrawer>
         </ChatRoomListWrapper>
       </ChatRoomListSidebar>
       <ChatRoomSection>
+        <SwipeableDrawer
+          sx={{
+            'width': drawerWidth,
+            'flexShrink': 0,
+            '& .MuiDrawer-paper': {
+              width: drawerWidth,
+              boxSizing: 'border-box',
+            },
+          }}
+          variant="persistent"
+          anchor="right"
+          open={open}
+          onOpen={toggleDrawer(true)}
+          onClose={toggleDrawer(false)}
+        >
+          <DrawerHeader>
+            <IconButton onClick={handleDrawerClose}>
+              <ChevronLeftIcon />
+            </IconButton>
+          </DrawerHeader>
+          <List>
+            {roomData?.map((room: ChatRoomType) => (
+              <ListItem
+                button
+                key={room.roomId}
+                onClick={toggleDrawer(false)}
+                onKeyDown={toggleDrawer(false)}
+              >
+                <NavLink
+                  to={`/chatting/${Number(myId)}?roomId=${room.roomId}&userId=${
+                    room.userId
+                  }&userName=${room.userName}@${room.userEmail.split('@')[0]}`}
+                >
+                  <div css={listItemCss}>
+                    <img></img>
+                    <span>{`${room.userName}@${
+                      room.userEmail.split('@')[0]
+                    }`}</span>
+                  </div>
+                </NavLink>
+              </ListItem>
+            ))}
+          </List>
+        </SwipeableDrawer>
         {!roomId ? (
           <ChatRoomEmpty>
             <ChatRoomEmptyContentWrapper>
               <span>대화할 상대를 선택해주세요.</span>
+              <Button
+                variant="contained"
+                css={chatListButtonCss}
+                onClick={handleDrawerOpen}
+              >
+                <MailOutlineIcon css={{ padding: '5px' }} />
+                채팅 목록
+              </Button>
             </ChatRoomEmptyContentWrapper>
           </ChatRoomEmpty>
         ) : (
@@ -274,10 +408,18 @@ const ChattingForm: React.FC = () => {
                     <span>{userName}</span>
                   </div>
                 </ChatRoomHeaderProfile>
+                <IconButton
+                  css={listIcon}
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start"
+                >
+                  <CommentIcon fontSize="large" />
+                </IconButton>
               </ChatRoomUserNameBar>
               <Scrollbars autoHide ref={scrollbarRef} onScrollFrame={onScroll}>
-                <ChatRoomMessageList>
-                  <MessageWrapper ref={chatRoomMessageRef}>
+                <ChatRoomMessageList ref={chatRoomMessageRef}>
+                  <MessageWrapper>
                     {chatSections && chatSections.length > 0
                       ? chatSections.map((message, index) => {
                           if (message.senderId === Number(myId)) {
@@ -339,6 +481,12 @@ const ChattingForm: React.FC = () => {
     </ChatContianer>
   );
 };
+
+const DrawerHeader = styled.div`
+  display: flex,
+  align-items: center,
+  justify-content: flex-end,
+`;
 
 const ChatContianer = styled.div`
   display: flex;
@@ -408,8 +556,45 @@ const ChatRoomEmptyContentWrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  color: #383838;
   font-size: 18px;
+
+  & span {
+    color: #383838;
+    padding: 20px;
+  }
+`;
+
+const chatListButtonCss = css`
+  display: none;
+  font-size: 15px;
+
+  @media (max-width: 575px) {
+    display: flex;
+  }
+`;
+
+const listItemCss = css`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+
+  & img {
+    width: 40px;
+    height: 40px;
+    margin-right: 8px;
+    border: 1px solid #b4b4b4;
+    border-radius: 50%;
+  }
+
+  & span {
+    overflow-x: hidden;
+    font-size: 16px;
+    font-weight: 500;
+    color: #6d6d6d;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 `;
 
 const ChatRoomWrapper = styled.div`
@@ -434,9 +619,18 @@ const ChatRoomUserNameBar = styled.div`
   align-items: center;
   height: 80px;
   min-height: 80px;
-  padding: 0 20px;
+  padding: 0 16px;
   border-bottom: 1px solid #dfdfdf;
   box-sizing: border-box;
+`;
+
+const listIcon = css`
+  display: none;
+  color: inherit;
+
+  @media (max-width: 575px) {
+    display: flex;
+  }
 `;
 
 const ChatRoomHeaderProfile = styled.div`
@@ -457,6 +651,9 @@ const ChatRoomHeaderProfile = styled.div`
   & .userName {
     display: inline-flex;
     align-items: center;
+    font-size: 16px;
+    font-weight: 600;
+    color: #6d6d6d;
   }
 `;
 

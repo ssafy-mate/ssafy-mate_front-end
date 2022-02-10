@@ -65,9 +65,6 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
                 <TitleSenderName>{userName}</TitleSenderName>
                 <TitleSubText>
                   <span>{dayjs(sentTime).format('YYYY.MM.DD')}</span>
-                  {onlineList.map((item, index) => {
-                    <span>{item}</span>;
-                  })}
                 </TitleSubText>
               </TitleWrapper>
               <DescriptionWrapper>
@@ -90,7 +87,7 @@ const ChatListItem = styled.li`
   }
 `;
 
-const ChatListItemWrapper = styled.a`
+const ChatListItemWrapper = styled.div`
   display: flex;
   overflow: hidden;
   align-items: center;
@@ -123,9 +120,8 @@ const ProfileWrapper = styled.div`
   }
 
   @media (max-width: 575px) {
-    display: flex;
-    width: 100%;
     display: none;
+    width: 100%;
   }
 `;
 
@@ -134,9 +130,8 @@ const ContentWrapper = styled.div`
   width: 100%;
 
   @media (max-width: 575px) {
-    display: flex;
-    width: 100%;
     display: none;
+    width: 100%;
   }
 `;
 
@@ -145,9 +140,8 @@ const TitleWrapper = styled.div`
   width: 100%;
 
   @media (max-width: 575px) {
-    display: flex;
-    width: 100%;
     display: none;
+    width: 100%;
   }
 `;
 
