@@ -20,7 +20,6 @@ import styled from '@emotion/styled';
 
 import { Avatar } from '@mui/material';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import List from '@mui/material/List';
@@ -349,7 +348,7 @@ const ChattingForm: React.FC = () => {
                         }
                         sx={{ marginRight: '12px' }}
                       />
-                      <span>{`${room.userName}@${
+                      <span className="userEmail">{`${room.userName}@${
                         room.userEmail.split('@')[0]
                       }`}</span>
                     </div>
@@ -403,9 +402,14 @@ const ChattingForm: React.FC = () => {
                       }
                       sx={{ marginRight: '10px' }}
                     />
-                    <span>{`${room.userName}@${
-                      room.userEmail.split('@')[0]
-                    }`}</span>
+                    <div className="user-name">
+                      <span className="user-name__name">
+                        {otherUser?.userName}
+                      </span>
+                      <span className="user-name__email">
+                        @{otherUser?.userEmail.split('@')[0]}
+                      </span>
+                    </div>
                   </div>
                 </Link>
               </ListItem>
@@ -426,7 +430,7 @@ const ChattingForm: React.FC = () => {
           <ChatRoomWrapper>
             <ChatRoomMessageWrapper>
               <ChatRoomUserNameBar>
-                <ChatRoomHeaderProfile className="userName">
+                <ChatRoomHeaderProfile className="user-name">
                   <Avatar
                     src={
                       otherUser?.profileImgUrl
@@ -437,10 +441,12 @@ const ChattingForm: React.FC = () => {
                     className="profile-avatar"
                   />
                   <ProfileLink to={`/users/${otherUser?.userId}`}>
-                    <div className="userName">
-                      <span>
-                        {otherUser?.userName}@
-                        {otherUser?.userEmail.split('@')[0]}
+                    <div className="user-name">
+                      <span className="user-name__name">
+                        {otherUser?.userName}
+                      </span>
+                      <span className="user-name__email">
+                        @{otherUser?.userEmail.split('@')[0]}
                       </span>
                     </div>
                   </ProfileLink>
@@ -673,6 +679,12 @@ const listItemCss = css`
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
+  & .user-name {
+    & .user-name__email {
+      color: #868b94;
+    }
+  }
 `;
 
 const ChatRoomWrapper = styled.div`
@@ -742,7 +754,7 @@ const ProfileLink = styled(Link)`
   width: 100%;
   cursor: pointer;
 
-  & .userName {
+  & .user-name {
     & span {
       font-size: 16px;
       font-weight: 500;
@@ -756,8 +768,14 @@ const ProfileLink = styled(Link)`
     }
   }
 
+  & .user-name {
+    & .user-name__email {
+      color: #868b94;
+    }
+  }
+
   @media (max-width: 767px) {
-    & .userName {
+    & .user-name {
       & span {
         font-size: 15px;
         font-weight: 500;
