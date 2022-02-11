@@ -279,6 +279,11 @@ const NewPasswordCard: React.FC = () => {
           '비밀번호는 영문, 숫자만을 혼합하여 6자 이상이어야 합니다.',
         );
       }
+      if (newPasswordOnChange !== newPasswordCheckInput) {
+        setNewPasswordCheckInputError('비밀번호가 일치하지 않습니다.');
+      } else {
+        setNewPasswordCheckInputError('');
+      }
     }
   };
 
