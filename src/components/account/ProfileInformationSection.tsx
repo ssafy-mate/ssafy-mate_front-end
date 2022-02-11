@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
 import {
   editProfileInfo as editProfileInfoSagaStart,
@@ -20,7 +20,7 @@ import { PROJECT_LIST } from '../../data/ssafyData';
 
 import useUserId from '../../hooks/useUserId';
 import useToken from '../../hooks/useToken';
-import { EditProfileInfoRequest } from '../../types/authTypes';
+import { EditProfileInfoRequest, RootState } from '../../types/authTypes';
 import useProfileInfo from '../../hooks/useProfileInfo';
 import useTechStackList from '../../hooks/useTechStackList';
 import useProfileTechStacks, {
@@ -30,6 +30,7 @@ import useProfileTechStacks, {
 import {
   EditProfileProjectsRequest,
   ProfileProject,
+  UserData,
 } from '../../types/userTypes';
 
 import ProfileTechStackTagWithLevel from '../common/ProfileTechStackTagWithLevel';
@@ -88,6 +89,9 @@ const ProfileInformationSection: React.FC = () => {
   const [newTechStackModifyButtonText, setNewTechStackModifyButtonText] =
     useState<string>('수정');
   const [techStacksError, setTechStacksError] = useState<boolean>(false);
+  const profileError = useSelector<RootState, string | null>(
+    (state) => state.profile.error,
+  );
 
   const {
     getRootProps,
@@ -134,7 +138,7 @@ const ProfileInformationSection: React.FC = () => {
       setNewGitHubUrl(profileInfo.githubUrl);
       setNewEtcUrl(profileInfo.etcUrl);
     }
-  }, []);
+  }, [dispatch, profileError, profileInfo]);
 
   useEffect(() => {
     setTechStacks(oldTechStacksWithLevel);
@@ -150,7 +154,7 @@ const ProfileInformationSection: React.FC = () => {
       setSpecialProject(profileInfo?.projects[1].projectTrack);
       setOldSpecialProject(profileInfo?.projects[1].projectTrack);
     }
-  }, []);
+  }, [profileError, profileInfo?.projects]);
 
   useEffect(() => {
     techStacks.length >= 2

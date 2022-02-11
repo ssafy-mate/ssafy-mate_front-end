@@ -46,6 +46,9 @@ const BasicInformationSection: React.FC = () => {
   const [ssafyTrackDisabled, setSsafyTrackDisabled] = useState<boolean>(true);
   const [ssafyTrackModifyButtonText, setSsafyTrackModifyButtonText] =
     useState<string>('수정');
+  const profileError = useSelector<RootState, string | null>(
+    (state) => state.profile.error,
+  );
 
   const dispatch = useDispatch();
 
@@ -82,7 +85,7 @@ const BasicInformationSection: React.FC = () => {
     } else if (token !== null && userId !== null && profileInfo === null) {
       update({ token: token, userId: userId });
     }
-  }, [profileInfo, token, userId]);
+  }, [profileInfo, token, userId, profileError, dispatch, update]);
 
   useEffect(() => {
     const selectedCampusIndex = CAMPUS_LIST.findIndex(
