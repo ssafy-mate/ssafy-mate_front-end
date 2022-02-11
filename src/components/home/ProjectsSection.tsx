@@ -69,7 +69,7 @@ const ProjectsSection: React.FC = () => {
 
 const Container = styled.main`
   padding: 0 16px;
-  background-color: #f8fafc;
+  background-color: #fff;
 `;
 
 const Wrapper = styled.main`

@@ -40,6 +40,25 @@ const SERVICE_INTRODUCTION_LIST: ServiceIntroductionType[] = [
   },
 ];
 
+const MOBILE_SERVICE_INTRODUCTION_LIST = [
+  {
+    id: 1,
+    headText: '반응형 웹',
+    subHeadText: '모바일 웹 서비스 제공',
+    descriptionText:
+      'PC, 테블릿, 모바일 등 어떤 기기에서든 최적화된 싸피 메이트 서비스를 이용하실 수 있습니다.',
+    imgUrl: '/images/home/mobile-team-list-sample.png',
+  },
+  {
+    id: 2,
+    headText: '1대1 채팅',
+    subHeadText: '실시간 채팅 서비스 제공',
+    descriptionText:
+      '내게 맞는 팀 또는 나의 팀에 필요한 교육생이 있다면 실시간 1대1 채팅을 통해 이야기를 나눠보세요.',
+    imgUrl: '/images/home/mobile-team-list-sample.png',
+  },
+];
+
 const IntroContainer: React.FC = () => {
   return (
     <Container id="intro-container">
@@ -53,7 +72,16 @@ const IntroContainer: React.FC = () => {
           reversed={introduction.id % 2 === 0 ? true : false}
         />
       ))}
-      <MobileServiceIntroSection />
+      {MOBILE_SERVICE_INTRODUCTION_LIST.map((introduction) => (
+        <MobileServiceIntroSection
+          key={introduction.id}
+          headText={introduction.headText}
+          subHeadText={introduction.subHeadText}
+          descriptionText={introduction.descriptionText}
+          imgUrl={introduction.imgUrl}
+          reversed={introduction.id % 2 === 0 ? true : false}
+        />
+      ))}
     </Container>
   );
 };
