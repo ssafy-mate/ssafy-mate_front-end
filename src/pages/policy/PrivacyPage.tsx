@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 
 import Footer from '../../components/common/Footer';
 import Header from '../../components/common/Header';
-import PrivacyCard from '../../components/policy/PrivacyCard';
+import PrivacySection from '../../components/policy/PrivacySection';
 
 const PrivacyPage: React.FC = () => {
   useEffect(() => {
@@ -14,21 +14,10 @@ const PrivacyPage: React.FC = () => {
   return (
     <>
       <Header />
-      <Container>
-        <PrivacyCard />
-      </Container>
+      <PrivacySection />
       <Footer />
     </>
   );
 };
-
-const Container = styled.div`
-  margin-top: 140px;
-  padding: 0 16px;
-
-  @media (max-width: 575px) {
-    margin-top: 120px;
-  }
-`;
 
 export default PrivacyPage;
