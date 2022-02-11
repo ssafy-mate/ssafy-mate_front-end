@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 
 import dayjs from 'dayjs';
 import useSWR from 'swr';
@@ -419,11 +419,14 @@ const ChattingForm: React.FC = () => {
                     }
                     sx={{ marginRight: '10px' }}
                   />
-                  <div className="userName">
-                    <span>
-                      {otherUser?.userName}@{otherUser?.userEmail.split('@')[0]}
-                    </span>
-                  </div>
+                  <ProfileLink to={`/users/${otherUser?.userId}`}>
+                    <div className="userName">
+                      <span>
+                        {otherUser?.userName}@
+                        {otherUser?.userEmail.split('@')[0]}
+                      </span>
+                    </div>
+                  </ProfileLink>
                 </ChatRoomHeaderProfile>
                 <IconButton
                   css={listIcon}
@@ -649,6 +652,15 @@ const listIcon = css`
   }
 `;
 
+const ProfileLink = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  transition: background-color 0.08s ease-in-out;
+  cursor: pointer;
+`;
+
 const ChatRoomHeaderProfile = styled.div`
   display: flex;
   align-items: center;
@@ -659,6 +671,11 @@ const ChatRoomHeaderProfile = styled.div`
     font-size: 16px;
     font-weight: 600;
     color: #6d6d6d;
+
+    &:hover {
+      color: #3396f4;
+      text-decoration: underline;
+    }
   }
 `;
 
