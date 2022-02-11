@@ -34,7 +34,7 @@ const HOME_BANNER_SLIDE_LIST: HomeBannerSlideType[] = [
     subHead: '특화 프로젝트',
     descriptions: [
       '4차 산업혁명 분야 신기술 도메인 구현 프로젝트 수행',
-      '인공지능, 빅데이터, 블록체인 IoT 제어 중 택 1',
+      '인공지능, 빅데이터, 블록체인, IoT 제어 중 택 1',
     ],
     imgUrl: '/images/projects/specialization-project.gif',
     hexColorCode: '#152029',

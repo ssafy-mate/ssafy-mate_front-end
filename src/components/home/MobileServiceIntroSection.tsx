@@ -4,7 +4,21 @@ import styled from '@emotion/styled';
 
 import useOnScreen from '../../hooks/useOnScreen';
 
-const MobileServiceIntroSection: React.FC = () => {
+interface MobileServiceIntroSectionProps {
+  headText: string;
+  subHeadText: string;
+  descriptionText: string;
+  imgUrl: string;
+  reversed: boolean;
+}
+
+const MobileServiceIntroSection: React.FC<MobileServiceIntroSectionProps> = ({
+  headText,
+  subHeadText,
+  descriptionText,
+  imgUrl,
+  reversed,
+}) => {
   const sectionRef = useRef(null);
   const isVisible = useOnScreen(sectionRef);
 
@@ -12,19 +26,19 @@ const MobileServiceIntroSection: React.FC = () => {
     <Section ref={sectionRef}>
       <Wrapper>
         <Contents className="section__contents">
-          <Head className={isVisible ? 'scroll' : ''}>반응형 웹</Head>
-          <SubHead className={isVisible ? 'scroll' : ''}>
-            모바일 웹 서비스 제공
-          </SubHead>
+          <Head className={isVisible ? 'scroll' : ''}>{headText}</Head>
+          <SubHead className={isVisible ? 'scroll' : ''}>{subHeadText}</SubHead>
           <Description className={isVisible ? 'scroll' : ''}>
-            PC, 테블릿, 모바일 등 어떤 기기에서든 최적화된 싸피 메이트 서비스를
-            이용하실 수 있습니다.
+            {descriptionText}
           </Description>
         </Contents>
         <Iphone className={isVisible ? 'scroll' : ''}>
           <IphoneInner>
-            <IphoneContents src="/images/home/mobile-team-list-sample.png" />
-            <IphoneFrame src="/images/home/iphone-frame.png" />
+            <IphoneContents src={imgUrl} alt={`${headText} 이미지`} />
+            <IphoneFrame
+              src="/images/home/iphone-frame.png"
+              alt="아이폰 프레임"
+            />
           </IphoneInner>
         </Iphone>
       </Wrapper>
@@ -37,6 +51,10 @@ const Section = styled.section`
   position: relative;
   width: 100%;
   height: 100%;
+
+  &:nth-of-type(odd) {
+    background-color: #f9fafb;
+  }
 `;
 
 const Wrapper = styled.div`

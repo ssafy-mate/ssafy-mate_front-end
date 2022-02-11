@@ -49,7 +49,7 @@ const IntroSection: React.FC<IntroSectionProps> = ({
 };
 
 const Section = styled.section`
-  &:nth-of-type(even) {
+  &:nth-of-type(odd) {
     background-color: #f9fafb;
   }
 `;
