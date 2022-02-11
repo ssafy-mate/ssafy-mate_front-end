@@ -74,11 +74,10 @@ const ChatTypingWrapper = styled.div`
   display: flex;
   flex-direction: row;
   position: relative;
-  /* height: 40px; */
   height: 85px;
   margin: 20px;
   padding: 0px 10px;
-  border-radius: 10px;
+  border-radius: 8px;
   background-color: #eaebef;
 
   textarea {

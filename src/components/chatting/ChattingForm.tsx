@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+
 import { useLocation } from 'react-router';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+
+import { useMediaQuery } from 'react-responsive';
 
 import dayjs from 'dayjs';
 import useSWR from 'swr';
@@ -30,7 +33,6 @@ import { Avatar } from '@mui/material';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
-import Drawer from '@mui/material/Drawer';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -38,6 +40,7 @@ import SendIcon from '@mui/icons-material/Send';
 import CommentIcon from '@mui/icons-material/Comment';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
+import ChatIcon from '@mui/icons-material/Chat';
 
 const socketUrl = 'https://i6a402.p.ssafy.io:3100';
 const PAGE_SIZE = 20;
@@ -47,6 +50,9 @@ const ChattingForm: React.FC = () => {
   const location = useLocation();
   const myToken = useToken();
   const myData = useUserIdName();
+  const smallMedia = useMediaQuery({
+    query: '(max-width: 575px)',
+  });
 
   const myUserId = myData[0];
   const myUserName = myData[1];
@@ -233,6 +239,7 @@ const ChattingForm: React.FC = () => {
     const sections: { [key: string]: T[] } = {};
     chatList.forEach((chat) => {
       const monthDate = dayjs(chat.sentTime).format('YYYY-MM-DD');
+
       if (Array.isArray(sections[monthDate])) {
         sections[monthDate].push(chat);
       } else {
@@ -280,8 +287,13 @@ const ChattingForm: React.FC = () => {
     <ChatContianer>
       <ChatRoomListSidebar>
         <ChatRoomListWrapper>
-          {roomData?.map((room: ChatRoomType, index: number) => (
+          <ChatRoomListHeader>
+            <ChatIcon />
+            <ChatRoomListHead>채팅 목록</ChatRoomListHead>
+          </ChatRoomListHeader>
+          {roomData?.map((room: ChatRoomType) => (
             <ChatRoomList
+              key={room.roomId}
               myId={Number(myUserId)}
               roomId={room.roomId}
               userId={room.userId}
@@ -315,7 +327,7 @@ const ChattingForm: React.FC = () => {
             <List>
               {roomData?.map((room: ChatRoomType) => (
                 <ListItem button key={room.roomId}>
-                  <NavLink
+                  <Link
                     to={`/chatting/${Number(myUserId)}?roomId=${
                       room.roomId
                     }&userId=${room.userId}}`}
@@ -327,13 +339,13 @@ const ChattingForm: React.FC = () => {
                             ? room?.profileImgUrl
                             : '/image/assets/basic-priofile-img.png'
                         }
-                        sx={{ marginRight: '10px' }}
+                        sx={{ marginRight: '12px' }}
                       />
                       <span>{`${room.userName}@${
                         room.userEmail.split('@')[0]
                       }`}</span>
                     </div>
-                  </NavLink>
+                  </Link>
                 </ListItem>
               ))}
             </List>
@@ -369,7 +381,7 @@ const ChattingForm: React.FC = () => {
                 onClick={toggleDrawer(false)}
                 onKeyDown={toggleDrawer(false)}
               >
-                <NavLink
+                <Link
                   to={`/chatting/${Number(myUserId)}?roomId=${
                     room.roomId
                   }&userId=${room.userId}`}
@@ -387,7 +399,7 @@ const ChattingForm: React.FC = () => {
                       room.userEmail.split('@')[0]
                     }`}</span>
                   </div>
-                </NavLink>
+                </Link>
               </ListItem>
             ))}
           </List>
@@ -434,7 +446,7 @@ const ChattingForm: React.FC = () => {
                   onClick={handleDrawerOpen}
                   edge="start"
                 >
-                  <CommentIcon fontSize="large" />
+                  <CommentIcon />
                 </IconButton>
               </ChatRoomUserNameBar>
               <Scrollbars autoHide ref={scrollbarRef} onScrollFrame={onScroll}>
@@ -448,9 +460,13 @@ const ChattingForm: React.FC = () => {
                                 <MessageBoxRightContent>
                                   <MessageTimeBox>
                                     <div className="message_date">
-                                      {dayjs(message.sentTime).format(
-                                        'YYYY.MM.DD HH:mm',
-                                      )}
+                                      {smallMedia
+                                        ? dayjs(message.sentTime).format(
+                                            'a hh:mm',
+                                          )
+                                        : dayjs(message.sentTime).format(
+                                            'YY.MM.DD. a hh:mm',
+                                          )}
                                     </div>
                                   </MessageTimeBox>
                                   <p>{message.content}</p>
@@ -459,9 +475,9 @@ const ChattingForm: React.FC = () => {
                             );
                           } else {
                             return (
-                              <MessageBoxWrapper>
-                                <MessageBoxLeftContent key={index}>
-                                  <Avatar
+                              <MessageBoxWrapper key={index}>
+                                <MessageBoxLeftContent>
+                                  <ProfileImg
                                     src={
                                       otherUser?.profileImgUrl
                                         ? otherUser?.profileImgUrl
@@ -471,9 +487,13 @@ const ChattingForm: React.FC = () => {
                                   <p>{message.content}</p>
                                   <MessageTimeBox>
                                     <div className="message_date">
-                                      {dayjs(message.sentTime).format(
-                                        'YYYY.MM.DD HH:mm',
-                                      )}
+                                      {smallMedia
+                                        ? dayjs(message.sentTime).format(
+                                            'a hh:mm',
+                                          )
+                                        : dayjs(message.sentTime).format(
+                                            'YY.MM.DD. a hh:mm',
+                                          )}
                                     </div>
                                   </MessageTimeBox>
                                 </MessageBoxLeftContent>
@@ -487,7 +507,7 @@ const ChattingForm: React.FC = () => {
               </Scrollbars>
             </ChatRoomMessageWrapper>
             <ChatTypingWrapper>
-              <TextareaAutosize
+              <TextArea
                 css={ChatTypingTextarea}
                 ref={messageInputRef}
                 maxRows={3}
@@ -512,6 +532,15 @@ const DrawerHeader = styled.div`
   display: flex;
   align-items: center;
   justify-content: flex-end;
+
+  & svg {
+    font-size: 32px;
+    transition: color 0.08s ease-in-out;
+
+    &:hover {
+      color: #3396f4;
+    }
+  }
 `;
 
 const ChatContianer = styled.div`
@@ -608,9 +637,9 @@ const listItemCss = css`
   & span {
     overflow: hidden;
     height: 18px;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 500;
-    color: #6d6d6d;
+    color: #263747;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
@@ -636,16 +665,34 @@ const ChatRoomUserNameBar = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 80px;
-  min-height: 80px;
-  padding: 0 16px;
+  height: 64px;
+  min-height: 64px;
+  padding: 0 20px;
   border-bottom: 1px solid #dfdfdf;
   box-sizing: border-box;
 `;
 
+const TextArea = styled(TextareaAutosize)`
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  font-size: 14px;
+  line-height: 1.5;
+  color: #263747;
+`;
+
 const listIcon = css`
   display: none;
+  padding: 0;
   color: inherit;
+
+  & svg {
+    font-size: 28px;
+    color: #263747;
+    transition: color 0.08s ease-in-out;
+
+    &:hover {
+      color: #3396f4;
+    }
+  }
 
   @media (max-width: 575px) {
     display: flex;
@@ -657,8 +704,17 @@ const ProfileLink = styled(Link)`
   justify-content: center;
   align-items: center;
   width: 100%;
+
   transition: background-color 0.08s ease-in-out;
   cursor: pointer;
+
+  & .userName {
+    & span {
+      font-size: 16px;
+      font-weight: 500;
+      color: #263747;
+    }
+  }
 `;
 
 const ChatRoomHeaderProfile = styled.div`
@@ -703,10 +759,11 @@ const MessageBoxLeftContent = styled.div`
     max-width: 364px;
     margin: 0px;
     padding: 10px 14px;
-    border-radius: 2px 10px 10px 10px;
-    background-color: #eaebef;
+    border-radius: 2px 20px 20px;
+    background-color: #e9ebef;
+    font-size: 14px;
     line-height: 150%;
-    color: #000;
+    color: #263747;
     white-space: pre-wrap;
     word-break: break-all;
   }
@@ -717,7 +774,6 @@ const MessageBoxLeftContent = styled.div`
     min-height: 36px;
     min-width: 36px;
     margin-right: 8px;
-    /* border: 1px solid #f9f9f9; */
     border-radius: 50%;
     background-color: #eaebef;
   }
@@ -734,8 +790,9 @@ const MessageBoxRightContent = styled.div`
     max-width: 364px;
     margin: 0px;
     padding: 10px 14px;
-    border-radius: 10px 2px 10px 10px;
+    border-radius: 20px 2px 20px 20px;
     background-color: #3396f4;
+    font-size: 14px;
     line-height: 150%;
     color: #fff;
     white-space: pre-wrap;
@@ -751,6 +808,7 @@ const MessageTimeBox = styled.div`
   align-items: flex-end;
 
   .message_date {
+    min-width: 58px;
     font-size: 12px;
     line-height: 150%;
     color: #868b94;
@@ -803,6 +861,30 @@ const ChatTypingTextarea = css`
     border-radius: 5px;
     background-color: rgba(51, 150, 244, 0.5);
   }
+`;
+
+const ProfileImg = styled(Avatar)`
+  margin-right: 8px;
+`;
+
+const ChatRoomListHeader = styled.div`
+  display: flex;
+  align-items: center;
+  height: 64px;
+  padding: 0 20px;
+  box-sizing: border-box;
+  border-bottom: 1px solid #dfdfdf;
+
+  & svg {
+    color: #263747;
+    margin-right: 8px;
+  }
+`;
+
+const ChatRoomListHead = styled.h1`
+  font-size: 16px;
+  font-weight: 500;
+  color: #263747;
 `;
 
 export default ChattingForm;

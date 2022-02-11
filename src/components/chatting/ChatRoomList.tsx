@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+
+import { Link } from 'react-router-dom';
 
 import dayjs from 'dayjs';
 
@@ -51,7 +52,7 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
 
   return (
     <>
-      <NavLink to={`/chatting/${myId}?roomId=${roomId}&userId=${userId}`}>
+      <Link to={`/chatting/${myId}?roomId=${roomId}&userId=${userId}`}>
         <ChatListItem>
           <ChatListItemWrapper>
             <ProfileWrapper>
@@ -62,7 +63,7 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
                 <TitleSenderName>{userName}</TitleSenderName>
                 <TitleSubText>
                   {sentTime ? (
-                    <span>{dayjs(sentTime).format('YYYY.MM.DD')}</span>
+                    <span>{dayjs(sentTime).format('YY.MM.DD. a hh:mm')}</span>
                   ) : null}
                 </TitleSubText>
               </TitleWrapper>
@@ -72,7 +73,7 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
             </ContentWrapper>
           </ChatListItemWrapper>
         </ChatListItem>
-      </NavLink>
+      </Link>
     </>
   );
 };
@@ -91,8 +92,8 @@ const ChatListItemWrapper = styled.div`
   overflow: hidden;
   align-items: center;
   width: 100%;
-  height: 80px;
-  padding: 0 20px;
+  height: 72px;
+  padding: 16px;
   box-sizing: border-box;
   border-bottom: 1px solid #dfdfdf;
   background-color: #fff;
@@ -147,23 +148,22 @@ const TitleSenderName = styled.span`
   overflow-x: hidden;
   max-width: 70px;
   height: 20px;
-  font-size: 14px;
-  font-weight: 600;
-  color: #6d6d6d;
+  font-size: 13px;
+  font-weight: 500;
+  color: #263747;
   text-overflow: ellipsis;
   white-space: nowrap;
 
   @media (max-width: 575px) {
-    display: flex;
-    width: 100%;
     display: none;
+    width: 100%;
   }
 `;
 
 const TitleSubText = styled.div`
-  margin-left: 6px;
+  margin-left: 4px;
   font-size: 12px;
-  color: #9b9ea3;
+  color: #868b94;
   white-space: nowrap;
 `;
 
@@ -174,8 +174,8 @@ const DescriptionWrapper = styled.div`
 
 const DescriptionContent = styled.p`
   overflow: hidden;
-  font-size: 14px;
-  color: #3d3d3d;
+  font-size: 13px;
+  color: #4d5159;
   text-overflow: ellipsis;
   white-space: nowrap;
 `;
