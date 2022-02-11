@@ -32,7 +32,8 @@ import TeamEditPage from './pages/teams/TeamEditPage';
 import TeamCreatePage from './pages/projects/TeamCreatePage';
 import SpecializationProjectTeamListPage from './pages/projects/SpecializationProjectTeamListPage';
 import SpecializationProjectUserListPage from './pages/projects/SpecializationProjectUserListPage';
-import SpecializationProjectOfferListPage from './pages/projects/SpecializationProjectOfferListPage';
+import SpecializationProjectReceiveRequestListPage from './pages/projects/SpecializationProjectReceiveRequestListPage';
+import SpecializationProjectSendRequestListPage from './pages/projects/SpecializationProjectSendRequestListPage';
 import ChattingPage from './pages/ChattingPage';
 import PrivacyPage from './pages/policy/PrivacyPage';
 import TermsOfServicePage from './pages/policy/TermsOfServicePage';
@@ -73,8 +74,13 @@ const App: React.FC = () => {
           />
           <Route
             exact
-            path="/projects/specialization/offer_list"
-            component={SpecializationProjectOfferListPage}
+            path="/projects/specialization/:userId/receive_requests"
+            component={SpecializationProjectReceiveRequestListPage}
+          />
+          <Route
+            exact
+            path="/projects/specialization/:userId/send_requests"
+            component={SpecializationProjectSendRequestListPage}
           />
           <Route exact path="/chatting/:myId" component={ChattingPage} />
           <Route exact path="/privacy" component={PrivacyPage} />

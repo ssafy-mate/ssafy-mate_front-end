@@ -106,4 +106,50 @@ export const requestsHandlers = [
       );
     },
   ),
+
+  rest.put(
+    `${process.env.REACT_APP_SERVER_URL}/api/auth/requests/responses`,
+    async (request, response, context) => {
+      const status: number = 200;
+
+      if (status === 403) {
+        return response(
+          context.status(403),
+          context.json({
+            status: 403,
+            success: false,
+            message: '응답 권한이 없습니다.',
+          }),
+        );
+      }
+
+      if (status === 409) {
+        return response(
+          context.status(409),
+          context.json({
+            status: 409,
+            success: false,
+            message: '해당 교육생은 이미 다른 팀에 합류되어 있습니다.',
+          }),
+        );
+      }
+
+      if (status === 500) {
+        return response(
+          context.status(500),
+          context.json({
+            status: 500,
+            success: false,
+            message: 'Internal Server Error, 제안 요청 응답 실패',
+          }),
+        );
+      }
+
+      return response(
+        context.json({
+          message: '응답 완료',
+        }),
+      );
+    },
+  ),
 ];

@@ -14,8 +14,9 @@ const useProfileTechStacks = () => {
   const profileTechStacks = useSelector<RootState, UserTechStack[] | undefined>(
     (state) => state.profile.info?.techStacks,
   );
-  let oldTechStackList: TechStackWithImg[] = [];
-  let oldTechStackListWithLevel: TechStacksWithLevel[] = [];
+  const oldTechStackList: TechStackWithImg[] = [];
+  const oldTechStackListWithLevel: TechStacksWithLevel[] = [];
+
   profileTechStacks?.forEach((techStack) => {
     oldTechStackList.push({
       techStackId: techStack.techStackId,
@@ -27,6 +28,7 @@ const useProfileTechStacks = () => {
       techStackLevel: techStack.techStackLevel,
     });
   });
+
   const oldTechStackWithImg: convertTechStackWithImg = {
     teckStackList: oldTechStackList,
     teckStackListWithLevel: oldTechStackListWithLevel,

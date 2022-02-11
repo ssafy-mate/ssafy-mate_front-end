@@ -31,6 +31,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import { TeamOfferRequestType } from '../../types/teamTypes';
 
+import useUserId from '../../hooks/useUserId';
 import useUserInfo from '../../hooks/useUserInfo';
 
 import UserLabel from './UserLabel';
@@ -59,6 +60,7 @@ const UserInfoSection: React.FC = () => {
 
   const dispatch = useDispatch();
   const { userId } = useParams<Params>();
+  const myUserId = useUserId();
   const { isLoading, userData, isError, errorMessage } = useUserInfo(userId);
 
   useEffect(() => {
@@ -98,18 +100,30 @@ const UserInfoSection: React.FC = () => {
         description: `${
           userData !== undefined ? userData.userName : ''
         } 교육생 상세 정보`,
-        imageUrl: 'https://avatars.githubusercontent.com/u/97279195?s=200&v=4',
+        imageUrl: `${
+          userData !== undefined
+            ? userData.profileImgUrl
+            : 'https://avatars.githubusercontent.com/u/97279195?s=200&v=4'
+        }`,
         link: {
           webUrl: `https://www.ssafymate.site${
+            userData !== undefined ? `/users/${userData.userId}` : ''
+          }`,
+          mobileWebUrl: `https://www.ssafymate.site${
             userData !== undefined ? `/users/${userData.userId}` : ''
           }`,
         },
       },
       buttons: [
         {
-          title: '교육생 상세 정보 보러가기',
+          title: `${
+            userData !== undefined ? userData.userName : ''
+          } 교육생 정보 보러가기`,
           link: {
             webUrl: `https://www.ssafymate.site${
+              userData !== undefined ? `/users/${userData.userId}` : ''
+            }`,
+            mobileWebUrl: `https://www.ssafymate.site${
               userData !== undefined ? `/users/${userData.userId}` : ''
             }`,
           },
@@ -212,10 +226,12 @@ const UserInfoSection: React.FC = () => {
               </NameWrapper>
             </TitleBox>
             <ButtonBox>
-              <RequestButton onClick={handleOpenOfferDialog}>
-                <VolunteerActivismIcon />
-                <span>팀 합류 요청하기</span>
-              </RequestButton>
+              {parseInt(userId) !== myUserId && (
+                <RequestButton onClick={handleOpenOfferDialog}>
+                  <VolunteerActivismIcon />
+                  <span>팀 합류 요청하기</span>
+                </RequestButton>
+              )}
               <SharingButton onClick={sendKakaoSharingMessage}>
                 <ShareIcon />
                 <span>공유하기</span>

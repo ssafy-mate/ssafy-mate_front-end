@@ -239,6 +239,42 @@ class UserService {
 
     return response.data;
   }
+
+  public static async getReceiveRequests(
+    token: string | null,
+    userId: number,
+    params: ProjectParams,
+  ) {
+    const response = await axiosInstance.get(
+      `/api/auth/users/${userId}/receive-requests`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params,
+      },
+    );
+
+    return response;
+  }
+
+  public static async getSendRequests(
+    token: string | null,
+    userId: number,
+    params: ProjectParams,
+  ) {
+    const response = await axiosInstance.get(
+      `/api/auth/users/${userId}/send-requests`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params,
+      },
+    );
+
+    return response;
+  }
 }
 
 export default UserService;

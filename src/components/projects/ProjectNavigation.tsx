@@ -9,16 +9,18 @@ import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import GroupsIcon from '@mui/icons-material/Groups';
+import useUserId from '../../hooks/useUserId';
 
 const ProjectNavigation: React.FC = () => {
   const location = useLocation();
+  const userId: number | null = useUserId();
 
   return (
     <NavTabs>
       <NavItem
         className={
           location.pathname === '/projects/specialization/teams' ||
-          location.pathname === '/info/teams/1'
+          location.pathname.split('/')[1] === 'teams'
             ? 'active'
             : ''
         }
@@ -29,7 +31,10 @@ const ProjectNavigation: React.FC = () => {
       </NavItem>
       <NavItem
         className={
-          location.pathname === '/projects/specialization/users' ? 'active' : ''
+          location.pathname === '/projects/specialization/users' ||
+          location.pathname.split('/')[1] === 'users'
+            ? 'active'
+            : ''
         }
       >
         <NavLink to="/projects/specialization/users">
@@ -39,22 +44,20 @@ const ProjectNavigation: React.FC = () => {
       </NavItem>
       <NavItem
         className={
-          location.pathname === '/projects/specialization/offer_list'
-            ? 'active'
-            : ''
+          location.pathname.split('/')[4] === 'receive_requests' ? 'active' : ''
         }
       >
-        <NavLink to="/projects/specialization/offer_list">
+        <NavLink to={`/projects/specialization/${userId}/receive_requests`}>
           <VolunteerActivismIcon css={navLinkIcon} />
           받은 제안
         </NavLink>
       </NavItem>
       <NavItem
         className={
-          location.pathname === '/projects/applications' ? 'active' : ''
+          location.pathname.split('/')[4] === 'send_requests' ? 'active' : ''
         }
       >
-        <NavLink to="/projects/applications">
+        <NavLink to={`/projects/specialization/${userId}/send_requests`}>
           <HowToVoteIcon css={navLinkIcon} />
           보낸 요청
         </NavLink>

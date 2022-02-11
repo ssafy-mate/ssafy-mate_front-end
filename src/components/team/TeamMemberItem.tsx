@@ -21,7 +21,14 @@ const TeamMemberItem: React.FC<TeamMemberItemProps> = ({
   return (
     <Item>
       <ProfileImgWrapper>
-        <ProfileImg src={profileImgUrl} alt={`${userName}님의 프로필 이미지`} />
+        <ProfileImg
+          src={
+            profileImgUrl !== null
+              ? profileImgUrl
+              : '/images/assets/basic-profile-img.png'
+          }
+          alt={`${userName}님의 프로필 이미지`}
+        />
       </ProfileImgWrapper>
       <MemberInfo>
         <MemberName>

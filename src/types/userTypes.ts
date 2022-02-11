@@ -101,3 +101,41 @@ export interface ProfileState {
   loading: boolean | null;
   error: string | null;
 }
+
+export type RequestStatusType =
+  | 'pending'
+  | 'approval'
+  | 'rejection'
+  | 'expiration'
+  | 'cancellation';
+
+export type ResponseStatusType = 'approval' | 'rejection' | 'cancellation';
+
+export type RequestType = 'receive' | 'send';
+
+export interface UserRequestType {
+  requestId: number;
+  requestStatus: RequestStatusType;
+  message: string;
+  userId: number;
+  userName: string;
+  profileImgUrl: string | null;
+  job1: string;
+  createdTime: string;
+}
+
+export interface TeamRequestType {
+  requestId: number;
+  requestStatus: RequestStatusType;
+  message: string;
+  teamId: number;
+  teamImgUrl: string | null;
+  teamName: string;
+  campus: string;
+  createdTime: string;
+}
+
+export interface ResponseOfTheRequestType {
+  requestId: number;
+  response: ResponseStatusType;
+}

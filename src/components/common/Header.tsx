@@ -274,12 +274,16 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
                             </Link>
                           </AccountBoxItem>
                           <AccountBoxItem onClick={handleAccountBoxClose}>
-                            <Link to={`/users/${userId}/offers`}>
+                            <Link
+                              to={`/projects/specialization/${userId}/receive_requests`}
+                            >
                               받은 제안
                             </Link>
                           </AccountBoxItem>
                           <AccountBoxItem onClick={handleAccountBoxClose}>
-                            <Link to={`/users/${userId}/applications`}>
+                            <Link
+                              to={`/projects/specialization/${userId}/send_requests`}
+                            >
                               보낸 요청
                             </Link>
                           </AccountBoxItem>
