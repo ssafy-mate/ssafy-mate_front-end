@@ -20,7 +20,7 @@ const ProjectNavigation: React.FC = () => {
       <NavItem
         className={
           location.pathname === '/projects/specialization/teams' ||
-          location.pathname === '/info/teams/1'
+          location.pathname.split('/')[1] === 'teams'
             ? 'active'
             : ''
         }
@@ -31,7 +31,10 @@ const ProjectNavigation: React.FC = () => {
       </NavItem>
       <NavItem
         className={
-          location.pathname === '/projects/specialization/users' ? 'active' : ''
+          location.pathname === '/projects/specialization/users' ||
+          location.pathname.split('/')[1] === 'users'
+            ? 'active'
+            : ''
         }
       >
         <NavLink to="/projects/specialization/users">
@@ -41,9 +44,7 @@ const ProjectNavigation: React.FC = () => {
       </NavItem>
       <NavItem
         className={
-          location.pathname === '/projects/specialization/offer_list'
-            ? 'active'
-            : ''
+          location.pathname.split('/')[4] === 'receive_requests' ? 'active' : ''
         }
       >
         <NavLink to={`/projects/specialization/${userId}/receive_requests`}>
@@ -53,7 +54,7 @@ const ProjectNavigation: React.FC = () => {
       </NavItem>
       <NavItem
         className={
-          location.pathname === '/projects/applications' ? 'active' : ''
+          location.pathname.split('/')[4] === 'send_requests' ? 'active' : ''
         }
       >
         <NavLink to={`/projects/specialization/${userId}/send_requests`}>
