@@ -7,6 +7,7 @@ import useSocket from '../../hooks/useSocket';
 import { ChatRoomTypeProps } from '../../types/messageTypes';
 
 import styled from '@emotion/styled';
+import { Avatar } from '@mui/material';
 
 const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
   myId,
@@ -50,19 +51,19 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
 
   return (
     <>
-      <NavLink
-        to={`/chatting/${myId}?roomId=${roomId}&userId=${userId}&userName=${userName}@${email[0]}`}
-      >
+      <NavLink to={`/chatting/${myId}?roomId=${roomId}&userId=${userId}`}>
         <ChatListItem>
           <ChatListItemWrapper>
             <ProfileWrapper>
-              <img src={profileImgUrl} />
+              <Avatar src={profileImgUrl} />
             </ProfileWrapper>
             <ContentWrapper>
               <TitleWrapper>
                 <TitleSenderName>{userName}</TitleSenderName>
                 <TitleSubText>
-                  <span>{dayjs(sentTime).format('YYYY.MM.DD')}</span>
+                  {sentTime ? (
+                    <span>{dayjs(sentTime).format('YYYY.MM.DD')}</span>
+                  ) : null}
                 </TitleSubText>
               </TitleWrapper>
               <DescriptionWrapper>
@@ -113,7 +114,6 @@ const ProfileWrapper = styled.div`
   img {
     width: 40px;
     height: 40px;
-    border: 1px solid #b4b4b4;
     border-radius: 50%;
   }
 
