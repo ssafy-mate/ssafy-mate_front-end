@@ -11,14 +11,14 @@ import { chattingHandlers } from './handlers/chattingHandlers';
 import { techStacksHandlers } from './handlers/techStacksHandlers';
 
 export const worker = setupWorker(
-  // ...authHandlers,
+  ...authHandlers,
   ...usersHandlers,
-  // ...teamsHandlers,
+  ...teamsHandlers,
   ...requestsHandlers,
-  // ...chattingHandlers,
-  // ...signInHandlers,
-  // ...newPasswordHandlers,
-  // ...findIdHandlers,
-  // ...chattingHandlers,
-  // ...techStacksHandlers,
+  ...chattingHandlers,
+  ...signInHandlers,
+  ...newPasswordHandlers,
+  ...findIdHandlers,
+  ...chattingHandlers,
+  ...techStacksHandlers,
 );
