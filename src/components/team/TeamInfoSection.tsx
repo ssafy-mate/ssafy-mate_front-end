@@ -322,14 +322,14 @@ const TeamInfoSection: React.FC = () => {
               <Section>
                 <SubHead>소개</SubHead>
                 <Introduction>
-                  {teamData.introduction?.split('\n').map((introduction) => {
-                    return (
-                      <span>
+                  {teamData.introduction
+                    ?.split('\n')
+                    .map((introduction, index) => (
+                      <span key={index}>
                         {introduction}
                         <br />
                       </span>
-                    );
-                  })}
+                    ))}
                 </Introduction>
               </Section>
               <Section>

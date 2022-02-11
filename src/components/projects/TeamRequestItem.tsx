@@ -216,7 +216,8 @@ const Item = styled.li<ItemProps>`
   border-radius: 4px;
   background-color: ${(props) =>
     props.requestStatus === 'expiration' ||
-    props.requestStatus === 'cancellation'
+    props.requestStatus === 'cancellation' ||
+    props.requestStatus === 'rejection'
       ? '#f3f3f3'
       : props.requestStatus === 'approval'
       ? '#ebf4fd'
