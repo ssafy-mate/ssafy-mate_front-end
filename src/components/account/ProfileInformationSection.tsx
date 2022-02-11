@@ -520,6 +520,7 @@ const ProfileInformationSection: React.FC = () => {
               disabled={selfIntroductionDisabled}
               required
               className={selfIntroductionError ? 'have-error' : ''}
+              maxLength={800}
             />
             {showError && selfIntroductionError && (
               <ErrorMessageWrapper>
@@ -730,6 +731,7 @@ const ProfileInformationSection: React.FC = () => {
                 disabled={newUrlsDisabled}
                 onChange={handleUrlsInput}
                 value={newGitHubUrl !== null ? newGitHubUrl : ''}
+                maxLength={250}
               />
             </SingleInformationWrapper>
           </Row>
@@ -745,6 +747,7 @@ const ProfileInformationSection: React.FC = () => {
                 value={newEtcUrl !== null ? newEtcUrl : ''}
                 onChange={handleUrlsInput}
                 disabled={newUrlsDisabled}
+                maxLength={250}
               />
             </SingleInformationWrapper>
           </Row>

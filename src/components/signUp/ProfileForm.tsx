@@ -364,6 +364,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
               onChange={handleTextAreaInput}
               required
               className={selfIntroductionError ? 'have-error' : ''}
+              maxLength={800}
             />
             {showError === 1 && selfIntroductionError && (
               <ErrorMessageWrapper>
@@ -499,6 +500,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
               placeholder="ex) https://github.com/ssafy-mate"
               onChange={handleUrlInput}
               pattern="https://.*"
+              maxLength={250}
             />
           </InputWrapper>
         </Row>
@@ -514,6 +516,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
               placeholder="ex) https://velog.io/@ssafy-mate"
               onChange={handleUrlInput}
               pattern="https://.*"
+              maxLength={250}
             />
           </InputWrapper>
         </Row>
