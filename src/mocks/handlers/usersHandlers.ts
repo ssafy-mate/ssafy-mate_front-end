@@ -317,4 +317,170 @@ export const usersHandlers = [
       );
     },
   ),
+
+  rest.get(
+    `${process.env.REACT_APP_SERVER_URL}/api/auth/users/:userId/receive-requests`,
+    async (request, response, context) => {
+      const token: string =
+        request.headers['_headers'].authorization.split(' ')[1];
+      const status: number = 200;
+
+      // 로그인 안 되어 있을 시
+      if (token === null) {
+        return response(
+          context.status(403),
+          context.json({
+            status: 401,
+            success: false,
+            message:
+              '받은 요청 조회 권한이 없습니다. 로그인 후 이용 가능합니다.',
+          }),
+        );
+      }
+
+      // 서버 오류 시
+      if (status === 500) {
+        return response(
+          context.status(500),
+          context.json({
+            status: 500,
+            success: false,
+            message: 'Internal Server Error, 받은 요청 조회 실패',
+          }),
+        );
+      }
+
+      return response(
+        context.json({
+          teamRequests: [
+            {
+              requestId: 2,
+              requestStatus: 'pending',
+              message: ' 같이 하고 싶습니다. ',
+              teamId: 1,
+              teamName: '팀 싸피',
+              teamImgUrl: '/images/assets/basic-team-logo.png',
+              campus: '서울',
+              createdTime: '2022-02-10T23:12:24.988',
+            },
+            {
+              requestId: 4,
+              requestStatus: 'pending',
+              message: ' 같이 하고 싶습니다. ',
+              teamId: 2,
+              teamImgUrl: '/images/assets/basic-team-logo.png',
+              teamName: '팀 싸피',
+              campus: '서울',
+              createdTime: '2022-02-10T23:12:24.988',
+            },
+          ],
+          userRequests: [
+            {
+              requestId: 3,
+              requestStatus: 'pending',
+              message: ' 참여하고 싶습니다. ',
+              userId: 2,
+              userName: '조원빈',
+              profileImgUrl: null,
+              job1: '백엔드(Back-end)',
+              createdTime: '2022-02-10T23:14:29.449',
+            },
+            {
+              requestId: 4,
+              requestStatus: 'pending',
+              message: ' 참여하고 싶습니다. ',
+              userId: 3,
+              userName: '이정훈',
+              profileImgUrl: '/images/assets/basic-team-logo.png',
+              job1: '프론트엔드(Front-end)',
+              createdTime: '2022-02-10T23:14:29.449',
+            },
+          ],
+        }),
+      );
+    },
+  ),
+
+  rest.get(
+    `${process.env.REACT_APP_SERVER_URL}/api/auth/users/:userId/send-requests`,
+    async (request, response, context) => {
+      const token: string =
+        request.headers['_headers'].authorization.split(' ')[1];
+      const status: number = 200;
+
+      // 로그인 안 되어 있을 시
+      if (token === null) {
+        return response(
+          context.status(403),
+          context.json({
+            status: 401,
+            success: false,
+            message:
+              '받은 요청 조회 권한이 없습니다. 로그인 후 이용 가능합니다.',
+          }),
+        );
+      }
+
+      // 서버 오류 시
+      if (status === 500) {
+        return response(
+          context.status(500),
+          context.json({
+            status: 500,
+            success: false,
+            message: 'Internal Server Error, 받은 요청 조회 실패',
+          }),
+        );
+      }
+
+      return response(
+        context.json({
+          teamRequests: [
+            {
+              requestId: 2,
+              requestStatus: 'pending',
+              message: ' 같이 하고 싶습니다. ',
+              teamId: 1,
+              teamName: '팀 싸피',
+              teamImgUrl: '/images/assets/basic-team-logo.png',
+              campus: '서울',
+              createdTime: '2022-02-10T23:12:24.988',
+            },
+            {
+              requestId: 4,
+              requestStatus: 'pending',
+              message: ' 같이 하고 싶습니다. ',
+              teamId: 2,
+              teamImgUrl: '/images/assets/basic-team-logo.png',
+              teamName: '팀 싸피',
+              campus: '서울',
+              createdTime: '2022-02-10T23:12:24.988',
+            },
+          ],
+          userRequests: [
+            {
+              requestId: 3,
+              requestStatus: 'pending',
+              message: ' 참여하고 싶습니다. ',
+              userId: 2,
+              userName: '조원빈',
+              profileImgUrl: null,
+              job1: '백엔드(Back-end)',
+              createdTime: '2022-02-10T23:14:29.449',
+            },
+            {
+              requestId: 4,
+              requestStatus: 'pending',
+              message: ' 참여하고 싶습니다. ',
+              userId: 3,
+              userName: '이정훈',
+              profileImgUrl: '/images/assets/basic-team-logo.png',
+              job1: '프론트엔드(Front-end)',
+              createdTime: '2022-02-10T23:14:29.449',
+            },
+          ],
+        }),
+      );
+    },
+  ),
 ];
