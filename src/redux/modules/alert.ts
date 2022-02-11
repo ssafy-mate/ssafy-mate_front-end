@@ -4,7 +4,7 @@ import { AlertState } from '../../types/alertTypes';
 export const initialState: AlertState = {
   show: false,
   text: '',
-  type: 'info',
+  type: undefined,
 };
 
 export const showSsafyMateAlert = createAction('SHOW_ALERT');
