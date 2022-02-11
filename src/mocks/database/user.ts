@@ -9,7 +9,7 @@ export const userDataList = [
       ssafyTrack: 'Java Track',
       selfIntroduction:
         '안녕하세요 모두가 협업하고 싶어하는 개발자가 되는게 목표인 조원빈 입니다.',
-      job1: '백엔드 (Back-end)',
+      job1: '백엔드(Back-end)',
       job2: null,
       projects: [
         {
@@ -205,7 +205,7 @@ export const userDataList = [
       ssafyTrack: 'Python Track',
       selfIntroduction:
         '거북이처럼 느리지만 목표를 향해 나아가는 개발자 손영배입니다. 즐겁게 프로젝트하고 모두 취뽀합시다!',
-      job1: '백엔드 (Back-end)',
+      job1: '백엔드(Back-end)',
       job2: null,
       projects: [
         {
@@ -282,7 +282,7 @@ export const userDataList = [
       ssafyTrack: 'Java Track',
       selfIntroduction:
         '안녕하세요 모두가 즐기는 개발을 하고자하는 이정훈 입니다.',
-      job1: '백엔드 (Back-end)',
+      job1: '백엔드(Back-end)',
       job2: null,
       projects: [
         {
@@ -353,7 +353,7 @@ export const userDataList = [
       ssafyTrack: 'Java Track',
       selfIntroduction:
         '안녕하세요. 개발을 좋아하고 UI/UX 개선을 고민하는 프론트엔드 개발자 박정환입니다. 1학기 최우수상 수상 이력을 갖고 있습니다. 이번 프로젝트에서는 실사용자를 받아 볼 수 있는 서비스 개발에 도전해보고 싶습니다.',
-      job1: '프론트엔드 (Front-end)',
+      job1: '프론트엔드(Front-end)',
       job2: null,
       projects: [
         {
@@ -459,7 +459,7 @@ export const userDataList = [
       campus: '서울',
       ssafyTrack: 'Java Track',
       selfIntroduction: '안녕하세요. 열심히 하는 개발자 이여진입니다. :) ',
-      job1: '프론트엔드 (Front-end)',
+      job1: '프론트엔드(Front-end)',
       job2: null,
       projects: [
         {
@@ -542,8 +542,8 @@ export const userDataList = [
       ssafyTrack: 'Python Track',
       selfIntroduction:
         '안녕하세요. 저는 디자인쪽을 전공하여 Figma를 능숙하게 다룰 수 있어 UI/UX 설계에 능숙합니다. 이전에 외부 교육으로 VR 개발도 경험하여 Unity를 이용한 VR 개발도 가능합니다.',
-      job1: '프론트엔드 (Front-end)',
-      job2: '백엔드 (Back-end)',
+      job1: '프론트엔드(Front-end)',
+      job2: '백엔드(Back-end)',
       projects: [
         {
           id: 1,
@@ -627,7 +627,7 @@ export const userDataList = [
       campus: '서울',
       ssafyTrack: 'Java Track',
       selfIntroduction: '안녕하세요~ 새로운 걸 개발하는 신지수입니다!',
-      job1: '프론트엔드 (Front-end)',
+      job1: '프론트엔드(Front-end)',
       job2: null,
       projects: [
         {
@@ -703,7 +703,7 @@ export const userDataList = [
       ssafyTrack: 'Python Track',
       selfIntroduction:
         '안녕하세요 김주호입니다. 백엔드 개발자입니다. 프로젝트 진행하면서 성장하고 싶어요',
-      job1: '백엔드 (Back-end)',
+      job1: '백엔드(Back-end)',
       job2: null,
       projects: [
         {
@@ -774,7 +774,7 @@ export const userDataList = [
       ssafyTrack: 'Embeded Track',
       selfIntroduction:
         '사용자의 편리함을 추구하는 프론트앤드 개발자 김영환 입니다..',
-      job1: '프론트엔드 (Front-end)',
+      job1: '프론트엔드(Front-end)',
       job2: null,
       projects: [
         {
@@ -855,7 +855,7 @@ export const userDataList = [
       ssafyTrack: 'Java Track',
       selfIntroduction:
         '안녕하세요. 백엔드 개발자 노경은입니다.^.^ 같이 즐겁게 프로젝트해요~!',
-      job1: '백엔드 (Back-end)',
+      job1: '백엔드(Back-end)',
       job2: null,
       projects: [
         {
@@ -916,7 +916,7 @@ export const userDataList = [
       ssafyTrack: 'Java Track',
       selfIntroduction:
         '안녕하세요 모두가 협업하고 싶어하는 개발자가 되는게 목표인 박상미 입니다.',
-      job1: '백엔드 (Back-end)',
+      job1: '백엔드(Back-end)',
       job2: null,
       projects: [
         {
@@ -1000,8 +1000,8 @@ export const userListData = [
         techStackName: 'docker',
       },
     ],
-    job1: '백엔드 (Back-end)',
-    job2: '프론트엔드 (Front-end)',
+    job1: '백엔드(Back-end)',
+    job2: '프론트엔드(Front-end)',
     githubUrl: 'https://github.com/Jo-wonbin',
     belongToTeam: false,
   },
@@ -1030,8 +1030,8 @@ export const userListData = [
         techStackName: 'Emotion',
       },
     ],
-    job1: '프론트엔드 (Front-end)',
-    job2: '백엔드 (Back-end)',
+    job1: '프론트엔드(Front-end)',
+    job2: '백엔드(Back-end)',
     githubUrl: 'https://github.com/sojjeong',
     belongToTeam: true,
   },
@@ -1060,8 +1060,8 @@ export const userListData = [
         techStackName: 'Vuex',
       },
     ],
-    job1: '백엔드 (Back-end)',
-    job2: '프론트엔드 (Front-end)',
+    job1: '백엔드(Back-end)',
+    job2: '프론트엔드(Front-end)',
     githubUrl: 'https://github.com/dudqo225',
     belongToTeam: true,
   },
@@ -1090,7 +1090,7 @@ export const userListData = [
         techStackName: 'JPA',
       },
     ],
-    job1: '백엔드 (Back-end)',
+    job1: '백엔드(Back-end)',
     job2: null,
     githubUrl: 'https://github.com/person003333',
     belongToTeam: false,
@@ -1120,7 +1120,7 @@ export const userListData = [
         techStackName: 'Emotion',
       },
     ],
-    job1: '프론트엔드 (Front-end)',
+    job1: '프론트엔드(Front-end)',
     job2: null,
     githubUrl: 'https://github.com/JeongHwan-dev',
     belongToTeam: false,
@@ -1150,7 +1150,7 @@ export const userListData = [
         techStackName: 'webpack',
       },
     ],
-    job1: '프론트엔드 (Front-end)',
+    job1: '프론트엔드(Front-end)',
     job2: null,
     githubUrl: null,
     belongToTeam: false,

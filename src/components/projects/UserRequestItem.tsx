@@ -190,18 +190,16 @@ const UserRequestItem: React.FC<UserRequestItemProps> = ({
             </Button>
           </>
         )}
-        {requestStatus !== 'cancellation' &&
-          requestStatus !== 'expiration' &&
-          requestType === 'send' && (
-            <Button
-              color="#f5554a"
-              colorWithHover="#f99992"
-              onClick={handleCancelRequest}
-            >
-              <HighlightOffIcon />
-              취소
-            </Button>
-          )}
+        {requestStatus === 'pending' && requestType === 'send' && (
+          <Button
+            color="#f5554a"
+            colorWithHover="#f99992"
+            onClick={handleCancelRequest}
+          >
+            <HighlightOffIcon />
+            취소
+          </Button>
+        )}
       </ItemFooter>
     </Item>
   );
@@ -218,7 +216,8 @@ const Item = styled.li<ItemProps>`
   border-radius: 4px;
   background-color: ${(props) =>
     props.requestStatus === 'expiration' ||
-    props.requestStatus === 'cancellation'
+    props.requestStatus === 'cancellation' ||
+    props.requestStatus === 'rejection'
       ? '#f3f3f3'
       : props.requestStatus === 'approval'
       ? '#ebf4fd'
