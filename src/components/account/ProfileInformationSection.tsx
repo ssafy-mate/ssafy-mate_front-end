@@ -1,4 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+
+import { push } from 'connected-react-router';
 
 import { useDispatch } from 'react-redux';
 import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
@@ -7,9 +9,8 @@ import {
   editProfileProjectsInfo as editProfileProjectsInfoStart,
 } from '../../redux/modules/profile';
 
-import { push } from 'connected-react-router';
-
 import styled from '@emotion/styled';
+
 import CheckIcon from '@mui/icons-material/Check';
 import { useAutocomplete } from '@mui/material';
 
@@ -103,10 +104,10 @@ const ProfileInformationSection: React.FC = () => {
   } = useAutocomplete({
     id: 'search-tech-stack',
     multiple: true,
+    defaultValue: oldTechStacksList,
     options: techStackList,
     isOptionEqualToValue: (option, value) =>
       option.techStackId === value.techStackId,
-    defaultValue: oldTechStacksList,
     getOptionLabel: (option) => option.techStackName,
   });
 

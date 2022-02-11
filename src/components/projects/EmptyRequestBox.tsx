@@ -3,17 +3,17 @@ import styled from '@emotion/styled';
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 
-import ContentPasteSearchIcon from '@mui/icons-material/ContentPasteSearch';
+import DraftsIcon from '@mui/icons-material/Drafts';
 
 interface EmptyBoxProps {
   message: string;
 }
 
-const EmptyBox: React.FC<EmptyBoxProps> = ({ message }) => {
+const EmptyRequestBox: React.FC<EmptyBoxProps> = ({ message }) => {
   return (
     <Box>
       <IconWrapper>
-        <ContentPasteSearchIcon css={icon} />
+        <DraftsIcon css={icon} />
       </IconWrapper>
       <Head>{message}</Head>
     </Box>
@@ -63,4 +63,4 @@ const icon = css`
   }
 `;
 
-export default EmptyBox;
+export default EmptyRequestBox;

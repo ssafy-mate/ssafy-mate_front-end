@@ -9,9 +9,11 @@ import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import GroupsIcon from '@mui/icons-material/Groups';
+import useUserId from '../../hooks/useUserId';
 
 const ProjectNavigation: React.FC = () => {
   const location = useLocation();
+  const userId: number | null = useUserId();
 
   return (
     <NavTabs>
@@ -44,7 +46,7 @@ const ProjectNavigation: React.FC = () => {
             : ''
         }
       >
-        <NavLink to="/projects/specialization/offer_list">
+        <NavLink to={`/projects/specialization/${userId}/receive_requests`}>
           <VolunteerActivismIcon css={navLinkIcon} />
           받은 제안
         </NavLink>
@@ -54,7 +56,7 @@ const ProjectNavigation: React.FC = () => {
           location.pathname === '/projects/applications' ? 'active' : ''
         }
       >
-        <NavLink to="/projects/applications">
+        <NavLink to={`/projects/specialization/${userId}/send_requests`}>
           <HowToVoteIcon css={navLinkIcon} />
           보낸 요청
         </NavLink>

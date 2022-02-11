@@ -74,7 +74,7 @@ const PROJECTS_BANNER_SLIDE_LIST: ProjectBannerSlideType[] = [
   {
     id: 7,
     head: '특화 프로젝트',
-    subHead: 'Track 7. IoT 제어 (Internet of Things)',
+    subHead: 'Track 7. IoT 제어',
     description:
       '가전기기나 센서들을 무선 통신으로 연결하여, 네트워킹, S/W, AI 기술을 기반으로 외부망과 가정을 연결하여 융합 콘텐츠 서비스를 제공하는 프로젝트',
     imgUrl: '/images/projects/iot_animation.gif',

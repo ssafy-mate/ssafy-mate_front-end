@@ -80,7 +80,7 @@ const TeamEditForm: React.FC = () => {
     focused,
     setAnchorEl,
   } = useAutocomplete({
-    id: 'customized-hook-demo',
+    id: 'search-tech-stack',
     multiple: true,
     defaultValue: initialTechStacks,
     options: techStackList,

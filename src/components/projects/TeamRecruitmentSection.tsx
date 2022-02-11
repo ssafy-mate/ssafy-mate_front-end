@@ -32,8 +32,8 @@ const TeamRecruitmentSection: React.FC<TeamRecruitmentSectionProps> = ({
   setExclusion,
   setSort,
 }) => {
-  const [exclusion, onSetExclusion] = useQueryString('exclusion');
-  const [sort, onSetSort] = useQueryString('sort');
+  const [, onSetExclusion] = useQueryString('exclusion');
+  const [, onSetSort] = useQueryString('sort');
 
   useEffect(() => {
     if (isError) {

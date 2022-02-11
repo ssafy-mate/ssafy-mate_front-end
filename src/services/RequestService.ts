@@ -2,6 +2,7 @@ import { axiosInstance } from '../utils/axios';
 
 import { UserApplicationRequestType } from '../types/authTypes';
 import { TeamOfferRequestType } from '../types/teamTypes';
+import { ResponseOfTheRequestType } from '../types/userTypes';
 
 class RequestService {
   public static async sendUserApplication(
@@ -36,6 +37,23 @@ class RequestService {
     );
 
     return response.data;
+  }
+
+  public static async sendResponseOfTheRequest(
+    token: string | null,
+    responseOfTheRequest: ResponseOfTheRequestType,
+  ): Promise<string> {
+    const response = await axiosInstance.put(
+      '/api/auth/requests/responses',
+      responseOfTheRequest,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data.message;
   }
 }
 

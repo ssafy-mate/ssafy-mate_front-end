@@ -11,11 +11,11 @@ import useToken from './useToken';
 
 const useTeamInfo = (teamId: number) => {
   const token: string | null = useToken();
-  const queryFunction = () => TeamService.getTeamInfo(token, teamId);
+  const queryFn = () => TeamService.getTeamInfo(token, teamId);
   const { isLoading, data, isError, error } = useQuery<
     AxiosResponse<TeamInfoResponse>,
     AxiosError<ErrorResponse>
-  >(['teamDetailInfo', teamId], queryFunction, {
+  >(['teamDetailInfo', teamId], queryFn, {
     keepPreviousData: true,
   });
 

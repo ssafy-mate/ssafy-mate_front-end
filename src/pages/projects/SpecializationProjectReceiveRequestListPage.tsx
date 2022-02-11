@@ -8,10 +8,10 @@ import useToken from '../../hooks/useToken';
 
 import Header from '../../components/common/Header';
 import ProjectNavigation from '../../components/projects/ProjectNavigation';
-import OfferListSection from '../../components/projects/OfferListSection';
+import ReceiveRequestListSection from '../../components/projects/ReceiveRequestListSection';
 import Footer from '../../components/common/Footer';
 
-const SpecializationProjectOfferListPage: React.FC = () => {
+const SpecializationProjectReceiveRequestListPage: React.FC = () => {
   const token = useToken();
   const smallMedia = useMediaQuery({
     query: '(max-width: 575px)',
@@ -29,10 +29,10 @@ const SpecializationProjectOfferListPage: React.FC = () => {
     <>
       <Header />
       <ProjectNavigation />
-      <OfferListSection />
+      <ReceiveRequestListSection />
       {!smallMedia && <Footer />}
     </>
   );
 };
 
-export default SpecializationProjectOfferListPage;
+export default SpecializationProjectReceiveRequestListPage;
