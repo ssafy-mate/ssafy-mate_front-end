@@ -31,6 +31,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import { TeamOfferRequestType } from '../../types/teamTypes';
 
+import useUserId from '../../hooks/useUserId';
 import useUserInfo from '../../hooks/useUserInfo';
 
 import UserLabel from './UserLabel';
@@ -59,6 +60,7 @@ const UserInfoSection: React.FC = () => {
 
   const dispatch = useDispatch();
   const { userId } = useParams<Params>();
+  const myUserId = useUserId();
   const { isLoading, userData, isError, errorMessage } = useUserInfo(userId);
 
   useEffect(() => {
@@ -212,10 +214,12 @@ const UserInfoSection: React.FC = () => {
               </NameWrapper>
             </TitleBox>
             <ButtonBox>
-              <RequestButton onClick={handleOpenOfferDialog}>
-                <VolunteerActivismIcon />
-                <span>팀 합류 요청하기</span>
-              </RequestButton>
+              {parseInt(userId) !== myUserId && (
+                <RequestButton onClick={handleOpenOfferDialog}>
+                  <VolunteerActivismIcon />
+                  <span>팀 합류 요청하기</span>
+                </RequestButton>
+              )}
               <SharingButton onClick={sendKakaoSharingMessage}>
                 <ShareIcon />
                 <span>공유하기</span>

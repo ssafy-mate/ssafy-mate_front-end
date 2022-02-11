@@ -26,6 +26,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { TeamOfferRequestType } from '../../types/teamTypes';
 import { TechStack } from '../../types/commonTypes';
 
+import useUserId from '../../hooks/useUserId';
+
 import UserLabel from '../user/UserLabel';
 
 interface UserItemProps {
@@ -70,6 +72,7 @@ const UserItem: React.FC<UserItemProps> = ({
   const [onProjectWarning, setOnProjectWarning] = useState<boolean>(false);
 
   const dispatch = useDispatch();
+  const myUserId = useUserId();
 
   useEffect(() => {
     if (offerProject !== '') {
@@ -224,7 +227,7 @@ const UserItem: React.FC<UserItemProps> = ({
         </SubInfoList>
       </ItemBody>
       <ItemFooter className={belongToTeam ? 'belong' : ''}>
-        {!belongToTeam && (
+        {!belongToTeam && userId !== myUserId && (
           <RequestButton onClick={handleOpenOfferDialog}>
             팀 합류 요청
           </RequestButton>
