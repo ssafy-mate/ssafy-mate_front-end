@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import { Redirect } from 'react-router-dom';
 
 /** @jsxImportSource @emotion/react */
@@ -9,12 +11,15 @@ import Header from '../components/common/Header';
 import ChattingForm from '../components/chatting/ChattingForm';
 import useSocket from '../hooks/useSocket';
 import useUserId from '../hooks/useUserId';
-import { useEffect } from 'react';
 
 const ChattingPage: React.FC = () => {
   const token = useToken();
   const userId = useUserId();
   const [socket, disconnect] = useSocket(userId as number);
+
+  useEffect(() => {
+    document.title = '채팅 | 싸피 메이트';
+  }, []);
 
   useEffect(() => {
     if (token && socket) {
