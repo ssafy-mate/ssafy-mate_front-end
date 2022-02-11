@@ -70,9 +70,9 @@ export const teamsHandlers = [
             project_track === 'all' || team.projectTrack === project_track,
         )
         .filter((team) =>
-          job1 === '프론트엔드 (Front-end)'
+          job1 === '프론트엔드(Front-end)'
             ? team.frontendRecruitment > team.frontendHeadcount
-            : job1 === '백엔드 (Back-end)'
+            : job1 === '백엔드(Back-end)'
             ? team.backendRecruitment > team.backendHeadcount
             : true,
         )
