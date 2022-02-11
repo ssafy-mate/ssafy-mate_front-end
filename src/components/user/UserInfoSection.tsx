@@ -106,10 +106,10 @@ const UserInfoSection: React.FC = () => {
             : 'https://avatars.githubusercontent.com/u/97279195?s=200&v=4'
         }`,
         link: {
-          webUrl: `https://www.ssafymate.site${
+          mobileWebUrl: `https://www.ssafymate.site${
             userData !== undefined ? `/users/${userData.userId}` : ''
           }`,
-          mobileWebUrl: `https://www.ssafymate.site${
+          webUrl: `https://www.ssafymate.site${
             userData !== undefined ? `/users/${userData.userId}` : ''
           }`,
         },
@@ -120,10 +120,10 @@ const UserInfoSection: React.FC = () => {
             userData !== undefined ? userData.userName : ''
           } 교육생 정보 보러가기`,
           link: {
-            webUrl: `https://www.ssafymate.site${
+            mobileWebUrl: `https://www.ssafymate.site${
               userData !== undefined ? `/users/${userData.userId}` : ''
             }`,
-            mobileWebUrl: `https://www.ssafymate.site${
+            webUrl: `https://www.ssafymate.site${
               userData !== undefined ? `/users/${userData.userId}` : ''
             }`,
           },
@@ -407,7 +407,18 @@ const UserInfoSection: React.FC = () => {
             </Section>
             <Section>
               <SubHead>소개</SubHead>
-              <Introduction>{userData.selfIntroduction}</Introduction>
+              <Introduction>
+                {userData.selfIntroduction
+                  .split('\n')
+                  .map((selfIntroduction) => {
+                    return (
+                      <span>
+                        {selfIntroduction}
+                        <br />
+                      </span>
+                    );
+                  })}
+              </Introduction>
             </Section>
             <Section>
               <SubHead>기술 스택</SubHead>
