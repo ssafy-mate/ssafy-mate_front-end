@@ -190,18 +190,16 @@ const TeamRequestItem: React.FC<TeamRequestItemProps> = ({
             </Button>
           </>
         )}
-        {requestStatus !== 'cancellation' &&
-          requestStatus !== 'expiration' &&
-          requestType === 'send' && (
-            <Button
-              color="#f5554a"
-              colorWithHover="#f99992"
-              onClick={handleCancelRequest}
-            >
-              <HighlightOffIcon />
-              취소
-            </Button>
-          )}
+        {requestStatus === 'pending' && requestType === 'send' && (
+          <Button
+            color="#f5554a"
+            colorWithHover="#f99992"
+            onClick={handleCancelRequest}
+          >
+            <HighlightOffIcon />
+            취소
+          </Button>
+        )}
       </ItemFooter>
     </Item>
   );

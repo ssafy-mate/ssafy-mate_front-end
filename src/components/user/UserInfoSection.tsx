@@ -410,14 +410,12 @@ const UserInfoSection: React.FC = () => {
               <Introduction>
                 {userData.selfIntroduction
                   .split('\n')
-                  .map((selfIntroduction) => {
-                    return (
-                      <span>
-                        {selfIntroduction}
-                        <br />
-                      </span>
-                    );
-                  })}
+                  .map((selfIntroduction, index) => (
+                    <span key={index}>
+                      {selfIntroduction}
+                      <br />
+                    </span>
+                  ))}
               </Introduction>
             </Section>
             <Section>
@@ -638,7 +636,7 @@ const RequestButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: auto 0;
+  margin: auto 12px auto 0;
   padding: 10px 24px;
   border: none;
   border-radius: 4px;
@@ -678,7 +676,7 @@ const SharingButton = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: auto 0 auto 12px;
+  margin: auto 0;
   padding: 10px 24px;
   border: none;
   border-radius: 4px;

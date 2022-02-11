@@ -72,9 +72,7 @@ const ReceiveRequestListSection: React.FC = () => {
             </SectionHeader>
             <RequestList>
               {userRequests.length === 0 && teamRequests.length === 0 && (
-                <EmptyRequestBox
-                  message={'위의 조건으로 모집 중인 팀이 아직 없습니다.'}
-                />
+                <EmptyRequestBox message={'아직 받은 제안이 없습니다.'} />
               )}
               {userRequests.map((userRequest) => (
                 <UserRequestItem
@@ -116,13 +114,12 @@ const ReceiveRequestListSection: React.FC = () => {
 
 const Container = styled.section`
   max-width: 800px;
-  margin: 0 auto 24px;
+  margin: 0 auto 120px;
   padding: 0 16px;
   box-sizing: border-box;
 
   @media (max-width: 575px) {
     margin-top: 70px;
-    margin-bottom: 90px;
   }
 `;
 

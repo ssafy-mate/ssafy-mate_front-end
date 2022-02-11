@@ -589,59 +589,62 @@ const ProfileInformationSection: React.FC = () => {
           </Row>
           <Hr />
           <Row>
-            <SingleInformationWrapper className="right-gap">
+            <SingleInformationWrapper>
               <Label htmlFor="common-project">공통 프로젝트 트랙</Label>
-              <Select
-                id="common-project"
-                name="common-project"
-                value={commonProject !== null ? commonProject : 'default'}
-                onChange={handleProjectSelect}
-                disabled={newCommonProjectsDisabled}
-              >
-                <option value="default">- 선택 -</option>
-                {PROJECT_LIST[0].projectTracks !== undefined &&
-                  PROJECT_LIST[0].projectTracks.map((projectTrack) => (
-                    <option key={projectTrack.id} value={projectTrack.name}>
-                      {projectTrack.name}
-                    </option>
-                  ))}
-              </Select>
+              <SelectWrapper>
+                <Select
+                  id="common-project"
+                  name="common-project"
+                  value={commonProject !== null ? commonProject : 'default'}
+                  onChange={handleProjectSelect}
+                  disabled={newCommonProjectsDisabled}
+                >
+                  <option value="default">- 선택 -</option>
+                  {PROJECT_LIST[0].projectTracks !== undefined &&
+                    PROJECT_LIST[0].projectTracks.map((projectTrack) => (
+                      <option key={projectTrack.id} value={projectTrack.name}>
+                        {projectTrack.name}
+                      </option>
+                    ))}
+                </Select>
+                <ModifyButton
+                  type="button"
+                  className="project-track-select__edit-button"
+                  onClick={handleCommonProjectssModifyButton}
+                >
+                  {newCommonProjectsModifyButtonText}
+                </ModifyButton>
+              </SelectWrapper>
             </SingleInformationWrapper>
-            <SingleInformationWrapper className="top-right-gap-button">
-              <ModifyButton
-                type="button"
-                className="project-track-select__edit-button"
-                onClick={handleCommonProjectssModifyButton}
-              >
-                {newCommonProjectsModifyButtonText}
-              </ModifyButton>
-            </SingleInformationWrapper>
-            <SingleInformationWrapper className="right-gap">
+          </Row>
+          <Hr />
+          <Row>
+            <SingleInformationWrapper>
               <Label htmlFor="special-project">특화 프로젝트 트랙</Label>
-              <Select
-                id="special-project"
-                name="special-project"
-                value={specialProject !== null ? specialProject : 'default'}
-                onChange={handleProjectSelect}
-                disabled={newSpecialProjectsDisabled}
-              >
-                <option value="default">- 선택 -</option>
-                {PROJECT_LIST[1].projectTracks !== undefined &&
-                  PROJECT_LIST[1].projectTracks.map((projectTrack) => (
-                    <option key={projectTrack.id} value={projectTrack.name}>
-                      {projectTrack.name}
-                    </option>
-                  ))}
-              </Select>
-            </SingleInformationWrapper>
-            <SingleInformationWrapper className="top-gap-button">
-              <ModifyButton
-                type="button"
-                className="project-track-select__edit-button"
-                onClick={handleSpecialProjectssModifyButton}
-              >
-                {newSpecialprojectsModifyButtonText}
-              </ModifyButton>
+              <SelectWrapper>
+                <Select
+                  id="special-project"
+                  name="special-project"
+                  value={specialProject !== null ? specialProject : 'default'}
+                  onChange={handleProjectSelect}
+                  disabled={newSpecialProjectsDisabled}
+                >
+                  <option value="default">- 선택 -</option>
+                  {PROJECT_LIST[1].projectTracks !== undefined &&
+                    PROJECT_LIST[1].projectTracks.map((projectTrack) => (
+                      <option key={projectTrack.id} value={projectTrack.name}>
+                        {projectTrack.name}
+                      </option>
+                    ))}
+                </Select>
+                <ModifyButton
+                  type="button"
+                  className="project-track-select__edit-button"
+                  onClick={handleSpecialProjectssModifyButton}
+                >
+                  {newSpecialprojectsModifyButtonText}
+                </ModifyButton>
+              </SelectWrapper>
             </SingleInformationWrapper>
           </Row>
           <Hr />
@@ -894,6 +897,7 @@ const Textarea = styled.textarea`
     font-size: 13px;
   }
 `;
+
 const ErrorMessageWrapper = styled.div`
   margin-bottom: 8px;
 `;
@@ -907,6 +911,7 @@ const ErrorMessage = styled.span`
 
 const ModifyButton = styled.button`
   width: 100%;
+  min-width: 60px;
   height: 40px;
   margin-top: 8px;
   border: none;
@@ -971,6 +976,7 @@ const JobSelectWrapper = styled.div`
 const Select = styled.select`
   width: 100%;
   height: 40px;
+  margin-right: 8px;
   padding: 8px 12px;
   outline: 0;
   border: 1px solid #d7e2eb;
@@ -1173,6 +1179,14 @@ const Hr = styled.hr`
   width: 100%;
   border: 1px dashed #d7e2eb;
   margin: 24px 0;
+`;
+
+const SelectWrapper = styled.div`
+  display: flex;
+
+  @media (max-width: 575px) {
+    flex-direction: column;
+  }
 `;
 
 export default ProfileInformationSection;
