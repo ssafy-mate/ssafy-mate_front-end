@@ -100,18 +100,30 @@ const UserInfoSection: React.FC = () => {
         description: `${
           userData !== undefined ? userData.userName : ''
         } 교육생 상세 정보`,
-        imageUrl: 'https://avatars.githubusercontent.com/u/97279195?s=200&v=4',
+        imageUrl: `${
+          userData !== undefined
+            ? userData.profileImgUrl
+            : 'https://avatars.githubusercontent.com/u/97279195?s=200&v=4'
+        }`,
         link: {
           webUrl: `https://www.ssafymate.site${
+            userData !== undefined ? `/users/${userData.userId}` : ''
+          }`,
+          mobileWebUrl: `https://www.ssafymate.site${
             userData !== undefined ? `/users/${userData.userId}` : ''
           }`,
         },
       },
       buttons: [
         {
-          title: '교육생 상세 정보 보러가기',
+          title: `${
+            userData !== undefined ? userData.userName : ''
+          } 교육생 정보 보러가기`,
           link: {
             webUrl: `https://www.ssafymate.site${
+              userData !== undefined ? `/users/${userData.userId}` : ''
+            }`,
+            mobileWebUrl: `https://www.ssafymate.site${
               userData !== undefined ? `/users/${userData.userId}` : ''
             }`,
           },

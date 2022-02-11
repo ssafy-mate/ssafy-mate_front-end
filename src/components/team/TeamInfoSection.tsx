@@ -128,18 +128,30 @@ const TeamInfoSection: React.FC = () => {
         description: `${
           teamData !== undefined ? teamData.teamName : ''
         } 팀 상세 정보`,
-        imageUrl: 'https://avatars.githubusercontent.com/u/97279195?s=200&v=4',
+        imageUrl: `${
+          teamData !== undefined
+            ? teamData.teamImgUrl
+            : 'https://avatars.githubusercontent.com/u/97279195?s=200&v=4'
+        }`,
         link: {
           webUrl: `https://www.ssafymate.site${
+            teamData !== undefined ? `/teams/${teamData.teamId}` : ''
+          }`,
+          mobileWebUrl: `https://www.ssafymate.site${
             teamData !== undefined ? `/teams/${teamData.teamId}` : ''
           }`,
         },
       },
       buttons: [
         {
-          title: '팀 상세 정보 보러가기',
+          title: `${
+            teamData !== undefined ? teamData.teamName : ''
+          } 팀 정보 보러가기`,
           link: {
             webUrl: `https://www.ssafymate.site${
+              teamData !== undefined ? `/teams/${teamData.teamId}` : ''
+            }`,
+            mobileWebUrl: `https://www.ssafymate.site${
               teamData !== undefined ? `/teams/${teamData.teamId}` : ''
             }`,
           },
