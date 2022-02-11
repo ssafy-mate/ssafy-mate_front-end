@@ -1,3 +1,10 @@
+export interface OtherUserInfoType {
+  userId: number;
+  userName: string;
+  userEmail: string;
+  profileImgUrl: string;
+}
+
 export interface MessageType {
   id: number;
   senderId: number;

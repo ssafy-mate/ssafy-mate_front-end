@@ -18,6 +18,7 @@ import {
   MessageType,
   ChatRoomType,
   ChatLogResponseType,
+  OtherUserInfoType,
 } from '../../types/messageTypes';
 
 /** @jsxImportSource @emotion/react */
@@ -25,6 +26,7 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import { Scrollbars } from 'react-custom-scrollbars-2';
+import { Avatar } from '@mui/material';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -46,18 +48,18 @@ const ChattingForm: React.FC = () => {
   const myToken = useToken();
   const myData = useUserIdName();
 
-  const myId = myData[0];
-  const myName = myData[1];
+  const myUserId = myData[0];
+  const myUserName = myData[1];
 
   const param = new URLSearchParams(location.search);
   const roomId: string | null = param.get('roomId');
   const userId: string | null = param.get('userId');
-  const userName: string | null = param.get('userName');
 
   const [chatSections, setChatSections] = useState<MessageType[]>([]);
+  const [otherUser, setOtherUser] = useState<OtherUserInfoType>();
   const [open, setOpen] = useState(false);
 
-  const [socket] = useSocket(myId as number);
+  const [socket] = useSocket(myUserId as number);
   const [chat, onChangeChat, setChat] = useTextArea('');
 
   const messageInputRef = useRef<HTMLTextAreaElement>(null);
@@ -69,13 +71,23 @@ const ChattingForm: React.FC = () => {
     data: roomData,
     error: roomError,
     mutate: mutateRoom,
-  } = useSWR<ChatRoomType[]>(`/api/chats/rooms/${myId}`, (url) =>
+  } = useSWR<ChatRoomType[]>(`/api/chats/rooms/${myUserId}`, (url) =>
     fetcherGet(url, myToken),
   );
 
   useEffect(() => {
     setChatSections([]);
   }, [roomId]);
+
+  useEffect(() => {
+    userInfoGet();
+  }, [userId]);
+
+  const userInfoGet = () => {
+    axiosInstance.get(`/api/chats/infos/${userId}`).then((response) => {
+      setOtherUser(response.data);
+    });
+  };
 
   const getKey = (pageIndex: number, previousPageData: ChatLogResponseType) => {
     // 끝에 도달
@@ -113,10 +125,10 @@ const ChattingForm: React.FC = () => {
 
       if (chat?.trim()) {
         const params: MessageType = {
-          userName: myName as string,
+          userName: myUserName as string,
           roomId: roomId as string,
           content: chat,
-          senderId: Number(myId),
+          senderId: Number(myUserId),
           sentTime: dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS'),
           id: 0,
         };
@@ -145,12 +157,15 @@ const ChattingForm: React.FC = () => {
         });
       }
     },
-    [chat, roomId, myId, userId, setChat],
+    [chat, roomId, myUserId, userId, setChat],
   );
 
   const onMessage = useCallback(
     (data: MessageType) => {
-      if (data.senderId === Number(userId) && Number(myId) !== Number(userId)) {
+      if (
+        data.senderId === Number(userId) &&
+        Number(myUserId) !== Number(userId)
+      ) {
         mutateChat((chatData) => {
           chatData?.[0].contentList.unshift(data);
           return chatData;
@@ -172,7 +187,7 @@ const ChattingForm: React.FC = () => {
         });
       }
     },
-    [chatData, scrollbarRef, userId, myId, mutateChat],
+    [chatData, scrollbarRef, userId, myUserId, mutateChat],
   );
 
   useEffect(() => {
@@ -267,7 +282,7 @@ const ChattingForm: React.FC = () => {
         <ChatRoomListWrapper>
           {roomData?.map((room: ChatRoomType, index: number) => (
             <ChatRoomList
-              myId={Number(myId)}
+              myId={Number(myUserId)}
               roomId={room.roomId}
               userId={room.userId}
               userName={room.userName}
@@ -301,16 +316,18 @@ const ChattingForm: React.FC = () => {
               {roomData?.map((room: ChatRoomType) => (
                 <ListItem button key={room.roomId}>
                   <NavLink
-                    to={`/chatting/${Number(myId)}?roomId=${
+                    to={`/chatting/${Number(myUserId)}?roomId=${
                       room.roomId
-                    }&userId=${room.userId}&userName=${room.userName}@${
-                      room.userEmail.split('@')[0]
-                    }`}
+                    }&userId=${room.userId}}`}
                   >
                     <div css={listItemCss}>
-                      <img
-                        src={room.profileImgUrl}
-                        alt="sender profile image"
+                      <Avatar
+                        src={
+                          room?.profileImgUrl
+                            ? room?.profileImgUrl
+                            : '/image/assets/basic-priofile-img.png'
+                        }
+                        sx={{ marginRight: '10px' }}
                       />
                       <span>{`${room.userName}@${
                         room.userEmail.split('@')[0]
@@ -353,12 +370,19 @@ const ChattingForm: React.FC = () => {
                 onKeyDown={toggleDrawer(false)}
               >
                 <NavLink
-                  to={`/chatting/${Number(myId)}?roomId=${room.roomId}&userId=${
-                    room.userId
-                  }&userName=${room.userName}@${room.userEmail.split('@')[0]}`}
+                  to={`/chatting/${Number(myUserId)}?roomId=${
+                    room.roomId
+                  }&userId=${room.userId}`}
                 >
                   <div css={listItemCss}>
-                    <img src={room.profileImgUrl} alt="sender profile image" />
+                    <Avatar
+                      src={
+                        room?.profileImgUrl
+                          ? room?.profileImgUrl
+                          : '/image/assets/basic-priofile-img.png'
+                      }
+                      sx={{ marginRight: '10px' }}
+                    />
                     <span>{`${room.userName}@${
                       room.userEmail.split('@')[0]
                     }`}</span>
@@ -387,14 +411,18 @@ const ChattingForm: React.FC = () => {
             <ChatRoomMessageWrapper>
               <ChatRoomUserNameBar>
                 <ChatRoomHeaderProfile className="userName">
-                  {roomData &&
-                    roomData?.map((item, index) => {
-                      if (item.userId === Number(userId)) {
-                        return <img src={item.profileImgUrl} />;
-                      }
-                    })}
+                  <Avatar
+                    src={
+                      otherUser?.profileImgUrl
+                        ? otherUser?.profileImgUrl
+                        : '/image/assets/basic-priofile-img.png'
+                    }
+                    sx={{ marginRight: '10px' }}
+                  />
                   <div className="userName">
-                    <span>{userName}</span>
+                    <span>
+                      {otherUser?.userName}@{otherUser?.userEmail.split('@')[0]}
+                    </span>
                   </div>
                 </ChatRoomHeaderProfile>
                 <IconButton
@@ -411,7 +439,7 @@ const ChattingForm: React.FC = () => {
                   <MessageWrapper>
                     {chatSections && chatSections.length > 0
                       ? chatSections.map((message, index) => {
-                          if (message.senderId === Number(myId)) {
+                          if (message.senderId === Number(myUserId)) {
                             return (
                               <MessageBoxWrapper key={index}>
                                 <MessageBoxRightContent>
@@ -430,12 +458,13 @@ const ChattingForm: React.FC = () => {
                             return (
                               <MessageBoxWrapper>
                                 <MessageBoxLeftContent key={index}>
-                                  {roomData &&
-                                    roomData?.map((item, index) => {
-                                      if (item.userId === Number(userId)) {
-                                        return <img src={item.profileImgUrl} />;
-                                      }
-                                    })}
+                                  <Avatar
+                                    src={
+                                      otherUser?.profileImgUrl
+                                        ? otherUser?.profileImgUrl
+                                        : '/image/assets/basic-priofile-img.png'
+                                    }
+                                  />
                                   <p>{message.content}</p>
                                   <MessageTimeBox>
                                     <div className="message_date">
@@ -477,9 +506,9 @@ const ChattingForm: React.FC = () => {
 };
 
 const DrawerHeader = styled.div`
-  display: flex,
-  align-items: center,
-  justify-content: flex-end,
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
 `;
 
 const ChatContianer = styled.div`
@@ -573,16 +602,9 @@ const listItemCss = css`
   align-items: center;
   box-sizing: border-box;
 
-  & img {
-    width: 40px;
-    height: 40px;
-    margin-right: 8px;
-    border: 1px solid #b4b4b4;
-    border-radius: 50%;
-  }
-
   & span {
-    overflow-x: hidden;
+    overflow: hidden;
+    height: 18px;
     font-size: 16px;
     font-weight: 500;
     color: #6d6d6d;
@@ -631,18 +653,7 @@ const ChatRoomHeaderProfile = styled.div`
   display: flex;
   align-items: center;
 
-  & img {
-    width: 40px;
-    height: 40px;
-    min-height: 40px;
-    min-width: 40px;
-    margin-right: 12px;
-    border: 1px solid #eaebef;
-    border-radius: 50%;
-    background-color: #eaebef;
-  }
-
-  & .userName {
+  & span {
     display: inline-flex;
     align-items: center;
     font-size: 16px;
@@ -689,7 +700,7 @@ const MessageBoxLeftContent = styled.div`
     min-height: 36px;
     min-width: 36px;
     margin-right: 8px;
-    border: 1px solid #f9f9f9;
+    /* border: 1px solid #f9f9f9; */
     border-radius: 50%;
     background-color: #eaebef;
   }

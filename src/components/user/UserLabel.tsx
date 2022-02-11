@@ -2,6 +2,8 @@ import { useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
+import useUserId from '../../hooks/useUserId';
+
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
@@ -27,7 +29,7 @@ const UserLabel: React.FC<UserLabelProps> = ({
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  const myId = 1; // 임시 아이디 추후 스토어에서 받아오기
+  const myUserId = useUserId() as number;
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
     setAnchorEl(event.currentTarget);
@@ -72,9 +74,9 @@ const UserLabel: React.FC<UserLabelProps> = ({
         )}
         <MuiMenuItem>
           <MenuLink
-            to={`/chatting/${myId < userId ? myId : userId}-${
-              myId > userId ? myId : userId
-            }`}
+            to={`/chatting/${myUserId}?roomId=${
+              myUserId < userId ? myUserId : userId
+            }-${myUserId > userId ? myUserId : userId}&userId=${userId}`}
           >
             <ListItemIcon>
               <SendIcon fontSize="small" css={{ color: '#5f7f90' }} />
