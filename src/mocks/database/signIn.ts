@@ -8,6 +8,7 @@ export const SsafyMateMemberList = [
       ssafyTrack: 'Java Track',
       token: '1231231sdfjlksjflksdjf',
       message: '로그인하였습니다.',
+      password: '',
       projects: [
         {
           projectId: 1,
@@ -39,6 +40,7 @@ export const SsafyMateMemberList = [
       ssafyTrack: 'Java Track',
       token: '1231231sdfjlksjflksdjf',
       message: '로그인하였습니다.',
+      password: '',
       projects: [
         {
           projectId: 1,
@@ -70,6 +72,7 @@ export const SsafyMateMemberList = [
       ssafyTrack: 'Python Track',
       token: '1231231sdfjlksjflksdjf',
       message: '로그인하였습니다.',
+      password: '',
       projects: [
         {
           projectId: 1,
@@ -101,6 +104,7 @@ export const SsafyMateMemberList = [
       ssafyTrack: 'Java Track',
       token: '1231231sdfjlksjflksdjf',
       message: '로그인하였습니다.',
+      password: '',
       projects: [
         {
           projectId: 1,
@@ -165,6 +169,7 @@ export const SsafyMateMemberList = [
       token: 'skdjfslkjflskdfjlskfjdklsd',
       projects: null,
       message: '로그인하였습니다.',
+      password: '',
     },
   },
   {
@@ -176,6 +181,7 @@ export const SsafyMateMemberList = [
       ssafyTrack: 'Python Track',
       token: 'skdjfslkjflskdfjlskfjdklsd',
       message: '로그인하였습니다.',
+      password: '',
       projects: [
         {
           projectId: 1,
