@@ -56,10 +56,10 @@ const Footer: React.FC<FooterProps> = ({ offMarginTop }) => {
         <FooterOthers>
           <SubMenuList>
             <SubMenuItem>
-              <PageLink to="#">개인정보 처리방침</PageLink>
+              <PageLink to="/privacy">개인정보 처리방침</PageLink>
             </SubMenuItem>
             <SubMenuItem>
-              <PageLink to="#">이용약관</PageLink>
+              <PageLink to="/terms_of_service">이용약관</PageLink>
             </SubMenuItem>
             <SubMenuItem>
               <PageLink to="#">싸피 메이트 인재 채용</PageLink>
