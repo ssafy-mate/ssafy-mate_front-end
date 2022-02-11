@@ -25,13 +25,13 @@ const Box = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 40px 16px;
+  padding: 120px 16px;
   border-radius: 4px;
   background-color: #f4f4f8;
 
   @media (max-width: 575px) {
-    padding-top: 30px;
-    padding-bottom: 30px;
+    padding-top: 60px;
+    padding-bottom: 60px;
   }
 `;
 
