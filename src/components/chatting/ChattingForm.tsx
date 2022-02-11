@@ -1,34 +1,23 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
+import { useLocation } from 'react-router';
 
 import { useMediaQuery } from 'react-responsive';
 
-import dayjs from 'dayjs';
-import useSWR from 'swr';
-import useSWRInfinite from 'swr/infinite';
+import { Scrollbars } from 'react-custom-scrollbars-2';
+
 import axios from 'axios';
 
-import { axiosInstance } from '../../utils/axios';
-import { fetcherGet } from '../../utils/fetcher';
-import useSocket from '../../hooks/useSocket';
-import useToken from '../../hooks/useToken';
-import useTextArea from '../../hooks/useTextArea';
-import useUserIdName from '../../hooks/useUserIdName';
-import ChatRoomList from './ChatRoomList';
-import {
-  MessageType,
-  ChatRoomType,
-  ChatLogResponseType,
-  OtherUserInfoType,
-} from '../../types/messageTypes';
+import dayjs from 'dayjs';
+
+import useSWR from 'swr';
+import useSWRInfinite from 'swr/infinite';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
-import { Scrollbars } from 'react-custom-scrollbars-2';
 import { Avatar } from '@mui/material';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import Button from '@mui/material/Button';
@@ -42,9 +31,23 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import ChatIcon from '@mui/icons-material/Chat';
 
-const socketUrl = 'https://i6a402.p.ssafy.io:3100';
+import {
+  MessageType,
+  ChatRoomType,
+  ChatLogResponseType,
+  OtherUserInfoType,
+} from '../../types/messageTypes';
+
+import { axiosInstance } from '../../utils/axios';
+import { fetcherGet } from '../../utils/fetcher';
+import useSocket from '../../hooks/useSocket';
+import useToken from '../../hooks/useToken';
+import useTextArea from '../../hooks/useTextArea';
+import useUserIdName from '../../hooks/useUserIdName';
+import ChatRoomList from './ChatRoomList';
+
 const PAGE_SIZE = 20;
-const drawerWidth = 250;
+const DRAWER_WIDTH = 250;
 
 const ChattingForm: React.FC = () => {
   const location = useLocation();
@@ -97,10 +100,14 @@ const ChattingForm: React.FC = () => {
 
   const getKey = (pageIndex: number, previousPageData: ChatLogResponseType) => {
     // 끝에 도달
-    if (previousPageData && !previousPageData.contentList) return null;
+    if (previousPageData && !previousPageData.contentList) {
+      return null;
+    }
 
     // 첫 페이지, `previousPageData`가 없음
-    if (pageIndex === 0) return `/api/chats/logs/${roomId}?nextCursor=0`;
+    if (pageIndex === 0) {
+      return `/api/chats/logs/${roomId}?nextCursor=0`;
+    }
 
     // API의 엔드포인트에 커서 추가
     return `api/chats/logs/${roomId}?nextCursor=${previousPageData.nextCursor}`;
@@ -151,16 +158,18 @@ const ChattingForm: React.FC = () => {
           }
         });
 
-        axios.post(`${socketUrl}/api/chats`, params).then(() => {
-          mutateRoom();
-          mutateChat().then(() => {
-            if (scrollbarRef.current) {
-              setTimeout(() => {
-                scrollbarRef?.current?.scrollToBottom();
-              }, 50);
-            }
+        axios
+          .post(`${process.env.REACT_APP_SOCKET_URL}/api/chats`, params)
+          .then(() => {
+            mutateRoom();
+            mutateChat().then(() => {
+              if (scrollbarRef.current) {
+                setTimeout(() => {
+                  scrollbarRef?.current?.scrollToBottom();
+                }, 50);
+              }
+            });
           });
-        });
       }
     },
     [chat, roomId, myUserId, userId, setChat],
@@ -212,7 +221,6 @@ const ChattingForm: React.FC = () => {
     }
   };
 
-  // infinity scroll checking
   const isEmpty = chatData?.[chatData.length - 1]?.contentList?.length === 0;
   const isReachingEnd =
     isEmpty ||
@@ -306,10 +314,10 @@ const ChattingForm: React.FC = () => {
           ))}
           <SwipeableDrawer
             sx={{
-              'width': drawerWidth,
+              'width': DRAWER_WIDTH,
               'flexShrink': 0,
               '& .MuiDrawer-paper': {
-                width: drawerWidth,
+                width: DRAWER_WIDTH,
                 boxSizing: 'border-box',
               },
             }}
@@ -337,7 +345,7 @@ const ChattingForm: React.FC = () => {
                         src={
                           room?.profileImgUrl
                             ? room?.profileImgUrl
-                            : '/image/assets/basic-priofile-img.png'
+                            : '/image/assets/basic-profile-img.png'
                         }
                         sx={{ marginRight: '12px' }}
                       />
@@ -355,10 +363,10 @@ const ChattingForm: React.FC = () => {
       <ChatRoomSection>
         <SwipeableDrawer
           sx={{
-            'width': drawerWidth,
+            'width': DRAWER_WIDTH,
             'flexShrink': 0,
             '& .MuiDrawer-paper': {
-              width: drawerWidth,
+              width: DRAWER_WIDTH,
               boxSizing: 'border-box',
             },
           }}
@@ -391,7 +399,7 @@ const ChattingForm: React.FC = () => {
                       src={
                         room?.profileImgUrl
                           ? room?.profileImgUrl
-                          : '/image/assets/basic-priofile-img.png'
+                          : '/image/assets/basic-profile-img.png'
                       }
                       sx={{ marginRight: '10px' }}
                     />
@@ -407,15 +415,11 @@ const ChattingForm: React.FC = () => {
         {!roomId ? (
           <ChatRoomEmpty>
             <ChatRoomEmptyContentWrapper>
-              <span>대화할 상대를 선택해주세요.</span>
-              <Button
-                variant="contained"
-                css={chatListButtonCss}
-                onClick={handleDrawerOpen}
-              >
-                <MailOutlineIcon css={{ padding: '5px' }} />
-                채팅 목록
-              </Button>
+              <ChatIcon className="chat-icon" />
+              <span>채팅할 상대를 선택해주세요.</span>
+              <ChatListOpenButton onClick={handleDrawerOpen}>
+                채팅 목록 열기
+              </ChatListOpenButton>
             </ChatRoomEmptyContentWrapper>
           </ChatRoomEmpty>
         ) : (
@@ -427,9 +431,10 @@ const ChattingForm: React.FC = () => {
                     src={
                       otherUser?.profileImgUrl
                         ? otherUser?.profileImgUrl
-                        : '/image/assets/basic-priofile-img.png'
+                        : '/image/assets/basic-profile-img.png'
                     }
                     sx={{ marginRight: '10px' }}
+                    className="profile-avatar"
                   />
                   <ProfileLink to={`/users/${otherUser?.userId}`}>
                     <div className="userName">
@@ -481,7 +486,7 @@ const ChattingForm: React.FC = () => {
                                     src={
                                       otherUser?.profileImgUrl
                                         ? otherUser?.profileImgUrl
-                                        : '/image/assets/basic-priofile-img.png'
+                                        : '/image/assets/basic-profile-img.png'
                                     }
                                   />
                                   <p>{message.content}</p>
@@ -562,7 +567,7 @@ const ChatRoomListSidebar = styled.div`
   box-sizing: border-box;
   background-color: #fff;
 
-  @media (max-width: 575px) {
+  @media (max-width: 767px) {
     display: flex;
     width: 100%;
     display: none;
@@ -573,7 +578,7 @@ const ChatRoomListWrapper = styled.ul`
   overflow-x: hidden;
   box-sizing: border-box;
 
-  @media (max-width: 575px) {
+  @media (max-width: 767px) {
     display: flex;
     width: 100%;
     display: none;
@@ -590,7 +595,7 @@ const ChatRoomSection = styled.section`
   border-right: solid 1px #dfdfdf;
   background-color: #fff;
 
-  @media (max-width: 575px) {
+  @media (max-width: 767px) {
     display: flex;
     flex-wrap: wrap;
     width: 100%;
@@ -611,19 +616,44 @@ const ChatRoomEmptyContentWrapper = styled.div`
   align-items: center;
   width: 100%;
   height: 100%;
-  font-size: 18px;
 
+  & .chat-icon {
+    font-size: 100px;
+    color: #dcdee2;
+  }
   & span {
-    color: #383838;
     padding: 20px;
+    font-size: 18px;
+    color: #4d5159;
+  }
+
+  @media (max-width: 767px) {
+    & .chat-icon {
+      font-size: 90px;
+    }
+    & span {
+      font-size: 16px;
+    }
   }
 `;
 
-const chatListButtonCss = css`
+const ChatListOpenButton = styled.button`
   display: none;
+  margin-top: 12px;
+  padding: 10px 20px;
+  outline: 0;
+  border: none;
+  border-radius: 4px;
+  background-color: #3396f4;
+  box-shadow: none;
   font-size: 15px;
+  color: #fff;
 
-  @media (max-width: 575px) {
+  &:hover {
+    background-color: #2878c3;
+  }
+
+  @media (max-width: 767px) {
     display: flex;
   }
 `;
@@ -670,6 +700,12 @@ const ChatRoomUserNameBar = styled.div`
   padding: 0 20px;
   border-bottom: 1px solid #dfdfdf;
   box-sizing: border-box;
+
+  @media (max-width: 767px) {
+    height: 62px;
+    min-height: 62px;
+    padding: 0 16px;
+  }
 `;
 
 const TextArea = styled(TextareaAutosize)`
@@ -694,7 +730,7 @@ const listIcon = css`
     }
   }
 
-  @media (max-width: 575px) {
+  @media (max-width: 767px) {
     display: flex;
   }
 `;
@@ -704,8 +740,6 @@ const ProfileLink = styled(Link)`
   justify-content: center;
   align-items: center;
   width: 100%;
-
-  transition: background-color 0.08s ease-in-out;
   cursor: pointer;
 
   & .userName {
@@ -713,6 +747,22 @@ const ProfileLink = styled(Link)`
       font-size: 16px;
       font-weight: 500;
       color: #263747;
+      transition: color 0.08s ease-in-out;
+
+      &:hover {
+        color: #3396f4;
+        text-decoration: underline;
+      }
+    }
+  }
+
+  @media (max-width: 767px) {
+    & .userName {
+      & span {
+        font-size: 15px;
+        font-weight: 500;
+        color: #263747;
+      }
     }
   }
 `;
@@ -721,16 +771,10 @@ const ChatRoomHeaderProfile = styled.div`
   display: flex;
   align-items: center;
 
-  & span {
-    display: inline-flex;
-    align-items: center;
-    font-size: 16px;
-    font-weight: 600;
-    color: #6d6d6d;
-
-    &:hover {
-      color: #3396f4;
-      text-decoration: underline;
+  @media (max-width: 767px) {
+    & .profile-avatar {
+      width: 36px;
+      height: 36px;
     }
   }
 `;
@@ -738,6 +782,10 @@ const ChatRoomHeaderProfile = styled.div`
 const ChatRoomMessageList = styled.div`
   overflow: hidden auto;
   padding: 0px 20px;
+
+  @media (max-width: 767px) {
+    padding: 0 16px;
+  }
 `;
 
 const MessageWrapper = styled.div`
@@ -762,7 +810,7 @@ const MessageBoxLeftContent = styled.div`
     border-radius: 2px 20px 20px;
     background-color: #e9ebef;
     font-size: 14px;
-    line-height: 150%;
+    line-height: 1.5;
     color: #263747;
     white-space: pre-wrap;
     word-break: break-all;
@@ -776,6 +824,13 @@ const MessageBoxLeftContent = styled.div`
     margin-right: 8px;
     border-radius: 50%;
     background-color: #eaebef;
+  }
+
+  @media (max-width: 767px) {
+    & p {
+      font-size: 13px;
+      line-height: 1.4;
+    }
   }
 `;
 
@@ -793,10 +848,17 @@ const MessageBoxRightContent = styled.div`
     border-radius: 20px 2px 20px 20px;
     background-color: #3396f4;
     font-size: 14px;
-    line-height: 150%;
+    line-height: 1.5;
     color: #fff;
     white-space: pre-wrap;
     word-break: break-all;
+  }
+
+  @media (max-width: 767px) {
+    & p {
+      font-size: 13px;
+      line-height: 1.4;
+    }
   }
 `;
 
@@ -826,10 +888,14 @@ const ChatTypingWrapper = styled.div`
   border-radius: 10px;
   background-color: #eaebef;
 
-  button {
+  & button {
     outline: none;
     border: none;
     background-color: #eaebef;
+  }
+
+  @media (max-width: 767px) {
+    margin: 12px 16px 8px 16px;
   }
 `;
 
@@ -865,6 +931,11 @@ const ChatTypingTextarea = css`
 
 const ProfileImg = styled(Avatar)`
   margin-right: 8px;
+
+  @media (max-width: 767px) {
+    width: 34px;
+    height: 34px;
+  }
 `;
 
 const ChatRoomListHeader = styled.div`

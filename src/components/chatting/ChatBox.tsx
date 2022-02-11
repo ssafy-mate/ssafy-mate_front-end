@@ -1,6 +1,4 @@
-import React, { useCallback, useRef } from 'react';
-
-import autosize from 'autosize';
+import { useCallback, useRef } from 'react';
 
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
@@ -60,7 +58,7 @@ const ChatBox: React.FC<ChatProps> = ({ chat }) => {
           maxRows={3}
           minRows={1}
           onKeyPress={handleMessageSendKeyPress}
-          placeholder="메시지를 입력해주세요"
+          placeholder="메시지를 입력해주세요."
         />
         <button onClick={handleSendMessage}>
           <SendIcon css={SendButton}></SendIcon>
@@ -80,17 +78,17 @@ const ChatTypingWrapper = styled.div`
   border-radius: 8px;
   background-color: #eaebef;
 
-  textarea {
+  & textarea {
     overflow: auto;
     overflow-wrap: break-word;
     width: 100%;
     padding: 10px;
-    resize: none;
-    border: none;
     outline: none;
-    line-height: 150%;
+    border: none;
     background-color: #eaebef;
     font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+    line-height: 150%;
+    resize: none;
 
     ::-webkit-scrollbar {
       opacity: 0;
@@ -105,7 +103,7 @@ const ChatTypingWrapper = styled.div`
     }
   }
 
-  button {
+  & button {
     outline: none;
     border: none;
     background-color: #eaebef;

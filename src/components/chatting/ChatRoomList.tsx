@@ -40,7 +40,6 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
     setOnlineList([]);
   }, [roomId]);
 
-  // off 되는지 확인하기
   useEffect(() => {
     socket?.on('onlineList', (data: number[]) => {
       setOnlineList(data);
@@ -97,10 +96,11 @@ const ChatListItemWrapper = styled.div`
   box-sizing: border-box;
   border-bottom: 1px solid #dfdfdf;
   background-color: #fff;
+  transition: background-color 0.08s ease-in-out;
   cursor: pointer;
 
   &:hover {
-    background-color: #ebebebce;
+    background-color: #e1e3e7;
   }
 
   @media (max-width: 575px) {
