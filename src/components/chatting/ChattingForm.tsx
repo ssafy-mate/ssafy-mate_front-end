@@ -27,7 +27,6 @@ import ListItem from '@mui/material/ListItem';
 import SendIcon from '@mui/icons-material/Send';
 import CommentIcon from '@mui/icons-material/Comment';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import ChatIcon from '@mui/icons-material/Chat';
 
 import {
@@ -74,7 +73,6 @@ const ChattingForm: React.FC = () => {
   const chatRoomMessageRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<Scrollbars>(null);
 
-  // 채팅 목록 불러오기
   const {
     data: roomData,
     error: roomError,
@@ -98,21 +96,17 @@ const ChattingForm: React.FC = () => {
   };
 
   const getKey = (pageIndex: number, previousPageData: ChatLogResponseType) => {
-    // 끝에 도달
     if (previousPageData && !previousPageData.contentList) {
       return null;
     }
 
-    // 첫 페이지, `previousPageData`가 없음
     if (pageIndex === 0) {
       return `/api/chats/logs/${roomId}?nextCursor=0`;
     }
 
-    // API의 엔드포인트에 커서 추가
     return `api/chats/logs/${roomId}?nextCursor=${previousPageData.nextCursor}`;
   };
 
-  // 대화 내역 불러오기
   const {
     data: chatData,
     mutate: mutateChat,
@@ -230,7 +224,6 @@ const ChattingForm: React.FC = () => {
     (values) => {
       if (values.scrollTop === 0 && !isReachingEnd && !isEmpty) {
         setSize((size) => size + 1).then(() => {
-          // 스크롤 위치 유지 : 현재 스크롤 높이 - 스크롤바의 높이
           setTimeout(() => {
             scrollbarRef.current?.scrollTop(
               scrollbarRef.current?.getScrollHeight() - values.scrollHeight,
@@ -311,52 +304,6 @@ const ChattingForm: React.FC = () => {
               userEmail={room.userEmail}
             />
           ))}
-          <SwipeableDrawer
-            sx={{
-              'width': DRAWER_WIDTH,
-              'flexShrink': 0,
-              '& .MuiDrawer-paper': {
-                width: DRAWER_WIDTH,
-                boxSizing: 'border-box',
-              },
-            }}
-            variant="persistent"
-            anchor="right"
-            open={open}
-            onOpen={toggleDrawer(true)}
-            onClose={toggleDrawer(false)}
-          >
-            <DrawerHeader>
-              <IconButton onClick={handleDrawerClose}>
-                <ChevronLeftIcon />
-              </IconButton>
-            </DrawerHeader>
-            <List>
-              {roomData?.map((room: ChatRoomType) => (
-                <ListItem button key={room.roomId}>
-                  <Link
-                    to={`/chatting/${Number(myUserId)}?roomId=${
-                      room.roomId
-                    }&userId=${room.userId}}`}
-                  >
-                    <div css={listItemCss}>
-                      <Avatar
-                        src={
-                          room?.profileImgUrl
-                            ? room?.profileImgUrl
-                            : '/image/assets/basic-profile-img.png'
-                        }
-                        sx={{ marginRight: '12px' }}
-                      />
-                      <span className="userEmail">{`${room.userName}@${
-                        room.userEmail.split('@')[0]
-                      }`}</span>
-                    </div>
-                  </Link>
-                </ListItem>
-              ))}
-            </List>
-          </SwipeableDrawer>
         </ChatRoomListWrapper>
       </ChatRoomListSidebar>
       <ChatRoomSection>
@@ -403,11 +350,9 @@ const ChattingForm: React.FC = () => {
                       sx={{ marginRight: '10px' }}
                     />
                     <div className="user-name">
-                      <span className="user-name__name">
-                        {otherUser?.userName}
-                      </span>
+                      <span className="user-name__name">{room?.userName}</span>
                       <span className="user-name__email">
-                        @{otherUser?.userEmail.split('@')[0]}
+                        @{room?.userEmail.split('@')[0]}
                       </span>
                     </div>
                   </div>
