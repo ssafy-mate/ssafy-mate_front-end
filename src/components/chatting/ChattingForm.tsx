@@ -27,8 +27,8 @@ import ListItem from '@mui/material/ListItem';
 import SendIcon from '@mui/icons-material/Send';
 import CommentIcon from '@mui/icons-material/Comment';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import MailOutlineIcon from '@mui/icons-material/MailOutline';
 import ChatIcon from '@mui/icons-material/Chat';
+import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 
 import {
   MessageType,
@@ -43,7 +43,7 @@ import useSocket from '../../hooks/useSocket';
 import useToken from '../../hooks/useToken';
 import useTextArea from '../../hooks/useTextArea';
 import useUserIdName from '../../hooks/useUserIdName';
-import ChatRoomList from './ChatRoomList';
+import ChatRoomItem from './ChatRoomItem';
 
 const PAGE_SIZE = 20;
 const DRAWER_WIDTH = 250;
@@ -74,7 +74,6 @@ const ChattingForm: React.FC = () => {
   const chatRoomMessageRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<Scrollbars>(null);
 
-  // 채팅 목록 불러오기
   const {
     data: roomData,
     error: roomError,
@@ -98,21 +97,17 @@ const ChattingForm: React.FC = () => {
   };
 
   const getKey = (pageIndex: number, previousPageData: ChatLogResponseType) => {
-    // 끝에 도달
     if (previousPageData && !previousPageData.contentList) {
       return null;
     }
 
-    // 첫 페이지, `previousPageData`가 없음
     if (pageIndex === 0) {
       return `/api/chats/logs/${roomId}?nextCursor=0`;
     }
 
-    // API의 엔드포인트에 커서 추가
     return `api/chats/logs/${roomId}?nextCursor=${previousPageData.nextCursor}`;
   };
 
-  // 대화 내역 불러오기
   const {
     data: chatData,
     mutate: mutateChat,
@@ -230,7 +225,6 @@ const ChattingForm: React.FC = () => {
     (values) => {
       if (values.scrollTop === 0 && !isReachingEnd && !isEmpty) {
         setSize((size) => size + 1).then(() => {
-          // 스크롤 위치 유지 : 현재 스크롤 높이 - 스크롤바의 높이
           setTimeout(() => {
             scrollbarRef.current?.scrollTop(
               scrollbarRef.current?.getScrollHeight() - values.scrollHeight,
@@ -291,7 +285,7 @@ const ChattingForm: React.FC = () => {
   };
 
   return (
-    <ChatContianer>
+    <Contianer>
       <ChatRoomListSidebar>
         <ChatRoomListWrapper>
           <ChatRoomListHeader>
@@ -299,7 +293,7 @@ const ChattingForm: React.FC = () => {
             <ChatRoomListHead>채팅 목록</ChatRoomListHead>
           </ChatRoomListHeader>
           {roomData?.map((room: ChatRoomType) => (
-            <ChatRoomList
+            <ChatRoomItem
               key={room.roomId}
               myId={Number(myUserId)}
               roomId={room.roomId}
@@ -311,52 +305,6 @@ const ChattingForm: React.FC = () => {
               userEmail={room.userEmail}
             />
           ))}
-          <SwipeableDrawer
-            sx={{
-              'width': DRAWER_WIDTH,
-              'flexShrink': 0,
-              '& .MuiDrawer-paper': {
-                width: DRAWER_WIDTH,
-                boxSizing: 'border-box',
-              },
-            }}
-            variant="persistent"
-            anchor="right"
-            open={open}
-            onOpen={toggleDrawer(true)}
-            onClose={toggleDrawer(false)}
-          >
-            <DrawerHeader>
-              <IconButton onClick={handleDrawerClose}>
-                <ChevronLeftIcon />
-              </IconButton>
-            </DrawerHeader>
-            <List>
-              {roomData?.map((room: ChatRoomType) => (
-                <ListItem button key={room.roomId}>
-                  <Link
-                    to={`/chatting/${Number(myUserId)}?roomId=${
-                      room.roomId
-                    }&userId=${room.userId}}`}
-                  >
-                    <div css={listItemCss}>
-                      <Avatar
-                        src={
-                          room?.profileImgUrl
-                            ? room?.profileImgUrl
-                            : '/image/assets/basic-profile-img.png'
-                        }
-                        sx={{ marginRight: '12px' }}
-                      />
-                      <span className="userEmail">{`${room.userName}@${
-                        room.userEmail.split('@')[0]
-                      }`}</span>
-                    </div>
-                  </Link>
-                </ListItem>
-              ))}
-            </List>
-          </SwipeableDrawer>
         </ChatRoomListWrapper>
       </ChatRoomListSidebar>
       <ChatRoomSection>
@@ -403,11 +351,9 @@ const ChattingForm: React.FC = () => {
                       sx={{ marginRight: '10px' }}
                     />
                     <div className="user-name">
-                      <span className="user-name__name">
-                        {otherUser?.userName}
-                      </span>
+                      <span className="user-name__name">{room?.userName}</span>
                       <span className="user-name__email">
-                        @{otherUser?.userEmail.split('@')[0]}
+                        @{room?.userEmail.split('@')[0]}
                       </span>
                     </div>
                   </div>
@@ -419,7 +365,7 @@ const ChattingForm: React.FC = () => {
         {!roomId ? (
           <ChatRoomEmpty>
             <ChatRoomEmptyContentWrapper>
-              <ChatIcon className="chat-icon" />
+              <ForumOutlinedIcon className="chat-icon" />
               <span>채팅할 상대를 선택해주세요.</span>
               <ChatListOpenButton onClick={handleDrawerOpen}>
                 채팅 목록 열기
@@ -535,7 +481,7 @@ const ChattingForm: React.FC = () => {
           </ChatRoomWrapper>
         )}
       </ChatRoomSection>
-    </ChatContianer>
+    </Contianer>
   );
 };
 
@@ -554,7 +500,7 @@ const DrawerHeader = styled.div`
   }
 `;
 
-const ChatContianer = styled.div`
+const Contianer = styled.div`
   display: flex;
   justify-content: center;
   box-sizing: border-box;
@@ -574,9 +520,8 @@ const ChatRoomListSidebar = styled.div`
   background-color: #fff;
 
   @media (max-width: 767px) {
-    display: flex;
-    width: 100%;
     display: none;
+    width: 100%;
   }
 `;
 
@@ -585,9 +530,8 @@ const ChatRoomListWrapper = styled.ul`
   box-sizing: border-box;
 
   @media (max-width: 767px) {
-    display: flex;
-    width: 100%;
     display: none;
+    width: 100%;
   }
 `;
 
@@ -602,15 +546,13 @@ const ChatRoomSection = styled.section`
   background-color: #fff;
 
   @media (max-width: 767px) {
-    display: flex;
-    flex-wrap: wrap;
     width: 100%;
   }
 `;
 
 const ChatRoomEmpty = styled.div`
-  align-items: center;
   flex-direction: column;
+  align-items: center;
   width: 100%;
   height: 100%;
 `;
@@ -695,12 +637,11 @@ const ChatRoomWrapper = styled.div`
 `;
 
 const ChatRoomMessageWrapper = styled.div`
-  display: flex;
   overflow: hidden;
-  position: relative;
+  display: flex;
   flex: 1 1 0px;
   flex-direction: column;
-  overflow: hidden;
+  position: relative;
 `;
 
 const ChatRoomUserNameBar = styled.div`
@@ -760,11 +701,11 @@ const ProfileLink = styled(Link)`
       font-weight: 500;
       color: #263747;
       transition: color 0.08s ease-in-out;
+    }
 
-      &:hover {
-        color: #3396f4;
-        text-decoration: underline;
-      }
+    &:hover {
+      color: #3396f4;
+      text-decoration: underline;
     }
   }
 
@@ -836,9 +777,9 @@ const MessageBoxLeftContent = styled.div`
 
   & img {
     width: 36px;
+    min-width: 36px;
     height: 36px;
     min-height: 36px;
-    min-width: 36px;
     margin-right: 8px;
     border-radius: 50%;
     background-color: #eaebef;
@@ -929,10 +870,10 @@ const ChatTypingTextarea = css`
   padding: 10px;
   resize: none;
   border: none;
-  outline: none;
-  line-height: 150%;
   background-color: #eaebef;
   font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  line-height: 150%;
+  outline: none;
 
   ::-webkit-scrollbar {
     opacity: 0;
