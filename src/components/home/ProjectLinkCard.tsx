@@ -43,7 +43,7 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
   const projectTrack: string | null = useProjectTrack(projectId);
 
   useEffect(() => {
-    if (token !== null && projectTrack === null) {
+    if (token !== null && (projectTrack === null || projectTrack === '')) {
       setOpenProjectTrackDialog(true);
     }
   }, [token, projectTrack]);
