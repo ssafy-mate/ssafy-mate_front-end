@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
 import { useDispatch } from 'react-redux';
+import { showSsafyMateAlert } from '../../redux/modules/alert';
 
 import styled from '@emotion/styled';
 
@@ -81,11 +82,19 @@ const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
     }
   };
 
-  const handleCancel = () => {
-    onClose();
-  };
+  const handleSubmitSelectedProjectTrack = () => {
+    if (selectedProjectTrack === null && selectedProjectTrack === '') {
+      dispatch(
+        showSsafyMateAlert({
+          show: true,
+          text: '프로젝트 트랙을 선택해주세요.',
+          type: 'warning',
+        }),
+      );
 
-  const handleOk = () => {
+      return;
+    }
+
     selectProjectTrack({
       project,
       projectTrack: selectedProjectTrack,
@@ -129,10 +138,15 @@ const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
         </RadioGroup>
       </DialogContent>
       <DialogActions>
-        <DialogButton autoFocus onClick={handleCancel} fontcolor="#44576c">
-          취소
-        </DialogButton>
-        <DialogButton onClick={handleOk} fontcolor={hexColorCode}>
+        <DialogButton
+          onClick={handleSubmitSelectedProjectTrack}
+          fontcolor={hexColorCode}
+          disabled={
+            selectedProjectTrack === null || selectedProjectTrack === ''
+              ? true
+              : false
+          }
+        >
           확인
         </DialogButton>
       </DialogActions>

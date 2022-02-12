@@ -36,7 +36,7 @@ const TeamMemberItem: React.FC<TeamMemberItemProps> = ({
           {isOwner ? <FlagIcon /> : null}
         </MemberName>
         <InfoBox>
-          <InfoItem>{job1}</InfoItem>
+          <InfoItem>{job1.split('(')[0]}</InfoItem>
           <InfoItem>{ssafyTrack}</InfoItem>
         </InfoBox>
       </MemberInfo>
