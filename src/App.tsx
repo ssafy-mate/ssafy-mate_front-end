@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 
+import ReactGA from 'react-ga';
+
 import { Switch, Route } from 'react-router-dom';
 import { ConnectedRouter as Router } from 'connected-react-router';
 
@@ -39,9 +41,27 @@ import PrivacyPage from './pages/policy/PrivacyPage';
 import TermsOfServicePage from './pages/policy/TermsOfServicePage';
 import NotFoundPage from './pages/NotFoundPage';
 
+ReactGA.event({
+  category: 'User',
+  action: 'Created an Account',
+});
+
+ReactGA.exception({
+  description: 'An error ocurred',
+  fatal: true,
+});
+
 const App: React.FC = () => {
   useEffect(() => {
     window.Kakao.init(process.env.REACT_APP_KAKAO_KEY);
+  }, []);
+
+  useEffect(() => {
+    ReactGA.initialize(`${process.env.REACT_APP_GOOGLE_ANALYTICS_TRACKING_ID}`);
+    history.listen((location: any) => {
+      ReactGA.set({ page: location.pathname });
+      ReactGA.pageview(location.pathname);
+    });
   }, []);
 
   return (

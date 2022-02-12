@@ -46,6 +46,21 @@
 
     <!-- 카카오 SDK 등록 -->
     <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+
+    <!-- Google Analytics 등록 -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-T4LL9JJKXK"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'G-T4LL9JJKXK');
+    </script>
     <title>싸피 메이트</title>
   </head>
   <body>
