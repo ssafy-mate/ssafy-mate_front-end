@@ -229,7 +229,7 @@ const BasicInformationSection: React.FC = () => {
             <Information id="userEmail">{profileInfo?.userEmail}</Information>
           </SingleInformationWrapper>
           <SingleInformationWrapper>
-            <Label htmlFor="ssafyCampus">SSAFY 캠퍼스</Label>
+            <Label htmlFor="ssafyCampus">캠퍼스</Label>
             <Information id="ssafyCampus">서울</Information>
           </SingleInformationWrapper>
           <SingleInformationWrapper>

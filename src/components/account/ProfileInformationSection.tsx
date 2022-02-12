@@ -721,6 +721,7 @@ const ProfileInformationSection: React.FC = () => {
                   updateTechStacks={updateTechStacks}
                   deleteTechStacks={deleteTechStacks}
                   oldTechStacksWithLevel={oldTechStacksWithLevel}
+                  hiddenCancelButton={newTechStackDisabled}
                   {...getTagProps({ index })}
                 />
               ))}
@@ -915,6 +916,10 @@ const ModifyButton = styled.button`
     &.project-track-select__edit-button {
       width: 100%;
     }
+
+    &.project-track-select__edit-button {
+      margin-top: 8px;
+    }
   }
 `;
 
@@ -939,9 +944,9 @@ const JobSelectWrapper = styled.div`
       margin-right: 0;
     }
 
-    &.job-select__edit_button_groupn {
-      margin-top: 8px;
+    &.job-select__edit_button_group {
       width: 100%;
+      margin-top: 8px;
     }
   }
 `;
@@ -984,6 +989,7 @@ const Select = styled.select`
   }
 
   @media (max-width: 575px) {
+    margin-right: 0;
     margin-bottom: 16px;
     font-size: 13px;
   }
