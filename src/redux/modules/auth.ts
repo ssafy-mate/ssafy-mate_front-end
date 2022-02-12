@@ -247,7 +247,6 @@ function* selectProjectTrackSaga(action: Action<ProjectTrackRequestType>) {
     );
 
     yield put(updateProjects(projects));
-    yield put(push('/projects/specialization/teams'));
   } catch (error: any) {
     yield put(fail(error?.response?.data || 'UNKNOWN ERROR'));
   }
