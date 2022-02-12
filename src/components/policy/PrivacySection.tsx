@@ -69,7 +69,7 @@ const PrivacySection: React.FC = () => {
   return (
     <Container>
       <Wrapper>
-        <Head>싸피메이트 개인정보 처리 방침</Head>
+        <Head>싸피메이트 개인정보 취급방침</Head>
         <PrivacyPreDescriptionWrapper>
           <DescriptionList>
             <DescriptionItem>
