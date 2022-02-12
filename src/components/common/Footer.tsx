@@ -32,10 +32,22 @@ const Footer: React.FC<FooterProps> = ({ offMarginTop }) => {
           <MenuList>
             <MenuItem>문의</MenuItem>
             <MenuItem>
-              <PageLink to="#">FAQ</PageLink>
+              <PageOuterLink
+                href="https://github.com/ssafy-mate/ssafy-mate_service"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                FAQ
+              </PageOuterLink>
             </MenuItem>
             <MenuItem>
-              <PageLink to="#">1대1 문의</PageLink>
+              <PageOuterLink
+                href="https://github.com/ssafy-mate/ssafy-mate_service"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                1대1 문의
+              </PageOuterLink>
             </MenuItem>
           </MenuList>
           <MenuList>
@@ -62,7 +74,13 @@ const Footer: React.FC<FooterProps> = ({ offMarginTop }) => {
               <PageLink to="/terms_of_service">이용약관</PageLink>
             </SubMenuItem>
             <SubMenuItem>
-              <PageLink to="#">싸피 메이트 인재 채용</PageLink>
+              <PageOuterLink
+                href="https://github.com/ssafy-mate/ssafy-mate_service"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                싸피 메이트 인재 채용
+              </PageOuterLink>
             </SubMenuItem>
           </SubMenuList>
           <SnsList>
@@ -231,6 +249,14 @@ const SnsItem = styled.a`
 `;
 
 const PageLink = styled(Link)`
+  transition: color 0.08s ease-in-out;
+
+  &:hover {
+    color: #3396f4;
+  }
+`;
+
+const PageOuterLink = styled.a`
   transition: color 0.08s ease-in-out;
 
   &:hover {

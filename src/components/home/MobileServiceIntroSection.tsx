@@ -12,6 +12,14 @@ interface MobileServiceIntroSectionProps {
   reversed: boolean;
 }
 
+interface WrapperProps {
+  reversed: boolean;
+}
+
+interface IphoneProps {
+  reversed: boolean;
+}
+
 const MobileServiceIntroSection: React.FC<MobileServiceIntroSectionProps> = ({
   headText,
   subHeadText,
@@ -24,7 +32,7 @@ const MobileServiceIntroSection: React.FC<MobileServiceIntroSectionProps> = ({
 
   return (
     <Section ref={sectionRef}>
-      <Wrapper>
+      <Wrapper reversed={reversed}>
         <Contents className="section__contents">
           <Head className={isVisible ? 'scroll' : ''}>{headText}</Head>
           <SubHead className={isVisible ? 'scroll' : ''}>{subHeadText}</SubHead>
@@ -32,7 +40,7 @@ const MobileServiceIntroSection: React.FC<MobileServiceIntroSectionProps> = ({
             {descriptionText}
           </Description>
         </Contents>
-        <Iphone className={isVisible ? 'scroll' : ''}>
+        <Iphone className={isVisible ? 'scroll' : ''} reversed={reversed}>
           <IphoneInner>
             <IphoneContents src={imgUrl} alt={`${headText} 이미지`} />
             <IphoneFrame
@@ -57,8 +65,9 @@ const Section = styled.section`
   }
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.div<WrapperProps>`
   display: flex;
+  flex-direction: ${(props) => (props.reversed ? 'row-reverse' : 'row')};
   width: 100%;
   max-width: 1200px;
   height: 100%;
@@ -67,6 +76,7 @@ const Wrapper = styled.div`
   box-sizing: border-box;
 
   @media (max-width: 991px) {
+    flex-direction: row;
     padding-bottom: 680px;
   }
   @media (max-width: 575px) {
@@ -173,10 +183,10 @@ const Description = styled.p`
   }
 `;
 
-const Iphone = styled.div`
+const Iphone = styled.div<IphoneProps>`
   opacity: 0;
   display: flex;
-  justify-content: flex-end;
+  justify-content: ${(props) => (props.reversed ? 'flex-start' : 'flex-end')};
   position: absolute;
   width: calc(100% - 32px);
   max-width: 1200px;
@@ -219,9 +229,8 @@ const IphoneInner = styled.div`
     width: calc(600px * 0.8);
     height: calc(936px * 0.8);
   }
-
   @media (max-width: 575px) {
-    top: 110px;
+    top: 130px;
     width: calc(600px * 0.7);
     height: calc(936px * 0.7);
   }

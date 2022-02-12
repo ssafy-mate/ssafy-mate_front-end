@@ -346,7 +346,7 @@ const ChattingForm: React.FC = () => {
                       src={
                         room?.profileImgUrl
                           ? room?.profileImgUrl
-                          : '/image/assets/basic-profile-img.png'
+                          : '/images/assets/basic-profile-img.png'
                       }
                       sx={{ marginRight: '10px' }}
                     />
@@ -381,7 +381,7 @@ const ChattingForm: React.FC = () => {
                     src={
                       otherUser?.profileImgUrl
                         ? otherUser?.profileImgUrl
-                        : '/image/assets/basic-profile-img.png'
+                        : '/images/assets/basic-profile-img.png'
                     }
                     sx={{ marginRight: '10px' }}
                     className="profile-avatar"
@@ -438,7 +438,7 @@ const ChattingForm: React.FC = () => {
                                     src={
                                       otherUser?.profileImgUrl
                                         ? otherUser?.profileImgUrl
-                                        : '/image/assets/basic-profile-img.png'
+                                        : '/images/assets/basic-profile-img.png'
                                     }
                                   />
                                   <p>{message.content}</p>
@@ -703,9 +703,11 @@ const ProfileLink = styled(Link)`
       transition: color 0.08s ease-in-out;
     }
 
-    &:hover {
-      color: #3396f4;
-      text-decoration: underline;
+    & .user-name__name {
+      :hover {
+        color: #3396f4;
+        text-decoration: underline;
+      }
     }
   }
 

@@ -54,8 +54,8 @@ const MOBILE_SERVICE_INTRODUCTION_LIST = [
     headText: '1대1 채팅',
     subHeadText: '실시간 채팅 서비스 제공',
     descriptionText:
-      '내게 맞는 팀 또는 나의 팀에 필요한 교육생이 있다면 실시간 1대1 채팅을 통해 이야기를 나눠보세요.',
-    imgUrl: '/images/home/mobile-team-list-sample.png',
+      '팀 또는 교육생에게 좀 더 구체적인 개발 계획이나 정보가 궁금하다면 실시간 1대1 채팅을 통해 이야기를 나눠보세요.',
+    imgUrl: '/images/home/mobile-chatting-sample.png',
   },
 ];
 
