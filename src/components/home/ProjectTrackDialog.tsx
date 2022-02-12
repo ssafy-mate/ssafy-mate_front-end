@@ -81,11 +81,7 @@ const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
     }
   };
 
-  const handleCancel = () => {
-    onClose();
-  };
-
-  const handleOk = () => {
+  const handleSubmitSelectedProjectTrack = () => {
     selectProjectTrack({
       project,
       projectTrack: selectedProjectTrack,
@@ -129,10 +125,10 @@ const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
         </RadioGroup>
       </DialogContent>
       <DialogActions>
-        <DialogButton autoFocus onClick={handleCancel} fontcolor="#44576c">
-          취소
-        </DialogButton>
-        <DialogButton onClick={handleOk} fontcolor={hexColorCode}>
+        <DialogButton
+          onClick={handleSubmitSelectedProjectTrack}
+          fontcolor={hexColorCode}
+        >
           확인
         </DialogButton>
       </DialogActions>

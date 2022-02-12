@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { push } from 'connected-react-router';
 
@@ -31,28 +31,33 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
   hexColorCode,
   trackOptions,
 }) => {
-  const [open, setOpen] = useState<boolean>(false);
+  const [openProjectTrackDialog, setOpenProjectTrackDialog] =
+    useState<boolean>(false);
   const [openBlockDialog, setOpenBlockDialog] = useState<boolean>(false);
   const [openWarningAlert, setOpenWarningAlert] = useState<boolean>(false);
   const [selectedProjectTrack, setSelectedProjectTrack] =
     useState<ProjectTrack>('');
 
   const dispatch = useDispatch();
-
   const token = useToken();
+  const projectTrack: string | null = useProjectTrack(projectId);
 
-  const projectTrack: string | null | undefined = useProjectTrack(projectId);
+  useEffect(() => {
+    if (token !== null && projectTrack === null) {
+      setOpenProjectTrackDialog(true);
+    }
+  }, [token, projectTrack]);
 
   const handleClickCardItem = () => {
     if (token !== null) {
-      projectTrack ? dispatch(push(pageUrl)) : setOpen(true);
+      projectTrack ? dispatch(push(pageUrl)) : setOpenProjectTrackDialog(true);
     } else {
       setOpenWarningAlert(true);
     }
   };
 
   const handleClose = (newSelectedProjectTrack?: ProjectTrack) => {
-    setOpen(false);
+    setOpenProjectTrackDialog(false);
 
     if (newSelectedProjectTrack !== undefined) {
       setSelectedProjectTrack(newSelectedProjectTrack);
@@ -88,7 +93,7 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
           <ProjectTrackDialog
             id="ringtone-menu"
             keepMounted
-            open={open}
+            open={openProjectTrackDialog}
             project={project}
             selectedProjectTrack={selectedProjectTrack}
             pageUrl={pageUrl}
