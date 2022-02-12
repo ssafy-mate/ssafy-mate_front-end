@@ -235,9 +235,13 @@ const Content = styled.p`
   line-height: 1.6;
 `;
 
-const TermsOfServiceList = styled.ol``;
+const TermsOfServiceList = styled.ol`
+  list-style: none;
+`;
 
-const TermsOfServiceItem = styled.li``;
+const TermsOfServiceItem = styled.li`
+  list-style: none;
+`;
 
 const ServiceTermsRuleList = styled.ol`
   margin-top: 0px;
