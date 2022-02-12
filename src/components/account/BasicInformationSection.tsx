@@ -8,7 +8,6 @@ import {
 import { showSsafyMateAlert } from '../../redux/modules/alert';
 
 import { Link } from 'react-router-dom';
-
 import { push } from 'connected-react-router';
 
 import styled from '@emotion/styled';
@@ -16,36 +15,36 @@ import { Avatar } from '@mui/material';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
 import { UserData } from '../../types/userTypes';
-
 import {
   EditProfileInfoRequest,
   getProfileInfoRequest,
   RootState,
 } from '../../types/authTypes';
 import { Severity, SsafyTrack } from '../../types/signUpTypes';
+import { CAMPUS_LIST } from '../../data/ssafyData';
 
 import useToken from '../../hooks/useToken';
 import useUserId from '../../hooks/useUserId';
 import useProfileInfo from '../../hooks/useProfileInfo';
 
-import { CAMPUS_LIST } from '../../data/ssafyData';
-
 const BasicInformationSection: React.FC = () => {
-  const profileInfo: UserData | null = useProfileInfo();
-  const token: string | null = useToken();
-  const userId: number | null = useUserId();
   const [profileImg, setProfileImg] = useState<Blob | null>(null);
   const [previewProgileImg, setPreviewProfileImg] = useState<string | null>(
     null,
-  );
-  const studentNumber = useSelector<RootState, string | null>(
-    (state) => state.auth.studentNumber,
   );
   const [newSsafyTrack, setNewSsafyTrack] = useState<string>('');
   const [selectedTracks, setSelectedTracks] = useState<SsafyTrack[]>([]);
   const [ssafyTrackDisabled, setSsafyTrackDisabled] = useState<boolean>(true);
   const [ssafyTrackModifyButtonText, setSsafyTrackModifyButtonText] =
     useState<string>('수정');
+
+  const profileInfo: UserData | null = useProfileInfo();
+  const token: string | null = useToken();
+  const userId: number | null = useUserId();
+
+  const studentNumber = useSelector<RootState, string | null>(
+    (state) => state.auth.studentNumber,
+  );
   const profileError = useSelector<RootState, string | null>(
     (state) => state.profile.error,
   );
@@ -457,7 +456,6 @@ const ModifyButton = styled.button`
   &:hover {
     background-color: #2878c3;
   }
-
   &:disabled {
     background-color: #ebf0fe;
     color: #8e888e;

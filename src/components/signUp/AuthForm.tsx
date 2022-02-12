@@ -22,7 +22,7 @@ import {
   SsafyAuthProps,
 } from '../../types/signUpTypes';
 
-import AuthService from '../../services/AuthService';
+import UserService from '../../services/UserService';
 
 const AuthForm: React.FC<SsafyAuthProps> = ({
   setSignUpStep,
@@ -85,12 +85,10 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
   };
 
   const AuthRequest = (data: SsafyAuth) => {
-    AuthService.getSsafyAuth(data)
-      .then((response) => {
-        if (response.success) {
-          showAlert(true, response.message, 'success');
-          updateSsafyAuthProps(data);
-        }
+    UserService.getSsafyAuth(data)
+      .then(({ message }) => {
+        showAlert(true, message, 'success');
+        updateSsafyAuthProps(data);
       })
       .catch((error) => {
         if (error.response) {
