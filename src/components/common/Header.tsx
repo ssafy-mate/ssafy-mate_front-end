@@ -14,7 +14,6 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import ArticleIcon from '@mui/icons-material/Article';
-import ChatIcon from '@mui/icons-material/Chat';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import LogoutIcon from '@mui/icons-material/Logout';
 import GroupsIcon from '@mui/icons-material/Groups';
@@ -27,6 +26,7 @@ import MenuList from '@mui/material/MenuList';
 import Divider from '@mui/material/Divider';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import Tooltip from '@mui/material/Tooltip';
+import ForumIcon from '@mui/icons-material/Forum';
 
 import Swal from 'sweetalert2';
 
@@ -224,7 +224,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
               <AccountMenuItem>
                 <Tooltip title="채팅 목록" arrow>
                   <IconLink to={`/chatting/${userId}`}>
-                    <ChatIcon css={icon} />
+                    <ForumIcon css={icon} />
                   </IconLink>
                 </Tooltip>
               </AccountMenuItem>

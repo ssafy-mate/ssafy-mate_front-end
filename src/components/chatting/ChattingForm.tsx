@@ -28,6 +28,7 @@ import SendIcon from '@mui/icons-material/Send';
 import CommentIcon from '@mui/icons-material/Comment';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChatIcon from '@mui/icons-material/Chat';
+import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 
 import {
   MessageType,
@@ -364,7 +365,7 @@ const ChattingForm: React.FC = () => {
         {!roomId ? (
           <ChatRoomEmpty>
             <ChatRoomEmptyContentWrapper>
-              <ChatIcon className="chat-icon" />
+              <ForumOutlinedIcon className="chat-icon" />
               <span>채팅할 상대를 선택해주세요.</span>
               <ChatListOpenButton onClick={handleDrawerOpen}>
                 채팅 목록 열기
