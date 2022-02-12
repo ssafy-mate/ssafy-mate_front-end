@@ -478,7 +478,9 @@ const ProfileInformationSection: React.FC = () => {
         }
         break;
       case 'techStacks':
-        if (oldTechStacksWithLevel !== techStacks) {
+        if (
+          JSON.stringify(oldTechStacksWithLevel) !== JSON.stringify(techStacks)
+        ) {
           const RequestFormData: FormData = getEditTechStacks();
 
           if (token !== null && userId !== undefined && userId !== null) {
