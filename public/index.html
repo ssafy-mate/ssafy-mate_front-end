@@ -1,17 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
     <meta
-      name="description"
-      content="Web site created using create-react-app"
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="description" content="삼성 청년 SW아카데미 팀 빌딩 서비스" />
+
+    <!-- Facebook, Kakao Open Graph 설정 -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.ssafymate.site/" />
+    <meta property="og:title" content="싸피 메이트 (SSAFY MATE)" />
+    <meta
+      property="og:description"
+      content="삼성 청년 SW아카데미 팀 빌딩 서비스"
+    />
+    <meta
+      property="og:image"
+      content="https://www.ssafymate.site/images/common/ssafy-mate_logo.png"
+    />
+
+    <!-- Twitter Open Graph 설정 -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content="싸피 메이트 (SSAFY MATE)" />
+    <meta
+      name="twitter:description"
+      content="삼성 청년 SW아카데미 팀 빌딩 서비스"
+    />
+    <meta
+      name="twitter:image"
+      content="https://www.ssafymate.site/images/common/ssafy-mate_logo.png"
+    />
+
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <link
+      rel="apple-touch-icon"
+      href="%PUBLIC_URL%/images/common/ssafy-mate_logo.png"
+    />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <title>SSAFY MATE</title>
+
+    <script src="https://unpkg.com/splitting/dist/splitting.js"></script>
+    <script src="https://unpkg.com/scroll-out/dist/scroll-out.min.js"></script>
+
+    <!-- 카카오 SDK 등록 -->
+    <script src="//developers.kakao.com/sdk/js/kakao.min.js"></script>
+
+    <!-- Google Analytics 등록 -->
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-T4LL9JJKXK"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag('js', new Date());
+
+      gtag('config', 'G-T4LL9JJKXK');
+    </script>
+    <title>싸피 메이트</title>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
