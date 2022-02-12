@@ -10,7 +10,7 @@ import { ChatRoomTypeProps } from '../../types/messageTypes';
 import styled from '@emotion/styled';
 import { Avatar } from '@mui/material';
 
-const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
+const ChatRoomItem: React.FC<ChatRoomTypeProps> = ({
   myId,
   roomId,
   userId,
@@ -20,21 +20,8 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
   sentTime,
   userEmail,
 }) => {
-  const [roomInfo, setRoomInfo] = useState<ChatRoomTypeProps>({
-    myId: myId,
-    roomId: roomId,
-    userId: userId,
-    userName: userName,
-    profileImgUrl: profileImgUrl,
-    content: content,
-    sentTime: sentTime,
-    userEmail: userEmail,
-  });
-
-  const email = userEmail.split('@');
-
-  const [socket] = useSocket();
   const [onlineList, setOnlineList] = useState<number[]>([]);
+  const [socket] = useSocket();
 
   useEffect(() => {
     setOnlineList([]);
@@ -50,34 +37,32 @@ const ChatRoomList: React.FC<ChatRoomTypeProps> = ({
   }, [socket]);
 
   return (
-    <>
-      <Link to={`/chatting/${myId}?roomId=${roomId}&userId=${userId}`}>
-        <ChatListItem>
-          <ChatListItemWrapper>
-            <ProfileWrapper>
-              <Avatar src={profileImgUrl} />
-            </ProfileWrapper>
-            <ContentWrapper>
-              <TitleWrapper>
-                <TitleSenderName>{userName}</TitleSenderName>
-                <TitleSubText>
-                  {sentTime ? (
-                    <span>{dayjs(sentTime).format('YY.MM.DD. a hh:mm')}</span>
-                  ) : null}
-                </TitleSubText>
-              </TitleWrapper>
-              <DescriptionWrapper>
-                <DescriptionContent>{content}</DescriptionContent>
-              </DescriptionWrapper>
-            </ContentWrapper>
-          </ChatListItemWrapper>
-        </ChatListItem>
-      </Link>
-    </>
+    <Link to={`/chatting/${myId}?roomId=${roomId}&userId=${userId}`}>
+      <Item>
+        <Wrapper>
+          <ProfileImg>
+            <Avatar src={profileImgUrl} />
+          </ProfileImg>
+          <Content>
+            <TitleWrapper>
+              <TitleSenderName>{userName}</TitleSenderName>
+              <TitleSubText>
+                {sentTime ? (
+                  <span>{dayjs(sentTime).format('YY.MM.DD. a hh:mm')}</span>
+                ) : null}
+              </TitleSubText>
+            </TitleWrapper>
+            <DescriptionWrapper>
+              <Description>{content}</Description>
+            </DescriptionWrapper>
+          </Content>
+        </Wrapper>
+      </Item>
+    </Link>
   );
 };
 
-const ChatListItem = styled.li`
+const Item = styled.li`
   width: 100%;
   box-sizing: border-box;
 
@@ -86,7 +71,7 @@ const ChatListItem = styled.li`
   }
 `;
 
-const ChatListItemWrapper = styled.div`
+const Wrapper = styled.div`
   display: flex;
   overflow: hidden;
   align-items: center;
@@ -108,7 +93,7 @@ const ChatListItemWrapper = styled.div`
   }
 `;
 
-const ProfileWrapper = styled.div`
+const ProfileImg = styled.div`
   height: 40px;
   margin-right: 8px;
 
@@ -124,7 +109,7 @@ const ProfileWrapper = styled.div`
   }
 `;
 
-const ContentWrapper = styled.div`
+const Content = styled.div`
   overflow: hidden;
   width: 100%;
 
@@ -172,7 +157,7 @@ const DescriptionWrapper = styled.div`
   width: 100%;
 `;
 
-const DescriptionContent = styled.p`
+const Description = styled.p`
   overflow: hidden;
   font-size: 13px;
   color: #4d5159;
@@ -180,4 +165,4 @@ const DescriptionContent = styled.p`
   white-space: nowrap;
 `;
 
-export default ChatRoomList;
+export default ChatRoomItem;

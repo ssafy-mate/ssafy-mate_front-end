@@ -42,7 +42,7 @@ import useSocket from '../../hooks/useSocket';
 import useToken from '../../hooks/useToken';
 import useTextArea from '../../hooks/useTextArea';
 import useUserIdName from '../../hooks/useUserIdName';
-import ChatRoomList from './ChatRoomList';
+import ChatRoomItem from './ChatRoomItem';
 
 const PAGE_SIZE = 20;
 const DRAWER_WIDTH = 250;
@@ -284,7 +284,7 @@ const ChattingForm: React.FC = () => {
   };
 
   return (
-    <ChatContianer>
+    <Contianer>
       <ChatRoomListSidebar>
         <ChatRoomListWrapper>
           <ChatRoomListHeader>
@@ -292,7 +292,7 @@ const ChattingForm: React.FC = () => {
             <ChatRoomListHead>채팅 목록</ChatRoomListHead>
           </ChatRoomListHeader>
           {roomData?.map((room: ChatRoomType) => (
-            <ChatRoomList
+            <ChatRoomItem
               key={room.roomId}
               myId={Number(myUserId)}
               roomId={room.roomId}
@@ -480,7 +480,7 @@ const ChattingForm: React.FC = () => {
           </ChatRoomWrapper>
         )}
       </ChatRoomSection>
-    </ChatContianer>
+    </Contianer>
   );
 };
 
@@ -499,7 +499,7 @@ const DrawerHeader = styled.div`
   }
 `;
 
-const ChatContianer = styled.div`
+const Contianer = styled.div`
   display: flex;
   justify-content: center;
   box-sizing: border-box;
@@ -519,9 +519,8 @@ const ChatRoomListSidebar = styled.div`
   background-color: #fff;
 
   @media (max-width: 767px) {
-    display: flex;
-    width: 100%;
     display: none;
+    width: 100%;
   }
 `;
 
@@ -530,9 +529,8 @@ const ChatRoomListWrapper = styled.ul`
   box-sizing: border-box;
 
   @media (max-width: 767px) {
-    display: flex;
-    width: 100%;
     display: none;
+    width: 100%;
   }
 `;
 
@@ -547,15 +545,13 @@ const ChatRoomSection = styled.section`
   background-color: #fff;
 
   @media (max-width: 767px) {
-    display: flex;
-    flex-wrap: wrap;
     width: 100%;
   }
 `;
 
 const ChatRoomEmpty = styled.div`
-  align-items: center;
   flex-direction: column;
+  align-items: center;
   width: 100%;
   height: 100%;
 `;
@@ -640,12 +636,11 @@ const ChatRoomWrapper = styled.div`
 `;
 
 const ChatRoomMessageWrapper = styled.div`
-  display: flex;
   overflow: hidden;
-  position: relative;
+  display: flex;
   flex: 1 1 0px;
   flex-direction: column;
-  overflow: hidden;
+  position: relative;
 `;
 
 const ChatRoomUserNameBar = styled.div`
@@ -705,11 +700,11 @@ const ProfileLink = styled(Link)`
       font-weight: 500;
       color: #263747;
       transition: color 0.08s ease-in-out;
+    }
 
-      &:hover {
-        color: #3396f4;
-        text-decoration: underline;
-      }
+    &:hover {
+      color: #3396f4;
+      text-decoration: underline;
     }
   }
 
@@ -781,9 +776,9 @@ const MessageBoxLeftContent = styled.div`
 
   & img {
     width: 36px;
+    min-width: 36px;
     height: 36px;
     min-height: 36px;
-    min-width: 36px;
     margin-right: 8px;
     border-radius: 50%;
     background-color: #eaebef;
@@ -874,10 +869,10 @@ const ChatTypingTextarea = css`
   padding: 10px;
   resize: none;
   border: none;
-  outline: none;
-  line-height: 150%;
   background-color: #eaebef;
   font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  line-height: 150%;
+  outline: none;
 
   ::-webkit-scrollbar {
     opacity: 0;
