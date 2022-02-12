@@ -87,7 +87,7 @@ const ChattingForm: React.FC = () => {
   }, [roomId]);
 
   useEffect(() => {
-    userInfoGet();
+    if (userId) userInfoGet();
   }, [userId]);
 
   const userInfoGet = () => {
