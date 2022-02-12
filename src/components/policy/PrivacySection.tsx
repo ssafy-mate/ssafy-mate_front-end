@@ -44,7 +44,7 @@ const PRIVACY_CONTENTS_STORE_EXPIRED_CONDITIONS = [
   },
   {
     id: 4,
-    condition: '관련법령 : 신용정보의 수집/처리 및 이용 등에 관한 기록 (3년)',
+    condition: '관련 법령 : 신용정보의 수집/처리 및 이용 등에 관한 기록 (3년)',
   },
 ];
 
@@ -129,9 +129,9 @@ const PrivacySection: React.FC = () => {
             <SubHead>제2조 [개인정보의 처리 및 보유 기간]</SubHead>
             <DescriptionList>
               <DescriptionItem>
-                싸피메이트는 법령에 따른 개인정보 보유·이용기간 또는
-                정보주체로부터 개인정보를 수집 시에 동의받은 개인정보
-                보유·이용기간 내에서 개인정보를 처리·보유합니다.
+                싸피메이트는 법령에 따른 개인정보 보유·이용 기간 또는
+                정보주체로부터 개인정보를 수집 시에 동의받은 개인정보 보유·이용
+                기간 내에서 개인정보를 처리·보유합니다.
               </DescriptionItem>
               <DescriptionItem>
                 개인정보 처리 및 보유 기간은 다음과 같습니다.
@@ -201,10 +201,10 @@ const PrivacySection: React.FC = () => {
             <DescriptionList>
               <DescriptionItem>
                 싸피메이트는 개인정보 보유기간의 경과, 처리목적 달성 등
-                개인정보가 불필요하게 되었을 때에는 지체없이 해당 개인정보를
-                파기합니다. 정보주체로부터 동의받은 개인정보 보유기간이
-                경과하거나 처리목적이 달성되었음에도 불구하고 다른 법령에 따라
-                개인정보를 계속 보존하여야 하는 경우에는, 해당 개인정보를 별도의
+                개인정보가 불필요하게 되었을 때에는 바로 해당 개인정보를
+                파기합니다. 정보주체로부터 동의받은 개인정보 보유기간이 지나거나
+                처리목적이 달성되었음에도 불구하고 다른 법령에 따라 개인정보를
+                계속 보존하여야 하는 경우에는, 해당 개인정보를 별도의
                 데이터베이스(DB)로 옮기거나 보관장소를 달리하여 보존합니다.
               </DescriptionItem>
               <DescriptionItem>
@@ -263,7 +263,7 @@ const PrivacySection: React.FC = () => {
                   개인정보처리시스템에 접속한 기록을 최소 1년 이상 보관,
                   관리하고 있으며,다만, 5만명 이상의 정보주체에 관하여
                   개인정보를 추가하거나, 고유식별정보 또는 민감정보를 처리하는
-                  경우에는 2년이상 보관, 관리하고 있습니다.
+                  경우에는 2년 이상 보관, 관리하고 있습니다.
                 </DescriptionDetailItem>
                 <DescriptionDetailItem>
                   또한, 접속기록이 위변조 및 도난, 분실되지 않도록 보안기능을
@@ -294,7 +294,7 @@ const PrivacySection: React.FC = () => {
               </DescriptionItem>
               <DescriptionItem>
                 쿠키는 웹사이트를 운영하는데 이용되는 서버가 이용자의 컴퓨터
-                브라우저에게 보내는 소량의 정보이며 이용자들의 PC 컴퓨터내의
+                브라우저에 보내는 소량의 정보이며 이용자들의 PC 컴퓨터 내의
                 하드디스크에 저장되기도 합니다.
               </DescriptionItem>
             </DescriptionList>
