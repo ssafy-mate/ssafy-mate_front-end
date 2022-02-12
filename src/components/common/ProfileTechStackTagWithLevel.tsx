@@ -14,6 +14,7 @@ interface TechStackTagWithLevelProps extends TechStackTagProps {
   techStacks: TechStacksWithLevel[];
   newTechStackDisabled: boolean;
   oldTechStacksWithLevel: TechStacksWithLevel[];
+  hiddenCancelButton?: boolean;
   updateTechStacks: (techStack: TechStacksWithLevel) => void;
   deleteTechStacks: (techStackId: number) => void;
 }
@@ -28,6 +29,7 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
   updateTechStacks,
   oldTechStacksWithLevel,
   deleteTechStacks,
+  hiddenCancelButton,
   ...other
 }) => {
   const [selectedTechStackLevel, setSelectedTechStackLevel] = useState<
@@ -129,7 +131,11 @@ const TechStackTagWithLevel: React.FC<TechStackTagWithLevelProps> = ({
             </LevelButton>
           </MuiButtonGroup>
         </Box>
-        <DeleteButton onClick={deleteTechStack} disabled={newTechStackDisabled}>
+        <DeleteButton
+          onClick={deleteTechStack}
+          disabled={newTechStackDisabled}
+          className={hiddenCancelButton ? 'hiddenCancelButton' : ''}
+        >
           <CloseIcon />
         </DeleteButton>
       </Group>
@@ -206,6 +212,10 @@ const DeleteButton = styled.button`
   }
   &:hover {
     transform: scale(1.15);
+  }
+
+  &.hiddenCancelButton {
+    display: none;
   }
 
   @media (max-width: 575px) {

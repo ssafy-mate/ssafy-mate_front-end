@@ -323,10 +323,16 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
                 </PageLink>
               </AccountMenuItem>
               <AccountMenuItem>
-                <PageLink to={`/users/${userId}/offers`}>받은 제안</PageLink>
+                <PageLink
+                  to={`/projects/specialization/${userId}/receive_requests`}
+                >
+                  받은 제안
+                </PageLink>
               </AccountMenuItem>
               <AccountMenuItem>
-                <PageLink to={`/users/${userId}/applications`}>
+                <PageLink
+                  to={`/projects/specialization/${userId}/send_requests`}
+                >
                   보낸 요청
                 </PageLink>
               </AccountMenuItem>

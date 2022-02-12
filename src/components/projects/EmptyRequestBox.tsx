@@ -30,8 +30,8 @@ const Box = styled.div`
   background-color: #f4f4f8;
 
   @media (max-width: 575px) {
-    padding-top: 60px;
-    padding-bottom: 60px;
+    padding-top: 80px;
+    padding-bottom: 80px;
   }
 `;
 
