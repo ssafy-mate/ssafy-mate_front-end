@@ -380,7 +380,6 @@ const FindIdWrapper = styled.div`
   font-size: 16px;
   line-height: 24px;
   color: #263747;
-
   transition: all 0.08s ease-in-out;
 
   @media (max-width: 575px) {

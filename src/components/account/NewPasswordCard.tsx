@@ -18,8 +18,8 @@ import {
 
 import { Severity } from '../../types/signUpTypes';
 
-import NewPassWordCardSubHead from './NewPassWordCardSubHead';
 import Loading from '../common/Loading';
+import NewPassWordCardSubHead from './NewPassWordCardSubHead';
 
 const NewPasswordCard: React.FC = () => {
   const [loadingColor, setLoadingColor] = useState<string>('#3396f4');
@@ -46,6 +46,20 @@ const NewPasswordCard: React.FC = () => {
   const [timeStop, setTimeStop] = useState<number>(0);
 
   const dispatch = useDispatch();
+
+  const showAlert = (
+    alertShow: boolean,
+    alertText: string,
+    alertType: Severity,
+  ) => {
+    dispatch(
+      showSsafyMateAlertSagaStart({
+        show: alertShow,
+        text: alertText,
+        type: alertType,
+      }),
+    );
+  };
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -80,20 +94,6 @@ const NewPasswordCard: React.FC = () => {
   const resetTimer = () => {
     setMinutes(3);
     setSeconds(0);
-  };
-
-  const showAlert = (
-    alertShow: boolean,
-    alertText: string,
-    alertType: Severity,
-  ) => {
-    dispatch(
-      showSsafyMateAlertSagaStart({
-        show: alertShow,
-        text: alertText,
-        type: alertType,
-      }),
-    );
   };
 
   const onCheckEnter = (event: React.KeyboardEvent) => {
@@ -563,16 +563,6 @@ const CardHeader = styled.div`
   margin-bottom: 40px;
 `;
 
-const SubHead = styled.h2`
-  font-size: 16px;
-  line-height: 1.6;
-  color: #98a8b9;
-
-  @media (max-width: 575px) {
-    font-size: 15px;
-  }
-`;
-
 const CardForm = styled.form``;
 
 const InputWrapper = styled.div`
@@ -754,7 +744,6 @@ const ResendEmailWrapper = styled.div`
 
 const ResendEmailMessage = styled.div`
   display: flex;
-  -webkit-box-align: center;
   align-items: center;
   padding-left: 6px;
   font-size: 13px;

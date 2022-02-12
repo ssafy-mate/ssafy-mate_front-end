@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 
+import { useDispatch } from 'react-redux';
+import { showSsafyMateAlert } from '../../redux/modules/alert';
+
 import { useForm } from 'react-hook-form';
 
 import styled from '@emotion/styled';
-
 import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
 
 import {
@@ -20,11 +22,9 @@ import {
   verificationCodeReg,
 } from '../../utils/regularExpressionData';
 
-import AuthService from '../../services/AuthService';
+import UserService from '../../services/UserService';
 
 import Loading from '../common/Loading';
-import { useDispatch } from 'react-redux';
-import { showSsafyMateAlert } from '../../redux/modules/alert';
 
 const SignUpForm: React.FC<SignUpProps> = ({
   setSignUpStep,
@@ -133,7 +133,6 @@ const SignUpForm: React.FC<SignUpProps> = ({
     setCodeConfirmButton(true);
   };
 
-  // 이메일 입력에 따라 이메일 인증 코드 전송 요청 버튼 활성화/비활성화
   useEffect(() => {
     if (errors.signUpEmail) {
       setEmailCodeRequestButton(true);
@@ -145,14 +144,12 @@ const SignUpForm: React.FC<SignUpProps> = ({
     }
   }, [errors.signUpEmail, signUpEmailOnChange]);
 
-  // 이메일 인증 요청 버튼 누르고 난 다음에 다른 이메일로 인증하려고 하는 경우
   useEffect(() => {
     if (emailCodeRequestButton === false) {
       setShowCodeBox(false);
     }
   }, [emailCodeRequestButton]);
 
-  // 인증 코드 입력 시 유효성 여부에 따라 코드 확인 버튼 활성화 비활성화
   useEffect(() => {
     setCodeVerificationError(false);
 
@@ -189,7 +186,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
       setLoading(false);
     }
 
-    AuthService.getEmailVerificationCode(data)
+    UserService.getEmailVerificationCode(data)
       .then(({ success, message }) => {
         if (success) {
           setLoading(false);
@@ -225,7 +222,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
       userEmail: signUpEmailOnChange,
     };
 
-    AuthService.getEmailVerificationCodeConfirm(data)
+    UserService.getEmailVerificationCodeConfirm(data)
       .then((response) => {
         offCodeInputAndConfirm();
         setEmailInputDisabled(true);
@@ -563,7 +560,6 @@ const VerificationCodeConfirmWrapper = styled.div`
     background-color: #fff;
     color: #495057;
   }
-
   &.have-error {
     border: 1px solid #f44336;
     box-shadow: inset 0 0 0 1px #ff77774d;
@@ -703,7 +699,6 @@ const ResendEmailWrapper = styled.div`
 
 const ResendEmailMessage = styled.div`
   display: flex;
-  -webkit-box-align: center;
   align-items: center;
   padding-left: 6px;
   font-size: 13px;

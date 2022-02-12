@@ -24,9 +24,10 @@ import {
   TechStacksWithLevel,
 } from '../../types/signUpTypes';
 
-import AuthService from '../../services/AuthService';
+import UserService from '../../services/UserService';
 
 import useTechStackList from '../../hooks/useTechStackList';
+
 import TechStackTagWithLevel from '../common/TechStackTagWithLevel';
 
 const ProfileForm: React.FC<ProfileProps> = ({
@@ -58,6 +59,8 @@ const ProfileForm: React.FC<ProfileProps> = ({
 
   const techStackList: TechStackWithImg[] = useTechStackList();
 
+  const signUpFormData = new FormData();
+
   const dispatch = useDispatch();
 
   const {
@@ -77,8 +80,6 @@ const ProfileForm: React.FC<ProfileProps> = ({
     options: techStackList,
     getOptionLabel: (option) => option.techStackName,
   });
-
-  const signUpFormData = new FormData();
 
   const showAlert = (
     alertShow: boolean,
@@ -280,9 +281,11 @@ const ProfileForm: React.FC<ProfileProps> = ({
     if (job2 !== null) {
       signUpFormData.append('job2', job2);
     }
+
     if (githubUrl !== null) {
       signUpFormData.append('githubUrl', githubUrl);
     }
+
     if (etcUrl !== null) {
       signUpFormData.append('etcUrl', etcUrl);
     }
@@ -296,7 +299,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
     const data: FormData = getSignUpInformation();
 
     if (validation()) {
-      AuthService.signUp(data)
+      UserService.signUp(data)
         .then(({ message }) => {
           showAlert(true, message, 'success');
 
@@ -702,14 +705,12 @@ const Select = styled.select`
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px#3396f4;
   }
-
   &:focus {
     border: 1px solid #3396f4;
     box-shadow: inset 0 0 0 1px #3396f4;
     background-color: #fff;
     color: #495057;
   }
-
   &:disabled {
     border: 1px solid #d7e2eb;
     box-shadow: none;

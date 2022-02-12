@@ -10,43 +10,33 @@ import {
 } from '../../redux/modules/profile';
 
 import styled from '@emotion/styled';
-
 import CheckIcon from '@mui/icons-material/Check';
 import { useAutocomplete } from '@mui/material';
-
-import { TechStackWithImg } from '../../types/commonTypes';
-import { Severity, TechStacksWithLevel } from '../../types/signUpTypes';
-import { JOB_LIST } from '../../data/jobListData';
-import { PROJECT_LIST } from '../../data/ssafyData';
-
-import useUserId from '../../hooks/useUserId';
-import useToken from '../../hooks/useToken';
-import { EditProfileInfoRequest, RootState } from '../../types/authTypes';
-import useProfileInfo from '../../hooks/useProfileInfo';
-import useTechStackList from '../../hooks/useTechStackList';
-import useProfileTechStacks, {
-  convertTechStackWithImg,
-} from '../../hooks/useProfileTeckStacks';
 
 import {
   EditProfileProjectsRequest,
   ProfileProject,
   UserData,
 } from '../../types/userTypes';
+import { TechStackWithImg } from '../../types/commonTypes';
+import { Severity, TechStacksWithLevel } from '../../types/signUpTypes';
+import { EditProfileInfoRequest, RootState } from '../../types/authTypes';
+import { JOB_LIST } from '../../data/jobListData';
+import { PROJECT_LIST } from '../../data/ssafyData';
+
+import useUserId from '../../hooks/useUserId';
+import useToken from '../../hooks/useToken';
+import useProfileInfo from '../../hooks/useProfileInfo';
+import useTechStackList from '../../hooks/useTechStackList';
+import useProfileTechStacks, {
+  convertTechStackWithImg,
+} from '../../hooks/useProfileTeckStacks';
 
 import ProfileTechStackTagWithLevel from '../common/ProfileTechStackTagWithLevel';
 
 const ProfileInformationSection: React.FC = () => {
-  const dispatch = useDispatch();
-  const profileInfo = useProfileInfo();
-  const token: string | null = useToken();
-  const userId: number | null = useUserId();
   const [showError, setShowError] = useState<boolean>(false);
   const [techStacks, setTechStacks] = useState<TechStacksWithLevel[]>([]);
-  const techStackList: TechStackWithImg[] = useTechStackList();
-  const oldTechStacksListData: convertTechStackWithImg = useProfileTechStacks();
-  const oldTechStacksList = oldTechStacksListData.teckStackList;
-  const oldTechStacksWithLevel = oldTechStacksListData.teckStackListWithLevel;
   const [selfIntroductionDisabled, setSelfIntroductionDisabled] =
     useState<boolean>(true);
   const [selfIntroductionValue, setSelfIntroductionValue] =
@@ -90,6 +80,19 @@ const ProfileInformationSection: React.FC = () => {
   const [newTechStackModifyButtonText, setNewTechStackModifyButtonText] =
     useState<string>('수정');
   const [techStacksError, setTechStacksError] = useState<boolean>(false);
+
+  const dispatch = useDispatch();
+
+  const techStackList: TechStackWithImg[] = useTechStackList();
+
+  const oldTechStacksListData: convertTechStackWithImg = useProfileTechStacks();
+  const oldTechStacksList = oldTechStacksListData.teckStackList;
+  const oldTechStacksWithLevel = oldTechStacksListData.teckStackListWithLevel;
+
+  const profileInfo: UserData | null = useProfileInfo();
+  const token: string | null = useToken();
+  const userId: number | null = useUserId();
+
   const profileError = useSelector<RootState, string | null>(
     (state) => state.profile.error,
   );
@@ -541,7 +544,7 @@ const ProfileInformationSection: React.FC = () => {
           </SingleInformationWrapper>
           <Hr />
           <Row>
-            <JobSelectWrapper className="right-gap">
+            <JobSelectWrapper className="job-select_group">
               <RequirementLabel htmlFor="job1">희망 직무1</RequirementLabel>
               <Select
                 id="job1"
@@ -560,7 +563,7 @@ const ProfileInformationSection: React.FC = () => {
                 ))}
               </Select>
             </JobSelectWrapper>
-            <JobSelectWrapper className="right-gap">
+            <JobSelectWrapper className="job-select_group">
               <Label htmlFor="job2">희망 직무2</Label>
               <Select
                 id="job2"
@@ -577,7 +580,7 @@ const ProfileInformationSection: React.FC = () => {
                 ))}
               </Select>
             </JobSelectWrapper>
-            <JobSelectWrapper className="top-gap">
+            <JobSelectWrapper className="job-select__edit_button_group">
               <ModifyButton
                 type="button"
                 className="job-select__edit-button"
@@ -648,7 +651,7 @@ const ProfileInformationSection: React.FC = () => {
             </SingleInformationWrapper>
           </Row>
           <Hr />
-          <Row className="tech-stack-row">
+          <Row className="tech-stack-grouop">
             <SingleInformationWrapper
               {...getRootProps()}
               className="tech-stack-input"
@@ -783,38 +786,8 @@ const SingleInformationWrapper = styled.div`
   flex-direction: column;
   width: 100%;
 
-  &.right-gap {
-    width: 43%;
-    margin-right: 8px;
-  }
-  &.top-gap-button {
-    width: 13%;
-    margin-top: 25px;
-  }
-  &.top-right-gap-button {
-    width: 13%;
-    margin-top: 25px;
-    margin-right: 8px;
-  }
   &.tech-stack-input {
     position: relative;
-  }
-
-  @media (max-width: 575px) {
-    &.right-gap {
-      margin-right: 0px;
-      width: 100%;
-    }
-
-    &.top-gap-button {
-      width: 100%;
-      margin-top: 8px;
-    }
-    &.top-right-gap-button {
-      width: 100%;
-      margin-top: 8px;
-      margin-bottom: 8px;
-    }
   }
 `;
 
@@ -950,23 +923,23 @@ const JobSelectWrapper = styled.div`
   flex-direction: column;
   width: 100%;
 
-  &.right-gap {
+  &.job-select_group {
     width: 43%;
     margin-right: 8px;
   }
 
-  &.top-gap {
+  &.job-select__edit_button_group {
     width: 13%;
     margin-top: 25px;
   }
 
   @media (max-width: 575px) {
-    &.right-gap {
+    &.job-select_group {
       width: 100%;
       margin-right: 0;
     }
 
-    &.top-gap {
+    &.job-select__edit_button_groupn {
       margin-top: 8px;
       width: 100%;
     }
@@ -1023,7 +996,7 @@ const Row = styled.div`
     margin-bottom: 12px;
   }
 
-  &.tech-stack-row {
+  &.tech-stack-grouop {
     flex-direction: column;
   }
 
