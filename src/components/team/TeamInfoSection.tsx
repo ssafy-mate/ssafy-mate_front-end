@@ -134,10 +134,10 @@ const TeamInfoSection: React.FC = () => {
             : 'https://avatars.githubusercontent.com/u/97279195?s=200&v=4'
         }`,
         link: {
-          mobileWebUrl: `https://www.ssafymate.site${
+          webUrl: `https://www.ssafymate.site${
             teamData !== undefined ? `/teams/${teamData.teamId}` : ''
           }`,
-          webUrl: `https://www.ssafymate.site${
+          mobileWebUrl: `https://www.ssafymate.site${
             teamData !== undefined ? `/teams/${teamData.teamId}` : ''
           }`,
         },
@@ -148,13 +148,13 @@ const TeamInfoSection: React.FC = () => {
             teamData !== undefined ? teamData.teamName : ''
           } 팀 정보 보러가기`,
           link: {
+            webUrl: `https://www.ssafymate.site${
+              teamData !== undefined ? `/teams/${teamData.teamId}` : ''
+            }`,
             mobileWebUrl: `https://www.ssafymate.site${
               teamData !== undefined ? `/teams/${teamData.teamId}` : ''
             }`,
           },
-          webUrl: `https://www.ssafymate.site${
-            teamData !== undefined ? `/teams/${teamData.teamId}` : ''
-          }`,
         },
       ],
     });
