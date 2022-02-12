@@ -1,4 +1,5 @@
 import { rest } from 'msw';
+import { SsafyMateMemberList } from '../database/signIn';
 
 export const findIdHandlers = [
   rest.get(
@@ -6,8 +7,12 @@ export const findIdHandlers = [
     async (request, response, context) => {
       const userName = request.url.searchParams.get('userName');
 
+      const memberIndex = SsafyMateMemberList.findIndex(
+        (ssafyMember) => ssafyMember.userData.userName === userName,
+      );
+
       // 교육생 정보가 없는 경우
-      if (userName === '이여진') {
+      if (memberIndex === -1 && userName !== '서버에러') {
         return response(
           context.status(401),
           context.json({

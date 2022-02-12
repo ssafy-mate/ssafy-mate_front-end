@@ -4,6 +4,8 @@ import {
   CodeConfirmForNewPassword,
   NewPassword,
 } from '../../types/accountTypes';
+import { EmailVerificationCodes, SsafyStudentDataList } from '../database/auth';
+import { SsafyMateMemberList } from '../database/signIn';
 
 export const newPasswordHandlers = [
   rest.get(
@@ -11,8 +13,12 @@ export const newPasswordHandlers = [
     async (request, response, context) => {
       const userEmail = request.url.searchParams.get('userEmail');
 
+      const emailIndex = SsafyStudentDataList.findIndex(
+        (ssafyStudent) => ssafyStudent.userEmail === userEmail,
+      );
+
       // 교육생 정보가 없는 경우
-      if (userEmail === 'sugarfina637@naver.comm') {
+      if (emailIndex === -1 && userEmail !== 'servererror@gmail.com') {
         return response(
           context.status(401),
           context.json({
@@ -50,9 +56,15 @@ export const newPasswordHandlers = [
     `${process.env.REACT_APP_SERVER_URL}/api/users/password/new`,
     async (request: any, response, context) => {
       const data: CodeConfirmForNewPassword = request.body;
-      const { code } = data;
+      const { code, userEmail } = data;
 
-      if (code === '44444444') {
+      const CodeIndex = EmailVerificationCodes.findIndex(
+        (verificationCode) =>
+          verificationCode.code === code &&
+          verificationCode.userEmail === userEmail,
+      );
+
+      if (CodeIndex === -1 && code !== '55555555' && code !== '33333333') {
         return response(
           context.status(401),
           context.json({
@@ -97,6 +109,14 @@ export const newPasswordHandlers = [
     async (request: any, response, context) => {
       const data: NewPassword = request.body;
       const { password, userEmail } = data;
+
+      const studentIndex = SsafyMateMemberList.findIndex(
+        (ssafyStudent) => ssafyStudent.userData.userEmail === userEmail,
+      );
+
+      if (studentIndex !== -1 && password !== 'errrrrror') {
+        SsafyMateMemberList[studentIndex].userData.password = password;
+      }
 
       if (password === 'errrrrror') {
         return response(
