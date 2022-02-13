@@ -265,28 +265,26 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
                           aria-labelledby="composition-button"
                           onKeyDown={handleListKeyDown}
                         >
-                          <AccountBoxItem>
-                            <Link
-                              to={`/users/account/edit`}
-                              onClick={handleUserAccountEdit}
-                            >
-                              계정 관리
-                            </Link>
-                          </AccountBoxItem>
-                          <AccountBoxItem onClick={handleAccountBoxClose}>
-                            <Link
-                              to={`/projects/specialization/${userId}/receive_requests`}
-                            >
+                          <Link
+                            to={`/users/account/edit`}
+                            onClick={handleUserAccountEdit}
+                          >
+                            <AccountBoxItem>계정 관리</AccountBoxItem>
+                          </Link>
+                          <Link
+                            to={`/projects/specialization/${userId}/receive_requests`}
+                          >
+                            <AccountBoxItem onClick={handleAccountBoxClose}>
                               받은 제안
-                            </Link>
-                          </AccountBoxItem>
-                          <AccountBoxItem onClick={handleAccountBoxClose}>
-                            <Link
-                              to={`/projects/specialization/${userId}/send_requests`}
-                            >
+                            </AccountBoxItem>
+                          </Link>
+                          <Link
+                            to={`/projects/specialization/${userId}/send_requests`}
+                          >
+                            <AccountBoxItem onClick={handleAccountBoxClose}>
                               보낸 요청
-                            </Link>
-                          </AccountBoxItem>
+                            </AccountBoxItem>
+                          </Link>
                           <Divider />
                           <AccountBoxItem onClick={handleClickLogoutButton}>
                             로그아웃
