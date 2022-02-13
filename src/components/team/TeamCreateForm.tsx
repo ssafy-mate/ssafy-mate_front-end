@@ -416,6 +416,11 @@ const TeamCreateForm: React.FC = () => {
                   ? 'active-warning'
                   : ''
               }
+              onKeyDown={(event: any) => {
+                if (event.key === 'Backspace') {
+                  event.stopPropagation();
+                }
+              }}
               placeholder="ex) Vue.js, django, Spring Boot, MySQL"
               {...getInputProps()}
             />

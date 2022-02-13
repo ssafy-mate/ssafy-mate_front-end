@@ -676,6 +676,11 @@ const ProfileInformationSection: React.FC = () => {
                   type="text"
                   id="tech-stack-options"
                   name="tech-stack-options"
+                  onKeyDown={(event: any) => {
+                    if (event.key === 'Backspace') {
+                      event.stopPropagation();
+                    }
+                  }}
                   placeholder="ex) Vue.js, django, Spring Boot, MySQL"
                   disabled={newTechStackDisabled}
                   {...getInputProps()}
