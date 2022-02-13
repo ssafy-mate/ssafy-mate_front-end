@@ -62,8 +62,8 @@ const Img = styled.img`
   object-fit: fill;
 
   @media (max-width: 540px) {
-    width: 22px;
-    height: 22px;
+    width: 23px;
+    height: 23px;
   }
 `;
 
@@ -85,13 +85,18 @@ const DeleteButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    transform: scale(1.15);
+    transform: scale(1.3);
   }
 
-  @media (max-width: 540px) {
+  & svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  @media (max-width: 575px) {
     svg {
-      width: 22px;
-      height: 22px;
+      width: 17px;
+      height: 17px;
     }
   }
 `;
