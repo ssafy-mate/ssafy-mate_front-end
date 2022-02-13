@@ -293,7 +293,7 @@ const InfoList = styled.h3`
 
 const RequestStatusWrapper = styled.div`
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 
   @media (max-width: 575px) {
