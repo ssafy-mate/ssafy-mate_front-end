@@ -1,6 +1,6 @@
 {
   "name": "ssafy-mate_front-end",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.7.1",

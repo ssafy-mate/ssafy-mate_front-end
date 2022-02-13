@@ -221,18 +221,18 @@ const Iphone = styled.div<IphoneProps>`
 const IphoneInner = styled.div`
   position: absolute;
   top: -355px;
-  width: 600px;
-  height: 936px;
+  width: 578px;
+  height: 928px;
 
   @media (max-width: 991px) {
     top: 220px;
-    width: calc(600px * 0.8);
-    height: calc(936px * 0.8);
+    width: calc(578px * 0.8);
+    height: calc(928px * 0.8);
   }
   @media (max-width: 575px) {
     top: 130px;
-    width: calc(600px * 0.7);
-    height: calc(936px * 0.7);
+    width: calc(578px * 0.7);
+    height: calc(928px * 0.7);
   }
 `;
 
@@ -245,11 +245,15 @@ const IphoneFrame = styled.img`
 
 const IphoneContents = styled.img`
   position: absolute;
-  top: 10%;
-  left: 21.8%;
+  top: 11.5%;
+  left: 21.83%;
   width: 56%;
   height: auto;
   border-radius: 20px;
+
+  &:nth-of-type(2) {
+    top: 50%;
+  }
 `;
 
 export default MobileServiceIntroSection;
