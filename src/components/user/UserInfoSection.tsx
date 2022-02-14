@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 
-import { Link, useParams } from 'react-router-dom';
+import { Link, Redirect, useParams } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
 import { sendTeamOffer as sendTeamOfferSagaStart } from '../../redux/modules/auth';
@@ -18,6 +18,7 @@ import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import GroupsIcon from '@mui/icons-material/Groups';
 import EmailIcon from '@mui/icons-material/Email';
 import StorefrontIcon from '@mui/icons-material/Storefront';
+import SendIcon from '@mui/icons-material/Send';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Dialog from '@mui/material/Dialog';
@@ -193,6 +194,10 @@ const UserInfoSection: React.FC = () => {
     return <ErrorSection errorMessage={errorMessage} />;
   }
 
+  if (myUserId === null) {
+    return <Redirect to="/users/sign_in" />;
+  }
+
   return (
     <>
       {isLoading || !userData ? (
@@ -212,11 +217,16 @@ const UserInfoSection: React.FC = () => {
                 />
               </ProfileImgWrapper>
               <NameWrapper>
-                <UserLabel
-                  userId={userData.userId}
-                  userName={userData.userName}
-                  offProfileMenu={true}
-                />
+                <Row>
+                  <UserLabel
+                    userId={userData.userId}
+                    userName={userData.userName}
+                    offProfileMenu={true}
+                  />
+                  <SharingButton onClick={sendKakaoSharingMessage}>
+                    <ShareIcon />
+                  </SharingButton>
+                </Row>
                 <Row>
                   <SsafyInfo>
                     <span>{userData.campus}</span>
@@ -232,10 +242,16 @@ const UserInfoSection: React.FC = () => {
                   <span>팀 합류 요청하기</span>
                 </RequestButton>
               )}
-              <SharingButton onClick={sendKakaoSharingMessage}>
-                <ShareIcon />
-                <span>공유하기</span>
-              </SharingButton>
+              <DirectMessageLink
+                to={`/chatting/${myUserId}?roomId=${
+                  myUserId < parseInt(userId) ? myUserId : userId
+                }-${
+                  myUserId > parseInt(userId) ? myUserId : userId
+                }&userId=${userId}`}
+              >
+                <SendIcon />
+                <span>메시지 보내기</span>
+              </DirectMessageLink>
             </ButtonBox>
           </HeadContainer>
           <BodyContainer>
@@ -588,6 +604,41 @@ const Row = styled.div`
   align-items: center;
 `;
 
+const SharingButton = styled.button`
+  display: block;
+  margin-left: 12px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+
+  & svg {
+    font-size: 22px;
+    color: #98a8b9;
+  }
+
+  &:hover {
+    & svg {
+      color: #3396f4;
+    }
+  }
+
+  @media (max-width: 991px) {
+    & svg {
+      font-size: 20px;
+    }
+  }
+  @media (max-width: 767px) {
+    margin-left: 10px;
+
+    & svg {
+      font-size: 18px;
+    }
+  }
+  @media (max-width: 575px) {
+    margin-left: 8px;
+  }
+`;
+
 const SsafyInfo = styled.h2`
   margin-right: 20px;
   font-size: 20px;
@@ -672,7 +723,7 @@ const RequestButton = styled.button`
   }
 `;
 
-const SharingButton = styled.button`
+const DirectMessageLink = styled(Link)`
   display: flex;
   justify-content: center;
   align-items: center;

@@ -26,9 +26,10 @@ interface TeamListSearchFormProps {
   setJob1: (job1: string) => void;
   setTechStackId: (techStackId: number | null) => void;
   setTeamName: (teamName: string) => void;
+  setPage: (page: number) => void;
 }
 
-const CURRENT_PROJECT_CODE: number = 1;
+const CURRENT_PROJECT_CODE: number = 2;
 
 const TeamListSearchForm: React.FC<TeamListSearchFormProps> = ({
   campus,
@@ -38,6 +39,7 @@ const TeamListSearchForm: React.FC<TeamListSearchFormProps> = ({
   setJob1,
   setTechStackId,
   setTeamName,
+  setPage,
 }) => {
   const [, onSetProject] = useQueryString('project');
   const [, onSetProjectTrack] = useQueryString('project_track');
@@ -68,6 +70,7 @@ const TeamListSearchForm: React.FC<TeamListSearchFormProps> = ({
     onSetJob1('all');
     onSetTeamName('');
     onSetPage(1);
+    setPage(1);
   }, [
     campus,
     projectTrack,
@@ -77,6 +80,7 @@ const TeamListSearchForm: React.FC<TeamListSearchFormProps> = ({
     onSetJob1,
     onSetTeamName,
     onSetPage,
+    setPage,
   ]);
 
   useEffect(() => {
@@ -138,7 +142,7 @@ const TeamListSearchForm: React.FC<TeamListSearchFormProps> = ({
             css={{ margin: '0 12px' }}
           >
             <option value="all">전체 특화 프로젝트 트랙</option>
-            {PROJECT_LIST[CURRENT_PROJECT_CODE].projectTracks?.map(
+            {PROJECT_LIST[CURRENT_PROJECT_CODE - 1].projectTracks?.map(
               (projectTrack) => (
                 <option key={projectTrack.id} value={projectTrack.name}>
                   {projectTrack.name}
