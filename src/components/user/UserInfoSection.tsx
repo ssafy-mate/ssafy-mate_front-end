@@ -614,6 +614,7 @@ const SharingButton = styled.button`
   & svg {
     font-size: 22px;
     color: #98a8b9;
+    transition: color 0.08s ease-in-out;
   }
 
   &:hover {
