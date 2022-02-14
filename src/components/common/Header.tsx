@@ -39,6 +39,7 @@ import useMyTeamId from '../../hooks/useMyTeamId';
 
 import SsafyMateAlert from './Alert';
 import MenuBar from './MenuBar';
+import useSocket from '../../hooks/useSocket';
 
 interface MenuListProps {
   isExpanded: boolean;
@@ -67,6 +68,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
   const userId = useUserId();
   const myTeamId = useMyTeamId(CURRENT_PROJECT);
 
+  const [socket] = useSocket(userId as number);
   const isMobile = useMediaQuery({
     query: '(max-width: 991px)',
   });
@@ -121,6 +123,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
   };
 
   const handleClickLogoutButton = () => {
+    socket?.emit('logout', { id: userId });
     dispatch(logoutSagaStart());
   };
 
