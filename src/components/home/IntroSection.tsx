@@ -4,7 +4,7 @@ import styled from '@emotion/styled';
 
 import useOnScreen from '../../hooks/useOnScreen';
 
-import ImacBox from './ImacBox';
+import PcBox from './PcBox';
 
 interface IntroSectionProps {
   headText: string;
@@ -42,7 +42,7 @@ const IntroSection: React.FC<IntroSectionProps> = ({
             {descriptionText}
           </Description>
         </Contents>
-        <ImacBox imgUrl={imgUrl} isVisible={isVisible} />
+        <PcBox imgUrl={imgUrl} isVisible={isVisible} />
       </Wrapper>
     </Section>
   );
