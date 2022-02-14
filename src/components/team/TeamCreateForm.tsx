@@ -358,6 +358,7 @@ const TeamCreateForm: React.FC = () => {
             }
             onChange={handleChangeTeamName}
             required
+            maxLength={20}
           />
           {isDisplayedWarningText && teamName === '' && (
             <WarningMessage text="필수 입력 항목입니다." />
@@ -378,6 +379,7 @@ const TeamCreateForm: React.FC = () => {
             }
             onChange={handleChangeNotice}
             required
+            maxLength={50}
             placeholder="ex) 최우수상에 도전할 팀원을 모집합니다."
           />
           {isDisplayedWarningText && notice === '' && (
@@ -393,6 +395,7 @@ const TeamCreateForm: React.FC = () => {
             name="introduction"
             onKeyPress={handleTextAreaEnterKeyPressed}
             onChange={handleChangeIntroduction}
+            maxLength={1000}
             placeholder="ex) 팀의 목표, 개발 방향성, 어떤 팀원들을 원하는지 등을 자유롭게 작성해 주세요."
           />
         </InputWrapper>
