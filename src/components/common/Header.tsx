@@ -458,6 +458,7 @@ const LogoutButton = styled.button`
   padding: 4px 8px;
   background-color: transparent;
   border: none;
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
   font-size: 16px;
   font-weight: 500;
   line-height: 1.6;
