@@ -35,4 +35,5 @@ export interface ChatLogResponseType {
 
 export interface ChatRoomTypeProps extends ChatRoomType {
   myId: number;
+  isOnline: boolean;
 }

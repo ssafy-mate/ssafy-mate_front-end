@@ -1,12 +1,11 @@
-import { useState, useEffect } from 'react';
-
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import dayjs from 'dayjs';
 
-import useSocket from '../../hooks/useSocket';
 import { ChatRoomTypeProps } from '../../types/messageTypes';
 
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Avatar } from '@mui/material';
 
@@ -15,33 +14,27 @@ const ChatRoomItem: React.FC<ChatRoomTypeProps> = ({
   roomId,
   userId,
   userName,
+  userEmail,
   profileImgUrl,
   content,
   sentTime,
-  userEmail,
+  isOnline,
 }) => {
-  const [onlineList, setOnlineList] = useState<number[]>([]);
-  const [socket] = useSocket();
-
-  useEffect(() => {
-    setOnlineList([]);
-  }, [roomId]);
-
-  useEffect(() => {
-    socket?.on('onlineList', (data: number[]) => {
-      setOnlineList(data);
-    });
-    return () => {
-      socket?.off('onlineList');
-    };
-  }, [socket]);
-
   return (
-    <Link to={`/chatting/${myId}?roomId=${roomId}&userId=${userId}`}>
-      <Item>
+    <Item>
+      <NavLink
+        to={`/chatting/${myId}?roomId=${roomId}&userId=${userId}`}
+        exact={true}
+      >
         <Wrapper>
           <ProfileImg>
-            <Avatar src={profileImgUrl} />
+            <Avatar
+              src={
+                profileImgUrl
+                  ? profileImgUrl
+                  : '/images/assets/basic-profile-img.png'
+              }
+            />
           </ProfileImg>
           <Content>
             <TitleWrapper>
@@ -56,15 +49,22 @@ const ChatRoomItem: React.FC<ChatRoomTypeProps> = ({
               <Description>{content}</Description>
             </DescriptionWrapper>
           </Content>
+          <OnlineWrraper>
+            {isOnline && isOnline ? <OnlineCircle /> : <OfflineCircle />}
+          </OnlineWrraper>
         </Wrapper>
-      </Item>
-    </Link>
+      </NavLink>
+    </Item>
   );
 };
 
 const Item = styled.li`
   width: 100%;
   box-sizing: border-box;
+
+  & .selected {
+    background-color: #111111;
+  }
 
   @media (max-width: 575px) {
     display: hidden;
@@ -150,6 +150,25 @@ const TitleSubText = styled.div`
   font-size: 12px;
   color: #868b94;
   white-space: nowrap;
+`;
+
+const OnlineWrraper = styled.div`
+  display: flex;
+  padding: 10px;
+`;
+
+const OnlineCircle = styled.div`
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #6cff6c;
+`;
+
+const OfflineCircle = styled.div`
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #acacac;
 `;
 
 const DescriptionWrapper = styled.div`

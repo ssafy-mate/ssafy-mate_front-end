@@ -67,6 +67,7 @@ const ChattingForm: React.FC = () => {
 
   const [chatSections, setChatSections] = useState<MessageType[]>([]);
   const [otherUser, setOtherUser] = useState<OtherUserInfoType>();
+  const [onlineList, setOnlineList] = useState<number[]>([]);
   const [open, setOpen] = useState(false);
 
   const [socket] = useSocket(myUserId as number);
@@ -208,6 +209,12 @@ const ChattingForm: React.FC = () => {
     };
   }, [socket, onMessage]);
 
+  useEffect(() => {
+    socket?.on('onlineList', (data: number[]) => {
+      setOnlineList(data);
+    });
+  }, [socket, onlineList]);
+
   const handleMessageSendKeyPress = (event: React.KeyboardEvent) => {
     if (event.code === 'Enter' || event.code === 'NumpadEnter') {
       if (!event.shiftKey) {
@@ -294,19 +301,23 @@ const ChattingForm: React.FC = () => {
             <ChatIcon />
             <ChatRoomListHead>채팅 목록</ChatRoomListHead>
           </ChatRoomListHeader>
-          {roomData?.map((room: ChatRoomType) => (
-            <ChatRoomItem
-              key={room.roomId}
-              myId={Number(myUserId)}
-              roomId={room.roomId}
-              userId={room.userId}
-              userName={room.userName}
-              profileImgUrl={room.profileImgUrl}
-              content={room.content}
-              sentTime={room.sentTime}
-              userEmail={room.userEmail}
-            />
-          ))}
+          {roomData?.map((room: ChatRoomType) => {
+            const isOnline = onlineList.includes(room.userId);
+            return (
+              <ChatRoomItem
+                key={room.roomId}
+                myId={Number(myUserId)}
+                roomId={room.roomId}
+                userId={room.userId}
+                userName={room.userName}
+                profileImgUrl={room.profileImgUrl}
+                content={room.content}
+                sentTime={room.sentTime}
+                userEmail={room.userEmail}
+                isOnline={isOnline}
+              />
+            );
+          })}
         </ChatRoomListWrapper>
       </ChatRoomListSidebar>
       <ChatRoomSection>

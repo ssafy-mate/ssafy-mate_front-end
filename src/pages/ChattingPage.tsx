@@ -6,16 +6,16 @@ import { Redirect } from 'react-router-dom';
 import styled from '@emotion/styled';
 
 import useToken from '../hooks/useToken';
+import useSocket from '../hooks/useSocket';
+import useUserId from '../hooks/useUserId';
 
 import Header from '../components/common/Header';
 import ChattingForm from '../components/chatting/ChattingForm';
-import useSocket from '../hooks/useSocket';
-import useUserId from '../hooks/useUserId';
 
 const ChattingPage: React.FC = () => {
   const token = useToken();
   const userId = useUserId();
-  const [socket, disconnect] = useSocket(userId as number);
+  const [socket] = useSocket(userId as number);
 
   useEffect(() => {
     document.title = '채팅 | 싸피 메이트';
