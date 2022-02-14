@@ -29,6 +29,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Tooltip from '@mui/material/Tooltip';
 
 import { TeamOfferRequestType } from '../../types/teamTypes';
 
@@ -223,9 +224,11 @@ const UserInfoSection: React.FC = () => {
                     userName={userData.userName}
                     offProfileMenu={true}
                   />
-                  <SharingButton onClick={sendKakaoSharingMessage}>
-                    <ShareIcon />
-                  </SharingButton>
+                  <Tooltip title="카카오톡 공유하기" arrow>
+                    <SharingButton onClick={sendKakaoSharingMessage}>
+                      <ShareIcon />
+                    </SharingButton>
+                  </Tooltip>
                 </Row>
                 <Row>
                   <SsafyInfo>
@@ -582,6 +585,11 @@ const NameWrapper = styled.div`
     font-weight: 600;
     line-height: 1.8;
     color: #263647;
+    transition: color 0.08s ease-in-out;
+
+    &:hover {
+      color: #3396f4;
+    }
 
     @media (max-width: 1199px) {
       font-size: 26px;
