@@ -154,6 +154,7 @@ const SortSelect = styled.select`
   background-color: #e9ecf3;
   background-image: url(/images/assets/toggle-black.png);
   background-repeat: no-repeat;
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
   font-size: 0.875rem;
   font-weight: 500;
   line-height: 1.25rem;
