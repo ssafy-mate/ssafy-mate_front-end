@@ -29,6 +29,7 @@ import CommentIcon from '@mui/icons-material/Comment';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChatIcon from '@mui/icons-material/Chat';
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
+import PersonIcon from '@mui/icons-material/Person';
 
 import {
   MessageType,
@@ -383,7 +384,6 @@ const ChattingForm: React.FC = () => {
                         ? otherUser?.profileImgUrl
                         : '/images/assets/basic-profile-img.png'
                     }
-                    sx={{ marginRight: '10px' }}
                     className="profile-avatar"
                   />
                   <ProfileLink to={`/users/${otherUser?.userId}`}>
@@ -395,6 +395,7 @@ const ChattingForm: React.FC = () => {
                         @{otherUser?.userEmail.split('@')[0]}
                       </span>
                     </div>
+                    <PersonIcon className="user-icon" />
                   </ProfileLink>
                 </ChatRoomHeaderProfile>
                 <IconButton
@@ -717,6 +718,10 @@ const ProfileLink = styled(Link)`
     }
   }
 
+  & .user-icon {
+    color: #868b94;
+  }
+
   @media (max-width: 767px) {
     & .user-name {
       & span {
@@ -731,6 +736,10 @@ const ProfileLink = styled(Link)`
 const ChatRoomHeaderProfile = styled.div`
   display: flex;
   align-items: center;
+
+  & .profile-avatar {
+    margin-right: 10px;
+  }
 
   @media (max-width: 767px) {
     & .profile-avatar {
@@ -775,16 +784,6 @@ const MessageBoxLeftContent = styled.div`
     color: #263747;
     white-space: pre-wrap;
     word-break: break-all;
-  }
-
-  & img {
-    width: 36px;
-    min-width: 36px;
-    height: 36px;
-    min-height: 36px;
-    margin-right: 8px;
-    border-radius: 50%;
-    background-color: #eaebef;
   }
 
   @media (max-width: 767px) {
