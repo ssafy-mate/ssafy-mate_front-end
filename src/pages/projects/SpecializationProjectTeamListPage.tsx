@@ -19,14 +19,14 @@ import TeamRecruitmentSection from '../../components/projects/TeamRecruitmentSec
 import Pagenation from '../../components/projects/Pagenation';
 import Footer from '../../components/common/Footer';
 
-const CURRENT_PROJECT_CODE: number = 1;
+const CURRENT_PROJECT_CODE: number = 2;
 
 const SpecializationProjectTeamListPage: React.FC = () => {
   const myCampus = useSelector<RootState, string | null>(
     (state) => state.auth.campus,
   );
   const myProjectTrack = useSelector<RootState, string | null>(
-    (state) => state.auth.projects[CURRENT_PROJECT_CODE].projectTrack,
+    (state) => state.auth.projects[CURRENT_PROJECT_CODE - 1].projectTrack,
   );
   const [campus, setCampus] = useState<string>(
     myCampus !== null ? myCampus : 'all',
@@ -80,6 +80,7 @@ const SpecializationProjectTeamListPage: React.FC = () => {
         setJob1={setJob1}
         setTechStackId={setTechStackId}
         setTeamName={setTeamName}
+        setPage={setPage}
       />
       <TeamRecruitmentSection
         isLoading={isLoading}

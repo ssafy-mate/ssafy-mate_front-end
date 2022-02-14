@@ -19,7 +19,7 @@ import {
 } from '../../data/ssafyData';
 import { JOB_LIST } from '../../data/jobListData';
 
-const CURRENT_PROJECT_CODE: number = 1;
+const CURRENT_PROJECT_CODE: number = 2;
 
 interface UserListSearchFormProps {
   campus: string;
@@ -30,6 +30,7 @@ interface UserListSearchFormProps {
   setTechStackId: (techStackId: number | null) => void;
   setUserName: (userName: string) => void;
   setSsafyTrack: (ssafyTrack: string) => void;
+  setPage: (page: number) => void;
 }
 
 const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
@@ -41,6 +42,7 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
   setTechStackId,
   setUserName,
   setSsafyTrack,
+  setPage,
 }) => {
   const [, onSetProject] = useQueryString('project');
   const [, onSetProjectTrack] = useQueryString('project_track');
@@ -73,6 +75,7 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
     onSetUserName('');
     onSetSsafyTrack('all');
     onSetPage(1);
+    setPage(1);
   }, [
     campus,
     projectTrack,
@@ -83,6 +86,7 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
     onSetUserName,
     onSetSsafyTrack,
     onSetPage,
+    setPage,
   ]);
 
   useEffect(() => {
@@ -151,7 +155,7 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
             css={{ margin: '0 12px' }}
           >
             <option value="all">전체 특화 프로젝트 트랙</option>
-            {PROJECT_LIST[CURRENT_PROJECT_CODE].projectTracks?.map(
+            {PROJECT_LIST[CURRENT_PROJECT_CODE - 1].projectTracks?.map(
               (projectTrack) => (
                 <option key={projectTrack.id} value={projectTrack.name}>
                   {projectTrack.name}

@@ -40,15 +40,15 @@ const MobileServiceIntroSection: React.FC<MobileServiceIntroSectionProps> = ({
             {descriptionText}
           </Description>
         </Contents>
-        <Iphone className={isVisible ? 'scroll' : ''} reversed={reversed}>
-          <IphoneInner>
-            <IphoneContents src={imgUrl} alt={`${headText} 이미지`} />
-            <IphoneFrame
+        <MobilePhone className={isVisible ? 'scroll' : ''} reversed={reversed}>
+          <MobilePhoneInner>
+            <MobilePhoneContents src={imgUrl} alt={`${headText} 이미지`} />
+            <MobilePhoneFrame
               src="/images/home/iphone-frame.png"
               alt="아이폰 프레임"
             />
-          </IphoneInner>
-        </Iphone>
+          </MobilePhoneInner>
+        </MobilePhone>
       </Wrapper>
     </Section>
   );
@@ -111,18 +111,18 @@ const Head = styled.h1`
   }
 
   @media (max-width: 575px) {
-    font-size: 18px;
     margin-bottom: 10px;
+    font-size: 18px;
   }
 
   @keyframes fadeinBottom {
     from {
-      transform: translate3d(0, 50px, 0);
       opacity: 0;
+      transform: translate3d(0, 50px, 0);
     }
     to {
-      transform: translate3d(0, 0, 0);
       opacity: 1;
+      transform: translate3d(0, 0, 0);
     }
   }
 `;
@@ -146,12 +146,12 @@ const SubHead = styled.h2`
 
   @keyframes fadeinBottom {
     from {
-      transform: translate3d(0, 50px, 0);
       opacity: 0;
+      transform: translate3d(0, 50px, 0);
     }
     to {
-      transform: translate3d(0, 0, 0);
       opacity: 1;
+      transform: translate3d(0, 0, 0);
     }
   }
 `;
@@ -173,17 +173,17 @@ const Description = styled.p`
 
   @keyframes fadeinBottom {
     from {
-      transform: translate3d(0, 50px, 0);
       opacity: 0;
+      transform: translate3d(0, 50px, 0);
     }
     to {
-      transform: translate3d(0, 0, 0);
       opacity: 1;
+      transform: translate3d(0, 0, 0);
     }
   }
 `;
 
-const Iphone = styled.div<IphoneProps>`
+const MobilePhone = styled.div<IphoneProps>`
   opacity: 0;
   display: flex;
   justify-content: ${(props) => (props.reversed ? 'flex-start' : 'flex-end')};
@@ -208,17 +208,17 @@ const Iphone = styled.div<IphoneProps>`
 
   @keyframes fadeinBottom {
     from {
-      transform: translate3d(0, 50px, 0);
       opacity: 0;
+      transform: translate3d(0, 50px, 0);
     }
     to {
-      transform: translate3d(0, 0, 0);
       opacity: 1;
+      transform: translate3d(0, 0, 0);
     }
   }
 `;
 
-const IphoneInner = styled.div`
+const MobilePhoneInner = styled.div`
   position: absolute;
   top: -355px;
   width: 578px;
@@ -236,18 +236,18 @@ const IphoneInner = styled.div`
   }
 `;
 
-const IphoneFrame = styled.img`
+const MobilePhoneFrame = styled.img`
   position: relative;
   z-index: 10;
   width: 100%;
   height: 100%;
 `;
 
-const IphoneContents = styled.img`
+const MobilePhoneContents = styled.img`
   position: absolute;
   top: 11.5%;
   left: 21.83%;
-  width: 56%;
+  width: 56.34%;
   height: auto;
   border-radius: 20px;
 

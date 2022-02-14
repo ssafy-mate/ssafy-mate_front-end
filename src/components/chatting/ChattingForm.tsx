@@ -18,17 +18,19 @@ import useSWRInfinite from 'swr/infinite';
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
+import SendIcon from '@mui/icons-material/Send';
+import CommentIcon from '@mui/icons-material/Comment';
+import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import ChatIcon from '@mui/icons-material/Chat';
+import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { Avatar } from '@mui/material';
 import TextareaAutosize from '@mui/base/TextareaAutosize';
 import IconButton from '@mui/material/IconButton';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import SendIcon from '@mui/icons-material/Send';
-import CommentIcon from '@mui/icons-material/Comment';
-import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChatIcon from '@mui/icons-material/Chat';
-import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
+import Tooltip from '@mui/material/Tooltip';
 
 import {
   MessageType,
@@ -383,7 +385,6 @@ const ChattingForm: React.FC = () => {
                         ? otherUser?.profileImgUrl
                         : '/images/assets/basic-profile-img.png'
                     }
-                    sx={{ marginRight: '10px' }}
                     className="profile-avatar"
                   />
                   <ProfileLink to={`/users/${otherUser?.userId}`}>
@@ -397,14 +398,22 @@ const ChattingForm: React.FC = () => {
                     </div>
                   </ProfileLink>
                 </ChatRoomHeaderProfile>
-                <IconButton
-                  css={listIcon}
-                  aria-label="open drawer"
-                  onClick={handleDrawerOpen}
-                  edge="start"
-                >
-                  <CommentIcon />
-                </IconButton>
+                <ButtonBox>
+                  <Tooltip title={`${otherUser?.userName}님의 프로필`} arrow>
+                    <ProfileIconLink to={`/users/${otherUser?.userId}`}>
+                      <AccountBoxIcon />
+                    </ProfileIconLink>
+                  </Tooltip>
+                  <Tooltip title="채팅 목록" arrow>
+                    <ChatRoomListButton
+                      aria-label="open drawer"
+                      onClick={handleDrawerOpen}
+                      edge="start"
+                    >
+                      <CommentIcon />
+                    </ChatRoomListButton>
+                  </Tooltip>
+                </ButtonBox>
               </ChatRoomUserNameBar>
               <Scrollbars autoHide ref={scrollbarRef} onScrollFrame={onScroll}>
                 <ChatRoomMessageList ref={chatRoomMessageRef}>
@@ -465,7 +474,7 @@ const ChattingForm: React.FC = () => {
             </ChatRoomMessageWrapper>
             <ChatTypingWrapper>
               <TextArea
-                css={ChatTypingTextarea}
+                css={chatTypingTextarea}
                 ref={messageInputRef}
                 maxRows={3}
                 minRows={1}
@@ -474,9 +483,9 @@ const ChattingForm: React.FC = () => {
                 onChange={onChangeChat}
                 placeholder="메시지를 입력해주세요"
               />
-              <button onClick={onSubmit}>
-                <SendIcon css={SendButton}></SendIcon>
-              </button>
+              <SendMessageButton onClick={onSubmit}>
+                <SendIcon />
+              </SendMessageButton>
             </ChatTypingWrapper>
           </ChatRoomWrapper>
         )}
@@ -606,29 +615,6 @@ const ChatListOpenButton = styled.button`
   }
 `;
 
-const listItemCss = css`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-sizing: border-box;
-
-  & span {
-    overflow: hidden;
-    height: 18px;
-    font-size: 14px;
-    font-weight: 500;
-    color: #263747;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  & .user-name {
-    & .user-name__email {
-      color: #868b94;
-    }
-  }
-`;
-
 const ChatRoomWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -668,26 +654,6 @@ const TextArea = styled(TextareaAutosize)`
   color: #263747;
 `;
 
-const listIcon = css`
-  display: none;
-  padding: 0;
-  color: inherit;
-
-  & svg {
-    font-size: 28px;
-    color: #263747;
-    transition: color 0.08s ease-in-out;
-
-    &:hover {
-      color: #3396f4;
-    }
-  }
-
-  @media (max-width: 767px) {
-    display: flex;
-  }
-`;
-
 const ProfileLink = styled(Link)`
   display: flex;
   justify-content: center;
@@ -695,26 +661,33 @@ const ProfileLink = styled(Link)`
   width: 100%;
   cursor: pointer;
 
-  & .user-name {
-    & span {
-      font-size: 16px;
-      font-weight: 500;
-      color: #263747;
-      transition: color 0.08s ease-in-out;
-    }
-
+  &:hover {
     & .user-name__name {
-      :hover {
-        color: #3396f4;
-        text-decoration: underline;
-      }
+      color: #3396f4;
+      text-decoration: underline;
     }
   }
 
   & .user-name {
+    & span {
+      font-size: 16px;
+      font-weight: 500;
+      transition: color 0.08s ease-in-out;
+    }
+  }
+
+  & .user-name {
+    &.user-name__name {
+      color: #263747;
+    }
+
     & .user-name__email {
       color: #868b94;
     }
+  }
+
+  & .user-icon {
+    color: #868b94;
   }
 
   @media (max-width: 767px) {
@@ -728,15 +701,58 @@ const ProfileLink = styled(Link)`
   }
 `;
 
+const ProfileIconLink = styled(Link)`
+  & svg {
+    font-size: 28px;
+    color: #263747;
+    transition: color 0.08s ease-in-out;
+  }
+
+  &:hover {
+    & svg {
+      color: #3396f4;
+    }
+  }
+`;
+
 const ChatRoomHeaderProfile = styled.div`
   display: flex;
   align-items: center;
+
+  & .profile-avatar {
+    margin-right: 10px;
+  }
 
   @media (max-width: 767px) {
     & .profile-avatar {
       width: 36px;
       height: 36px;
     }
+  }
+`;
+
+const ButtonBox = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
+
+const ChatRoomListButton = styled(IconButton)`
+  display: none;
+  padding: 0;
+  margin-left: 8px;
+
+  & svg {
+    font-size: 28px;
+    color: #263747;
+    transition: color 0.08s ease-in-out;
+
+    &:hover {
+      color: #3396f4;
+    }
+  }
+
+  @media (max-width: 767px) {
+    display: flex;
   }
 `;
 
@@ -775,16 +791,6 @@ const MessageBoxLeftContent = styled.div`
     color: #263747;
     white-space: pre-wrap;
     word-break: break-all;
-  }
-
-  & img {
-    width: 36px;
-    min-width: 36px;
-    height: 36px;
-    min-height: 36px;
-    margin-right: 8px;
-    border-radius: 50%;
-    background-color: #eaebef;
   }
 
   @media (max-width: 767px) {
@@ -860,36 +866,6 @@ const ChatTypingWrapper = styled.div`
   }
 `;
 
-const SendButton = css`
-  color: #3396f4;
-  cursor: pointer;
-`;
-
-const ChatTypingTextarea = css`
-  overflow: auto;
-  overflow-wrap: break-word;
-  width: 100%;
-  padding: 10px;
-  resize: none;
-  border: none;
-  background-color: #eaebef;
-  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
-  line-height: 150%;
-  outline: none;
-
-  ::-webkit-scrollbar {
-    opacity: 0;
-    width: 6px;
-    height: 7px;
-    appearance: auto;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    border-radius: 5px;
-    background-color: rgba(51, 150, 244, 0.5);
-  }
-`;
-
 const ProfileImg = styled(Avatar)`
   margin-right: 8px;
 
@@ -913,10 +889,63 @@ const ChatRoomListHeader = styled.div`
   }
 `;
 
+const listItemCss = css`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-sizing: border-box;
+
+  & span {
+    overflow: hidden;
+    height: 18px;
+    font-size: 14px;
+    font-weight: 500;
+    color: #263747;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  & .user-name {
+    & .user-name__email {
+      color: #868b94;
+    }
+  }
+`;
+
 const ChatRoomListHead = styled.h1`
   font-size: 16px;
   font-weight: 500;
   color: #263747;
+`;
+
+const SendMessageButton = styled.button`
+  color: #3396f4;
+  cursor: pointer;
+`;
+
+const chatTypingTextarea = css`
+  overflow: auto;
+  overflow-wrap: break-word;
+  width: 100%;
+  padding: 10px;
+  resize: none;
+  border: none;
+  background-color: #eaebef;
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
+  line-height: 150%;
+  outline: none;
+
+  ::-webkit-scrollbar {
+    opacity: 0;
+    width: 6px;
+    height: 7px;
+    appearance: auto;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: rgba(51, 150, 244, 0.5);
+  }
 `;
 
 export default ChattingForm;
