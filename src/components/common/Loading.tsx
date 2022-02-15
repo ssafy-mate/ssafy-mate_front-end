@@ -7,13 +7,11 @@ type ColorProps = {
 };
 const Loading: React.FC<ColorProps> = ({ selectColor }) => {
   return (
-    <>
-      <Box
-        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
-      >
-        <CircularProgress size={20} style={{ color: selectColor }} />
-      </Box>
-    </>
+    <Box
+      sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
+    >
+      <CircularProgress size={20} style={{ color: selectColor }} />
+    </Box>
   );
 };
 

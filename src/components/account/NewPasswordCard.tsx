@@ -365,165 +365,163 @@ const NewPasswordCard: React.FC = () => {
   };
 
   return (
-    <>
-      <Container>
-        <Wrapper>
-          <CardHeader>
-            <Head>비밀번호 재설정</Head>
-            <NewPassWordCardSubHead step={stepForNewPassword} />
-          </CardHeader>
-          <CardForm onKeyPress={onCheckEnter}>
-            {stepForNewPassword === 1 && (
-              <InputWrapper>
-                <RequirementLabel htmlFor="email">
-                  비밀번호를 재설정 할 이메일
-                </RequirementLabel>
-                <Input
-                  type="email"
-                  id="email"
-                  onChange={handleEmailIput}
-                  required
+    <Container>
+      <Wrapper>
+        <CardHeader>
+          <Head>비밀번호 재설정</Head>
+          <NewPassWordCardSubHead step={stepForNewPassword} />
+        </CardHeader>
+        <CardForm onKeyPress={onCheckEnter}>
+          {stepForNewPassword === 1 && (
+            <InputWrapper>
+              <RequirementLabel htmlFor="email">
+                비밀번호를 재설정 할 이메일
+              </RequirementLabel>
+              <Input
+                type="email"
+                id="email"
+                onChange={handleEmailIput}
+                required
+                className={inputError ? 'have-error' : ''}
+              />
+              {stepForNewPassword === 1 && inputError !== '' && (
+                <ErrorMessageWrapper>
+                  <ErrorMessage>{inputError}</ErrorMessage>
+                </ErrorMessageWrapper>
+              )}
+            </InputWrapper>
+          )}
+          {stepForNewPassword === 2 && (
+            <InputWrapper>
+              <RequirementLabel htmlFor="verification-code">
+                인증코드 입력
+              </RequirementLabel>
+              <VerificationCodeWrapper>
+                <VerificationCodeConfirmWrapper
                   className={inputError ? 'have-error' : ''}
-                />
-                {stepForNewPassword === 1 && inputError !== '' && (
-                  <ErrorMessageWrapper>
-                    <ErrorMessage>{inputError}</ErrorMessage>
-                  </ErrorMessageWrapper>
-                )}
-              </InputWrapper>
-            )}
-            {stepForNewPassword === 2 && (
-              <InputWrapper>
-                <RequirementLabel htmlFor="verification-code">
-                  인증코드 입력
-                </RequirementLabel>
-                <VerificationCodeWrapper>
-                  <VerificationCodeConfirmWrapper
-                    className={inputError ? 'have-error' : ''}
-                  >
-                    <VerificationCodeInputWrapper>
-                      <VerificationCodeInput
-                        type="text"
-                        id="verification-code"
-                        placeholder="인증코드 8자리 입력"
-                        required
-                        maxLength={8}
-                        value={verificationCodeInput}
-                        onChange={handleVerificationCodeInput}
-                        disabled={minutes === 0 && seconds === 0}
-                      />
-                      {(minutes !== 0 || seconds !== 0) && (
-                        <TimeLimit>
-                          {minutes.toString().padStart(2, '0')}:
-                          {seconds.toString().padStart(2, '0')}
-                        </TimeLimit>
-                      )}
-                      <CodeConfimtButton
-                        onClick={handleVerificationCodeConfirm}
-                        disabled={codeConfirmButtonDisalbed}
-                      >
-                        확인
-                      </CodeConfimtButton>
-                    </VerificationCodeInputWrapper>
-                    {inputError !== '' && (
-                      <ErrorMessageWrapper>
-                        <ErrorMessage className="verification-code">
-                          {inputError}
-                        </ErrorMessage>
-                      </ErrorMessageWrapper>
+                >
+                  <VerificationCodeInputWrapper>
+                    <VerificationCodeInput
+                      type="text"
+                      id="verification-code"
+                      placeholder="인증코드 8자리 입력"
+                      required
+                      maxLength={8}
+                      value={verificationCodeInput}
+                      onChange={handleVerificationCodeInput}
+                      disabled={minutes === 0 && seconds === 0}
+                    />
+                    {(minutes !== 0 || seconds !== 0) && (
+                      <TimeLimit>
+                        {minutes.toString().padStart(2, '0')}:
+                        {seconds.toString().padStart(2, '0')}
+                      </TimeLimit>
                     )}
-                  </VerificationCodeConfirmWrapper>
-                </VerificationCodeWrapper>
-                {timeStop === 1 ? (
-                  <ResendEmailWrapper>
-                    <ResendEmailMessage>
-                      <ResendEmailIcon />
-                      이메일을 받지 못하셨나요?
-                      <ResendLink onClick={handleEmailResend}>
-                        이메일 재전송하기
-                      </ResendLink>
-                    </ResendEmailMessage>
-                  </ResendEmailWrapper>
-                ) : null}
-              </InputWrapper>
-            )}
-            {stepForNewPassword === 3 && (
-              <InputWrapper>
-                <RequirementLabel htmlFor="new-password">
-                  새로운 비밀번호 (영문자와 숫자만 포함 최소 6자)
-                </RequirementLabel>
-                <Input
-                  id="new-password"
-                  type="password"
-                  required
-                  className={inputError !== '' ? 'have-error' : ''}
-                  onChange={handleNewPasswordInput}
-                />
-                {inputError !== '' && (
-                  <ErrorMessageWrapper>
-                    <ErrorMessage>{inputError}</ErrorMessage>
-                  </ErrorMessageWrapper>
-                )}
-                <RequirementLabel htmlFor="new-password-check">
-                  새로운 비밀번호 확인
-                </RequirementLabel>
-                <Input
-                  id="new-password-check"
-                  type="password"
-                  required
-                  className={
-                    newPasswordCheckInputError !== '' ? 'have-error' : ''
-                  }
-                  onChange={handleNewPasswordCheckInput}
-                />
-                {newPasswordCheckInputError !== '' && (
-                  <ErrorMessageWrapper>
-                    <ErrorMessage>{newPasswordCheckInputError}</ErrorMessage>
-                  </ErrorMessageWrapper>
-                )}
-              </InputWrapper>
-            )}
-          </CardForm>
-          <CardFooter>
-            {stepForNewPassword === 1 && (
-              <SubmitButton
-                type="submit"
-                onClick={handleCheckEmailFormat}
-                disabled={bottomConfirmButtonDisalbed}
-                className={loading ? 'cursor-wait' : ''}
-              >
-                {loading ? (
-                  <Loading selectColor="#fff" />
-                ) : (
-                  bottomConfirmButtonText
-                )}
-              </SubmitButton>
-            )}
-            {stepForNewPassword === 2 && (
-              <SubmitButton
-                type="submit"
-                onClick={handleNextStep}
-                disabled={bottomConfirmButtonDisalbed}
-              >
-                {loading ? (
-                  <Loading selectColor={loadingColor} />
-                ) : (
-                  bottomConfirmButtonText
-                )}
-              </SubmitButton>
-            )}
-            {stepForNewPassword === 3 && (
-              <SubmitButton
-                type="submit"
-                onClick={handleNewPasswordRequestButton}
-              >
-                {bottomConfirmButtonText}
-              </SubmitButton>
-            )}
-          </CardFooter>
-        </Wrapper>
-      </Container>
-    </>
+                    <CodeConfimtButton
+                      onClick={handleVerificationCodeConfirm}
+                      disabled={codeConfirmButtonDisalbed}
+                    >
+                      확인
+                    </CodeConfimtButton>
+                  </VerificationCodeInputWrapper>
+                  {inputError !== '' && (
+                    <ErrorMessageWrapper>
+                      <ErrorMessage className="verification-code">
+                        {inputError}
+                      </ErrorMessage>
+                    </ErrorMessageWrapper>
+                  )}
+                </VerificationCodeConfirmWrapper>
+              </VerificationCodeWrapper>
+              {timeStop === 1 ? (
+                <ResendEmailWrapper>
+                  <ResendEmailMessage>
+                    <ResendEmailIcon />
+                    이메일을 받지 못하셨나요?
+                    <ResendLink onClick={handleEmailResend}>
+                      이메일 재전송하기
+                    </ResendLink>
+                  </ResendEmailMessage>
+                </ResendEmailWrapper>
+              ) : null}
+            </InputWrapper>
+          )}
+          {stepForNewPassword === 3 && (
+            <InputWrapper>
+              <RequirementLabel htmlFor="new-password">
+                새로운 비밀번호 (영문자와 숫자만 포함 최소 6자)
+              </RequirementLabel>
+              <Input
+                id="new-password"
+                type="password"
+                required
+                className={inputError !== '' ? 'have-error' : ''}
+                onChange={handleNewPasswordInput}
+              />
+              {inputError !== '' && (
+                <ErrorMessageWrapper>
+                  <ErrorMessage>{inputError}</ErrorMessage>
+                </ErrorMessageWrapper>
+              )}
+              <RequirementLabel htmlFor="new-password-check">
+                새로운 비밀번호 확인
+              </RequirementLabel>
+              <Input
+                id="new-password-check"
+                type="password"
+                required
+                className={
+                  newPasswordCheckInputError !== '' ? 'have-error' : ''
+                }
+                onChange={handleNewPasswordCheckInput}
+              />
+              {newPasswordCheckInputError !== '' && (
+                <ErrorMessageWrapper>
+                  <ErrorMessage>{newPasswordCheckInputError}</ErrorMessage>
+                </ErrorMessageWrapper>
+              )}
+            </InputWrapper>
+          )}
+        </CardForm>
+        <CardFooter>
+          {stepForNewPassword === 1 && (
+            <SubmitButton
+              type="submit"
+              onClick={handleCheckEmailFormat}
+              disabled={bottomConfirmButtonDisalbed}
+              className={loading ? 'cursor-wait' : ''}
+            >
+              {loading ? (
+                <Loading selectColor="#fff" />
+              ) : (
+                bottomConfirmButtonText
+              )}
+            </SubmitButton>
+          )}
+          {stepForNewPassword === 2 && (
+            <SubmitButton
+              type="submit"
+              onClick={handleNextStep}
+              disabled={bottomConfirmButtonDisalbed}
+            >
+              {loading ? (
+                <Loading selectColor={loadingColor} />
+              ) : (
+                bottomConfirmButtonText
+              )}
+            </SubmitButton>
+          )}
+          {stepForNewPassword === 3 && (
+            <SubmitButton
+              type="submit"
+              onClick={handleNewPasswordRequestButton}
+            >
+              {bottomConfirmButtonText}
+            </SubmitButton>
+          )}
+        </CardFooter>
+      </Wrapper>
+    </Container>
   );
 };
 

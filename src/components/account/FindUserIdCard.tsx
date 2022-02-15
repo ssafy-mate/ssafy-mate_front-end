@@ -146,78 +146,74 @@ const FindUserIdCard: React.FC = () => {
   };
 
   return (
-    <>
-      <Container>
-        <Wrapper>
-          <CardHeader>
-            <Head>아이디 찾기</Head>
-            {findId === '' ? (
-              <SubHead>회원가입 시 등록한 학번과 이름을 입력해주세요.</SubHead>
-            ) : (
-              <>
-                <SubHead>{findIdSuccessText}</SubHead>
-                <SubInfo>계정 확인 후 로그인 해주세요.</SubInfo>
-              </>
-            )}
-          </CardHeader>
+    <Container>
+      <Wrapper>
+        <CardHeader>
+          <Head>아이디 찾기</Head>
           {findId === '' ? (
-            <CardForm onKeyPress={onCheckEnter}>
-              <InputWrapper>
-                <RequirementLabel htmlFor="studuntNumber">
-                  학번
-                </RequirementLabel>
-                <Input
-                  id="studuntNumber"
-                  required
-                  maxLength={7}
-                  onChange={handleStudentNumberInput}
-                  className={studentNumberError !== '' ? 'have-error' : ''}
-                />
-                {studentNumberError !== '' ? (
-                  <ErrorMessageWrapper>
-                    <ErrorMessage>{studentNumberError}</ErrorMessage>
-                  </ErrorMessageWrapper>
-                ) : null}
-              </InputWrapper>
-              <InputWrapper>
-                <RequirementLabel htmlFor="studuntName">이름</RequirementLabel>
-                <Input
-                  id="studuntName"
-                  required
-                  onChange={handleStudentNameInput}
-                  className={studentNameError !== '' ? 'have-error' : ''}
-                />
-                {studentNameError !== '' ? (
-                  <ErrorMessageWrapper>
-                    <ErrorMessage>{studentNameError}</ErrorMessage>
-                  </ErrorMessageWrapper>
-                ) : null}
-              </InputWrapper>
-            </CardForm>
+            <SubHead>회원가입 시 등록한 학번과 이름을 입력해주세요.</SubHead>
           ) : (
             <>
-              <FindIdWrapper>
-                <FindIdImgWrapper>
-                  <FindIdImg src="/images/common/ssafy-mate_logo.png" />
-                </FindIdImgWrapper>
-                <FindIdText className="user-id">{findId}</FindIdText>
-              </FindIdWrapper>
+              <SubHead>{findIdSuccessText}</SubHead>
+              <SubInfo>계정 확인 후 로그인 해주세요.</SubInfo>
             </>
           )}
-          <CardFooter>
-            {findId === '' ? (
-              <SubmitButton type="submit" onClick={handleFindIdButton}>
-                아이디 찾기
-              </SubmitButton>
-            ) : (
-              <SignInLinkButton to="/users/sign_in">
-                로그인 하러가기
-              </SignInLinkButton>
-            )}
-          </CardFooter>
-        </Wrapper>
-      </Container>
-    </>
+        </CardHeader>
+        {findId === '' ? (
+          <CardForm onKeyPress={onCheckEnter}>
+            <InputWrapper>
+              <RequirementLabel htmlFor="studuntNumber">학번</RequirementLabel>
+              <Input
+                id="studuntNumber"
+                required
+                maxLength={7}
+                onChange={handleStudentNumberInput}
+                className={studentNumberError !== '' ? 'have-error' : ''}
+              />
+              {studentNumberError !== '' ? (
+                <ErrorMessageWrapper>
+                  <ErrorMessage>{studentNumberError}</ErrorMessage>
+                </ErrorMessageWrapper>
+              ) : null}
+            </InputWrapper>
+            <InputWrapper>
+              <RequirementLabel htmlFor="studuntName">이름</RequirementLabel>
+              <Input
+                id="studuntName"
+                required
+                onChange={handleStudentNameInput}
+                className={studentNameError !== '' ? 'have-error' : ''}
+              />
+              {studentNameError !== '' ? (
+                <ErrorMessageWrapper>
+                  <ErrorMessage>{studentNameError}</ErrorMessage>
+                </ErrorMessageWrapper>
+              ) : null}
+            </InputWrapper>
+          </CardForm>
+        ) : (
+          <>
+            <FindIdWrapper>
+              <FindIdImgWrapper>
+                <FindIdImg src="/images/common/ssafy-mate_logo.png" />
+              </FindIdImgWrapper>
+              <FindIdText className="user-id">{findId}</FindIdText>
+            </FindIdWrapper>
+          </>
+        )}
+        <CardFooter>
+          {findId === '' ? (
+            <SubmitButton type="submit" onClick={handleFindIdButton}>
+              아이디 찾기
+            </SubmitButton>
+          ) : (
+            <SignInLinkButton to="/users/sign_in">
+              로그인 하러가기
+            </SignInLinkButton>
+          )}
+        </CardFooter>
+      </Wrapper>
+    </Container>
   );
 };
 

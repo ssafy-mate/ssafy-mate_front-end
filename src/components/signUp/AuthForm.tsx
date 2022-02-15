@@ -104,119 +104,115 @@ const AuthForm: React.FC<SsafyAuthProps> = ({
   };
 
   return (
-    <>
-      <Container onSubmit={handleSubmit(onSubmit)}>
-        <SsafyInfo>
-          <InputWrapper>
-            <RequirementLabel htmlFor="campus">캠퍼스</RequirementLabel>
-            <Select
-              id="campus"
-              {...register('campus', {
-                required: true,
-                pattern: exceptDefaultReg,
-              })}
-              defaultValue="default"
-              className={errors.campus ? 'have-error' : ''}
-            >
-              <option value="default" disabled>
-                - 선택 -
-              </option>
-              {CAMPUS_LIST.map((campus) => (
-                <option key={campus.id} value={campus.area}>
-                  {campus.area}
-                </option>
-              ))}
-            </Select>
-            {errors.campus !== undefined && (
-              <ErrorMessageWrapper>
-                <ErrorMessage>필수 선택 항목입니다.</ErrorMessage>
-              </ErrorMessageWrapper>
-            )}
-          </InputWrapper>
-          <InputWrapper>
-            <RequirementLabel htmlFor="ssafy-track">교육 트랙</RequirementLabel>
-            <Select
-              id="ssafy-track"
-              {...register('ssafyTrack', {
-                required: true,
-                pattern: exceptDefaultReg,
-              })}
-              defaultValue={'default'}
-              className={errors.ssafyTrack ? 'have-error' : ''}
-              disabled={
-                selectedCampus === 'default' || selectedCampus === ''
-                  ? true
-                  : false
-              }
-            >
-              <option value="default" disabled>
-                - 선택 -
-              </option>
-              {selectedTracks.map((track: SsafyTrack) => (
-                <option key={track.id}>{track.name}</option>
-              ))}
-            </Select>
-            {errors.ssafyTrack !== undefined && (
-              <ErrorMessageWrapper>
-                <ErrorMessage>필수 선택 항목입니다.</ErrorMessage>
-              </ErrorMessageWrapper>
-            )}
-          </InputWrapper>
-        </SsafyInfo>
+    <Container onSubmit={handleSubmit(onSubmit)}>
+      <SsafyInfo>
         <InputWrapper>
-          <RequirementLabel htmlFor="student-number">학번</RequirementLabel>
-          <InfoInput
-            type="text"
-            id="student-number"
-            maxLength={7}
-            {...register('studentNumber', {
+          <RequirementLabel htmlFor="campus">캠퍼스</RequirementLabel>
+          <Select
+            id="campus"
+            {...register('campus', {
               required: true,
-              pattern: onlyNumberReg,
-              maxLength: 7,
-              minLength: 7,
+              pattern: exceptDefaultReg,
             })}
-            className={errors.studentNumber ? 'have-error' : ''}
-          />
-          {errors.studentNumber !== undefined &&
-            errors.studentNumber.type === 'required' && (
-              <ErrorMessageWrapper>
-                <ErrorMessage>{requiredFields}</ErrorMessage>
-              </ErrorMessageWrapper>
-            )}
-          {errors.studentNumber !== undefined &&
-            errors.studentNumber.type !== 'required' && (
-              <ErrorMessageWrapper>
-                <ErrorMessage>
-                  학번 7자리를 정확하게 입력해 주세요.
-                </ErrorMessage>
-              </ErrorMessageWrapper>
-            )}
+            defaultValue="default"
+            className={errors.campus ? 'have-error' : ''}
+          >
+            <option value="default" disabled>
+              - 선택 -
+            </option>
+            {CAMPUS_LIST.map((campus) => (
+              <option key={campus.id} value={campus.area}>
+                {campus.area}
+              </option>
+            ))}
+          </Select>
+          {errors.campus !== undefined && (
+            <ErrorMessageWrapper>
+              <ErrorMessage>필수 선택 항목입니다.</ErrorMessage>
+            </ErrorMessageWrapper>
+          )}
         </InputWrapper>
         <InputWrapper>
-          <RequirementLabel htmlFor="student-name">이름</RequirementLabel>
-          <InfoInput
-            type="text"
-            id="student-name"
-            {...register('userName', {
+          <RequirementLabel htmlFor="ssafy-track">교육 트랙</RequirementLabel>
+          <Select
+            id="ssafy-track"
+            {...register('ssafyTrack', {
               required: true,
-              pattern: onlyKoreanReg,
+              pattern: exceptDefaultReg,
             })}
-            className={errors.userName ? 'have-error' : ''}
-          />
-          {errors.userName?.type === 'required' && (
+            defaultValue={'default'}
+            className={errors.ssafyTrack ? 'have-error' : ''}
+            disabled={
+              selectedCampus === 'default' || selectedCampus === ''
+                ? true
+                : false
+            }
+          >
+            <option value="default" disabled>
+              - 선택 -
+            </option>
+            {selectedTracks.map((track: SsafyTrack) => (
+              <option key={track.id}>{track.name}</option>
+            ))}
+          </Select>
+          {errors.ssafyTrack !== undefined && (
+            <ErrorMessageWrapper>
+              <ErrorMessage>필수 선택 항목입니다.</ErrorMessage>
+            </ErrorMessageWrapper>
+          )}
+        </InputWrapper>
+      </SsafyInfo>
+      <InputWrapper>
+        <RequirementLabel htmlFor="student-number">학번</RequirementLabel>
+        <InfoInput
+          type="text"
+          id="student-number"
+          maxLength={7}
+          {...register('studentNumber', {
+            required: true,
+            pattern: onlyNumberReg,
+            maxLength: 7,
+            minLength: 7,
+          })}
+          className={errors.studentNumber ? 'have-error' : ''}
+        />
+        {errors.studentNumber !== undefined &&
+          errors.studentNumber.type === 'required' && (
             <ErrorMessageWrapper>
               <ErrorMessage>{requiredFields}</ErrorMessage>
             </ErrorMessageWrapper>
           )}
-          {errors.userName?.type === 'pattern' && (
+        {errors.studentNumber !== undefined &&
+          errors.studentNumber.type !== 'required' && (
             <ErrorMessageWrapper>
-              <ErrorMessage>이름을 정확하게 입력해주세요.</ErrorMessage>
+              <ErrorMessage>학번 7자리를 정확하게 입력해 주세요.</ErrorMessage>
             </ErrorMessageWrapper>
           )}
-        </InputWrapper>
-        <AuthButton type="submit">교육생 인증</AuthButton>
-      </Container>
-    </>
+      </InputWrapper>
+      <InputWrapper>
+        <RequirementLabel htmlFor="student-name">이름</RequirementLabel>
+        <InfoInput
+          type="text"
+          id="student-name"
+          {...register('userName', {
+            required: true,
+            pattern: onlyKoreanReg,
+          })}
+          className={errors.userName ? 'have-error' : ''}
+        />
+        {errors.userName?.type === 'required' && (
+          <ErrorMessageWrapper>
+            <ErrorMessage>{requiredFields}</ErrorMessage>
+          </ErrorMessageWrapper>
+        )}
+        {errors.userName?.type === 'pattern' && (
+          <ErrorMessageWrapper>
+            <ErrorMessage>이름을 정확하게 입력해주세요.</ErrorMessage>
+          </ErrorMessageWrapper>
+        )}
+      </InputWrapper>
+      <AuthButton type="submit">교육생 인증</AuthButton>
+    </Container>
   );
 };
 
