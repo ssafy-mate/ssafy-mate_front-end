@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import styled from '@emotion/styled';
 
 import { styled as MuiStyled } from '@mui/material/styles';
@@ -7,8 +5,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
 import { UserListResponse } from '../../types/userTypes';
-
-import useQueryString from '../../hooks/useQueryString';
 
 import UserItem from '../projects/UserItem';
 import EmptyBox from './EmptyBox';
@@ -32,25 +28,15 @@ const UserRecruitmentSection: React.FC<UserRecruitmentSectionProps> = ({
   setExclusion,
   setSort,
 }) => {
-  const [exclusion, onSetExclusion] = useQueryString('exclusion');
-  const [sort, onSetSort] = useQueryString('sort');
-
-  useEffect(() => {
-    onSetExclusion(false);
-    onSetSort('recent');
-  });
-
   const handleChangeExclusion = (
     event: React.SyntheticEvent<Element, Event>,
     value: boolean,
   ) => {
     setExclusion(value);
-    onSetExclusion(value);
   };
 
   const handleChangeSort = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSort(event.target.value);
-    onSetSort(event.target.value);
   };
 
   if (isError) {

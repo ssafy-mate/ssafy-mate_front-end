@@ -15,7 +15,6 @@ import { TechStackWithImg } from '../../types/commonTypes';
 import { CAMPUS_LIST, PROJECT_LIST } from '../../data/ssafyData';
 import { JOB_LIST } from '../../data/jobListData';
 
-import useQueryString from '../../hooks/useQueryString';
 import useTechStackList from '../../hooks/useTechStackList';
 
 interface TeamListSearchFormProps {
@@ -41,14 +40,6 @@ const TeamListSearchForm: React.FC<TeamListSearchFormProps> = ({
   setTeamName,
   setPage,
 }) => {
-  const [, onSetProject] = useQueryString('project');
-  const [, onSetProjectTrack] = useQueryString('project_track');
-  const [, onSetCampus] = useQueryString('campus');
-  const [, onSetJob1] = useQueryString('job1');
-  const [, onSetPage] = useQueryString('page');
-  const [, onSetTechStackId] = useQueryString('techstack_id');
-  const [, onSetTeamName] = useQueryString('team_name');
-
   const techStackList: TechStackWithImg[] = useTechStackList();
 
   const {
@@ -64,59 +55,33 @@ const TeamListSearchForm: React.FC<TeamListSearchFormProps> = ({
   });
 
   useEffect(() => {
-    onSetCampus(campus);
-    onSetProject('특화 프로젝트');
-    onSetProjectTrack(projectTrack);
-    onSetJob1('all');
-    onSetTeamName('');
-    onSetPage(1);
     setPage(1);
-  }, [
-    campus,
-    projectTrack,
-    onSetProject,
-    onSetProjectTrack,
-    onSetCampus,
-    onSetJob1,
-    onSetTeamName,
-    onSetPage,
-    setPage,
-  ]);
+  }, [campus, projectTrack, setPage]);
 
   useEffect(() => {
-    if (value !== null) {
-      setTechStackId(value.techStackId);
-      onSetTechStackId(value.techStackId);
-    } else {
-      setTechStackId(null);
-      onSetTechStackId(null);
-    }
-  }, [setTechStackId, onSetTechStackId, value]);
+    value !== null ? setTechStackId(value.techStackId) : setTechStackId(null);
+  }, [setTechStackId, value]);
 
   const handleChangeCampus = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ): void => {
     setCampus(event.target.value);
-    onSetCampus(event.target.value);
   };
 
   const handleChangeProjectTrack = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ): void => {
     setProjectTrack(event.target.value);
-    onSetProjectTrack(event.target.value);
   };
 
   const handleChangeJob1 = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ): void => {
     setJob1(event.target.value);
-    onSetJob1(event.target.value);
   };
 
   const handleChangeTeamName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTeamName(event.target.value);
-    onSetTeamName(event.target.value);
   };
 
   return (
