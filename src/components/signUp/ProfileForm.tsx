@@ -390,6 +390,108 @@ const ProfileForm: React.FC<ProfileProps> = ({
               <option key={job.id} value={job.name}>
                 {job.name}
               </option>
+            </Select>
+            {showError === 1 && job1Error && (
+              <ErrorMessageWrapper>
+                <ErrorMessage>필수 선택 사항입니다.</ErrorMessage>
+              </ErrorMessageWrapper>
+            )}
+          </InputWrapper>
+          <InputWrapper>
+            <Label htmlFor="job2">
+              희망 직무2 <Em>(선택)</Em>
+            </Label>
+            <Select
+              id="job2"
+              defaultValue={'default'}
+              onChange={handleJobSelect}
+              disabled={job1 === 'default' ? true : false}
+            >
+              <option value="default">- 선택 -</option>
+              {JOB_LIST.filter((job) => job.name !== job1).map((job) => (
+                <option key={job.id} value={job.name}>
+                  {job.name}
+                </option>
+              ))}
+            </Select>
+          </InputWrapper>
+        </Row>
+        <Row css={techStackRow}>
+          <InputWrapper {...getRootProps()} css={techStackInputWrapper}>
+            <RequirementLabel
+              htmlFor="tech-stack-options"
+              {...getInputLabelProps()}
+            >
+              기술 스택 <Em>(필수 2가지 이상 기입)</Em>
+            </RequirementLabel>
+            <InfoInputWrapper
+              ref={setAnchorEl}
+              className={
+                (focused ? 'focused' : '') ||
+                (showError === 1 && techStacksError === true
+                  ? 'have-error'
+                  : '')
+              }
+            >
+              <InfoInput
+                type="text"
+                id="tech-stack-options"
+                name="tech-stack-options"
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  if (
+                    event.key === 'Backspace' ||
+                    event.key === 'Enter' ||
+                    event.code === 'NumpadEnter'
+                  ) {
+                    event.stopPropagation();
+                  }
+                }}
+                placeholder="ex) Vue.js, django, Spring Boot, MySQL"
+                {...getInputProps()}
+              />
+            </InfoInputWrapper>
+            {groupedOptions.length > 0 ? (
+              <SearchList {...getListboxProps()}>
+                {(groupedOptions as typeof techStackList).map(
+                  (option, index) => (
+                    <SearchItemWrapper
+                      key={option.techStackId}
+                      onClick={() => {
+                        controlTechStacks(option.techStackId);
+                      }}
+                    >
+                      <SearchItem {...getOptionProps({ option, index })}>
+                        <TechStackInfo>
+                          <TechStackImg
+                            src={option.techStackImgUrl}
+                            alt={option.techStackName}
+                          />
+                          {option.techStackName}
+                        </TechStackInfo>
+                        <CheckIcon fontSize="small" />
+                      </SearchItem>
+                    </SearchItemWrapper>
+                  ),
+                )}
+              </SearchList>
+            ) : null}
+            {showError === 1 && techStacksError && (
+              <ErrorMessageWrapper>
+                <ErrorMessage>필수 2가지 이상 선택 사항입니다.</ErrorMessage>
+              </ErrorMessageWrapper>
+            )}
+          </InputWrapper>
+          <TechStackList>
+            {value.map((option: TechStackWithImg, index: number) => (
+              <TechStackTagWithLevel
+                techStackId={option.techStackId}
+                techStackName={option.techStackName}
+                techStackImgUrl={option.techStackImgUrl}
+                techStacks={techStacks}
+                updateTechStacks={updateTechStacks}
+                deleteTechStacks={deleteTechStacks}
+                {...getTagProps({ index })}
+              />
             ))}
           </Select>
           {showError === 1 && job1Error && (

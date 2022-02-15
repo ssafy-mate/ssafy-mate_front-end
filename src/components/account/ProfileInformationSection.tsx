@@ -671,6 +671,79 @@ const ProfileInformationSection: React.FC = () => {
                   : '' || (showError && techStacksError ? 'have-error' : '')
               }
             >
+                <InfoInput
+                  type="text"
+                  id="tech-stack-options"
+                  name="tech-stack-options"
+                  onKeyDown={(event: React.KeyboardEvent) => {
+                    if (
+                      event.key === 'Backspace' ||
+                      event.key === 'Enter' ||
+                      event.code === 'NumpadEnter'
+                    ) {
+                      event.stopPropagation();
+                    }
+                  }}
+                  placeholder="ex) Vue.js, django, Spring Boot, MySQL"
+                  disabled={newTechStackDisabled}
+                  {...getInputProps()}
+                />
+              </InfoInputWrapper>
+              {groupedOptions.length > 0 ? (
+                <SearchList {...getListboxProps()}>
+                  {(groupedOptions as typeof techStackList).map(
+                    (option, index) => (
+                      <SearchItemWrapper
+                        key={option.techStackId}
+                        onClick={() => {
+                          controlTechStacks(option.techStackId);
+                        }}
+                      >
+                        <SearchItem {...getOptionProps({ option, index })}>
+                          <TechStackInfo>
+                            <TechStackImg
+                              src={option.techStackImgUrl}
+                              alt={option.techStackName}
+                            />
+                            {option.techStackName}
+                          </TechStackInfo>
+                          <CheckIcon fontSize="small" />
+                        </SearchItem>
+                      </SearchItemWrapper>
+                    ),
+                  )}
+                </SearchList>
+              ) : null}
+              {showError && techStacksError && (
+                <ErrorMessageWrapper>
+                  <ErrorMessage>필수 2가지 이상 선택 사항입니다.</ErrorMessage>
+                </ErrorMessageWrapper>
+              )}
+            </SingleInformationWrapper>
+            <TechStackList>
+              {value.map((option: TechStackWithImg, index: number) => (
+                <ProfileTechStackTagWithLevel
+                  techStackId={option.techStackId}
+                  techStackName={option.techStackName}
+                  techStackImgUrl={option.techStackImgUrl}
+                  techStacks={techStacks}
+                  newTechStackDisabled={newTechStackDisabled}
+                  updateTechStacks={updateTechStacks}
+                  deleteTechStacks={deleteTechStacks}
+                  oldTechStacksWithLevel={oldTechStacksWithLevel}
+                  hiddenCancelButton={newTechStackDisabled}
+                  {...getTagProps({ index })}
+                />
+              ))}
+            </TechStackList>
+            <ModifyButton type="button" onClick={handleTechStackModifyButton}>
+              {newTechStackModifyButtonText}
+            </ModifyButton>
+          </Row>
+          <Hr />
+          <Row>
+            <SingleInformationWrapper>
+              <Label htmlFor="github-url">GitHub URL</Label>
               <InfoInput
                 type="text"
                 id="tech-stack-options"
