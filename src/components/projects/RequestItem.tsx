@@ -209,11 +209,6 @@ const Item = styled.li<ItemProps>`
       : ''};
   box-sizing: border-box;
   transition: all 0.08s ease-in-out;
-  filter: ${(props) =>
-    props.requestStatus === 'expiration' ||
-    props.requestStatus === 'cancellation'
-      ? 'grayscale(80%)'
-      : ''};
 
   &:last-of-type {
     margin-bottom: 0;
