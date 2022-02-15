@@ -691,6 +691,7 @@ const Textarea = styled.textarea`
   line-height: 24px;
   color: #263747;
   transition: all 0.08s ease-in-out;
+  resize: none;
 
   &:hover {
     border: 1px solid #3396f4;

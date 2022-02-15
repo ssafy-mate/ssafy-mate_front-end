@@ -121,69 +121,65 @@ const SignInCard: React.FC<SigninProps> = ({ login }) => {
   };
 
   return (
-    <>
-      <Container>
-        <CardHead>로그인</CardHead>
-        <SignInForm onKeyPress={SignInWithEnterKey}>
-          <SignInLabel htmlFor="email">이메일</SignInLabel>
-          <SignInInput
-            type="email"
-            id="email"
-            className={
-              (emailVerificaion ? '' : 'email-verification-error') ||
-              (inputEmailError ? 'input-error' : '')
-            }
-            value={inputEmail}
-            onChange={handleInputEmail}
-            placeholder="이메일"
-            required
-          />
-          {!emailVerificaion && (
-            <ErrorMessageWrapper>
-              <ErrorMessage>이메일 형식이 올바르지 않습니다.</ErrorMessage>
-            </ErrorMessageWrapper>
-          )}
-          <SignInLabel htmlFor="password">비밀번호</SignInLabel>
-          <SignInInput
-            type="password"
-            id="password"
-            className={inputPasswordError ? 'input-error' : ''}
-            onChange={handleInputPassword}
-            placeholder="비밀번호"
-            required
-          />
-          <Options>
-            <IdSaveCheckBox>
-              <IdSaveCheckInput
-                type="checkbox"
-                id="id-save-check-box"
-                name="id-save-check-box"
-                onChange={handleChangeIdSaveCheckBox}
-                checked={idSaveCheckBox}
-              />
-              <IdSaveCheckLabel htmlFor="id-save-check-box">
-                아이디 저장
-              </IdSaveCheckLabel>
-            </IdSaveCheckBox>
-            <AccountManagementMenu>
-              <AccountLink to="/users/find/id">아이디 찾기</AccountLink>
-              <AccountLink to="/users/password/new">
-                비밀번호 재설정
-              </AccountLink>
-            </AccountManagementMenu>
-          </Options>
-          <SignInButton onClick={loginButtonClick} type="button">
-            로그인
-          </SignInButton>
-          <SignUpLinkBox>
-            아직 계정이 없으신가요?
-            <Link to="/users/sign_up" className="sign-up-link">
-              계정 만들기
-            </Link>
-          </SignUpLinkBox>
-        </SignInForm>
-      </Container>
-    </>
+    <Container>
+      <CardHead>로그인</CardHead>
+      <SignInForm onKeyPress={SignInWithEnterKey}>
+        <SignInLabel htmlFor="email">이메일</SignInLabel>
+        <SignInInput
+          type="email"
+          id="email"
+          className={
+            (emailVerificaion ? '' : 'email-verification-error') ||
+            (inputEmailError ? 'input-error' : '')
+          }
+          value={inputEmail}
+          onChange={handleInputEmail}
+          placeholder="이메일"
+          required
+        />
+        {!emailVerificaion && (
+          <ErrorMessageWrapper>
+            <ErrorMessage>이메일 형식이 올바르지 않습니다.</ErrorMessage>
+          </ErrorMessageWrapper>
+        )}
+        <SignInLabel htmlFor="password">비밀번호</SignInLabel>
+        <SignInInput
+          type="password"
+          id="password"
+          className={inputPasswordError ? 'input-error' : ''}
+          onChange={handleInputPassword}
+          placeholder="비밀번호"
+          required
+        />
+        <Options>
+          <IdSaveCheckBox>
+            <IdSaveCheckInput
+              type="checkbox"
+              id="id-save-check-box"
+              name="id-save-check-box"
+              onChange={handleChangeIdSaveCheckBox}
+              checked={idSaveCheckBox}
+            />
+            <IdSaveCheckLabel htmlFor="id-save-check-box">
+              아이디 저장
+            </IdSaveCheckLabel>
+          </IdSaveCheckBox>
+          <AccountManagementMenu>
+            <AccountLink to="/users/find/id">아이디 찾기</AccountLink>
+            <AccountLink to="/users/password/new">비밀번호 재설정</AccountLink>
+          </AccountManagementMenu>
+        </Options>
+        <SignInButton onClick={loginButtonClick} type="button">
+          로그인
+        </SignInButton>
+        <SignUpLinkBox>
+          아직 계정이 없으신가요?
+          <Link to="/users/sign_up" className="sign-up-link">
+            계정 만들기
+          </Link>
+        </SignUpLinkBox>
+      </SignInForm>
+    </Container>
   );
 };
 

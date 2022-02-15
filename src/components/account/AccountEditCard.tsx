@@ -10,20 +10,16 @@ const AccountEditCard: React.FC = () => {
   const [selectedTap, setSelectedTap] = useState<string>('basicInformation');
 
   return (
-    <>
-      <Container>
-        <Wrapper>
-          <CardHeader>
-            <Head>계정 관리</Head>
-            <AccountEditTaps setAcccountEditTap={setSelectedTap} />
-          </CardHeader>
-          {selectedTap === 'basicInformation' && <BasicInformationSection />}
-          {selectedTap === 'profileInformation' && (
-            <ProfileInformationSection />
-          )}
-        </Wrapper>
-      </Container>
-    </>
+    <Container>
+      <Wrapper>
+        <CardHeader>
+          <Head>계정 관리</Head>
+          <AccountEditTaps setAcccountEditTap={setSelectedTap} />
+        </CardHeader>
+        {selectedTap === 'basicInformation' && <BasicInformationSection />}
+        {selectedTap === 'profileInformation' && <ProfileInformationSection />}
+      </Wrapper>
+    </Container>
   );
 };
 

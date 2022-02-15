@@ -256,204 +256,202 @@ const SignUpForm: React.FC<SignUpProps> = ({
   };
 
   return (
-    <>
-      <Container onSubmit={handleSubmit(onSubmit)}>
-        <InputWrapper>
-          <RequirementLabel htmlFor="signup-email">이메일</RequirementLabel>
-          <EmailInputWrapper>
-            <InfoInput
-              type="email"
-              id="signup-email"
-              {...register('signUpEmail', {
-                required: {
-                  value: true,
-                  message: '필수 입력 항목입니다.',
-                },
-                pattern: {
-                  value: validEmailReg,
-                  message: '이메일 형식이 올바르지 않습니다.',
-                },
-              })}
-              className={
-                errors.signUpEmail || emailInputError !== '' ? 'have-error' : ''
-              }
-              maxLength={320}
-              placeholder="이메일"
-              readOnly={emailInputDisabled}
-            />
-            <AuthButton
-              type="button"
-              disabled={emailCodeRequestButton}
-              onClick={verificationCodeRequest}
-              className={loading ? 'cursor-wait' : ''}
-            >
-              {loading ? (
-                <Loading selectColor={loadingColor} />
-              ) : (
-                verificationCodeButtonText
-              )}
-            </AuthButton>
-          </EmailInputWrapper>
-          {errors.signUpEmail !== undefined && (
-            <ErrorMessageWrapper>
-              <ErrorMessage>{errors.signUpEmail.message}</ErrorMessage>
-            </ErrorMessageWrapper>
-          )}
-          {errors.signUpEmail === undefined && emailInputError !== '' && (
-            <ErrorMessageWrapper>
-              <ErrorMessage>{emailInputError}</ErrorMessage>
-            </ErrorMessageWrapper>
-          )}
-        </InputWrapper>
-        {showCodeBox ? (
-          <InputWrapper>
-            <RequirementLabel htmlFor="verification-code">
-              인증코드 입력
-            </RequirementLabel>
-            <VerificationCodeWrapper>
-              <VerificationCodeConfirmWrapper
-                className={
-                  errors.verificationCode ||
-                  codeVerificationError ||
-                  codeInputDisabled
-                    ? 'have-error'
-                    : ''
-                }
-              >
-                <VerificationCodeInputWrapper>
-                  <VerificationCodeInput
-                    type="text"
-                    id="verification-code"
-                    {...register('verificationCode', {
-                      required: true,
-                      pattern: verificationCodeReg,
-                      minLength: 8,
-                      maxLength: 8,
-                    })}
-                    maxLength={8}
-                    placeholder="인증코드 8자리 입력"
-                    disabled={codeInputDisabled}
-                  />
-                  {!codeInputDisabled && (
-                    <TimeLimit>
-                      {minutes.toString().padStart(2, '0')}:
-                      {seconds.toString().padStart(2, '0')}
-                    </TimeLimit>
-                  )}
-                  <CodeConfimtButton
-                    type="button"
-                    onClick={EmailVerificationCodeConfirm}
-                    disabled={codeConfirmButton}
-                    {...register('signUpConfiromButton', {
-                      required: true,
-                    })}
-                  >
-                    확인
-                  </CodeConfimtButton>
-                </VerificationCodeInputWrapper>
-                {(() => {
-                  if (codeVerificationError) {
-                    return (
-                      <ErrorMessageWrapper>
-                        <ErrorMessage>{codeVerificationErrorText}</ErrorMessage>
-                      </ErrorMessageWrapper>
-                    );
-                  } else if (errors.verificationCode) {
-                    return (
-                      <ErrorMessageWrapper>
-                        <ErrorMessage>{codeVerificationErrorText}</ErrorMessage>
-                      </ErrorMessageWrapper>
-                    );
-                  }
-                })()}
-              </VerificationCodeConfirmWrapper>
-            </VerificationCodeWrapper>
-            {timeStop === 1 ? (
-              <ResendEmailWrapper>
-                <ResendEmailMessage>
-                  <ResendEmailIcon />
-                  이메일을 받지 못하셨나요?
-                  <ResendLink onClick={verificationCodeRequest}>
-                    이메일 재전송하기
-                  </ResendLink>
-                </ResendEmailMessage>
-              </ResendEmailWrapper>
-            ) : null}
-          </InputWrapper>
-        ) : null}
-        <InputWrapper>
-          <RequirementLabel htmlFor="signup-password">
-            비밀번호 (영문자와 숫자 포함 최소 6자)
-          </RequirementLabel>
+    <Container onSubmit={handleSubmit(onSubmit)}>
+      <InputWrapper>
+        <RequirementLabel htmlFor="signup-email">이메일</RequirementLabel>
+        <EmailInputWrapper>
           <InfoInput
-            type="password"
-            id="signup-password"
-            {...register('signUpPassword', {
-              required: true,
-              minLength: 6,
-              pattern: passwordReg,
+            type="email"
+            id="signup-email"
+            {...register('signUpEmail', {
+              required: {
+                value: true,
+                message: '필수 입력 항목입니다.',
+              },
+              pattern: {
+                value: validEmailReg,
+                message: '이메일 형식이 올바르지 않습니다.',
+              },
             })}
-            placeholder="비밀번호"
-            className={errors.signUpPassword ? 'have-error' : ''}
-          />
-          {errors.signUpPassword?.type === 'required' &&
-            !(
-              errors.signUpPassword?.type === 'pattern' ||
-              errors.signUpPassword?.type === 'minLength'
-            ) && (
-              <ErrorMessageWrapper>
-                <ErrorMessage>필수 입력 항목입니다.</ErrorMessage>
-              </ErrorMessageWrapper>
-            )}
-          {(errors.signUpPassword?.type === 'pattern' ||
-            errors.signUpPassword?.type === 'minLength') && (
-            <ErrorMessageWrapper>
-              <ErrorMessage>
-                비밀번호는 영문, 숫자만을 혼합하여 6자 이상이어야 합니다.
-              </ErrorMessage>
-            </ErrorMessageWrapper>
-          )}
-        </InputWrapper>
-        <InputWrapper>
-          <RequirementLabel htmlFor="signup-check-password">
-            비밀번호 확인
-          </RequirementLabel>
-          <InfoInput
-            type="password"
-            id="signup-check-password"
-            {...register('signUpCheckPassword', {
-              required: true,
-              validate: (confirmPasswordInput) =>
-                confirmPasswordInput === signUpPasswordOnChange,
-            })}
-            placeholder="비밀번호 확인"
             className={
-              errors.signUpCheckPassword ||
-              (signUpCheckPasswordOnChange !== '' &&
-                signUpCheckPasswordOnChange !== signUpPasswordOnChange)
-                ? 'have-error'
-                : ''
+              errors.signUpEmail || emailInputError !== '' ? 'have-error' : ''
             }
+            maxLength={320}
+            placeholder="이메일"
+            readOnly={emailInputDisabled}
           />
-          {errors.signUpCheckPassword?.type === 'required' && (
-            <ErrorMessageWrapper>
-              <ErrorMessage>
-                확인을 위해 비밀번호를 한 번 더 입력해주세요.
-              </ErrorMessage>
-            </ErrorMessageWrapper>
-          )}
-          {(errors.signUpCheckPassword?.type !== 'required' &&
-            errors.signUpCheckPassword?.type === 'validate') ||
-          (signUpCheckPasswordOnChange !== '' &&
-            signUpCheckPasswordOnChange !== signUpPasswordOnChange) ? (
-            <ErrorMessageWrapper>
-              <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
-            </ErrorMessageWrapper>
+          <AuthButton
+            type="button"
+            disabled={emailCodeRequestButton}
+            onClick={verificationCodeRequest}
+            className={loading ? 'cursor-wait' : ''}
+          >
+            {loading ? (
+              <Loading selectColor={loadingColor} />
+            ) : (
+              verificationCodeButtonText
+            )}
+          </AuthButton>
+        </EmailInputWrapper>
+        {errors.signUpEmail !== undefined && (
+          <ErrorMessageWrapper>
+            <ErrorMessage>{errors.signUpEmail.message}</ErrorMessage>
+          </ErrorMessageWrapper>
+        )}
+        {errors.signUpEmail === undefined && emailInputError !== '' && (
+          <ErrorMessageWrapper>
+            <ErrorMessage>{emailInputError}</ErrorMessage>
+          </ErrorMessageWrapper>
+        )}
+      </InputWrapper>
+      {showCodeBox ? (
+        <InputWrapper>
+          <RequirementLabel htmlFor="verification-code">
+            인증코드 입력
+          </RequirementLabel>
+          <VerificationCodeWrapper>
+            <VerificationCodeConfirmWrapper
+              className={
+                errors.verificationCode ||
+                codeVerificationError ||
+                codeInputDisabled
+                  ? 'have-error'
+                  : ''
+              }
+            >
+              <VerificationCodeInputWrapper>
+                <VerificationCodeInput
+                  type="text"
+                  id="verification-code"
+                  {...register('verificationCode', {
+                    required: true,
+                    pattern: verificationCodeReg,
+                    minLength: 8,
+                    maxLength: 8,
+                  })}
+                  maxLength={8}
+                  placeholder="인증코드 8자리 입력"
+                  disabled={codeInputDisabled}
+                />
+                {!codeInputDisabled && (
+                  <TimeLimit>
+                    {minutes.toString().padStart(2, '0')}:
+                    {seconds.toString().padStart(2, '0')}
+                  </TimeLimit>
+                )}
+                <CodeConfimtButton
+                  type="button"
+                  onClick={EmailVerificationCodeConfirm}
+                  disabled={codeConfirmButton}
+                  {...register('signUpConfiromButton', {
+                    required: true,
+                  })}
+                >
+                  확인
+                </CodeConfimtButton>
+              </VerificationCodeInputWrapper>
+              {(() => {
+                if (codeVerificationError) {
+                  return (
+                    <ErrorMessageWrapper>
+                      <ErrorMessage>{codeVerificationErrorText}</ErrorMessage>
+                    </ErrorMessageWrapper>
+                  );
+                } else if (errors.verificationCode) {
+                  return (
+                    <ErrorMessageWrapper>
+                      <ErrorMessage>{codeVerificationErrorText}</ErrorMessage>
+                    </ErrorMessageWrapper>
+                  );
+                }
+              })()}
+            </VerificationCodeConfirmWrapper>
+          </VerificationCodeWrapper>
+          {timeStop === 1 ? (
+            <ResendEmailWrapper>
+              <ResendEmailMessage>
+                <ResendEmailIcon />
+                이메일을 받지 못하셨나요?
+                <ResendLink onClick={verificationCodeRequest}>
+                  이메일 재전송하기
+                </ResendLink>
+              </ResendEmailMessage>
+            </ResendEmailWrapper>
           ) : null}
         </InputWrapper>
-        <SubmitButton type="submit">기본 정보 작성 완료</SubmitButton>
-      </Container>
-    </>
+      ) : null}
+      <InputWrapper>
+        <RequirementLabel htmlFor="signup-password">
+          비밀번호 (영문자와 숫자 포함 최소 6자)
+        </RequirementLabel>
+        <InfoInput
+          type="password"
+          id="signup-password"
+          {...register('signUpPassword', {
+            required: true,
+            minLength: 6,
+            pattern: passwordReg,
+          })}
+          placeholder="비밀번호"
+          className={errors.signUpPassword ? 'have-error' : ''}
+        />
+        {errors.signUpPassword?.type === 'required' &&
+          !(
+            errors.signUpPassword?.type === 'pattern' ||
+            errors.signUpPassword?.type === 'minLength'
+          ) && (
+            <ErrorMessageWrapper>
+              <ErrorMessage>필수 입력 항목입니다.</ErrorMessage>
+            </ErrorMessageWrapper>
+          )}
+        {(errors.signUpPassword?.type === 'pattern' ||
+          errors.signUpPassword?.type === 'minLength') && (
+          <ErrorMessageWrapper>
+            <ErrorMessage>
+              비밀번호는 영문, 숫자만을 혼합하여 6자 이상이어야 합니다.
+            </ErrorMessage>
+          </ErrorMessageWrapper>
+        )}
+      </InputWrapper>
+      <InputWrapper>
+        <RequirementLabel htmlFor="signup-check-password">
+          비밀번호 확인
+        </RequirementLabel>
+        <InfoInput
+          type="password"
+          id="signup-check-password"
+          {...register('signUpCheckPassword', {
+            required: true,
+            validate: (confirmPasswordInput) =>
+              confirmPasswordInput === signUpPasswordOnChange,
+          })}
+          placeholder="비밀번호 확인"
+          className={
+            errors.signUpCheckPassword ||
+            (signUpCheckPasswordOnChange !== '' &&
+              signUpCheckPasswordOnChange !== signUpPasswordOnChange)
+              ? 'have-error'
+              : ''
+          }
+        />
+        {errors.signUpCheckPassword?.type === 'required' && (
+          <ErrorMessageWrapper>
+            <ErrorMessage>
+              확인을 위해 비밀번호를 한 번 더 입력해주세요.
+            </ErrorMessage>
+          </ErrorMessageWrapper>
+        )}
+        {(errors.signUpCheckPassword?.type !== 'required' &&
+          errors.signUpCheckPassword?.type === 'validate') ||
+        (signUpCheckPasswordOnChange !== '' &&
+          signUpCheckPasswordOnChange !== signUpPasswordOnChange) ? (
+          <ErrorMessageWrapper>
+            <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
+          </ErrorMessageWrapper>
+        ) : null}
+      </InputWrapper>
+      <SubmitButton type="submit">기본 정보 작성 완료</SubmitButton>
+    </Container>
   );
 };
 

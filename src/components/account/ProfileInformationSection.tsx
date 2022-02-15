@@ -514,164 +514,163 @@ const ProfileInformationSection: React.FC = () => {
   };
 
   return (
-    <>
-      <SsafyMateInformationWrapper>
-        <InfomationWrapper>
-          <SingleInformationWrapper>
-            <RequirementLabel htmlFor="self-introduction">
-              자기소개
-            </RequirementLabel>
-            <Textarea
-              id="self-introduction"
-              name="selfIntroduction"
-              value={selfIntroductionValue}
-              onKeyPress={handleTextAreaEnterKeyPressed}
-              onChange={handleNewSelfIntroduction}
-              disabled={selfIntroductionDisabled}
-              required
-              className={selfIntroductionError ? 'have-error' : ''}
-              maxLength={800}
-            />
-            {showError && selfIntroductionError && (
-              <ErrorMessageWrapper>
-                <ErrorMessage>필수 입력 항목입니다.</ErrorMessage>
-              </ErrorMessageWrapper>
-            )}
+    <Container>
+      <InfomationWrapper>
+        <SingleInformationWrapper>
+          <RequirementLabel htmlFor="self-introduction">
+            자기소개
+          </RequirementLabel>
+          <Textarea
+            id="self-introduction"
+            name="selfIntroduction"
+            value={selfIntroductionValue}
+            onKeyPress={handleTextAreaEnterKeyPressed}
+            onChange={handleNewSelfIntroduction}
+            disabled={selfIntroductionDisabled}
+            required
+            className={selfIntroductionError ? 'have-error' : ''}
+            maxLength={800}
+          />
+          {showError && selfIntroductionError && (
+            <ErrorMessageWrapper>
+              <ErrorMessage>필수 입력 항목입니다.</ErrorMessage>
+            </ErrorMessageWrapper>
+          )}
+          <ModifyButton
+            type="button"
+            onClick={handleSelfIntroductionModifyButton}
+          >
+            {selfIntroductionModifyButtonText}
+          </ModifyButton>
+        </SingleInformationWrapper>
+        <Hr />
+        <Row>
+          <JobSelectWrapper className="job-select_group">
+            <RequirementLabel htmlFor="job1">희망 직무1</RequirementLabel>
+            <Select
+              id="job1"
+              name="job1"
+              value={newJob1}
+              onChange={handleJobsSelect}
+              disabled={newJobsDisabled}
+            >
+              <option value="default" disabled>
+                - 선택 -
+              </option>
+              {JOB_LIST.map((job) => (
+                <option key={job.id} value={job.name}>
+                  {job.name}
+                </option>
+              ))}
+            </Select>
+          </JobSelectWrapper>
+          <JobSelectWrapper className="job-select_group">
+            <Label htmlFor="job2">희망 직무2</Label>
+            <Select
+              id="job2"
+              value={newJob2 !== null ? newJob2 : 'default'}
+              name="job2"
+              onChange={handleJobsSelect}
+              disabled={newJobsDisabled}
+            >
+              <option value="default">- 선택 -</option>
+              {JOB_LIST.filter((job) => job.name !== newJob1).map((job) => (
+                <option key={job.id} value={job.name}>
+                  {job.name}
+                </option>
+              ))}
+            </Select>
+          </JobSelectWrapper>
+          <JobSelectWrapper className="job-select__edit_button_group">
             <ModifyButton
               type="button"
-              onClick={handleSelfIntroductionModifyButton}
+              className="job-select__edit-button"
+              onClick={handlJobsModifyButton}
             >
-              {selfIntroductionModifyButtonText}
+              {newJobsModifyButtonText}
             </ModifyButton>
-          </SingleInformationWrapper>
-          <Hr />
-          <Row>
-            <JobSelectWrapper className="job-select_group">
-              <RequirementLabel htmlFor="job1">희망 직무1</RequirementLabel>
+          </JobSelectWrapper>
+        </Row>
+        <Hr />
+        <Row>
+          <SingleInformationWrapper>
+            <Label htmlFor="common-project">공통 프로젝트 트랙</Label>
+            <SelectWrapper>
               <Select
-                id="job1"
-                name="job1"
-                value={newJob1}
-                onChange={handleJobsSelect}
-                disabled={newJobsDisabled}
-              >
-                <option value="default" disabled>
-                  - 선택 -
-                </option>
-                {JOB_LIST.map((job) => (
-                  <option key={job.id} value={job.name}>
-                    {job.name}
-                  </option>
-                ))}
-              </Select>
-            </JobSelectWrapper>
-            <JobSelectWrapper className="job-select_group">
-              <Label htmlFor="job2">희망 직무2</Label>
-              <Select
-                id="job2"
-                value={newJob2 !== null ? newJob2 : 'default'}
-                name="job2"
-                onChange={handleJobsSelect}
-                disabled={newJobsDisabled}
+                id="common-project"
+                name="common-project"
+                value={commonProject !== null ? commonProject : 'default'}
+                onChange={handleProjectSelect}
+                disabled={newCommonProjectsDisabled}
               >
                 <option value="default">- 선택 -</option>
-                {JOB_LIST.filter((job) => job.name !== newJob1).map((job) => (
-                  <option key={job.id} value={job.name}>
-                    {job.name}
-                  </option>
-                ))}
+                {PROJECT_LIST[0].projectTracks !== undefined &&
+                  PROJECT_LIST[0].projectTracks.map((projectTrack) => (
+                    <option key={projectTrack.id} value={projectTrack.name}>
+                      {projectTrack.name}
+                    </option>
+                  ))}
               </Select>
-            </JobSelectWrapper>
-            <JobSelectWrapper className="job-select__edit_button_group">
               <ModifyButton
                 type="button"
-                className="job-select__edit-button"
-                onClick={handlJobsModifyButton}
+                className="project-track-select__edit-button"
+                onClick={handleCommonProjectssModifyButton}
               >
-                {newJobsModifyButtonText}
+                {newCommonProjectsModifyButtonText}
               </ModifyButton>
-            </JobSelectWrapper>
-          </Row>
-          <Hr />
-          <Row>
-            <SingleInformationWrapper>
-              <Label htmlFor="common-project">공통 프로젝트 트랙</Label>
-              <SelectWrapper>
-                <Select
-                  id="common-project"
-                  name="common-project"
-                  value={commonProject !== null ? commonProject : 'default'}
-                  onChange={handleProjectSelect}
-                  disabled={newCommonProjectsDisabled}
-                >
-                  <option value="default">- 선택 -</option>
-                  {PROJECT_LIST[0].projectTracks !== undefined &&
-                    PROJECT_LIST[0].projectTracks.map((projectTrack) => (
-                      <option key={projectTrack.id} value={projectTrack.name}>
-                        {projectTrack.name}
-                      </option>
-                    ))}
-                </Select>
-                <ModifyButton
-                  type="button"
-                  className="project-track-select__edit-button"
-                  onClick={handleCommonProjectssModifyButton}
-                >
-                  {newCommonProjectsModifyButtonText}
-                </ModifyButton>
-              </SelectWrapper>
-            </SingleInformationWrapper>
-          </Row>
-          <Hr />
-          <Row>
-            <SingleInformationWrapper>
-              <Label htmlFor="special-project">특화 프로젝트 트랙</Label>
-              <SelectWrapper>
-                <Select
-                  id="special-project"
-                  name="special-project"
-                  value={specialProject !== null ? specialProject : 'default'}
-                  onChange={handleProjectSelect}
-                  disabled={newSpecialProjectsDisabled}
-                >
-                  <option value="default">- 선택 -</option>
-                  {PROJECT_LIST[1].projectTracks !== undefined &&
-                    PROJECT_LIST[1].projectTracks.map((projectTrack) => (
-                      <option key={projectTrack.id} value={projectTrack.name}>
-                        {projectTrack.name}
-                      </option>
-                    ))}
-                </Select>
-                <ModifyButton
-                  type="button"
-                  className="project-track-select__edit-button"
-                  onClick={handleSpecialProjectssModifyButton}
-                >
-                  {newSpecialprojectsModifyButtonText}
-                </ModifyButton>
-              </SelectWrapper>
-            </SingleInformationWrapper>
-          </Row>
-          <Hr />
-          <Row className="tech-stack-grouop">
-            <SingleInformationWrapper
-              {...getRootProps()}
-              className="tech-stack-input"
+            </SelectWrapper>
+          </SingleInformationWrapper>
+        </Row>
+        <Hr />
+        <Row>
+          <SingleInformationWrapper>
+            <Label htmlFor="special-project">특화 프로젝트 트랙</Label>
+            <SelectWrapper>
+              <Select
+                id="special-project"
+                name="special-project"
+                value={specialProject !== null ? specialProject : 'default'}
+                onChange={handleProjectSelect}
+                disabled={newSpecialProjectsDisabled}
+              >
+                <option value="default">- 선택 -</option>
+                {PROJECT_LIST[1].projectTracks !== undefined &&
+                  PROJECT_LIST[1].projectTracks.map((projectTrack) => (
+                    <option key={projectTrack.id} value={projectTrack.name}>
+                      {projectTrack.name}
+                    </option>
+                  ))}
+              </Select>
+              <ModifyButton
+                type="button"
+                className="project-track-select__edit-button"
+                onClick={handleSpecialProjectssModifyButton}
+              >
+                {newSpecialprojectsModifyButtonText}
+              </ModifyButton>
+            </SelectWrapper>
+          </SingleInformationWrapper>
+        </Row>
+        <Hr />
+        <Row className="tech-stack-grouop">
+          <SingleInformationWrapper
+            {...getRootProps()}
+            className="tech-stack-input"
+          >
+            <RequirementLabel
+              htmlFor="tech-stack-options"
+              {...getInputLabelProps()}
             >
-              <RequirementLabel
-                htmlFor="tech-stack-options"
-                {...getInputLabelProps()}
-              >
-                기술 스택 <Em>(필수 2가지 이상 기입)</Em>
-              </RequirementLabel>
-              <InfoInputWrapper
-                ref={setAnchorEl}
-                className={
-                  focused
-                    ? 'focused'
-                    : '' || (showError && techStacksError ? 'have-error' : '')
-                }
-              >
+              기술 스택 <Em>(필수 2가지 이상 기입)</Em>
+            </RequirementLabel>
+            <InfoInputWrapper
+              ref={setAnchorEl}
+              className={
+                focused
+                  ? 'focused'
+                  : '' || (showError && techStacksError ? 'have-error' : '')
+              }
+            >
                 <InfoInput
                   type="text"
                   id="tech-stack-options"
@@ -746,46 +745,114 @@ const ProfileInformationSection: React.FC = () => {
             <SingleInformationWrapper>
               <Label htmlFor="github-url">GitHub URL</Label>
               <InfoInput
-                type="url"
-                id="github-url"
-                name="githubUrl"
-                placeholder="ex) https://github.com/ssafy-mate"
-                pattern="https://.*"
-                disabled={newUrlsDisabled}
-                onChange={handleUrlsInput}
-                value={newGitHubUrl !== null ? newGitHubUrl : ''}
-                maxLength={250}
+                type="text"
+                id="tech-stack-options"
+                name="tech-stack-options"
+                onKeyDown={(event: any) => {
+                  if (event.key === 'Backspace') {
+                    event.stopPropagation();
+                  }
+                }}
+                placeholder="ex) Vue.js, django, Spring Boot, MySQL"
+                disabled={newTechStackDisabled}
+                {...getInputProps()}
               />
-            </SingleInformationWrapper>
-          </Row>
-          <Row>
-            <SingleInformationWrapper>
-              <Label htmlFor="etc-url">기술 블로그 URL 또는 기타 URL</Label>
-              <InfoInput
-                type="url"
-                id="etc-url"
-                name="etcUrl"
-                placeholder="ex) https://velog.io/@ssafy-mate"
-                pattern="https://.*"
-                value={newEtcUrl !== null ? newEtcUrl : ''}
-                onChange={handleUrlsInput}
-                disabled={newUrlsDisabled}
-                maxLength={250}
-              />
-            </SingleInformationWrapper>
-          </Row>
-          <SingleInformationWrapper>
-            <ModifyButton type="button" onClick={handleUrlsModifyButton}>
-              {urlsModifyButtonText}
-            </ModifyButton>
+            </InfoInputWrapper>
+            {groupedOptions.length > 0 ? (
+              <SearchList {...getListboxProps()}>
+                {(groupedOptions as typeof techStackList).map(
+                  (option, index) => (
+                    <SearchItemWrapper
+                      key={option.techStackId}
+                      onClick={() => {
+                        controlTechStacks(option.techStackId);
+                      }}
+                    >
+                      <SearchItem {...getOptionProps({ option, index })}>
+                        <TechStackInfo>
+                          <TechStackImg
+                            src={option.techStackImgUrl}
+                            alt={option.techStackName}
+                          />
+                          {option.techStackName}
+                        </TechStackInfo>
+                        <CheckIcon fontSize="small" />
+                      </SearchItem>
+                    </SearchItemWrapper>
+                  ),
+                )}
+              </SearchList>
+            ) : null}
+            {showError && techStacksError && (
+              <ErrorMessageWrapper>
+                <ErrorMessage>필수 2가지 이상 선택 사항입니다.</ErrorMessage>
+              </ErrorMessageWrapper>
+            )}
           </SingleInformationWrapper>
-        </InfomationWrapper>
-      </SsafyMateInformationWrapper>
-    </>
+          <TechStackList>
+            {value.map((option: TechStackWithImg, index: number) => (
+              <ProfileTechStackTagWithLevel
+                techStackId={option.techStackId}
+                techStackName={option.techStackName}
+                techStackImgUrl={option.techStackImgUrl}
+                techStacks={techStacks}
+                newTechStackDisabled={newTechStackDisabled}
+                updateTechStacks={updateTechStacks}
+                deleteTechStacks={deleteTechStacks}
+                oldTechStacksWithLevel={oldTechStacksWithLevel}
+                hiddenCancelButton={newTechStackDisabled}
+                {...getTagProps({ index })}
+              />
+            ))}
+          </TechStackList>
+          <ModifyButton type="button" onClick={handleTechStackModifyButton}>
+            {newTechStackModifyButtonText}
+          </ModifyButton>
+        </Row>
+        <Hr />
+        <Row>
+          <SingleInformationWrapper>
+            <Label htmlFor="github-url">GitHub URL</Label>
+            <InfoInput
+              type="url"
+              id="github-url"
+              name="githubUrl"
+              placeholder="ex) https://github.com/ssafy-mate"
+              pattern="https://.*"
+              disabled={newUrlsDisabled}
+              onChange={handleUrlsInput}
+              value={newGitHubUrl !== null ? newGitHubUrl : ''}
+              maxLength={250}
+            />
+          </SingleInformationWrapper>
+        </Row>
+        <Row>
+          <SingleInformationWrapper>
+            <Label htmlFor="etc-url">기술 블로그 URL 또는 기타 URL</Label>
+            <InfoInput
+              type="url"
+              id="etc-url"
+              name="etcUrl"
+              placeholder="ex) https://velog.io/@ssafy-mate"
+              pattern="https://.*"
+              value={newEtcUrl !== null ? newEtcUrl : ''}
+              onChange={handleUrlsInput}
+              disabled={newUrlsDisabled}
+              maxLength={250}
+            />
+          </SingleInformationWrapper>
+        </Row>
+        <SingleInformationWrapper>
+          <ModifyButton type="button" onClick={handleUrlsModifyButton}>
+            {urlsModifyButtonText}
+          </ModifyButton>
+        </SingleInformationWrapper>
+      </InfomationWrapper>
+    </Container>
   );
 };
 
-const SsafyMateInformationWrapper = styled.div``;
+const Container = styled.div``;
 
 const InfomationWrapper = styled.div`
   display: flex;
@@ -852,6 +919,7 @@ const Textarea = styled.textarea`
   line-height: 24px;
   color: #263747;
   transition: all 0.08s ease-in-out;
+  resize: none;
 
   &:not(:disabled) {
     &:hover {
