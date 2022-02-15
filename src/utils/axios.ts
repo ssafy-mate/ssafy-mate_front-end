@@ -10,7 +10,7 @@ function createAxiosInstance() {
 
 function createAxiosSocketInstance() {
   const axiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_SOCKET_URL,
+    baseURL: process.env.REACT_APP_SOCKET_SERVER_URL,
   });
 
   return axiosInstance;
