@@ -17,7 +17,7 @@ const useSocket = (myId?: number): [Socket | undefined, () => void] => {
   }
 
   if (!sockets[myId]) {
-    sockets[myId] = io(`${process.env.REACT_APP_SOCKET_URL}`, {
+    sockets[myId] = io(`${process.env.REACT_APP_SOCKET_SERVER_URL}`, {
       transports: ['websocket'],
     });
   }
