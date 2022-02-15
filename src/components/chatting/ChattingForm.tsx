@@ -50,6 +50,10 @@ import ChatRoomItem from './ChatRoomItem';
 const PAGE_SIZE = 20;
 const DRAWER_WIDTH = 250;
 
+interface OnlineProps {
+  isOnline: boolean;
+}
+
 const ChattingForm: React.FC = () => {
   const location = useLocation();
   const myToken = useToken();
@@ -342,37 +346,47 @@ const ChattingForm: React.FC = () => {
             </IconButton>
           </DrawerHeader>
           <List>
-            {roomData?.map((room: ChatRoomType) => (
-              <ListItem
-                button
-                key={room.roomId}
-                onClick={toggleDrawer(false)}
-                onKeyDown={toggleDrawer(false)}
-              >
-                <Link
-                  to={`/chatting/${Number(myUserId)}?roomId=${
-                    room.roomId
-                  }&userId=${room.userId}`}
+            {roomData?.map((room: ChatRoomType) => {
+              const isOnline = onlineList.includes(room.userId);
+              return (
+                <ListItem
+                  button
+                  key={room.roomId}
+                  onClick={toggleDrawer(false)}
+                  onKeyDown={toggleDrawer(false)}
                 >
-                  <div css={listItemCss}>
-                    <Avatar
-                      src={
-                        room?.profileImgUrl
-                          ? room?.profileImgUrl
-                          : '/images/assets/basic-profile-img.png'
-                      }
-                      sx={{ marginRight: '10px' }}
-                    />
-                    <div className="user-name">
-                      <span className="user-name__name">{room?.userName}</span>
-                      <span className="user-name__email">
-                        @{room?.userEmail.split('@')[0]}
-                      </span>
+                  <Link
+                    to={`/chatting/${Number(myUserId)}?roomId=${
+                      room.roomId
+                    }&userId=${room.userId}`}
+                  >
+                    <div css={listItemCss}>
+                      <Avatar
+                        src={
+                          room?.profileImgUrl
+                            ? room?.profileImgUrl
+                            : '/images/assets/basic-profile-img.png'
+                        }
+                        sx={{ marginRight: '8px' }}
+                      />
+                      <OnlineWrraper>
+                        <OnlineOutCircle>
+                          <OnlineInCircle isOnline={isOnline} />
+                        </OnlineOutCircle>
+                      </OnlineWrraper>
+                      <div className="user-name">
+                        <span className="user-name__name">
+                          {room?.userName}
+                        </span>
+                        <span className="user-name__email">
+                          @{room?.userEmail.split('@')[0]}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                </Link>
-              </ListItem>
-            ))}
+                  </Link>
+                </ListItem>
+              );
+            })}
           </List>
         </SwipeableDrawer>
         {!roomId ? (
@@ -624,6 +638,33 @@ const ChatListOpenButton = styled.button`
   @media (max-width: 767px) {
     display: flex;
   }
+`;
+
+const OnlineWrraper = styled.div`
+  position: relative;
+  width: 1px;
+  top: 16px;
+  right: 24px;
+`;
+
+const OnlineOutCircle = styled.div`
+  position: relative;
+  width: 18px;
+  height: 18px;
+  z-index: 1;
+  border-radius: 50%;
+  background-color: #fff;
+`;
+
+const OnlineInCircle = styled.div<OnlineProps>`
+  position: relative;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  z-index: 2;
+  border-radius: 50%;
+  background-color: ${(props) => (props.isOnline ? '#45c46d' : '#b6b6b6')};
 `;
 
 const ChatRoomWrapper = styled.div`
