@@ -8,4 +8,13 @@ function createAxiosInstance() {
   return axiosInstance;
 }
 
+function createAxiosSocketInstance() {
+  const axiosInstance = axios.create({
+    baseURL: process.env.REACT_APP_SOCKET_URL,
+  });
+
+  return axiosInstance;
+}
+
 export const axiosInstance = createAxiosInstance();
+export const axiosSocketInstance = createAxiosSocketInstance();

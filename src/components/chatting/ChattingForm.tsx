@@ -7,8 +7,6 @@ import { useMediaQuery } from 'react-responsive';
 
 import { Scrollbars } from 'react-custom-scrollbars-2';
 
-import axios from 'axios';
-
 import dayjs from 'dayjs';
 
 import useSWR from 'swr';
@@ -39,7 +37,7 @@ import {
   OtherUserInfoType,
 } from '../../types/messageTypes';
 
-import { axiosInstance } from '../../utils/axios';
+import { axiosInstance, axiosSocketInstance } from '../../utils/axios';
 import { fetcherGet } from '../../utils/fetcher';
 import useSocket from '../../hooks/useSocket';
 import useToken from '../../hooks/useToken';
@@ -108,7 +106,7 @@ const ChattingForm: React.FC = () => {
       return `/api/chats/logs/${roomId}?nextCursor=0`;
     }
 
-    return `api/chats/logs/${roomId}?nextCursor=${previousPageData.nextCursor}`;
+    return `/api/chats/logs/${roomId}?nextCursor=${previousPageData.nextCursor}`;
   };
 
   const {
@@ -155,18 +153,16 @@ const ChattingForm: React.FC = () => {
           }
         });
 
-        axios
-          .post(`${process.env.REACT_APP_SOCKET_URL}/api/chats`, params)
-          .then(() => {
-            mutateRoom();
-            mutateChat().then(() => {
-              if (scrollbarRef.current) {
-                setTimeout(() => {
-                  scrollbarRef?.current?.scrollToBottom();
-                }, 50);
-              }
-            });
+        axiosSocketInstance.post(`/api/chats`, params).then(() => {
+          mutateRoom();
+          mutateChat().then(() => {
+            if (scrollbarRef.current) {
+              setTimeout(() => {
+                scrollbarRef?.current?.scrollToBottom();
+              }, 50);
+            }
           });
+        });
       }
     },
     [chat, roomId, myUserId, userId, setChat],
