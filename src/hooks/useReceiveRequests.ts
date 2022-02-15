@@ -4,13 +4,12 @@ import { useQuery } from 'react-query';
 
 import { ProjectParams } from '../types/authTypes';
 import { ErrorResponse } from '../types/commonTypes';
-import { UserRequestType, TeamRequestType } from '../types/userTypes';
+import { Request } from '../types/userTypes';
 
 import UserService from '../services/UserService';
 
 interface ReceiveRequestsResponse {
-  userRequests: UserRequestType[] | null;
-  teamRequests: TeamRequestType[] | null;
+  requests: Request[];
 }
 
 const useReceiveRequests = (
@@ -28,8 +27,7 @@ const useReceiveRequests = (
 
   return {
     isLoading,
-    userRequests: data?.data.userRequests,
-    teamRequests: data?.data.teamRequests,
+    requests: data?.data.requests,
     isError,
     errorMessage: error?.response?.data.message,
     refetch,

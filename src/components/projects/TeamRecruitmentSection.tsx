@@ -8,8 +8,6 @@ import Switch from '@mui/material/Switch';
 
 import { TeamListResponse } from '../../types/teamTypes';
 
-import useQueryString from '../../hooks/useQueryString';
-
 import TeamItem from './TeamItem';
 import EmptyBox from './EmptyBox';
 import SkeletonTeamRecruitmentSection from './skeletonUI/SkeletonTeamRecruitmentSection';
@@ -32,31 +30,21 @@ const TeamRecruitmentSection: React.FC<TeamRecruitmentSectionProps> = ({
   setExclusion,
   setSort,
 }) => {
-  const [, onSetExclusion] = useQueryString('exclusion');
-  const [, onSetSort] = useQueryString('sort');
-
   useEffect(() => {
     if (isError) {
       document.title = `${errorMessage} | 싸피 메이트`;
     }
   }, [isError, errorMessage]);
 
-  useEffect(() => {
-    onSetExclusion(false);
-    onSetSort('recent');
-  }, [onSetExclusion, onSetSort]);
-
   const handleChangeExclusion = (
     event: React.SyntheticEvent<Element, Event>,
     value: boolean,
   ) => {
     setExclusion(value);
-    onSetExclusion(value);
   };
 
   const handleChangeSort = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSort(event.target.value);
-    onSetSort(event.target.value);
   };
 
   if (isError) {
@@ -154,6 +142,7 @@ const SortSelect = styled.select`
   background-color: #e9ecf3;
   background-image: url(/images/assets/toggle-black.png);
   background-repeat: no-repeat;
+  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
   font-size: 0.875rem;
   font-weight: 500;
   line-height: 1.25rem;
