@@ -323,247 +323,238 @@ const ProfileForm: React.FC<ProfileProps> = ({
   };
 
   return (
-    <>
-      <Container>
-        <Row>
-          <AvatarWrapper>
-            {previewProgileImg ? (
-              <>
-                <Avatar src={previewProgileImg} css={avatar} />
-                <FileInputWrapper>
-                  <FileInputLabel htmlFor="profile-img">
-                    <CloseIcon
-                      fontSize="large"
-                      onClick={handleClearProfileImg}
-                    />
-                  </FileInputLabel>
-                </FileInputWrapper>
-              </>
-            ) : (
-              <>
-                <Avatar src="/broken-image.jpg" css={avatar} />
-                <FileInputWrapper>
-                  <FileInputLabel htmlFor="profile-img">
-                    <AddAPhotoIcon />
-                  </FileInputLabel>
-                  <FileInput
-                    type="file"
-                    id="profile-img"
-                    accept="image/*"
-                    onChange={handleChangeProfileImg}
-                  />
-                </FileInputWrapper>
-              </>
-            )}
-          </AvatarWrapper>
-          <InputWrapper>
-            <RequirementLabel htmlFor="self-introduction">
-              자기소개
-            </RequirementLabel>
-            <Textarea
-              id="self-introduction"
-              name="selfIntroduction"
-              onKeyPress={handleTextAreaEnterKeyPressed}
-              onChange={handleTextAreaInput}
-              required
-              className={selfIntroductionError ? 'have-error' : ''}
-              maxLength={800}
-            />
-            {showError === 1 && selfIntroductionError && (
-              <ErrorMessageWrapper>
-                <ErrorMessage>필수 입력 항목입니다.</ErrorMessage>
-              </ErrorMessageWrapper>
-            )}
-          </InputWrapper>
-        </Row>
-        <Row>
-          <InputWrapper css={rightGap}>
-            <RequirementLabel htmlFor="job1">희망 직무1</RequirementLabel>
-            <Select
-              id="job1"
-              defaultValue={'default'}
-              name="job1"
-              onChange={handleJobSelect}
-              required
-              className={job1Error ? 'have-error' : ''}
-            >
-              <option value="default" disabled>
-                - 선택 -
+    <Container>
+      <Row>
+        <AvatarWrapper>
+          {previewProgileImg ? (
+            <>
+              <Avatar src={previewProgileImg} css={avatar} />
+              <FileInputWrapper>
+                <FileInputLabel htmlFor="profile-img">
+                  <CloseIcon fontSize="large" onClick={handleClearProfileImg} />
+                </FileInputLabel>
+              </FileInputWrapper>
+            </>
+          ) : (
+            <>
+              <Avatar src="/broken-image.jpg" css={avatar} />
+              <FileInputWrapper>
+                <FileInputLabel htmlFor="profile-img">
+                  <AddAPhotoIcon />
+                </FileInputLabel>
+                <FileInput
+                  type="file"
+                  id="profile-img"
+                  accept="image/*"
+                  onChange={handleChangeProfileImg}
+                />
+              </FileInputWrapper>
+            </>
+          )}
+        </AvatarWrapper>
+        <InputWrapper>
+          <RequirementLabel htmlFor="self-introduction">
+            자기소개
+          </RequirementLabel>
+          <Textarea
+            id="self-introduction"
+            name="selfIntroduction"
+            onKeyPress={handleTextAreaEnterKeyPressed}
+            onChange={handleTextAreaInput}
+            required
+            className={selfIntroductionError ? 'have-error' : ''}
+            maxLength={800}
+          />
+          {showError === 1 && selfIntroductionError && (
+            <ErrorMessageWrapper>
+              <ErrorMessage>필수 입력 항목입니다.</ErrorMessage>
+            </ErrorMessageWrapper>
+          )}
+        </InputWrapper>
+      </Row>
+      <Row>
+        <InputWrapper css={rightGap}>
+          <RequirementLabel htmlFor="job1">희망 직무1</RequirementLabel>
+          <Select
+            id="job1"
+            defaultValue={'default'}
+            name="job1"
+            onChange={handleJobSelect}
+            required
+            className={job1Error ? 'have-error' : ''}
+          >
+            <option value="default" disabled>
+              - 선택 -
+            </option>
+            {JOB_LIST.map((job) => (
+              <option key={job.id} value={job.name}>
+                {job.name}
               </option>
-              {JOB_LIST.map((job) => (
-                <option key={job.id} value={job.name}>
-                  {job.name}
-                </option>
-              ))}
-            </Select>
-            {showError === 1 && job1Error && (
-              <ErrorMessageWrapper>
-                <ErrorMessage>필수 선택 사항입니다.</ErrorMessage>
-              </ErrorMessageWrapper>
-            )}
-          </InputWrapper>
-          <InputWrapper>
-            <Label htmlFor="job2">
-              희망 직무2 <Em>(선택)</Em>
-            </Label>
-            <Select
-              id="job2"
-              defaultValue={'default'}
-              onChange={handleJobSelect}
-              disabled={job1 === 'default' ? true : false}
-            >
-              <option value="default">- 선택 -</option>
-              {JOB_LIST.filter((job) => job.name !== job1).map((job) => (
-                <option key={job.id} value={job.name}>
-                  {job.name}
-                </option>
-              ))}
-            </Select>
-          </InputWrapper>
-        </Row>
-        <Row css={techStackRow}>
-          <InputWrapper {...getRootProps()} css={techStackInputWrapper}>
-            <RequirementLabel
-              htmlFor="tech-stack-options"
-              {...getInputLabelProps()}
-            >
-              기술 스택 <Em>(필수 2가지 이상 기입)</Em>
-            </RequirementLabel>
-            <InfoInputWrapper
-              ref={setAnchorEl}
-              className={
-                (focused ? 'focused' : '') ||
-                (showError === 1 && techStacksError === true
-                  ? 'have-error'
-                  : '')
-              }
-            >
-              <InfoInput
-                type="text"
-                id="tech-stack-options"
-                name="tech-stack-options"
-                onKeyDown={(event: any) => {
-                  if (event.key === 'Backspace') {
-                    event.stopPropagation();
-                  }
-                }}
-                placeholder="ex) Vue.js, django, Spring Boot, MySQL"
-                {...getInputProps()}
-              />
-            </InfoInputWrapper>
-            {groupedOptions.length > 0 ? (
-              <SearchList {...getListboxProps()}>
-                {(groupedOptions as typeof techStackList).map(
-                  (option, index) => (
-                    <SearchItemWrapper
-                      key={option.techStackId}
-                      onClick={() => {
-                        controlTechStacks(option.techStackId);
-                      }}
-                    >
-                      <SearchItem {...getOptionProps({ option, index })}>
-                        <TechStackInfo>
-                          <TechStackImg
-                            src={option.techStackImgUrl}
-                            alt={option.techStackName}
-                          />
-                          {option.techStackName}
-                        </TechStackInfo>
-                        <CheckIcon fontSize="small" />
-                      </SearchItem>
-                    </SearchItemWrapper>
-                  ),
-                )}
-              </SearchList>
-            ) : null}
-            {showError === 1 && techStacksError && (
-              <ErrorMessageWrapper>
-                <ErrorMessage>필수 2가지 이상 선택 사항입니다.</ErrorMessage>
-              </ErrorMessageWrapper>
-            )}
-          </InputWrapper>
-          <TechStackList>
-            {value.map((option: TechStackWithImg, index: number) => (
-              <TechStackTagWithLevel
-                techStackId={option.techStackId}
-                techStackName={option.techStackName}
-                techStackImgUrl={option.techStackImgUrl}
-                techStacks={techStacks}
-                updateTechStacks={updateTechStacks}
-                deleteTechStacks={deleteTechStacks}
-                {...getTagProps({ index })}
-              />
             ))}
-          </TechStackList>
-        </Row>
-        <Row>
-          <InputWrapper>
-            <Label htmlFor="github-url">
-              GitHub URL <Em>(선택)</Em>
-            </Label>
+          </Select>
+          {showError === 1 && job1Error && (
+            <ErrorMessageWrapper>
+              <ErrorMessage>필수 선택 사항입니다.</ErrorMessage>
+            </ErrorMessageWrapper>
+          )}
+        </InputWrapper>
+        <InputWrapper>
+          <Label htmlFor="job2">
+            희망 직무2 <Em>(선택)</Em>
+          </Label>
+          <Select
+            id="job2"
+            defaultValue={'default'}
+            onChange={handleJobSelect}
+            disabled={job1 === 'default' ? true : false}
+          >
+            <option value="default">- 선택 -</option>
+            {JOB_LIST.filter((job) => job.name !== job1).map((job) => (
+              <option key={job.id} value={job.name}>
+                {job.name}
+              </option>
+            ))}
+          </Select>
+        </InputWrapper>
+      </Row>
+      <Row css={techStackRow}>
+        <InputWrapper {...getRootProps()} css={techStackInputWrapper}>
+          <RequirementLabel
+            htmlFor="tech-stack-options"
+            {...getInputLabelProps()}
+          >
+            기술 스택 <Em>(필수 2가지 이상 기입)</Em>
+          </RequirementLabel>
+          <InfoInputWrapper
+            ref={setAnchorEl}
+            className={
+              (focused ? 'focused' : '') ||
+              (showError === 1 && techStacksError === true ? 'have-error' : '')
+            }
+          >
             <InfoInput
-              type="url"
-              id="github-url"
-              name="githubUrl"
-              placeholder="ex) https://github.com/ssafy-mate"
-              onChange={handleUrlInput}
-              pattern="https://.*"
-              maxLength={250}
+              type="text"
+              id="tech-stack-options"
+              name="tech-stack-options"
+              onKeyDown={(event: any) => {
+                if (event.key === 'Backspace') {
+                  event.stopPropagation();
+                }
+              }}
+              placeholder="ex) Vue.js, django, Spring Boot, MySQL"
+              {...getInputProps()}
             />
-          </InputWrapper>
-        </Row>
-        <Row>
-          <InputWrapper>
-            <Label htmlFor="etc-url">
-              기술 블로그 URL 또는 기타 URL <Em>(선택)</Em>
-            </Label>
-            <InfoInput
-              type="url"
-              id="etc-url"
-              name="etcUrl"
-              placeholder="ex) https://velog.io/@ssafy-mate"
-              onChange={handleUrlInput}
-              pattern="https://.*"
-              maxLength={250}
+          </InfoInputWrapper>
+          {groupedOptions.length > 0 ? (
+            <SearchList {...getListboxProps()}>
+              {(groupedOptions as typeof techStackList).map((option, index) => (
+                <SearchItemWrapper
+                  key={option.techStackId}
+                  onClick={() => {
+                    controlTechStacks(option.techStackId);
+                  }}
+                >
+                  <SearchItem {...getOptionProps({ option, index })}>
+                    <TechStackInfo>
+                      <TechStackImg
+                        src={option.techStackImgUrl}
+                        alt={option.techStackName}
+                      />
+                      {option.techStackName}
+                    </TechStackInfo>
+                    <CheckIcon fontSize="small" />
+                  </SearchItem>
+                </SearchItemWrapper>
+              ))}
+            </SearchList>
+          ) : null}
+          {showError === 1 && techStacksError && (
+            <ErrorMessageWrapper>
+              <ErrorMessage>필수 2가지 이상 선택 사항입니다.</ErrorMessage>
+            </ErrorMessageWrapper>
+          )}
+        </InputWrapper>
+        <TechStackList>
+          {value.map((option: TechStackWithImg, index: number) => (
+            <TechStackTagWithLevel
+              techStackId={option.techStackId}
+              techStackName={option.techStackName}
+              techStackImgUrl={option.techStackImgUrl}
+              techStacks={techStacks}
+              updateTechStacks={updateTechStacks}
+              deleteTechStacks={deleteTechStacks}
+              {...getTagProps({ index })}
             />
-          </InputWrapper>
-        </Row>
-        <Row>
-          <CheckBoxWrapper>
-            <AgreementCheckBox
-              type="checkbox"
-              id="sign-up-agreement"
-              name="sign-up-agreement"
-              onClick={handleCheckAgreement}
-              className={agreementError ? 'have-error' : ''}
-            />
-            <CheckBoxLabel htmlFor="sign-up-agreement">
-              <AgreementLink
-                href="/terms_of_service"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                이용약관
-              </AgreementLink>
-              &nbsp;및&nbsp;
-              <AgreementLink
-                href="/privacy"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                개인정보 처리방침
-              </AgreementLink>
-              에 동의합니다.
-            </CheckBoxLabel>
-          </CheckBoxWrapper>
-        </Row>
-        <Row>
-          <SignUpButton onClick={signUpClick} type="button">
-            계정 만들기
-          </SignUpButton>
-        </Row>
-      </Container>
-    </>
+          ))}
+        </TechStackList>
+      </Row>
+      <Row>
+        <InputWrapper>
+          <Label htmlFor="github-url">
+            GitHub URL <Em>(선택)</Em>
+          </Label>
+          <InfoInput
+            type="url"
+            id="github-url"
+            name="githubUrl"
+            placeholder="ex) https://github.com/ssafy-mate"
+            onChange={handleUrlInput}
+            pattern="https://.*"
+            maxLength={250}
+          />
+        </InputWrapper>
+      </Row>
+      <Row>
+        <InputWrapper>
+          <Label htmlFor="etc-url">
+            기술 블로그 URL 또는 기타 URL <Em>(선택)</Em>
+          </Label>
+          <InfoInput
+            type="url"
+            id="etc-url"
+            name="etcUrl"
+            placeholder="ex) https://velog.io/@ssafy-mate"
+            onChange={handleUrlInput}
+            pattern="https://.*"
+            maxLength={250}
+          />
+        </InputWrapper>
+      </Row>
+      <Row>
+        <CheckBoxWrapper>
+          <AgreementCheckBox
+            type="checkbox"
+            id="sign-up-agreement"
+            name="sign-up-agreement"
+            onClick={handleCheckAgreement}
+            className={agreementError ? 'have-error' : ''}
+          />
+          <CheckBoxLabel htmlFor="sign-up-agreement">
+            <AgreementLink
+              href="/terms_of_service"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              이용약관
+            </AgreementLink>
+            &nbsp;및&nbsp;
+            <AgreementLink
+              href="/privacy"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              개인정보 처리방침
+            </AgreementLink>
+            에 동의합니다.
+          </CheckBoxLabel>
+        </CheckBoxWrapper>
+      </Row>
+      <Row>
+        <SignUpButton onClick={signUpClick} type="button">
+          계정 만들기
+        </SignUpButton>
+      </Row>
+    </Container>
   );
 };
 
@@ -674,6 +665,7 @@ const Textarea = styled.textarea`
   line-height: 24px;
   color: #263747;
   transition: all 0.08s ease-in-out;
+  resize: none;
 
   &.have-error {
     margin-bottom: 4px;
