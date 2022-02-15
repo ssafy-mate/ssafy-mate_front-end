@@ -286,7 +286,10 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
                             </AccountBoxItem>
                           </Link>
                           <Divider />
-                          <AccountBoxItem onClick={handleClickLogoutButton}>
+                          <AccountBoxItem
+                            onClick={handleClickLogoutButton}
+                            className="logout-button"
+                          >
                             로그아웃
                             <AccountBoxItemIcon>
                               <LogoutIcon fontSize="small" />
@@ -498,8 +501,7 @@ const IconButton = styled.button`
 const AccountBoxList = styled(MenuList)``;
 
 const AccountBoxItem = styled(MenuItem)`
-  padding-right: 22px;
-  padding-left: 22px;
+  padding: 8px 22px;
   font-family: 'Spoqa Han Sans Neo', 'sans-serif';
   font-weight: 500;
   color: #263747;
@@ -512,6 +514,10 @@ const AccountBoxItem = styled(MenuItem)`
     & svg {
       color: #3396f4;
     }
+  }
+
+  &.logout-button {
+    padding-top: 16px;
   }
 `;
 
