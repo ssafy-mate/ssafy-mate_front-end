@@ -9,6 +9,10 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Avatar } from '@mui/material';
 
+interface OnlineProps {
+  isOnline: boolean;
+}
+
 const ChatRoomItem: React.FC<ChatRoomTypeProps> = ({
   myId,
   roomId,
@@ -35,6 +39,11 @@ const ChatRoomItem: React.FC<ChatRoomTypeProps> = ({
                   : '/images/assets/basic-profile-img.png'
               }
             />
+            <OnlineWrraper>
+              <OnlineOutCircle>
+                <OnlineInCircle isOnline={isOnline} />
+              </OnlineOutCircle>
+            </OnlineWrraper>
           </ProfileImg>
           <Content>
             <TitleWrapper>
@@ -49,9 +58,6 @@ const ChatRoomItem: React.FC<ChatRoomTypeProps> = ({
               <Description>{content}</Description>
             </DescriptionWrapper>
           </Content>
-          <OnlineWrraper>
-            {isOnline && isOnline ? <OnlineCircle /> : <OfflineCircle />}
-          </OnlineWrraper>
         </Wrapper>
       </NavLink>
     </Item>
@@ -95,7 +101,7 @@ const Wrapper = styled.div`
 
 const ProfileImg = styled.div`
   height: 40px;
-  margin-right: 8px;
+  margin-right: 10px;
 
   img {
     width: 40px;
@@ -107,6 +113,32 @@ const ProfileImg = styled.div`
     display: none;
     width: 100%;
   }
+`;
+
+const OnlineWrraper = styled.div`
+  position: relative;
+  top: -14px;
+  right: -24px;
+`;
+
+const OnlineOutCircle = styled.div`
+  position: relative;
+  width: 20px;
+  height: 20px;
+  z-index: 1;
+  border-radius: 50%;
+  background-color: #fff;
+`;
+
+const OnlineInCircle = styled.div<OnlineProps>`
+  position: relative;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  z-index: 2;
+  border-radius: 50%;
+  background-color: ${(props) => (props.isOnline ? '#45c46d' : '#b6b6b6')};
 `;
 
 const Content = styled.div`
@@ -133,7 +165,7 @@ const TitleSenderName = styled.span`
   overflow-x: hidden;
   max-width: 70px;
   height: 20px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: #263747;
   text-overflow: ellipsis;
@@ -150,25 +182,6 @@ const TitleSubText = styled.div`
   font-size: 12px;
   color: #868b94;
   white-space: nowrap;
-`;
-
-const OnlineWrraper = styled.div`
-  display: flex;
-  padding: 10px;
-`;
-
-const OnlineCircle = styled.div`
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: #6cff6c;
-`;
-
-const OfflineCircle = styled.div`
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: #acacac;
 `;
 
 const DescriptionWrapper = styled.div`
