@@ -442,8 +442,12 @@ const ProfileForm: React.FC<ProfileProps> = ({
                 type="text"
                 id="tech-stack-options"
                 name="tech-stack-options"
-                onKeyDown={(event: any) => {
-                  if (event.key === 'Backspace') {
+                onKeyDown={(event: React.KeyboardEvent) => {
+                  if (
+                    event.key === 'Backspace' ||
+                    event.key === 'Enter' ||
+                    event.code === 'NumpadEnter'
+                  ) {
                     event.stopPropagation();
                   }
                 }}

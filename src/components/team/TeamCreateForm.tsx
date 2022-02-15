@@ -419,8 +419,12 @@ const TeamCreateForm: React.FC = () => {
                   ? 'active-warning'
                   : ''
               }
-              onKeyDown={(event: any) => {
-                if (event.key === 'Backspace') {
+              onKeyDown={(event: React.KeyboardEvent) => {
+                if (
+                  event.key === 'Backspace' ||
+                  event.key === 'Enter' ||
+                  event.code === 'NumpadEnter'
+                ) {
                   event.stopPropagation();
                 }
               }}
