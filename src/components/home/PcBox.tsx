@@ -29,7 +29,7 @@ const PcBox: React.FC<PcBoxProps> = ({ imgUrl, isVisible }) => {
 const Box = styled.div`
   opacity: 0;
   width: 100%;
-  max-width: 540px;
+  max-width: 560px;
 
   &.scroll {
     animation: 0.6s ease-in-out 0.6s 1 normal forwards running fadeinBottom;

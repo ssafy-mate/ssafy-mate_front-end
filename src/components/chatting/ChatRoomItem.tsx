@@ -1,47 +1,49 @@
-import { useState, useEffect } from 'react';
-
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 import dayjs from 'dayjs';
 
-import useSocket from '../../hooks/useSocket';
 import { ChatRoomTypeProps } from '../../types/messageTypes';
 
+/** @jsxImportSource @emotion/react */
+import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Avatar } from '@mui/material';
+
+interface OnlineProps {
+  isOnline: boolean;
+}
 
 const ChatRoomItem: React.FC<ChatRoomTypeProps> = ({
   myId,
   roomId,
   userId,
   userName,
+  userEmail,
   profileImgUrl,
   content,
   sentTime,
-  userEmail,
+  isOnline,
 }) => {
-  const [onlineList, setOnlineList] = useState<number[]>([]);
-  const [socket] = useSocket();
-
-  useEffect(() => {
-    setOnlineList([]);
-  }, [roomId]);
-
-  useEffect(() => {
-    socket?.on('onlineList', (data: number[]) => {
-      setOnlineList(data);
-    });
-    return () => {
-      socket?.off('onlineList');
-    };
-  }, [socket]);
-
   return (
-    <Link to={`/chatting/${myId}?roomId=${roomId}&userId=${userId}`}>
-      <Item>
+    <Item>
+      <NavLink
+        to={`/chatting/${myId}?roomId=${roomId}&userId=${userId}`}
+        exact={true}
+      >
         <Wrapper>
           <ProfileImg>
-            <Avatar src={profileImgUrl} />
+            <Avatar
+              src={
+                profileImgUrl
+                  ? profileImgUrl
+                  : '/images/assets/basic-profile-img.png'
+              }
+            />
+            <OnlineWrraper>
+              <OnlineOutCircle>
+                <OnlineInCircle isOnline={isOnline} />
+              </OnlineOutCircle>
+            </OnlineWrraper>
           </ProfileImg>
           <Content>
             <TitleWrapper>
@@ -57,14 +59,18 @@ const ChatRoomItem: React.FC<ChatRoomTypeProps> = ({
             </DescriptionWrapper>
           </Content>
         </Wrapper>
-      </Item>
-    </Link>
+      </NavLink>
+    </Item>
   );
 };
 
 const Item = styled.li`
   width: 100%;
   box-sizing: border-box;
+
+  & .selected {
+    background-color: #111111;
+  }
 
   @media (max-width: 575px) {
     display: hidden;
@@ -95,7 +101,7 @@ const Wrapper = styled.div`
 
 const ProfileImg = styled.div`
   height: 40px;
-  margin-right: 8px;
+  margin-right: 10px;
 
   img {
     width: 40px;
@@ -107,6 +113,32 @@ const ProfileImg = styled.div`
     display: none;
     width: 100%;
   }
+`;
+
+const OnlineWrraper = styled.div`
+  position: relative;
+  top: -14px;
+  right: -24px;
+`;
+
+const OnlineOutCircle = styled.div`
+  position: relative;
+  width: 20px;
+  height: 20px;
+  z-index: 1;
+  border-radius: 50%;
+  background-color: #fff;
+`;
+
+const OnlineInCircle = styled.div<OnlineProps>`
+  position: relative;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  z-index: 2;
+  border-radius: 50%;
+  background-color: ${(props) => (props.isOnline ? '#45c46d' : '#b6b6b6')};
 `;
 
 const Content = styled.div`
@@ -133,7 +165,7 @@ const TitleSenderName = styled.span`
   overflow-x: hidden;
   max-width: 70px;
   height: 20px;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 500;
   color: #263747;
   text-overflow: ellipsis;

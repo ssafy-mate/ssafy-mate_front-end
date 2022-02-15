@@ -23,8 +23,8 @@ const PROJECTS_BANNER_SLIDE_LIST: ProjectBannerSlideType[] = [
     subHead: 'Track 1. 인공지능 (영상)',
     description:
       '이미지 입력이 들어 갔을 때, 해당 이미지를 묘사하는 텍스트를 생성하는 이미지 캡셔닝 모델 구현 프로젝트',
-    imgUrl: '/images/projects/ai_animation.gif',
-    hexColorCode: '#ffc107',
+    imgUrl: '/images/projects/ai-video_animation.gif',
+    hexColorCode: '#232930',
   },
   {
     id: 2,
@@ -32,7 +32,7 @@ const PROJECTS_BANNER_SLIDE_LIST: ProjectBannerSlideType[] = [
     subHead: 'Track 2. 인공지능 (음성)',
     description:
       '딥러닝 알고리즘의 동작 과정 이해 및 구현, 각 팀 별로 개성있는 인공지능 서비스 구축 프로젝트',
-    imgUrl: '/images/projects/ai_animation.gif',
+    imgUrl: '/images/projects/ai-voice_animation.gif',
     hexColorCode: '#ffc107',
   },
   {
@@ -41,7 +41,7 @@ const PROJECTS_BANNER_SLIDE_LIST: ProjectBannerSlideType[] = [
     subHead: 'Track 3. 빅데이터 (추천)',
     description:
       '사용자에 대한 이해, 추천되는 요소에 대한 이해를 통한 정보 필터링 서비스 제공, 기존의 서비스 이용 기록을 통한 인사이트 도출 및 적용 프로젝트',
-    imgUrl: '/images/projects/bigdata_animation.gif',
+    imgUrl: '/images/projects/bigdata-recommendation_animation.gif',
     hexColorCode: '#52c5b5',
   },
   {
@@ -50,8 +50,8 @@ const PROJECTS_BANNER_SLIDE_LIST: ProjectBannerSlideType[] = [
     subHead: 'Track 4. 빅데이터 (분산)',
     description:
       '분산 파일 시스템을 활용한 데이터 처리 과정에 대해 이해하고 효율적인 병렬 연산을 위한 알고리즘 구현 및 서비스 적용 프로젝트',
-    imgUrl: '/images/projects/bigdata_animation.gif',
-    hexColorCode: '#52c5b5',
+    imgUrl: '/images/projects/bigdata-dispersion_animation.gif',
+    hexColorCode: '#2b3747',
   },
   {
     id: 5,
@@ -59,7 +59,7 @@ const PROJECTS_BANNER_SLIDE_LIST: ProjectBannerSlideType[] = [
     subHead: 'Track 5. 블록체인 (P2P 거래)',
     description:
       '블록체인 오픈소스로 네트워크 인프라를 구축하여 이를 활용하는 프로젝트',
-    imgUrl: '/images/projects/blockchain_animation.gif',
+    imgUrl: '/images/projects/blockchain-p2p_animation.gif',
     hexColorCode: '#000',
   },
   {
@@ -68,8 +68,8 @@ const PROJECTS_BANNER_SLIDE_LIST: ProjectBannerSlideType[] = [
     subHead: 'Track 6. 블록체인 (디지털화폐)',
     description:
       'NFT(대체 불가한 토큰) 스마트 컨트랙트 구현하여 NFT를 거래할 수 있도록 하는 프로젝트',
-    imgUrl: '/images/projects/blockchain_animation.gif',
-    hexColorCode: '#000',
+    imgUrl: '/images/projects/blockchain-digital-money_animation.gif',
+    hexColorCode: '#090a1d',
   },
   {
     id: 7,

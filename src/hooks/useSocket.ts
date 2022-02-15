@@ -2,8 +2,6 @@ import { useCallback } from 'react';
 
 import { io, Socket } from 'socket.io-client';
 
-const backUrl = 'https://i6a402.p.ssafy.io:3100';
-
 const sockets: { [key: number]: Socket } = {};
 
 const useSocket = (myId?: number): [Socket | undefined, () => void] => {
@@ -19,7 +17,7 @@ const useSocket = (myId?: number): [Socket | undefined, () => void] => {
   }
 
   if (!sockets[myId]) {
-    sockets[myId] = io(`${backUrl}`, {
+    sockets[myId] = io(`${process.env.REACT_APP_SOCKET_URL}`, {
       transports: ['websocket'],
     });
   }

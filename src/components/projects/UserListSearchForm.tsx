@@ -7,7 +7,6 @@ import styled from '@emotion/styled';
 import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
 import CheckIcon from '@mui/icons-material/Check';
 
-import useQueryString from '../../hooks/useQueryString';
 import useTechStackList from '../../hooks/useTechStackList';
 
 import { TechStackWithImg } from '../../types/commonTypes';
@@ -44,15 +43,6 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
   setSsafyTrack,
   setPage,
 }) => {
-  const [, onSetProject] = useQueryString('project');
-  const [, onSetProjectTrack] = useQueryString('project_track');
-  const [, onSetCampus] = useQueryString('campus');
-  const [, onSetJob1] = useQueryString('job1');
-  const [, onSetPage] = useQueryString('page');
-  const [, onSetTechStackId] = useQueryString('techstack_id');
-  const [, onSetUserName] = useQueryString('user_name');
-  const [, onSetSsafyTrack] = useQueryString('ssafy_track');
-
   const techStackList: TechStackWithImg[] = useTechStackList();
 
   const {
@@ -68,68 +58,39 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
   });
 
   useEffect(() => {
-    onSetCampus(campus);
-    onSetProject('특화 프로젝트');
-    onSetProjectTrack(projectTrack);
-    onSetJob1('all');
-    onSetUserName('');
-    onSetSsafyTrack('all');
-    onSetPage(1);
     setPage(1);
-  }, [
-    campus,
-    projectTrack,
-    onSetProject,
-    onSetProjectTrack,
-    onSetCampus,
-    onSetJob1,
-    onSetUserName,
-    onSetSsafyTrack,
-    onSetPage,
-    setPage,
-  ]);
+  }, [campus, projectTrack, setPage]);
 
   useEffect(() => {
-    if (value !== null) {
-      setTechStackId(value.techStackId);
-      onSetTechStackId(value.techStackId);
-    } else {
-      setTechStackId(null);
-      onSetTechStackId(null);
-    }
-  }, [setTechStackId, onSetTechStackId, value]);
+    value !== null ? setTechStackId(value.techStackId) : setTechStackId(null);
+  }, [setTechStackId, value]);
 
   const handleChangeCampus = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ): void => {
     setCampus(event.target.value);
-    onSetCampus(event.target.value);
   };
 
   const handleChangeProjectTrack = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ): void => {
     setProjectTrack(event.target.value);
-    onSetProjectTrack(event.target.value);
   };
 
   const handleChangeJob1 = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ): void => {
     setJob1(event.target.value);
-    onSetJob1(event.target.value);
   };
 
   const handleChangeUserName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setUserName(event.target.value);
-    onSetUserName(event.target.value);
   };
 
   const handleChangeSsafyTrack = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ): void => {
     setSsafyTrack(event.target.value);
-    onSetSsafyTrack(event.target.value);
   };
 
   return (

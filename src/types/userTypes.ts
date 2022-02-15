@@ -135,6 +135,20 @@ export interface TeamRequestType {
   createdTime: string;
 }
 
+export type OriginType = 'user' | 'team';
+
+export interface Request {
+  requestId: number;
+  requestStatus: RequestStatusType;
+  originType: OriginType;
+  originId: number;
+  originImgUrl: string | null;
+  originName: string;
+  originInfo: string;
+  message: string;
+  createdTime: string;
+}
+
 export interface ResponseOfTheRequestType {
   requestId: number;
   response: ResponseStatusType;

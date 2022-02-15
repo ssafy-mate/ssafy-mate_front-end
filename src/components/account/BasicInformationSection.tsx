@@ -195,75 +195,73 @@ const BasicInformationSection: React.FC = () => {
   };
 
   return (
-    <>
-      <Container>
-        <AvatarWrapperCol>
-          <AvatarWrapper>
-            <SsafyMateAvatar
-              src={
-                previewProgileImg === null
-                  ? '/broken-image.jpg'
-                  : previewProgileImg
-              }
+    <Container>
+      <AvatarWrapperCol>
+        <AvatarWrapper>
+          <SsafyMateAvatar
+            src={
+              previewProgileImg === null
+                ? '/broken-image.jpg'
+                : previewProgileImg
+            }
+          />
+          <FileInputWrapper>
+            <FileInputLabel htmlFor="profile-img">
+              <AddAPhotoIcon />
+            </FileInputLabel>
+            <FileInput
+              type="file"
+              id="profile-img"
+              accept="image/*"
+              onChange={handleChangeProfileImg}
             />
-            <FileInputWrapper>
-              <FileInputLabel htmlFor="profile-img">
-                <AddAPhotoIcon />
-              </FileInputLabel>
-              <FileInput
-                type="file"
-                id="profile-img"
-                accept="image/*"
-                onChange={handleChangeProfileImg}
-              />
-            </FileInputWrapper>
-          </AvatarWrapper>
-        </AvatarWrapperCol>
-        <InfomationWrapper>
-          <SingleInformationWrapper>
-            <Label htmlFor="userName">이름</Label>
-            <Information id="userName">{profileInfo?.userName}</Information>
-          </SingleInformationWrapper>
-          <SingleInformationWrapper>
-            <Label htmlFor="userEmail">이메일</Label>
-            <Information id="userEmail">{profileInfo?.userEmail}</Information>
-          </SingleInformationWrapper>
-          <SingleInformationWrapper>
-            <Label htmlFor="ssafyCampus">캠퍼스</Label>
-            <Information id="ssafyCampus">서울</Information>
-          </SingleInformationWrapper>
-          <SingleInformationWrapper>
-            <Label htmlFor="studentNumber">학번</Label>
-            <Information id="studentNumber">{studentNumber}</Information>
-          </SingleInformationWrapper>
-          <SingleInformationWrapper>
-            <RequirementLabel htmlFor="ssafyTrack">교육 트랙</RequirementLabel>
-            <SelectWrapper>
-              <Select
-                id="ssafyTrack"
-                value={newSsafyTrack}
-                onChange={handleSsafyTrack}
-                disabled={ssafyTrackDisabled}
-              >
-                {selectedTracks.map((track: SsafyTrack) => (
-                  <option key={track.id} value={track.name}>
-                    {track.name}
-                  </option>
-                ))}
-              </Select>
-              <ModifyButton onClick={handleSsafyModifyButton}>
-                {ssafyTrackModifyButtonText}
-              </ModifyButton>
-            </SelectWrapper>
-          </SingleInformationWrapper>
-          <SingleInformationWrapper>
-            <NewPasswordLinkButton to="/users/password/new">
-              비밀번호 재설정 하러가기
-            </NewPasswordLinkButton>
-          </SingleInformationWrapper>
-        </InfomationWrapper>
-      </Container>
-    </>
+          </FileInputWrapper>
+        </AvatarWrapper>
+      </AvatarWrapperCol>
+      <InfomationWrapper>
+        <SingleInformationWrapper>
+          <Label htmlFor="userName">이름</Label>
+          <Information id="userName">{profileInfo?.userName}</Information>
+        </SingleInformationWrapper>
+        <SingleInformationWrapper>
+          <Label htmlFor="userEmail">이메일</Label>
+          <Information id="userEmail">{profileInfo?.userEmail}</Information>
+        </SingleInformationWrapper>
+        <SingleInformationWrapper>
+          <Label htmlFor="ssafyCampus">캠퍼스</Label>
+          <Information id="ssafyCampus">서울</Information>
+        </SingleInformationWrapper>
+        <SingleInformationWrapper>
+          <Label htmlFor="studentNumber">학번</Label>
+          <Information id="studentNumber">{studentNumber}</Information>
+        </SingleInformationWrapper>
+        <SingleInformationWrapper>
+          <RequirementLabel htmlFor="ssafyTrack">교육 트랙</RequirementLabel>
+          <SelectWrapper>
+            <Select
+              id="ssafyTrack"
+              value={newSsafyTrack}
+              onChange={handleSsafyTrack}
+              disabled={ssafyTrackDisabled}
+            >
+              {selectedTracks.map((track: SsafyTrack) => (
+                <option key={track.id} value={track.name}>
+                  {track.name}
+                </option>
+              ))}
+            </Select>
+            <ModifyButton onClick={handleSsafyModifyButton}>
+              {ssafyTrackModifyButtonText}
+            </ModifyButton>
+          </SelectWrapper>
+        </SingleInformationWrapper>
+        <SingleInformationWrapper>
+          <NewPasswordLinkButton to="/users/password/new">
+            비밀번호 재설정 하러가기
+          </NewPasswordLinkButton>
+        </SingleInformationWrapper>
+      </InfomationWrapper>
+    </Container>
   );
 };
 

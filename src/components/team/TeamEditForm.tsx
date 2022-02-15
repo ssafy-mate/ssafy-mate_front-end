@@ -500,6 +500,15 @@ const TeamEditForm: React.FC = () => {
               type="text"
               id="tech-stacks"
               name="tech-stacks"
+              onKeyDown={(event: React.KeyboardEvent) => {
+                if (
+                  event.key === 'Backspace' ||
+                  event.key === 'Enter' ||
+                  event.code === 'NumpadEnter'
+                ) {
+                  event.stopPropagation();
+                }
+              }}
               className={
                 isDisplayedWarningText && techStacks.length < 2
                   ? 'active-warning'
@@ -812,6 +821,7 @@ const Textarea = styled.textarea`
   line-height: 24px;
   color: #263747;
   transition: all 0.08s ease-in-out;
+  resize: none;
 
   &:hover {
     border: 1px solid #3396f4;

@@ -419,8 +419,12 @@ const TeamCreateForm: React.FC = () => {
                   ? 'active-warning'
                   : ''
               }
-              onKeyDown={(event: any) => {
-                if (event.key === 'Backspace') {
+              onKeyDown={(event: React.KeyboardEvent) => {
+                if (
+                  event.key === 'Backspace' ||
+                  event.key === 'Enter' ||
+                  event.code === 'NumpadEnter'
+                ) {
                   event.stopPropagation();
                 }
               }}
@@ -687,6 +691,7 @@ const Textarea = styled.textarea`
   line-height: 24px;
   color: #263747;
   transition: all 0.08s ease-in-out;
+  resize: none;
 
   &:hover {
     border: 1px solid #3396f4;
