@@ -149,7 +149,7 @@ const RequestItem: React.FC<RequestItemProps> = ({
               }
             })()}
             <CreatedDate>
-              {dayjs(createdTime).format('YY.MM.DD. A hh:mm')}
+              {dayjs(createdTime).add(9, 'h').format('YY.MM.DD. A hh:mm')}
             </CreatedDate>
           </RequestStatusWrapper>
         </Contents>
