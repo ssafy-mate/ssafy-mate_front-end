@@ -349,6 +349,7 @@ const ChattingForm: React.FC = () => {
                   key={room.roomId}
                   onClick={toggleDrawer(false)}
                   onKeyDown={toggleDrawer(false)}
+                  sx={{ padding: '12px 16px 12px 16px' }}
                 >
                   <Link
                     to={`/chatting/${Number(myUserId)}?roomId=${
