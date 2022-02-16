@@ -174,6 +174,8 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
         confirmButtonText: '확인',
       });
     }
+
+    handleExpandMenu();
   };
 
   return (
@@ -307,7 +309,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
             </>
           ) : (
             <>
-              <AccountMenuItem>
+              <AccountMenuItem onClick={handleExpandMenu}>
                 <PageLink to={`/users/${userId}`}>내 프로필</PageLink>
               </AccountMenuItem>
               <AccountMenuItem onClick={handleClickMyTeamLink}>
@@ -315,10 +317,10 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
                   내 팀 정보
                 </PageLink>
               </AccountMenuItem>
-              <AccountMenuItem>
+              <AccountMenuItem onClick={handleExpandMenu}>
                 <PageLink to={`/chatting/${userId}`}>채팅 목록</PageLink>
               </AccountMenuItem>
-              <AccountMenuItem>
+              <AccountMenuItem onClick={handleExpandMenu}>
                 <PageLink
                   to={`/users/account/edit`}
                   onClick={handleUserAccountEdit}
@@ -326,14 +328,14 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
                   계정 관리
                 </PageLink>
               </AccountMenuItem>
-              <AccountMenuItem>
+              <AccountMenuItem onClick={handleExpandMenu}>
                 <PageLink
                   to={`/projects/specialization/${userId}/receive_requests`}
                 >
                   받은 제안
                 </PageLink>
               </AccountMenuItem>
-              <AccountMenuItem>
+              <AccountMenuItem onClick={handleExpandMenu}>
                 <PageLink
                   to={`/projects/specialization/${userId}/send_requests`}
                 >
