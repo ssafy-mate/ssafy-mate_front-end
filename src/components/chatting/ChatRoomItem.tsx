@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import { NavLink } from 'react-router-dom';
 
 import dayjs from 'dayjs';
@@ -5,7 +7,6 @@ import dayjs from 'dayjs';
 import { ChatRoomTypeProps } from '../../types/messageTypes';
 
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Avatar } from '@mui/material';
 
@@ -24,11 +25,24 @@ const ChatRoomItem: React.FC<ChatRoomTypeProps> = ({
   sentTime,
   isOnline,
 }) => {
+  const [params, setParams] = useState<string>(
+    `?roomId=${roomId}&userId=${userId}`,
+  );
+
+  const checkActive = (match: any, location: any) => {
+    if (!location) return false;
+    const { search } = location;
+    return search === params ? true : false;
+  };
+
   return (
     <Item>
-      <NavLink
-        to={`/chatting/${myId}?roomId=${roomId}&userId=${userId}`}
+      <ChatLink
+        key={roomId}
         exact={true}
+        to={`/chatting/${myId}?roomId=${roomId}&userId=${userId}`}
+        activeClassName="selected"
+        isActive={checkActive}
       >
         <Wrapper>
           <ProfileImg>
@@ -59,7 +73,7 @@ const ChatRoomItem: React.FC<ChatRoomTypeProps> = ({
             </DescriptionWrapper>
           </Content>
         </Wrapper>
-      </NavLink>
+      </ChatLink>
     </Item>
   );
 };
@@ -68,12 +82,22 @@ const Item = styled.li`
   width: 100%;
   box-sizing: border-box;
 
-  & .selected {
-    background-color: #111111;
-  }
-
   @media (max-width: 575px) {
     display: hidden;
+  }
+`;
+
+const ChatLink = styled(NavLink)`
+  display: block;
+  background-color: #fff;
+  transition: background-color 0.08s ease-in-out;
+
+  &:hover {
+    background-color: #e1e3e7;
+  }
+
+  &.selected {
+    background-color: #e1e3e7;
   }
 `;
 
@@ -86,13 +110,6 @@ const Wrapper = styled.div`
   padding: 16px;
   box-sizing: border-box;
   border-bottom: 1px solid #dfdfdf;
-  background-color: #fff;
-  transition: background-color 0.08s ease-in-out;
-  cursor: pointer;
-
-  &:hover {
-    background-color: #e1e3e7;
-  }
 
   @media (max-width: 575px) {
     display: hidden;

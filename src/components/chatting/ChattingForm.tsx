@@ -23,7 +23,6 @@ import ChatIcon from '@mui/icons-material/Chat';
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { Avatar } from '@mui/material';
-import TextareaAutosize from '@mui/base/TextareaAutosize';
 import IconButton from '@mui/material/IconButton';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import List from '@mui/material/List';
@@ -350,6 +349,7 @@ const ChattingForm: React.FC = () => {
                   key={room.roomId}
                   onClick={toggleDrawer(false)}
                   onKeyDown={toggleDrawer(false)}
+                  sx={{ padding: '12px 16px 12px 16px' }}
                 >
                   <Link
                     to={`/chatting/${Number(myUserId)}?roomId=${
@@ -495,10 +495,8 @@ const ChattingForm: React.FC = () => {
             </ChatRoomMessageWrapper>
             <ChatTypingWrapper>
               <TextArea
-                css={chatTypingTextarea}
                 ref={messageInputRef}
-                maxRows={3}
-                minRows={1}
+                maxLength={300}
                 value={chat}
                 onKeyPress={handleMessageSendKeyPress}
                 onChange={onChangeChat}
@@ -693,13 +691,6 @@ const ChatRoomUserNameBar = styled.div`
     min-height: 62px;
     padding: 0 16px;
   }
-`;
-
-const TextArea = styled(TextareaAutosize)`
-  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
-  font-size: 14px;
-  line-height: 1.5;
-  color: #263747;
 `;
 
 const ProfileLink = styled(Link)`
@@ -971,7 +962,7 @@ const SendMessageButton = styled.button`
   cursor: pointer;
 `;
 
-const chatTypingTextarea = css`
+const TextArea = styled.textarea`
   overflow: auto;
   overflow-wrap: break-word;
   width: 100%;
@@ -980,7 +971,9 @@ const chatTypingTextarea = css`
   border: none;
   background-color: #eaebef;
   font-family: 'Spoqa Han Sans Neo', 'sans-serif';
-  line-height: 150%;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #263747;
   outline: none;
 
   ::-webkit-scrollbar {
