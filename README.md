@@ -148,7 +148,7 @@
     </td>
     <td align="center">
       <a href="https://github.com/dudqo225" target="_blank">
-        <img src="https://avatars.githubusercontent.com/u/47763664?v=4" alt="손영배 프로필" />
+        <img src="https://avatars.githubusercontent.com/u/78641259?v=4" alt="손영배 프로필" />
       </a>
     </td>
     <td align="center">
