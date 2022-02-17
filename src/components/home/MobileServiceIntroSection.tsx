@@ -72,7 +72,7 @@ const Wrapper = styled.div<WrapperProps>`
   max-width: 1200px;
   height: 100%;
   margin: 0 auto;
-  padding: 380px 20px;
+  padding: 380px 16px;
   box-sizing: border-box;
 
   @media (max-width: 991px) {
