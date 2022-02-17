@@ -158,7 +158,6 @@ const SortSelect = styled.select`
 const TeamList = styled.ul`
   display: flex;
   flex-wrap: wrap;
-
   @media (max-width: 1199px) {
     flex-direction: column;
   }
@@ -166,7 +165,6 @@ const TeamList = styled.ul`
 
 const MuiFormControlLabel = styled(FormControlLabel)`
   padding-left: 4px;
-
   & span {
     font-family: 'Spoqa Han Sans Neo', 'sans-serif';
     font-size: 14px;
