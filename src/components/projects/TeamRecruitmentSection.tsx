@@ -20,6 +20,7 @@ interface TeamRecruitmentSectionProps {
   errorMessage?: string;
   setExclusion: (exclustion: boolean) => void;
   setSort: (sort: string) => void;
+  setPage: (page: number) => void;
 }
 
 const TeamRecruitmentSection: React.FC<TeamRecruitmentSectionProps> = ({
@@ -29,6 +30,7 @@ const TeamRecruitmentSection: React.FC<TeamRecruitmentSectionProps> = ({
   errorMessage,
   setExclusion,
   setSort,
+  setPage,
 }) => {
   useEffect(() => {
     if (isError) {
@@ -41,6 +43,7 @@ const TeamRecruitmentSection: React.FC<TeamRecruitmentSectionProps> = ({
     value: boolean,
   ) => {
     setExclusion(value);
+    setPage(1);
   };
 
   const handleChangeSort = (event: React.ChangeEvent<HTMLSelectElement>) => {

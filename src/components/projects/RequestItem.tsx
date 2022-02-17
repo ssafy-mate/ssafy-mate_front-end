@@ -261,10 +261,11 @@ const Message = styled.h2`
 
   @media (max-width: 767px) {
     max-width: 100%;
-    font-size: 16px;
+    font-size: 15px;
   }
   @media (max-width: 575px) {
-    font-size: 15px;
+    font-size: 14px;
+    line-height: 1.4;
   }
 `;
 

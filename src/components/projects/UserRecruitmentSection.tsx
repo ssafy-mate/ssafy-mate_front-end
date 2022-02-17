@@ -18,6 +18,7 @@ interface UserRecruitmentSectionProps {
   errorMessage?: string;
   setExclusion: (exclustion: boolean) => void;
   setSort: (sort: string) => void;
+  setPage: (page: number) => void;
 }
 
 const UserRecruitmentSection: React.FC<UserRecruitmentSectionProps> = ({
@@ -27,12 +28,14 @@ const UserRecruitmentSection: React.FC<UserRecruitmentSectionProps> = ({
   errorMessage,
   setExclusion,
   setSort,
+  setPage,
 }) => {
   const handleChangeExclusion = (
     event: React.SyntheticEvent<Element, Event>,
     value: boolean,
   ) => {
     setExclusion(value);
+    setPage(1);
   };
 
   const handleChangeSort = (event: React.ChangeEvent<HTMLSelectElement>) => {

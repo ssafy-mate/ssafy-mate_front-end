@@ -147,6 +147,10 @@ const RequestList = styled.ul`
   display: flex;
   flex-direction: column;
   padding: 20px;
+
+  @media (max-width: 575px) {
+    padding: 12px;
+  }
 `;
 
 export default ReceiveRequestListSection;
