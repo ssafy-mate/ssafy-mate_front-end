@@ -91,7 +91,7 @@ const SubHead = styled.h2`
   }
   @media (max-width: 575px) {
     margin-bottom: 12px;
-    font-size: 24px;
+    font-size: 22px;
   }
 `;
 
