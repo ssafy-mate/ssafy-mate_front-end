@@ -36,8 +36,8 @@ import {
   OtherUserInfoType,
 } from '../../types/messageTypes';
 
-import { axiosInstance, axiosSocketInstance } from '../../utils/axios';
 import { fetcherGet } from '../../utils/fetcher';
+import ChatService from '../../services/ChatService';
 import useSocket from '../../hooks/useSocket';
 import useToken from '../../hooks/useToken';
 import useTextArea from '../../hooks/useTextArea';
@@ -99,7 +99,7 @@ const ChattingForm: React.FC = () => {
   }, [userId]);
 
   const userInfoGet = () => {
-    axiosInstance.get(`/api/chats/infos/${userId}`).then((response) => {
+    ChatService.getChatUserInfo(userId as string).then((response) => {
       setOtherUser(response.data);
     });
   };
@@ -160,7 +160,7 @@ const ChattingForm: React.FC = () => {
           }
         });
 
-        axiosSocketInstance.post(`/api/chats`, params).then(() => {
+        ChatService.sendChatData(params).then(() => {
           mutateRoom();
           mutateChat().then(() => {
             if (scrollbarRef.current) {
