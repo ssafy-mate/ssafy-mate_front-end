@@ -51,6 +51,10 @@ interface OnlineProps {
   isOnline: boolean;
 }
 
+interface MessageBoxProps {
+  isLeft: boolean;
+}
+
 const ChattingForm: React.FC = () => {
   const location = useLocation();
   const myToken = useToken();
@@ -438,58 +442,52 @@ const ChattingForm: React.FC = () => {
               </ChatRoomUserNameBar>
               <Scrollbars autoHide ref={scrollbarRef} onScrollFrame={onScroll}>
                 <ChatRoomMessageList ref={chatRoomMessageRef}>
-                  <MessageWrapper>
-                    {chatSections && chatSections.length > 0
-                      ? chatSections.map((message, index) => {
-                          if (message.senderId === Number(myUserId)) {
-                            return (
-                              <MessageBoxWrapper key={index}>
-                                <MessageBoxRightContent>
-                                  <MessageTimeBox>
-                                    <div className="message_date">
-                                      {smallMedia
-                                        ? dayjs(message.sentTime).format(
-                                            'a hh:mm',
-                                          )
-                                        : dayjs(message.sentTime).format(
-                                            'YY.MM.DD. a hh:mm',
-                                          )}
-                                    </div>
-                                  </MessageTimeBox>
-                                  <p>{message.content}</p>
-                                </MessageBoxRightContent>
-                              </MessageBoxWrapper>
-                            );
-                          } else {
-                            return (
-                              <MessageBoxWrapper key={index}>
-                                <MessageBoxLeftContent>
-                                  <ProfileImg
-                                    src={
-                                      otherUser?.profileImgUrl
-                                        ? otherUser?.profileImgUrl
-                                        : '/images/assets/basic-profile-img.png'
-                                    }
-                                  />
-                                  <p>{message.content}</p>
-                                  <MessageTimeBox>
-                                    <div className="message_date">
-                                      {smallMedia
-                                        ? dayjs(message.sentTime).format(
-                                            'a hh:mm',
-                                          )
-                                        : dayjs(message.sentTime).format(
-                                            'YY.MM.DD. a hh:mm',
-                                          )}
-                                    </div>
-                                  </MessageTimeBox>
-                                </MessageBoxLeftContent>
-                              </MessageBoxWrapper>
-                            );
-                          }
-                        })
-                      : null}
-                  </MessageWrapper>
+                  {chatSections && chatSections.length > 0
+                    ? chatSections.map((message, index) => {
+                        return (
+                          <MessageBoxWrapper key={index}>
+                            {message.senderId === Number(myUserId) ? (
+                              <MessageBoxContent isLeft={false}>
+                                <MessageTimeBox>
+                                  <div className="message_date">
+                                    {smallMedia
+                                      ? dayjs(message.sentTime).format(
+                                          'a hh:mm',
+                                        )
+                                      : dayjs(message.sentTime).format(
+                                          'YY.MM.DD. a hh:mm',
+                                        )}
+                                  </div>
+                                </MessageTimeBox>
+                                <p>{message.content}</p>
+                              </MessageBoxContent>
+                            ) : (
+                              <MessageBoxContent isLeft={true}>
+                                <ProfileImg
+                                  src={
+                                    otherUser?.profileImgUrl
+                                      ? otherUser?.profileImgUrl
+                                      : '/images/assets/basic-profile-img.png'
+                                  }
+                                />
+                                <p>{message.content}</p>
+                                <MessageTimeBox>
+                                  <div className="message_date">
+                                    {smallMedia
+                                      ? dayjs(message.sentTime).format(
+                                          'a hh:mm',
+                                        )
+                                      : dayjs(message.sentTime).format(
+                                          'YY.MM.DD. a hh:mm',
+                                        )}
+                                  </div>
+                                </MessageTimeBox>
+                              </MessageBoxContent>
+                            )}
+                          </MessageBoxWrapper>
+                        );
+                      })
+                    : null}
                 </ChatRoomMessageList>
               </Scrollbars>
             </ChatRoomMessageWrapper>
@@ -804,17 +802,13 @@ const ChatRoomMessageList = styled.div`
   }
 `;
 
-const MessageWrapper = styled.div`
-  contain: content;
-`;
-
 const MessageBoxWrapper = styled.div`
   margin-top: 15px;
 `;
 
-const MessageBoxLeftContent = styled.div`
+const MessageBoxContent = styled.div<MessageBoxProps>`
   display: flex;
-  justify-content: start;
+  justify-content: ${(props) => (props.isLeft ? 'start' : 'flex-end')};
   padding: 4px;
   contain: content;
 
@@ -823,39 +817,12 @@ const MessageBoxLeftContent = styled.div`
     max-width: 364px;
     margin: 0px;
     padding: 10px 14px;
-    border-radius: 2px 20px 20px;
-    background-color: #e9ebef;
+    border-radius: ${(props) =>
+      props.isLeft ? '2px 20px 20px' : '20px 2px 20px 20px'};
+    background-color: ${(props) => (props.isLeft ? '#e9ebef' : '#3396f4')};
     font-size: 14px;
     line-height: 1.5;
-    color: #263747;
-    white-space: pre-wrap;
-    word-break: break-all;
-  }
-
-  @media (max-width: 767px) {
-    & p {
-      font-size: 13px;
-      line-height: 1.4;
-    }
-  }
-`;
-
-const MessageBoxRightContent = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  padding: 4px;
-  contain: content;
-
-  & p {
-    display: inline-flex;
-    max-width: 364px;
-    margin: 0px;
-    padding: 10px 14px;
-    border-radius: 20px 2px 20px 20px;
-    background-color: #3396f4;
-    font-size: 14px;
-    line-height: 1.5;
-    color: #fff;
+    color: ${(props) => (props.isLeft ? '#263747' : '#fff')};
     white-space: pre-wrap;
     word-break: break-all;
   }
