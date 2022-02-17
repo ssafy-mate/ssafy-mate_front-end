@@ -59,7 +59,7 @@ const Wrapper = styled.div<WrapperProps>`
   justify-content: space-between;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 250px 16px;
+  padding: 250px 20px;
   box-sizing: border-box;
   flex-direction: ${(props) =>
     props.reversed === true ? 'row-reverse' : 'row'};
