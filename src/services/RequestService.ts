@@ -55,6 +55,25 @@ class RequestService {
 
     return response.data.message;
   }
+
+  public static async deleteRequestItem(
+    token: string | null,
+    requestId: number,
+  ): Promise<string> {
+    const response = await axiosInstance.put(
+      `/api/auth/requests/read-check/${requestId}`,
+      {
+        requestId,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+
+    return response.data.message;
+  }
 }
 
 export default RequestService;
