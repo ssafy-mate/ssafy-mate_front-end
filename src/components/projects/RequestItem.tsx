@@ -1,11 +1,15 @@
 import { Link } from 'react-router-dom';
 
+import { useDispatch } from 'react-redux';
+import { showSsafyMateAlert } from '../../redux/modules/alert';
+
 import dayjs from 'dayjs';
 
 import styled from '@emotion/styled';
 
 import CheckIcon from '@mui/icons-material/Check';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import CloseIcon from '@mui/icons-material/Close';
 
 import Swal from 'sweetalert2';
 
@@ -53,6 +57,7 @@ const RequestItem: React.FC<RequestItemProps> = ({
   createdTime,
   refetch,
 }) => {
+  const dispatch = useDispatch();
   const token: string | null = useToken();
 
   const sendResponse = (responseOfTheRequest: ResponseOfTheRequestType) => {
@@ -84,6 +89,29 @@ const RequestItem: React.FC<RequestItemProps> = ({
     };
 
     sendResponse(responseOfTheRequest);
+  };
+
+  const handleDeleteRequestItem = () => {
+    RequestService.deleteRequestItem(token, requestId)
+      .then((message: string) => {
+        dispatch(
+          showSsafyMateAlert({
+            show: true,
+            text: message,
+            type: 'success',
+          }),
+        );
+      })
+      .catch((error: any) => {
+        dispatch(
+          showSsafyMateAlert({
+            show: true,
+            text: error.response.data.message,
+            type: 'warning',
+          }),
+        );
+      })
+      .finally(() => refetch());
   };
 
   return (
@@ -185,6 +213,11 @@ const RequestItem: React.FC<RequestItemProps> = ({
             취소
           </Button>
         )}
+        {requestStatus !== 'pending' && (
+          <DeleteButton onClick={handleDeleteRequestItem}>
+            <CloseIcon />
+          </DeleteButton>
+        )}
       </ItemFooter>
     </Item>
   );
@@ -261,10 +294,11 @@ const Message = styled.h2`
 
   @media (max-width: 767px) {
     max-width: 100%;
-    font-size: 16px;
+    font-size: 15px;
   }
   @media (max-width: 575px) {
-    font-size: 15px;
+    font-size: 14px;
+    line-height: 1.4;
   }
 `;
 
@@ -399,6 +433,30 @@ const CreatedDate = styled.span`
     margin-top: 10px;
     margin-left: 0;
     font-size: 13px;
+  }
+`;
+
+const DeleteButton = styled.button`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2px 4px;
+  border-radius: 4px;
+  border: 1px solid #f44336;
+  background-color: transparent;
+  color: #f44336;
+  transition: background-color 0.08s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    color: #fff;
+    background-color: #f99992;
+  }
+
+  @media (max-width: 767px) {
+    margin-top: 20px;
+    width: 100%;
+    height: 30px;
   }
 `;
 

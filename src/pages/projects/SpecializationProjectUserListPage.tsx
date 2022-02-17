@@ -92,9 +92,10 @@ const SpecializationProjectUserListPage: React.FC = () => {
         errorMessage={errorMessage}
         setExclusion={setExclusion}
         setSort={setSort}
+        setPage={setPage}
       />
       {data !== undefined && (
-        <Pagenation totalPage={data.totalPage} setPage={setPage} />
+        <Pagenation totalPage={data.totalPage} page={page} setPage={setPage} />
       )}
       {!smallMedia && <Footer />}
     </>

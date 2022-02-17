@@ -6,13 +6,19 @@ import styled from '@emotion/styled';
 
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
+import { useEffect } from 'react';
 
 interface PagenationProps {
   totalPage: number;
+  page: number;
   setPage: (page: number) => void;
 }
 
-const Pagenation: React.FC<PagenationProps> = ({ totalPage, setPage }) => {
+const Pagenation: React.FC<PagenationProps> = ({
+  totalPage,
+  page,
+  setPage,
+}) => {
   const extraLargeMedia = useMediaQuery({
     query: '(max-width: 1199px)',
   });
@@ -32,12 +38,13 @@ const Pagenation: React.FC<PagenationProps> = ({ totalPage, setPage }) => {
       <Wrapper>
         <Stack spacing={2}>
           <Pagination
-            count={totalPage}
             variant="outlined"
             shape="rounded"
-            css={pagination}
+            count={totalPage}
+            page={page}
             onChange={handleChangePage}
             size={extraLargeMedia ? (smallMedia ? 'small' : 'medium') : 'large'}
+            css={pagination}
           />
         </Stack>
       </Wrapper>

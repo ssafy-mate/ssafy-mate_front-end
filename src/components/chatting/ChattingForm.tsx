@@ -23,7 +23,6 @@ import ChatIcon from '@mui/icons-material/Chat';
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { Avatar } from '@mui/material';
-import TextareaAutosize from '@mui/base/TextareaAutosize';
 import IconButton from '@mui/material/IconButton';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import List from '@mui/material/List';
@@ -37,8 +36,8 @@ import {
   OtherUserInfoType,
 } from '../../types/messageTypes';
 
-import { axiosInstance, axiosSocketInstance } from '../../utils/axios';
 import { fetcherGet } from '../../utils/fetcher';
+import ChatService from '../../services/ChatService';
 import useSocket from '../../hooks/useSocket';
 import useToken from '../../hooks/useToken';
 import useTextArea from '../../hooks/useTextArea';
@@ -50,6 +49,10 @@ const DRAWER_WIDTH = 250;
 
 interface OnlineProps {
   isOnline: boolean;
+}
+
+interface MessageBoxProps {
+  isLeft: boolean;
 }
 
 const ChattingForm: React.FC = () => {
@@ -96,7 +99,7 @@ const ChattingForm: React.FC = () => {
   }, [userId]);
 
   const userInfoGet = () => {
-    axiosInstance.get(`/api/chats/infos/${userId}`).then((response) => {
+    ChatService.getChatUserInfo(userId as string).then((response) => {
       setOtherUser(response.data);
     });
   };
@@ -157,7 +160,7 @@ const ChattingForm: React.FC = () => {
           }
         });
 
-        axiosSocketInstance.post(`/api/chats`, params).then(() => {
+        ChatService.sendChatData(params).then(() => {
           mutateRoom();
           mutateChat().then(() => {
             if (scrollbarRef.current) {
@@ -350,6 +353,7 @@ const ChattingForm: React.FC = () => {
                   key={room.roomId}
                   onClick={toggleDrawer(false)}
                   onKeyDown={toggleDrawer(false)}
+                  sx={{ padding: '12px 16px 12px 16px' }}
                 >
                   <Link
                     to={`/chatting/${Number(myUserId)}?roomId=${
@@ -438,67 +442,59 @@ const ChattingForm: React.FC = () => {
               </ChatRoomUserNameBar>
               <Scrollbars autoHide ref={scrollbarRef} onScrollFrame={onScroll}>
                 <ChatRoomMessageList ref={chatRoomMessageRef}>
-                  <MessageWrapper>
-                    {chatSections && chatSections.length > 0
-                      ? chatSections.map((message, index) => {
-                          if (message.senderId === Number(myUserId)) {
-                            return (
-                              <MessageBoxWrapper key={index}>
-                                <MessageBoxRightContent>
-                                  <MessageTimeBox>
-                                    <div className="message_date">
-                                      {smallMedia
-                                        ? dayjs(message.sentTime).format(
-                                            'a hh:mm',
-                                          )
-                                        : dayjs(message.sentTime).format(
-                                            'YY.MM.DD. a hh:mm',
-                                          )}
-                                    </div>
-                                  </MessageTimeBox>
-                                  <p>{message.content}</p>
-                                </MessageBoxRightContent>
-                              </MessageBoxWrapper>
-                            );
-                          } else {
-                            return (
-                              <MessageBoxWrapper key={index}>
-                                <MessageBoxLeftContent>
-                                  <ProfileImg
-                                    src={
-                                      otherUser?.profileImgUrl
-                                        ? otherUser?.profileImgUrl
-                                        : '/images/assets/basic-profile-img.png'
-                                    }
-                                  />
-                                  <p>{message.content}</p>
-                                  <MessageTimeBox>
-                                    <div className="message_date">
-                                      {smallMedia
-                                        ? dayjs(message.sentTime).format(
-                                            'a hh:mm',
-                                          )
-                                        : dayjs(message.sentTime).format(
-                                            'YY.MM.DD. a hh:mm',
-                                          )}
-                                    </div>
-                                  </MessageTimeBox>
-                                </MessageBoxLeftContent>
-                              </MessageBoxWrapper>
-                            );
-                          }
-                        })
-                      : null}
-                  </MessageWrapper>
+                  {chatSections && chatSections.length > 0
+                    ? chatSections.map((message, index) => {
+                        return (
+                          <MessageBoxWrapper key={index}>
+                            {message.senderId === Number(myUserId) ? (
+                              <MessageBoxContent isLeft={false}>
+                                <MessageTimeBox>
+                                  <div className="message_date">
+                                    {smallMedia
+                                      ? dayjs(message.sentTime).format(
+                                          'a hh:mm',
+                                        )
+                                      : dayjs(message.sentTime).format(
+                                          'YY.MM.DD. a hh:mm',
+                                        )}
+                                  </div>
+                                </MessageTimeBox>
+                                <p>{message.content}</p>
+                              </MessageBoxContent>
+                            ) : (
+                              <MessageBoxContent isLeft={true}>
+                                <ProfileImg
+                                  src={
+                                    otherUser?.profileImgUrl
+                                      ? otherUser?.profileImgUrl
+                                      : '/images/assets/basic-profile-img.png'
+                                  }
+                                />
+                                <p>{message.content}</p>
+                                <MessageTimeBox>
+                                  <div className="message_date">
+                                    {smallMedia
+                                      ? dayjs(message.sentTime).format(
+                                          'a hh:mm',
+                                        )
+                                      : dayjs(message.sentTime).format(
+                                          'YY.MM.DD. a hh:mm',
+                                        )}
+                                  </div>
+                                </MessageTimeBox>
+                              </MessageBoxContent>
+                            )}
+                          </MessageBoxWrapper>
+                        );
+                      })
+                    : null}
                 </ChatRoomMessageList>
               </Scrollbars>
             </ChatRoomMessageWrapper>
             <ChatTypingWrapper>
               <TextArea
-                css={chatTypingTextarea}
                 ref={messageInputRef}
-                maxRows={3}
-                minRows={1}
+                maxLength={300}
                 value={chat}
                 onKeyPress={handleMessageSendKeyPress}
                 onChange={onChangeChat}
@@ -695,13 +691,6 @@ const ChatRoomUserNameBar = styled.div`
   }
 `;
 
-const TextArea = styled(TextareaAutosize)`
-  font-family: 'Spoqa Han Sans Neo', 'sans-serif';
-  font-size: 14px;
-  line-height: 1.5;
-  color: #263747;
-`;
-
 const ProfileLink = styled(Link)`
   display: flex;
   justify-content: center;
@@ -813,17 +802,13 @@ const ChatRoomMessageList = styled.div`
   }
 `;
 
-const MessageWrapper = styled.div`
-  contain: content;
-`;
-
 const MessageBoxWrapper = styled.div`
   margin-top: 15px;
 `;
 
-const MessageBoxLeftContent = styled.div`
+const MessageBoxContent = styled.div<MessageBoxProps>`
   display: flex;
-  justify-content: start;
+  justify-content: ${(props) => (props.isLeft ? 'start' : 'flex-end')};
   padding: 4px;
   contain: content;
 
@@ -832,39 +817,12 @@ const MessageBoxLeftContent = styled.div`
     max-width: 364px;
     margin: 0px;
     padding: 10px 14px;
-    border-radius: 2px 20px 20px;
-    background-color: #e9ebef;
+    border-radius: ${(props) =>
+      props.isLeft ? '2px 20px 20px' : '20px 2px 20px 20px'};
+    background-color: ${(props) => (props.isLeft ? '#e9ebef' : '#3396f4')};
     font-size: 14px;
     line-height: 1.5;
-    color: #263747;
-    white-space: pre-wrap;
-    word-break: break-all;
-  }
-
-  @media (max-width: 767px) {
-    & p {
-      font-size: 13px;
-      line-height: 1.4;
-    }
-  }
-`;
-
-const MessageBoxRightContent = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  padding: 4px;
-  contain: content;
-
-  & p {
-    display: inline-flex;
-    max-width: 364px;
-    margin: 0px;
-    padding: 10px 14px;
-    border-radius: 20px 2px 20px 20px;
-    background-color: #3396f4;
-    font-size: 14px;
-    line-height: 1.5;
-    color: #fff;
+    color: ${(props) => (props.isLeft ? '#263747' : '#fff')};
     white-space: pre-wrap;
     word-break: break-all;
   }
@@ -971,7 +929,7 @@ const SendMessageButton = styled.button`
   cursor: pointer;
 `;
 
-const chatTypingTextarea = css`
+const TextArea = styled.textarea`
   overflow: auto;
   overflow-wrap: break-word;
   width: 100%;
@@ -980,7 +938,9 @@ const chatTypingTextarea = css`
   border: none;
   background-color: #eaebef;
   font-family: 'Spoqa Han Sans Neo', 'sans-serif';
-  line-height: 150%;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #263747;
   outline: none;
 
   ::-webkit-scrollbar {
