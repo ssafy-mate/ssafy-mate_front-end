@@ -39,6 +39,12 @@
 
 [**🔗 배포된 웹 서비스로 바로가기 Click !**](https://www.ssafymate.site/) 👈
 
+[**🔗 프론트엔드 저장소 바로가기 Click !**](https://github.com/ssafy-mate/ssafy-mate_front-end) 👈
+
+[**🔗 백엔드(메인 서버) 저장소 바로가기 Click !**](https://github.com/ssafy-mate/ssafy-mate_back-end) 👈
+
+[**🔗 백엔드(채팅 서버) 저장소 바로가기 Click !**](https://github.com/ssafy-mate/ssafy-mate_back-end_with-chatting) 👈
+
 > 새 창 열기 방법 : CTRL+click (on Windows and Linux) | CMD+click (on MacOS)
 
 <br />
