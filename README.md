@@ -240,7 +240,7 @@
 
 ## 💻 실행 방법
 
-### client 실행
+### Client 실행
 
 1. **원격 저장소 복제**
 
@@ -264,4 +264,178 @@ $ yarn install
 
 ```bash
 $ yarn start
+```
+
+<br />
+
+### Main Server 실행
+
+1. **원격 저장소 복제**
+
+```bash
+$ git clone https://github.com/ssafy-mate/ssafy-mate_back-end.git
+```
+
+2. **프로젝터 폴더 > src > main > resources 이동**
+
+```bash
+$ cd ssafy-mate_back-end
+$ cd src
+$ cd main
+$ cd resources
+```
+
+3. **프로젝트 실행을 위한 yml 파일 작성**
+
+- 프로젝트 첫 빌드시 `jpa:hibernate:ddl-auto:create` 로 작성
+- 이후에는 `jpa:hibernate:ddl-auto:none` 으로 변경
+
+```bash
+server:
+  port: [포트번호]
+
+spring:
+  redis:
+    host: [호스트명]
+    port: [포트번호]
+
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    username: [이메일]
+    password: [비밀번호]
+    smtp:
+      socketFactory:
+        class: javax.net.ssl.SSLSocketFactory
+        fallback: 'false'
+        port: '465'
+      starttls:
+        required: 'true'
+        enable: 'true'
+      port: '465'
+      auth: 'true'
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+    defer-datasource-initialization: true
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: [DB설정]
+    username: [사용자명]
+    password: [비밀번호]
+
+jwt:
+  secret: [비밀키]
+```
+
+4. **프로젝트 폴더 루트 경로로 이동**
+
+```bash
+$ cd ssafy-mate_back-end
+```
+
+5. **프로젝트 빌드**
+
+```bash
+$ ./gradlew build
+```
+
+6. **빌드 폴더 이동 후 war 파일 실행**
+
+```bash
+$ cd build
+$ java -jar [파일명].war
+```
+
+<br />
+
+### Chatting Server 실행
+
+1. **원격 저장소 복제**
+
+```bash
+$ git clone https://github.com/ssafy-mate/ssafy-mate_back-end_with-chatting.git
+```
+
+2. **프로젝터 폴더 > src > .env 파일 생성**
+
+```bash
+DB_USER=[DB 사용자명]
+DB_PASSWORD=[DB 비밀번호]
+DB_DATABASE=[DB명]
+PORT=[포트번호]
+```
+
+3. **프로젝터 폴더 > src > ormconfig.ts 파일 생성**
+
+```typescript
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import * as dotenv from 'dotenv';
+import { User } from './src/entities/User';
+import { ChattingRoom } from './src/entities/ChattingRoom';
+import { ChattingHistory } from './src/entities/ChattingHistory';
+
+dotenv.config();
+
+const config: TypeOrmModuleOptions = {
+  type: 'mysql',
+  host: '[호스트명]',
+  port: 3306,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+  entities: [User, ChattingRoom, ChattingHistory],
+  migrations: [__dirname + '/src/migrations/*.ts'],
+  cli: { migrationsDir: 'src/migrations' },
+  autoLoadEntities: true,
+  charset: 'utf8mb4',
+  synchronize: false, // ddl-auto 옵션
+  logging: true,
+  keepConnectionAlive: true,
+};
+
+export = config;
+```
+
+4. **프로젝터 폴더 > src > output > ormconfig.json 파일 생성**
+
+```json
+[
+  {
+    "name": "default",
+    "type": "mysql",
+    "host": "[호스트명]",
+    "port": 3306,
+    "username": "[DB 사용자명]",
+    "password": "[DB 비밀번호]",
+    "database": "[DB 명]",
+    "synchronize": false,
+    "entities": ["entities/*.js"]
+  }
+]
+```
+
+5. **프로젝트 폴더 루트 경로로 이동**
+
+```bash
+$ cd ssafy-mate_back-end_with-chatting
+```
+
+6. **npm 설치**
+
+```bash
+$ npm install
+```
+
+7. **프로젝트 빌드**
+
+```bash
+$ npm run build
 ```
