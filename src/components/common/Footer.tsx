@@ -91,7 +91,11 @@ const Footer: React.FC<FooterProps> = ({ offMarginTop }) => {
             >
               <GitHubIcon css={snsIcon} />
             </SnsItem>
-            <SnsItem href="#" target="_blank" rel="noopener noreferrer">
+            <SnsItem
+              href="https://youtu.be/0q4h3c69dXg"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               <YouTubeIcon css={snsIcon} />
             </SnsItem>
             <SnsItem href="#" target="_blank" rel="noopener noreferrer">

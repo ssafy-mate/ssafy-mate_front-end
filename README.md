@@ -39,6 +39,14 @@
 
 [**🔗 배포된 웹 서비스로 바로가기 Click !**](https://www.ssafymate.site/) 👈
 
+[**🔗 서비스 소개 UCC 영상 바로가기 Click !**](https://youtu.be/0q4h3c69dXg) 👈
+
+[**🔗 프론트엔드 저장소 바로가기 Click !**](https://github.com/ssafy-mate/ssafy-mate_front-end) 👈
+
+[**🔗 백엔드(메인 서버) 저장소 바로가기 Click !**](https://github.com/ssafy-mate/ssafy-mate_back-end) 👈
+
+[**🔗 백엔드(채팅 서버) 저장소 바로가기 Click !**](https://github.com/ssafy-mate/ssafy-mate_back-end_with-chatting) 👈
+
 > 새 창 열기 방법 : CTRL+click (on Windows and Linux) | CMD+click (on MacOS)
 
 <br />
@@ -58,6 +66,8 @@
 | `v1.0.6` | - 채팅 페이지 프로필 이미지 CSS 중첩 오류 수정<br />- 채팅 페이지의 상대방 프로필 링크 UI 개선<br /> - 홈 페이지의 모바일 서비스 소개 부분 PC, Mobile 이미지 스타일링 수정<br /> - 공고 페이지 필터 옵션 변경시 페이지 설정 미초기화 오류 수정<br />- 교육생 공고 페이지 공유하기, 메시지 보내기 버튼 UI 수정<br /> - 팀 생성 및 수정 텍스트 입력 폼 입력 텍스트 길이 제한 추가 |   22.02.14.   |
 | `v1.1.0` | - 채팅 페이지 사용자 접속 ON/OFF 표시 기능 추가<br />- 프로젝트 트랙 소개 배너 이미지 추가<br /> - 받은 제안 및 보낸 요청 목록 시간순 정렬 적용 및 UI 수정<br /> - 헤더 마이 메뉴 창 UI 수정<br />- 팀 소개, 자기소개 입력 창 오토사이즈 오류 수정<br /> - 기술 스택 입력 및 수정 시 엔터키 인식 오류 수정                                                                      |   22.02.15.   |
 | `v1.1.1` | - 소켓 서버 연결 오류 해결                                                                                                                                                                                                                                                                                                                                                      |   22.02.15.   |
+| `v1.2.0` | - 받은 제안 및 보낸 요청 항목 삭제 기능 추가<br />- 채팅 목록 리스트에서 선택된 채팅방 표시 기능 추가<br />- 받은 제안 및 보낸 요청 페이지 UI 개선<br />- 기술 스택 선택 옵션 추가<br />- 모집 마감 토글 버튼 클릭 시 페이지네이션 미초기화 오류 수정                                                                                                                           |   22.02.17.   |
+| `v1.2.1` | - 푸터 유튜브 아이콘에 서비스 소개 UCC 영상 링크 연결                                                                                                                                                                                                                                                                                                                           |   22.02.20.   |
 
 <br />
 
@@ -233,7 +243,7 @@
 
 ## 💻 실행 방법
 
-### client 실행
+### Client 실행
 
 1. **원격 저장소 복제**
 
@@ -257,4 +267,178 @@ $ yarn install
 
 ```bash
 $ yarn start
+```
+
+<br />
+
+### Main Server 실행
+
+1. **원격 저장소 복제**
+
+```bash
+$ git clone https://github.com/ssafy-mate/ssafy-mate_back-end.git
+```
+
+2. **프로젝터 폴더 > src > main > resources 이동**
+
+```bash
+$ cd ssafy-mate_back-end
+$ cd src
+$ cd main
+$ cd resources
+```
+
+3. **프로젝트 실행을 위한 yml 파일 작성**
+
+- 프로젝트 첫 빌드시 `jpa:hibernate:ddl-auto:create` 로 작성
+- 이후에는 `jpa:hibernate:ddl-auto:none` 으로 변경
+
+```bash
+server:
+  port: [포트번호]
+
+spring:
+  redis:
+    host: [호스트명]
+    port: [포트번호]
+
+  mail:
+    host: smtp.gmail.com
+    port: 465
+    username: [이메일]
+    password: [비밀번호]
+    smtp:
+      socketFactory:
+        class: javax.net.ssl.SSLSocketFactory
+        fallback: 'false'
+        port: '465'
+      starttls:
+        required: 'true'
+        enable: 'true'
+      port: '465'
+      auth: 'true'
+
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+        show_sql: true
+    defer-datasource-initialization: true
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: [DB설정]
+    username: [사용자명]
+    password: [비밀번호]
+
+jwt:
+  secret: [비밀키]
+```
+
+4. **프로젝트 폴더 루트 경로로 이동**
+
+```bash
+$ cd ssafy-mate_back-end
+```
+
+5. **프로젝트 빌드**
+
+```bash
+$ ./gradlew build
+```
+
+6. **빌드 폴더 이동 후 war 파일 실행**
+
+```bash
+$ cd build
+$ java -jar [파일명].war
+```
+
+<br />
+
+### Chatting Server 실행
+
+1. **원격 저장소 복제**
+
+```bash
+$ git clone https://github.com/ssafy-mate/ssafy-mate_back-end_with-chatting.git
+```
+
+2. **프로젝터 폴더 > src > .env 파일 생성**
+
+```bash
+DB_USER=[DB 사용자명]
+DB_PASSWORD=[DB 비밀번호]
+DB_DATABASE=[DB명]
+PORT=[포트번호]
+```
+
+3. **프로젝터 폴더 > src > ormconfig.ts 파일 생성**
+
+```typescript
+import { TypeOrmModuleOptions } from '@nestjs/typeorm';
+import * as dotenv from 'dotenv';
+import { User } from './src/entities/User';
+import { ChattingRoom } from './src/entities/ChattingRoom';
+import { ChattingHistory } from './src/entities/ChattingHistory';
+
+dotenv.config();
+
+const config: TypeOrmModuleOptions = {
+  type: 'mysql',
+  host: '[호스트명]',
+  port: 3306,
+  username: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE,
+  entities: [User, ChattingRoom, ChattingHistory],
+  migrations: [__dirname + '/src/migrations/*.ts'],
+  cli: { migrationsDir: 'src/migrations' },
+  autoLoadEntities: true,
+  charset: 'utf8mb4',
+  synchronize: false, // ddl-auto 옵션
+  logging: true,
+  keepConnectionAlive: true,
+};
+
+export = config;
+```
+
+4. **프로젝터 폴더 > src > output > ormconfig.json 파일 생성**
+
+```json
+[
+  {
+    "name": "default",
+    "type": "mysql",
+    "host": "[호스트명]",
+    "port": 3306,
+    "username": "[DB 사용자명]",
+    "password": "[DB 비밀번호]",
+    "database": "[DB 명]",
+    "synchronize": false,
+    "entities": ["entities/*.js"]
+  }
+]
+```
+
+5. **프로젝트 폴더 루트 경로로 이동**
+
+```bash
+$ cd ssafy-mate_back-end_with-chatting
+```
+
+6. **npm 설치**
+
+```bash
+$ npm install
+```
+
+7. **프로젝트 빌드**
+
+```bash
+$ npm run build
 ```
