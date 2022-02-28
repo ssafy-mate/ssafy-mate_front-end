@@ -7,22 +7,28 @@ interface PcBoxProps {
 
 const PcBox: React.FC<PcBoxProps> = ({ imgUrl, isVisible }) => {
   return (
-    <Box className={isVisible ? 'scroll' : ''}>
-      <div className="pc">
-        <div className="screen">
-          <div
-            className="viewport"
-            style={{
-              backgroundImage: `url(${imgUrl})`,
-            }}
-          ></div>
-        </div>
-        <div className="logo"></div>
-        <div className="leg"></div>
-        <div className="foot"></div>
-      </div>
-      <Text>* 상단의 모니터 화면에 마우스를 올려보세요.</Text>
-    </Box>
+    <>
+      {isVisible ? (
+        <Box>
+          <div className="pc">
+            <div className="pc__screen">
+              <div
+                className="pc__viewport"
+                style={{
+                  backgroundImage: `url(${imgUrl})`,
+                }}
+              />
+            </div>
+            <div className="pc__logo" />
+            <div className="pc__leg" />
+            <div className="pc__foot" />
+          </div>
+          <Text>* 상단의 모니터 화면에 마우스를 올려보세요.</Text>
+        </Box>
+      ) : (
+        ''
+      )}
+    </>
   );
 };
 
@@ -30,22 +36,19 @@ const Box = styled.div`
   opacity: 0;
   width: 100%;
   max-width: 560px;
+  animation: 0.6s ease-in-out 0.6s 1 normal forwards running fadeinBottom;
 
-  &.scroll {
-    animation: 0.6s ease-in-out 0.6s 1 normal forwards running fadeinBottom;
-  }
-
-  .screen {
+  .pc__screen {
     position: relative;
     width: 100%;
-    background: #ededed;
     border: 2px solid #cecece;
     border-bottom: 2px solid #878787;
     border-radius: 3% 3% 0 0 / 5% 5% 0 0;
     box-sizing: border-box;
+    background-color: #ededed;
   }
 
-  .screen:before {
+  .pc__screen:before {
     content: 'SAMSUNG';
     display: block;
     margin-bottom: 2px;
@@ -57,7 +60,7 @@ const Box = styled.div`
     text-align: center;
   }
 
-  .logo {
+  .pc__logo {
     position: relative;
     width: 100%;
     border: 2px solid #cecece;
@@ -67,13 +70,13 @@ const Box = styled.div`
     background: linear-gradient(90deg, #acacac, #acacac);
   }
 
-  .logo:before {
+  .pc__logo:before {
     content: '';
     display: block;
     padding-top: 9%;
   }
 
-  .viewport {
+  .pc__viewport {
     position: absolute;
     top: 0;
     right: 0;
@@ -83,13 +86,13 @@ const Box = styled.div`
     background-color: #333;
   }
 
-  .leg {
+  .pc__leg {
     position: relative;
     width: 20%;
     margin: 0 auto;
   }
 
-  .leg:before {
+  .pc__leg:before {
     content: '';
     display: block;
     padding-top: 46%;
@@ -103,14 +106,14 @@ const Box = styled.div`
     );
   }
 
-  .foot {
+  .pc__foot {
     position: relative;
     width: 20%;
     margin: 0 auto;
     perspective: 180px;
   }
 
-  .foot:before {
+  .pc__foot:before {
     content: '';
     display: block;
     padding-top: 40%;
@@ -132,7 +135,7 @@ const Box = styled.div`
     transform-origin: center top;
   }
 
-  .pc .viewport {
+  .pc .pc__viewport {
     overflow: hidden;
     background-position: 0 0;
     background-size: 100% auto;
@@ -140,11 +143,11 @@ const Box = styled.div`
     cursor: pointer;
   }
 
-  .pc:hover .viewport {
+  .pc:hover .pc__viewport {
     background-position: 0 100%;
   }
 
-  .pc .viewport:after {
+  .pc .pc__viewport:after {
     content: '';
     position: absolute;
     top: 0;
@@ -162,14 +165,14 @@ const Box = styled.div`
   @media (max-width: 991px) {
     margin: 0 auto;
 
-    .screen:before {
+    .pc__screen:before {
       font-size: 10px;
     }
   }
   @media (max-width: 575px) {
     max-width: 420px;
 
-    .screen:before {
+    .pc__screen:before {
       font-size: 8px;
     }
   }
