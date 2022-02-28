@@ -42,9 +42,14 @@ const MobileServiceIntroSection: React.FC<MobileServiceIntroSectionProps> = ({
         </Contents>
         <MobilePhone className={isVisible ? 'scroll' : ''} reversed={reversed}>
           <MobilePhoneInner>
-            <MobilePhoneContents src={imgUrl} alt={`${headText} 이미지`} />
+            <MobilePhoneContents
+              src={imgUrl}
+              loading="lazy"
+              alt={`${headText} 이미지`}
+            />
             <MobilePhoneFrame
               src="/images/home/iphone-frame.png"
+              loading="lazy"
               alt="아이폰 프레임"
             />
           </MobilePhoneInner>
