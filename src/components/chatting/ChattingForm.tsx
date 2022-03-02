@@ -297,7 +297,7 @@ const ChattingForm: React.FC = () => {
 
   return (
     <Contianer>
-      <ChatRoomListSidebar />
+      <ChatRoomListSidebar roomData={roomData as ChatRoomType[]} />
       <ChatRoomSection>
         <SwipeableDrawer
           sx={{

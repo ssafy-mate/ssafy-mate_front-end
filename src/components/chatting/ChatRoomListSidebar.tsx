@@ -1,7 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import useSWR from 'swr';
-
 import ChatRoomItem from './ChatRoomItem';
 
 /** @jsxImportSource @emotion/react */
@@ -10,13 +8,14 @@ import styled from '@emotion/styled';
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 
 import { ChatRoomType } from '../../types/messageTypes';
-import { fetcherGet } from '../../utils/fetcher';
 import useUserIdName from '../../hooks/useUserIdName';
-import useToken from '../../hooks/useToken';
 import useSocket from '../../hooks/useSocket';
 
-const ChatRoomListSidebar = () => {
-  const myToken = useToken();
+interface RoomDataProps {
+  roomData: ChatRoomType[];
+}
+
+const ChatRoomListSidebar: React.FC<RoomDataProps> = ({ roomData }) => {
   const myData = useUserIdName();
   const myUserId = myData[0];
 
@@ -28,14 +27,6 @@ const ChatRoomListSidebar = () => {
       setOnlineList(data);
     });
   }, [socket, onlineList]);
-
-  const {
-    data: roomData,
-    error: roomError,
-    mutate: mutateRoom,
-  } = useSWR<ChatRoomType[]>(`/api/chats/rooms/${myUserId}`, (url) =>
-    fetcherGet(url, myToken),
-  );
 
   return (
     <Sidebar>
