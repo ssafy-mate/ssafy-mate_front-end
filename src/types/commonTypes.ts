@@ -19,7 +19,7 @@ export interface HomeBannerCardData {
   head: string;
   subHead: string;
   descriptions: string[];
-  imgUrl: string;
+  videoUrl: string;
 }
 
 export interface HomeBannderCardProps extends HomeBannerCardData {}
