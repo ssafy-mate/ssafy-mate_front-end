@@ -19,7 +19,6 @@ import styled from '@emotion/styled';
 import SendIcon from '@mui/icons-material/Send';
 import CommentIcon from '@mui/icons-material/Comment';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import ChatIcon from '@mui/icons-material/Chat';
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { Avatar } from '@mui/material';
@@ -42,7 +41,7 @@ import useSocket from '../../hooks/useSocket';
 import useToken from '../../hooks/useToken';
 import useTextArea from '../../hooks/useTextArea';
 import useUserIdName from '../../hooks/useUserIdName';
-import ChatRoomItem from './ChatRoomItem';
+import ChatRoomListSidebar from './ChatRoomListSidebar';
 
 const PAGE_SIZE = 20;
 const DRAWER_WIDTH = 250;
@@ -298,31 +297,7 @@ const ChattingForm: React.FC = () => {
 
   return (
     <Contianer>
-      <ChatRoomListSidebar>
-        <ChatRoomListWrapper>
-          <ChatRoomListHeader>
-            <ChatIcon />
-            <ChatRoomListHead>채팅 목록</ChatRoomListHead>
-          </ChatRoomListHeader>
-          {roomData?.map((room: ChatRoomType) => {
-            const isOnline = onlineList.includes(room.userId);
-            return (
-              <ChatRoomItem
-                key={room.roomId}
-                myId={Number(myUserId)}
-                roomId={room.roomId}
-                userId={room.userId}
-                userName={room.userName}
-                profileImgUrl={room.profileImgUrl}
-                content={room.content}
-                sentTime={room.sentTime}
-                userEmail={room.userEmail}
-                isOnline={isOnline}
-              />
-            );
-          })}
-        </ChatRoomListWrapper>
-      </ChatRoomListSidebar>
+      <ChatRoomListSidebar />
       <ChatRoomSection>
         <SwipeableDrawer
           sx={{
@@ -533,32 +508,6 @@ const Contianer = styled.div`
   width: 100%;
   height: calc(100vh - 46px);
   background-color: #ffffff;
-`;
-
-const ChatRoomListSidebar = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 300px;
-  height: 100%;
-  border-left: 1px solid #dfdfdf;
-  box-sizing: border-box;
-  background-color: #fff;
-
-  @media (max-width: 767px) {
-    display: none;
-    width: 100%;
-  }
-`;
-
-const ChatRoomListWrapper = styled.ul`
-  overflow-x: hidden;
-  box-sizing: border-box;
-
-  @media (max-width: 767px) {
-    display: none;
-    width: 100%;
-  }
 `;
 
 const ChatRoomSection = styled.section`
@@ -881,20 +830,6 @@ const ProfileImg = styled(Avatar)`
   }
 `;
 
-const ChatRoomListHeader = styled.div`
-  display: flex;
-  align-items: center;
-  height: 64px;
-  padding: 0 20px;
-  box-sizing: border-box;
-  border-bottom: 1px solid #dfdfdf;
-
-  & svg {
-    color: #263747;
-    margin-right: 8px;
-  }
-`;
-
 const listItemCss = css`
   display: flex;
   justify-content: space-between;
@@ -916,12 +851,6 @@ const listItemCss = css`
       color: #868b94;
     }
   }
-`;
-
-const ChatRoomListHead = styled.h1`
-  font-size: 16px;
-  font-weight: 500;
-  color: #263747;
 `;
 
 const SendMessageButton = styled.button`
