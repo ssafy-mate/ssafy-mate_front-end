@@ -1,11 +1,10 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { push } from 'connected-react-router';
 
 import { useDispatch } from 'react-redux';
 
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import Dialog from '@mui/material/Dialog';
@@ -82,84 +81,58 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
 
   return (
     <>
-      {trackOptions ? (
-        <>
-          <Card
-            onClick={handleClickCardItem}
-            css={{ backgroundColor: hexColorCode }}
-          >
-            <CardImg
-              srcSet={`
-                ${smallImg.imgUrl} ${smallImg.size}w, 
-                ${mediumImg.imgUrl} ${mediumImg.size}w,
-                ${largeImg.imgUrl} ${largeImg.size}w,
-              `}
-              sizes="
-                (max-width: 575px) 100px, 
-                (max-width: 991px) 140px,
-              "
-              src={largeImg.imgUrl}
-              alt={`${project} 이미지`}
-            />
-            <CardTitle>
-              {project}
-              <br />팀 빌딩 바로가기
-            </CardTitle>
-          </Card>
-          <ProjectTrackDialog
-            id="ringtone-menu"
-            keepMounted
-            open={openProjectTrackDialog}
-            project={project}
-            selectedProjectTrack={selectedProjectTrack}
-            pageUrl={pageUrl}
-            hexColorCode={hexColorCode}
-            trackOptions={trackOptions}
-            onClose={handleClose}
-          />
-        </>
-      ) : (
-        <>
-          <Card
-            onClick={handleClickOpenBlockDialog}
-            css={{ backgroundColor: hexColorCode }}
-          >
-            <CardImg
-              srcSet={`
-                ${smallImg.imgUrl} ${smallImg.size}w, 
-                ${mediumImg.imgUrl} ${mediumImg.size}w,
-                ${largeImg.imgUrl} ${largeImg.size}w,
-              `}
-              sizes="
-              (max-width: 575px) 100px, 
-              (max-width: 991px) 140px,
-              "
-              src={largeImg.imgUrl}
-              alt={`${project} 이미지`}
-            />
-            <CardTitle>
-              {project}
-              <br />팀 빌딩 바로가기
-            </CardTitle>
-          </Card>
-          <Dialog
-            open={openBlockDialog}
-            onClose={onCloseBlockDialog}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
-          >
-            <BlockDialogTitle id="alert-dialog-title">
-              해당 프로젝트 팀 빌딩 기간이 아닙니다.
-            </BlockDialogTitle>
-            <DialogContent>
-              <BlockDialogContentText id="alert-dialog-description">
-                해당 프로젝트 팀 빌딩 기간에 다시 한번 싸피 메이트를 이용해
-                주세요.
-              </BlockDialogContentText>
-            </DialogContent>
-          </Dialog>
-        </>
-      )}
+      <Card
+        onClick={
+          trackOptions === undefined
+            ? handleClickCardItem
+            : handleClickOpenBlockDialog
+        }
+        css={{ backgroundColor: hexColorCode }}
+      >
+        <CardImg
+          srcSet={`
+            ${smallImg.imgUrl} ${smallImg.size}w, 
+            ${mediumImg.imgUrl} ${mediumImg.size}w,
+            ${largeImg.imgUrl} ${largeImg.size}w,
+          `}
+          sizes="
+            (max-width: 575px) 100px, 
+            (max-width: 991px) 140px,
+          "
+          src={largeImg.imgUrl}
+          alt={`${project} 이미지`}
+        />
+        <CardTitle>
+          {project}
+          <br />팀 빌딩 바로가기
+        </CardTitle>
+      </Card>
+      <ProjectTrackDialog
+        id="ringtone-menu"
+        keepMounted
+        open={openProjectTrackDialog}
+        project={project}
+        selectedProjectTrack={selectedProjectTrack}
+        pageUrl={pageUrl}
+        hexColorCode={hexColorCode}
+        trackOptions={trackOptions}
+        onClose={handleClose}
+      />
+      <Dialog
+        open={openBlockDialog}
+        onClose={onCloseBlockDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <BlockDialogTitle id="alert-dialog-title">
+          해당 프로젝트 팀 빌딩 기간이 아닙니다.
+        </BlockDialogTitle>
+        <DialogContent>
+          <BlockDialogContentText id="alert-dialog-description">
+            해당 프로젝트 팀 빌딩 기간에 다시 한번 싸피 메이트를 이용해 주세요.
+          </BlockDialogContentText>
+        </DialogContent>
+      </Dialog>
       {openWarningAlert && (
         <WarningAlertWrapper
           open={openWarningAlert}
