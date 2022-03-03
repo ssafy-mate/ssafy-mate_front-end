@@ -2,6 +2,11 @@ import { AutocompleteGetTagProps } from '@mui/material';
 
 export type ProjectTrack = string;
 
+export interface Img {
+  imgUrl: string;
+  size: number;
+}
+
 export interface TechStack {
   techStackId: number;
   techStackName: string;
@@ -47,12 +52,12 @@ export interface ProjectLinkCardType {
   projectId: number;
   project: string;
   pageUrl: string;
-  imgUrl: string;
+  smallImg: Img;
+  mediumImg: Img;
+  largeImg: Img;
   hexColorCode: string;
   trackOptions?: string[];
 }
-
-export interface ProjectLinkCardProps extends ProjectLinkCardType {}
 
 export interface ErrorResponse {
   status: number;

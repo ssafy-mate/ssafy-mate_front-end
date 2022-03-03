@@ -16,18 +16,22 @@ import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
 import type { ProjectTrack } from '../../types/commonTypes';
-import { ProjectLinkCardProps } from '../../types/commonTypes';
+import { ProjectLinkCardType } from '../../types/commonTypes';
 
 import useToken from '../../hooks/useToken';
 import useProjectTrack from '../../hooks/useProjectTrack';
 
 import ProjectTrackDialog from './ProjectTrackDialog';
 
+interface ProjectLinkCardProps extends ProjectLinkCardType {}
+
 const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
   projectId,
   project,
   pageUrl,
-  imgUrl,
+  smallImg,
+  mediumImg,
+  largeImg,
   hexColorCode,
   trackOptions,
 }) => {
@@ -84,7 +88,19 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
             onClick={handleClickCardItem}
             css={{ backgroundColor: hexColorCode }}
           >
-            <CardImg src={imgUrl} alt={`${project} 이미지`} />
+            <CardImg
+              srcSet={`
+                ${smallImg.imgUrl} ${smallImg.size}w, 
+                ${mediumImg.imgUrl} ${mediumImg.size}w,
+                ${largeImg.imgUrl} ${largeImg.size}w,
+              `}
+              sizes="
+                (max-width: 575px) 100px, 
+                (max-width: 991px) 140px,
+              "
+              src={largeImg.imgUrl}
+              alt={`${project} 이미지`}
+            />
             <CardTitle>
               {project}
               <br />팀 빌딩 바로가기
@@ -108,7 +124,19 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
             onClick={handleClickOpenBlockDialog}
             css={{ backgroundColor: hexColorCode }}
           >
-            <CardImg src={imgUrl} alt={`${project} 이미지`} />
+            <CardImg
+              srcSet={`
+                ${smallImg.imgUrl} ${smallImg.size}w, 
+                ${mediumImg.imgUrl} ${mediumImg.size}w,
+                ${largeImg.imgUrl} ${largeImg.size}w,
+              `}
+              sizes="
+              (max-width: 575px) 100px, 
+              (max-width: 991px) 140px,
+              "
+              src={largeImg.imgUrl}
+              alt={`${project} 이미지`}
+            />
             <CardTitle>
               {project}
               <br />팀 빌딩 바로가기
@@ -186,14 +214,17 @@ const Card = styled.div`
 const CardImg = styled.img`
   display: block;
   width: 240px;
+  height: 240px;
   margin: 0 auto 36px;
 
   @media (max-width: 991px) {
     width: 140px;
+    height: 140px;
     margin: 0 0 0 12px;
   }
   @media (max-width: 575px) {
     width: 100px;
+    height: 100px;
   }
 `;
 

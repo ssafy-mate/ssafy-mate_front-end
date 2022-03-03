@@ -11,14 +11,36 @@ const PROJECT_LINK_CARD_LIST: ProjectLinkCardType[] = [
     projectId: 1,
     project: '공통 프로젝트',
     pageUrl: '/projects/common/teams',
-    imgUrl: '/images/projects/common-project_link.png',
+    smallImg: {
+      imgUrl: '/images/home/common-project_link-img_small.png',
+      size: 240,
+    },
+    mediumImg: {
+      imgUrl: '/images/home/common-project_link-img_medium.png',
+      size: 320,
+    },
+    largeImg: {
+      imgUrl: '/images/home/common-project_link-img_large.png',
+      size: 512,
+    },
     hexColorCode: '#3396f4',
   },
   {
     projectId: 2,
     project: '특화 프로젝트',
     pageUrl: '/projects/specialization/teams',
-    imgUrl: '/images/projects/specialization-project_link.png',
+    smallImg: {
+      imgUrl: '/images/home/specialization-project_link-img_small.png',
+      size: 240,
+    },
+    mediumImg: {
+      imgUrl: '/images/home/specialization-project_link-img_medium.png',
+      size: 320,
+    },
+    largeImg: {
+      imgUrl: '/images/home/specialization-project_link-img_large.png',
+      size: 512,
+    },
     hexColorCode: '#84c0f8',
     trackOptions: [
       '인공지능(영상)',
@@ -34,7 +56,18 @@ const PROJECT_LINK_CARD_LIST: ProjectLinkCardType[] = [
     projectId: 3,
     project: '자율 프로젝트',
     pageUrl: '/projects/autonomy/teams',
-    imgUrl: '/images/projects/autonomy-project_link.png',
+    smallImg: {
+      imgUrl: '/images/home/autonomy-project_link-img_small.png',
+      size: 240,
+    },
+    mediumImg: {
+      imgUrl: '/images/home/autonomy-project_link-img_medium.png',
+      size: 320,
+    },
+    largeImg: {
+      imgUrl: '/images/home/autonomy-project_link-img_large.png',
+      size: 512,
+    },
     hexColorCode: '#385a7b',
   },
 ];
@@ -49,7 +82,9 @@ const ProjectsSection: React.FC = () => {
             projectId={projectLinkCardData.projectId}
             project={projectLinkCardData.project}
             pageUrl={projectLinkCardData.pageUrl}
-            imgUrl={projectLinkCardData.imgUrl}
+            smallImg={projectLinkCardData.smallImg}
+            mediumImg={projectLinkCardData.mediumImg}
+            largeImg={projectLinkCardData.largeImg}
             hexColorCode={projectLinkCardData.hexColorCode}
             trackOptions={projectLinkCardData.trackOptions}
           />
