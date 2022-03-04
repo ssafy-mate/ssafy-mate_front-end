@@ -11,6 +11,15 @@ class ChatService {
     const response = await axiosSocketInstance.post(`/api/chats`, params);
     return response;
   }
+
+  public static async getChatRoomList(token: string | null, userId: number) {
+    const response = await axiosInstance.get(`/api/chats/rooms/${userId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    return response;
+  }
 }
 
 export default ChatService;

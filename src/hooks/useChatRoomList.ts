@@ -1,0 +1,25 @@
+import { AxiosResponse, AxiosError } from 'axios';
+
+import { useQuery } from 'react-query';
+
+import { ErrorResponse } from '../types/commonTypes';
+import { ChatRoomType } from '../types/messageTypes';
+
+import ChatService from '../services/ChatService';
+
+const useChatRoomList = (token: string | null, myUserId: number) => {
+  const queryFn = () => ChatService.getChatRoomList(token, myUserId);
+  const { isLoading, data, isError, error } = useQuery<
+    AxiosResponse<ChatRoomType[]>,
+    AxiosError<ErrorResponse>
+  >([myUserId], queryFn, { keepPreviousData: true });
+
+  return {
+    isLoading,
+    roomData: data?.data,
+    isError,
+    errorMessage: error?.response?.data.message,
+  };
+};
+
+export default useChatRoomList;

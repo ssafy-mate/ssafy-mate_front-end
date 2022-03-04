@@ -42,6 +42,7 @@ import useToken from '../../hooks/useToken';
 import useTextArea from '../../hooks/useTextArea';
 import useUserIdName from '../../hooks/useUserIdName';
 import ChatRoomListSidebar from './ChatRoomListSidebar';
+import useChatRoomList from '../../hooks/useChatRoomList';
 
 const PAGE_SIZE = 20;
 const DRAWER_WIDTH = 250;
@@ -62,8 +63,8 @@ const ChattingForm: React.FC = () => {
     query: '(max-width: 575px)',
   });
 
-  const myUserId = myData[0];
-  const myUserName = myData[1];
+  const myUserId: number | null = myData[0] as number;
+  const myUserName: string | null = myData[1] as string;
 
   const param = new URLSearchParams(location.search);
   const roomId: string | null = param.get('roomId');
