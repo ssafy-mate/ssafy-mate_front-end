@@ -6,7 +6,6 @@ import styled from '@emotion/styled';
 
 import Pagination from '@mui/material/Pagination';
 import Stack from '@mui/material/Stack';
-import { useEffect } from 'react';
 
 interface PagenationProps {
   totalPage: number;

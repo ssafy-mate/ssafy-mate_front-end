@@ -6,7 +6,7 @@ const HomeBannerCard: React.FC<HomeBannderCardProps> = ({
   head,
   subHead,
   descriptions,
-  imgUrl,
+  videoUrl,
 }) => {
   return (
     <BannerCard>
@@ -17,9 +17,11 @@ const HomeBannerCard: React.FC<HomeBannderCardProps> = ({
           <Description key={index}>{description}</Description>
         ))}
       </InfoWrapper>
-      <ImgWrapper>
-        <Img src={imgUrl} alt={`${subHead} 이미지`} />
-      </ImgWrapper>
+      <VideoWrapper>
+        <Video autoPlay loop muted>
+          <source src={videoUrl} type="video/mp4" />
+        </Video>
+      </VideoWrapper>
     </BannerCard>
   );
 };
@@ -103,7 +105,7 @@ const Description = styled.p`
   }
 `;
 
-const ImgWrapper = styled.div`
+const VideoWrapper = styled.div`
   height: 280px;
 
   @media (max-width: 767px) {
@@ -111,13 +113,16 @@ const ImgWrapper = styled.div`
   }
 `;
 
-const Img = styled.img`
+const Video = styled.video`
+  width: 280px;
   height: 280px;
 
   @media (max-width: 767px) {
+    width: 220px;
     height: 220px;
   }
   @media (max-width: 575px) {
+    width: 180px;
     height: 180px;
   }
 `;
