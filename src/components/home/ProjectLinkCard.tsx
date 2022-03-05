@@ -91,9 +91,9 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
       >
         <CardImg
           srcSet={`
-            ${smallImg.imgUrl} ${smallImg.size}w, 
-            ${mediumImg.imgUrl} ${mediumImg.size}w,
-            ${largeImg.imgUrl} ${largeImg.size}w,
+            ${smallImg.imgUrl} ${smallImg.width}w, 
+            ${mediumImg.imgUrl} ${mediumImg.width}w,
+            ${largeImg.imgUrl} ${largeImg.width}w,
           `}
           sizes="
             (max-width: 575px) 100px, 

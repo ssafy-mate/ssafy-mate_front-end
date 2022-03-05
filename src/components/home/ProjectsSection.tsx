@@ -13,15 +13,15 @@ const PROJECT_LINK_CARD_LIST: ProjectLinkCardType[] = [
     pageUrl: '/projects/common/teams',
     smallImg: {
       imgUrl: '/images/home/common-project_link-img_small.png',
-      size: 240,
+      width: 240,
     },
     mediumImg: {
       imgUrl: '/images/home/common-project_link-img_medium.png',
-      size: 320,
+      width: 320,
     },
     largeImg: {
       imgUrl: '/images/home/common-project_link-img_large.png',
-      size: 512,
+      width: 512,
     },
     hexColorCode: '#3396f4',
   },
@@ -31,15 +31,15 @@ const PROJECT_LINK_CARD_LIST: ProjectLinkCardType[] = [
     pageUrl: '/projects/specialization/teams',
     smallImg: {
       imgUrl: '/images/home/specialization-project_link-img_small.png',
-      size: 240,
+      width: 240,
     },
     mediumImg: {
       imgUrl: '/images/home/specialization-project_link-img_medium.png',
-      size: 320,
+      width: 320,
     },
     largeImg: {
       imgUrl: '/images/home/specialization-project_link-img_large.png',
-      size: 512,
+      width: 512,
     },
     hexColorCode: '#84c0f8',
     trackOptions: [
@@ -58,15 +58,15 @@ const PROJECT_LINK_CARD_LIST: ProjectLinkCardType[] = [
     pageUrl: '/projects/autonomy/teams',
     smallImg: {
       imgUrl: '/images/home/autonomy-project_link-img_small.png',
-      size: 240,
+      width: 240,
     },
     mediumImg: {
       imgUrl: '/images/home/autonomy-project_link-img_medium.png',
-      size: 320,
+      width: 320,
     },
     largeImg: {
       imgUrl: '/images/home/autonomy-project_link-img_large.png',
-      size: 512,
+      width: 512,
     },
     hexColorCode: '#385a7b',
   },

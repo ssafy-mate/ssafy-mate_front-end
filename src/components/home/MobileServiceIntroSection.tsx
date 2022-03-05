@@ -2,13 +2,16 @@ import { useRef } from 'react';
 
 import styled from '@emotion/styled';
 
+import { Img } from '../../types/commonTypes';
+
 import useOnScreen from '../../hooks/useOnScreen';
 
 interface MobileServiceIntroSectionProps {
   headText: string;
   subHeadText: string;
   descriptionText: string;
-  imgUrl: string;
+  smallImg: Img;
+  mediumImg: Img;
   reversed: boolean;
 }
 
@@ -24,7 +27,8 @@ const MobileServiceIntroSection: React.FC<MobileServiceIntroSectionProps> = ({
   headText,
   subHeadText,
   descriptionText,
-  imgUrl,
+  mediumImg,
+  smallImg,
   reversed,
 }) => {
   const sectionRef = useRef(null);
@@ -43,7 +47,14 @@ const MobileServiceIntroSection: React.FC<MobileServiceIntroSectionProps> = ({
         <MobilePhone className={isVisible ? 'scroll' : ''} reversed={reversed}>
           <MobilePhoneInner>
             <MobilePhoneContents
-              src={imgUrl}
+              srcSet={`
+                ${smallImg.imgUrl} ${smallImg.width}w,
+                ${mediumImg.imgUrl} ${mediumImg.width}w,
+              `}
+              sizes="
+                (max-width: 575px) 300px,
+              "
+              src={mediumImg.imgUrl}
               loading="lazy"
               alt={`${headText} 이미지`}
             />
@@ -251,7 +262,7 @@ const MobilePhoneFrame = styled.img`
 const MobilePhoneContents = styled.img`
   position: absolute;
   top: 11.5%;
-  left: 21.83%;
+  left: 21.76%;
   width: 56.34%;
   height: auto;
   border-radius: 20px;

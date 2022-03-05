@@ -4,7 +4,7 @@ export type ProjectTrack = string;
 
 export interface Img {
   imgUrl: string;
-  size: number;
+  width: number;
 }
 
 export interface TechStack {
@@ -57,6 +57,15 @@ export interface ProjectLinkCardType {
   largeImg: Img;
   hexColorCode: string;
   trackOptions?: string[];
+}
+
+export interface MobileServiceIntroductionType {
+  id: number;
+  headText: string;
+  subHeadText: string;
+  descriptionText: string;
+  smallImg: Img;
+  mediumImg: Img;
 }
 
 export interface ErrorResponse {
