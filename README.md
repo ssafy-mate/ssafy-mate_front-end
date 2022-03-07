@@ -175,6 +175,10 @@
 
 > Lighthouse를 통한 측정 기준
 
+<img src="./readme_assets/google-search.png" alt="'싸피 메이트' 구글 검색 모습" width="500px" />
+
+> 구글에 '싸피 메이트' 검색 시 최상단에 위치
+
 <br />
 
 ### Headings Map
@@ -196,6 +200,8 @@
 - gif 파일들을 mp4 파일들로 교체
 
 > 위의 작업들을 통해 Performance Score 62점 → 81점 으로 개선, 첫 페이지 렌더링 속도 3.5초 → 1.4초로 개선
+
+<br />
 
 <div id="8"></div>
 
