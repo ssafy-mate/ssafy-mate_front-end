@@ -219,11 +219,13 @@ const UserInfoSection: React.FC = () => {
               </ProfileImgWrapper>
               <NameWrapper>
                 <Row>
-                  <UserLabel
-                    userId={userData.userId}
-                    userName={userData.userName}
-                    offProfileMenu={true}
-                  />
+                  <UserName>
+                    <UserLabel
+                      userId={userData.userId}
+                      userName={userData.userName}
+                      offProfileMenu={true}
+                    />
+                  </UserName>
                   <Tooltip title="카카오톡 공유하기" arrow>
                     <SharingButton onClick={sendKakaoSharingMessage}>
                       <ShareIcon />
@@ -806,6 +808,8 @@ const SubHead = styled.h3`
     font-size: 15px;
   }
 `;
+
+const UserName = styled.h1``;
 
 const InfoList = styled.ul`
   width: 100%;

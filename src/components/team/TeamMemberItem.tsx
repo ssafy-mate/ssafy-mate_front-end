@@ -105,7 +105,7 @@ const MemberInfo = styled.div`
   margin: auto 0;
 `;
 
-const MemberName = styled.h5`
+const MemberName = styled.h4`
   display: flex;
   align-items: center;
 

@@ -137,7 +137,7 @@ const RequestItem: React.FC<RequestItemProps> = ({
             <NameLink
               to={`/${originType === 'user' ? 'users' : 'teams'}/${originId}`}
             >
-              {originName}
+              <InfoName>{originName}</InfoName>
             </NameLink>
             <InfoItem>{originInfo}</InfoItem>
           </InfoList>
@@ -302,7 +302,7 @@ const Message = styled.h2`
   }
 `;
 
-const InfoList = styled.h3`
+const InfoList = styled.div`
   display: flex;
   margin-bottom: 10px;
 `;
@@ -347,6 +347,8 @@ const NameLink = styled(Link)`
     font-size: 13px;
   }
 `;
+
+const InfoName = styled.h3``;
 
 const InfoItem = styled.span`
   display: flex;
