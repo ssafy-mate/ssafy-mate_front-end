@@ -83,7 +83,7 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
     <>
       <Card
         onClick={
-          trackOptions === undefined
+          trackOptions !== undefined
             ? handleClickCardItem
             : handleClickOpenBlockDialog
         }
@@ -107,7 +107,7 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
           <br />팀 빌딩 바로가기
         </CardTitle>
       </Card>
-      {trackOptions && (
+      {trackOptions !== undefined && (
         <ProjectTrackDialog
           id="ringtone-menu"
           keepMounted
