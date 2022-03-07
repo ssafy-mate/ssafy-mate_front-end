@@ -37,6 +37,16 @@
 
 <br />
 
+- '싸피 메이트' 게스트 계정 정보
+
+| 아이디 | ssafymate@gmail.com |
+| :--: | :-- |
+| 비밀번호 | ssafymate123 |
+
+> 서비스를 구경하고 싶으시다면 상단의 계정 정보로 로그인 후 사용하시면 됩니다.
+
+<br />
+
 [**🔗 배포된 웹 서비스로 바로가기 Click !**](https://ssafymate.site/) 👈
 
 [**🔗 서비스 소개 영상 바로가기 Click !**](https://youtu.be/0q4h3c69dXg) 👈
