@@ -107,17 +107,19 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
           <br />팀 빌딩 바로가기
         </CardTitle>
       </Card>
-      <ProjectTrackDialog
-        id="ringtone-menu"
-        keepMounted
-        open={openProjectTrackDialog}
-        project={project}
-        selectedProjectTrack={selectedProjectTrack}
-        pageUrl={pageUrl}
-        hexColorCode={hexColorCode}
-        trackOptions={trackOptions}
-        onClose={handleClose}
-      />
+      {trackOptions && (
+        <ProjectTrackDialog
+          id="ringtone-menu"
+          keepMounted
+          open={openProjectTrackDialog}
+          project={project}
+          selectedProjectTrack={selectedProjectTrack}
+          pageUrl={pageUrl}
+          hexColorCode={hexColorCode}
+          trackOptions={trackOptions}
+          onClose={handleClose}
+        />
+      )}
       <Dialog
         open={openBlockDialog}
         onClose={onCloseBlockDialog}
