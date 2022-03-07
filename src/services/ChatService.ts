@@ -20,6 +20,22 @@ class ChatService {
     });
     return response;
   }
+
+  public static async getChatLog(
+    token: string | null,
+    roomId: string | null,
+    nexCursor: number,
+  ) {
+    const response = await axiosInstance.get(
+      `/api/chats/logs/${roomId}?nextCursor=${nexCursor}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
+    );
+    return response;
+  }
 }
 
 export default ChatService;

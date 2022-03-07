@@ -9,9 +9,6 @@ import { Scrollbars } from 'react-custom-scrollbars-2';
 
 import dayjs from 'dayjs';
 
-import useSWR from 'swr';
-import useSWRInfinite from 'swr/infinite';
-
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
@@ -31,11 +28,9 @@ import Tooltip from '@mui/material/Tooltip';
 import {
   MessageType,
   ChatRoomType,
-  ChatLogResponseType,
   OtherUserInfoType,
 } from '../../types/messageTypes';
 
-import { fetcherGet } from '../../utils/fetcher';
 import ChatService from '../../services/ChatService';
 import useSocket from '../../hooks/useSocket';
 import useToken from '../../hooks/useToken';
@@ -43,8 +38,8 @@ import useTextArea from '../../hooks/useTextArea';
 import useUserIdName from '../../hooks/useUserIdName';
 import ChatRoomListSidebar from './ChatRoomListSidebar';
 import useChatRoomList from '../../hooks/useChatRoomList';
+import useChatLog from '../../hooks/useChatLog';
 
-const PAGE_SIZE = 20;
 const DRAWER_WIDTH = 250;
 
 interface OnlineProps {
@@ -82,16 +77,14 @@ const ChattingForm: React.FC = () => {
   const chatRoomMessageRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<Scrollbars>(null);
 
-  const {
-    data: roomData,
-    error: roomError,
-    mutate: mutateRoom,
-  } = useSWR<ChatRoomType[]>(`/api/chats/rooms/${myUserId}`, (url) =>
-    fetcherGet(url, myToken),
+  const { roomData: roomListData, refetch: roomRefetch } = useChatRoomList(
+    myToken,
+    myUserId,
   );
 
   useEffect(() => {
     setChatSections([]);
+    scrollbarRef.current?.scrollToBottom();
   }, [roomId]);
 
   useEffect(() => {
@@ -104,35 +97,12 @@ const ChattingForm: React.FC = () => {
     });
   };
 
-  const getKey = (pageIndex: number, previousPageData: ChatLogResponseType) => {
-    if (previousPageData && !previousPageData.contentList) {
-      return null;
-    }
-
-    if (pageIndex === 0) {
-      return `/api/chats/logs/${roomId}?nextCursor=0`;
-    }
-
-    return `/api/chats/logs/${roomId}?nextCursor=${previousPageData.nextCursor}`;
-  };
-
   const {
-    data: chatData,
-    mutate: mutateChat,
-    setSize,
-  } = useSWRInfinite<ChatLogResponseType>(
-    getKey,
-    (url) => fetcherGet(url, myToken),
-    {
-      onSuccess(data) {
-        if (data?.length === 1) {
-          setTimeout(() => {
-            scrollbarRef.current?.scrollToBottom();
-          }, 100);
-        }
-      },
-    },
-  );
+    data: chatLogData,
+    refetch: chatLogRefetch,
+    fetchNextPage,
+    hasNextPage,
+  } = useChatLog(myToken, roomId);
 
   const onSubmit = useCallback(
     (event) => {
@@ -148,31 +118,21 @@ const ChattingForm: React.FC = () => {
           id: 0,
         };
 
-        mutateChat((prevChatData) => {
-          prevChatData?.[0].contentList.unshift(params);
-          return prevChatData;
-        }, false).then(() => {
-          setChat('');
-          if (scrollbarRef.current) {
-            setTimeout(() => {
-              scrollbarRef?.current?.scrollToBottom();
-            }, 100);
-          }
-        });
-
         ChatService.sendChatData(params).then(() => {
-          mutateRoom();
-          mutateChat().then(() => {
+          chatLogRefetch().then(() => {
+            setChat('');
             if (scrollbarRef.current) {
               setTimeout(() => {
                 scrollbarRef?.current?.scrollToBottom();
-              }, 50);
+              }, 100);
             }
           });
+
+          roomRefetch();
         });
       }
     },
-    [chat, roomId, myUserId, userId, setChat],
+    [chat, myUserName, roomId, myUserId, chatLogRefetch, roomRefetch, setChat],
   );
 
   const onMessage = useCallback(
@@ -181,28 +141,23 @@ const ChattingForm: React.FC = () => {
         data.senderId === Number(userId) &&
         Number(myUserId) !== Number(userId)
       ) {
-        mutateChat((chatData) => {
-          chatData?.[0].contentList.unshift(data);
-          return chatData;
-        }, false).then(() => {
-          mutateChat();
-          mutateRoom();
+        roomRefetch();
+        chatLogRefetch().then(() => {
           if (scrollbarRef.current) {
             if (
               scrollbarRef.current.getScrollHeight() <
               scrollbarRef.current.getClientHeight() +
                 scrollbarRef.current.getScrollTop() +
                 150
-            ) {
+            )
               setTimeout(() => {
-                scrollbarRef.current?.scrollToBottom();
+                scrollbarRef?.current?.scrollToBottom();
               }, 100);
-            }
           }
         });
       }
     },
-    [chatData, scrollbarRef, userId, myUserId, mutateChat],
+    [userId, myUserId, roomRefetch, chatLogRefetch],
   );
 
   useEffect(() => {
@@ -227,16 +182,10 @@ const ChattingForm: React.FC = () => {
     }
   };
 
-  const isEmpty = chatData?.[chatData.length - 1]?.contentList?.length === 0;
-  const isReachingEnd =
-    isEmpty ||
-    (chatData &&
-      chatData[chatData.length - 1]?.contentList?.length < PAGE_SIZE);
-
   const onScroll = useCallback(
     (values) => {
-      if (values.scrollTop === 0 && !isReachingEnd && !isEmpty) {
-        setSize((size) => size + 1).then(() => {
+      if (values.scrollTop === 0) {
+        fetchNextPage().then(() => {
           setTimeout(() => {
             scrollbarRef.current?.scrollTop(
               scrollbarRef.current?.getScrollHeight() - values.scrollHeight,
@@ -245,28 +194,15 @@ const ChattingForm: React.FC = () => {
         });
       }
     },
-    [scrollbarRef, isReachingEnd, isEmpty, setSize],
+    [scrollbarRef, fetchNextPage],
   );
-
-  const clustByDate = <T extends MessageType>(chatList: T[]) => {
-    const sections: { [key: string]: T[] } = {};
-    chatList.forEach((chat) => {
-      const monthDate = dayjs(chat.sentTime).format('YYYY-MM-DD');
-
-      if (Array.isArray(sections[monthDate])) {
-        sections[monthDate].push(chat);
-      } else {
-        sections[monthDate] = [chat];
-      }
-    });
-    return sections;
-  };
 
   const reverseChatList = () => {
     let list: any = [];
-    if (chatData) {
-      chatData.forEach((chat) => {
-        list.push(chat.contentList);
+
+    if (chatLogData) {
+      chatLogData.forEach((chat) => {
+        list.push(chat.data.contentList);
       });
     }
     setChatSections(([] as MessageType[]).concat(...list).reverse());
@@ -274,7 +210,7 @@ const ChattingForm: React.FC = () => {
 
   useEffect(() => {
     reverseChatList();
-  }, [chatData]);
+  }, [chatLogData]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -298,7 +234,7 @@ const ChattingForm: React.FC = () => {
 
   return (
     <Contianer>
-      <ChatRoomListSidebar roomData={roomData as ChatRoomType[]} />
+      <ChatRoomListSidebar roomData={roomListData as ChatRoomType[]} />
       <ChatRoomSection>
         <SwipeableDrawer
           sx={{
@@ -321,7 +257,7 @@ const ChattingForm: React.FC = () => {
             </IconButton>
           </DrawerHeader>
           <List>
-            {roomData?.map((room: ChatRoomType) => {
+            {roomListData?.map((room: ChatRoomType) => {
               const isOnline = onlineList.includes(room.userId);
               return (
                 <ListItem

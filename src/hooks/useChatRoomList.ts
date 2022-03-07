@@ -9,14 +9,18 @@ import ChatService from '../services/ChatService';
 
 const useChatRoomList = (token: string | null, myUserId: number) => {
   const queryFn = () => ChatService.getChatRoomList(token, myUserId);
-  const { isLoading, data, isError, error } = useQuery<
+  const { isLoading, data, refetch, isError, error } = useQuery<
     AxiosResponse<ChatRoomType[]>,
     AxiosError<ErrorResponse>
-  >([myUserId], queryFn, { keepPreviousData: true });
+  >(['userId', myUserId], queryFn, {
+    keepPreviousData: true,
+    refetchOnWindowFocus: false,
+  });
 
   return {
     isLoading,
     roomData: data?.data,
+    refetch,
     isError,
     errorMessage: error?.response?.data.message,
   };
