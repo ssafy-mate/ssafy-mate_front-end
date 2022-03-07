@@ -44,8 +44,8 @@ const TeamItem: React.FC<TeamItemProps> = ({
           <Notice className="team-item__notice">{notice}</Notice>
         </Link>
         <MainInfoList>
-          <InfoItem>{teamName}</InfoItem>
-          <InfoItem>{campus}</InfoItem>
+          <InfoName>{teamName}</InfoName>
+          <InfoCampus>{campus}</InfoCampus>
         </MainInfoList>
         <SubInfoList>
           <InfoItem>{project}</InfoItem>
@@ -167,7 +167,7 @@ const Notice = styled.h2`
   }
 `;
 
-const MainInfoList = styled.h3`
+const MainInfoList = styled.div`
   display: flex;
   margin-bottom: 6px;
 `;
@@ -175,6 +175,41 @@ const MainInfoList = styled.h3`
 const SubInfoList = styled.div`
   display: flex;
   margin-bottom: 6px;
+`;
+
+const InfoName = styled.h3`
+  display: flex;
+  font-size: 14px;
+  color: #98a8b9;
+
+  @media (max-width: 767px) {
+    font-size: 13px;
+  }
+`;
+
+const InfoCampus = styled.span`
+  display: flex;
+  font-size: 14px;
+  color: #98a8b9;
+
+  ::before {
+    content: '';
+    display: inline-block;
+    width: 1px;
+    height: 10px;
+    margin: auto 8px;
+    background-color: #98a8b9;
+  }
+
+  @media (max-width: 767px) {
+    font-size: 13px;
+  }
+  @media (max-width: 575px) {
+    ::before {
+      height: 9px;
+      margin: auto 6px;
+    }
+  }
 `;
 
 const InfoItem = styled.span`
