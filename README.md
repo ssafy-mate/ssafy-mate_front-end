@@ -3,7 +3,7 @@
   <img src="./readme_assets/ssafy-mate_logo.png" alt="SSAFY MATE" width="200px" height="200px" />
   <br />
   <h1>싸피 메이트 (SSAFY MATE)</h1>
-  <a href="https://www.ssafymate.site/">
+  <a href="https://ssafymate.site/">
     <img src="https://img.shields.io/badge/NGINX-Active-2ea04?&logo=nginx&logoColor=white" alt="NGINX" />
   </a>
   <br />
@@ -37,9 +37,9 @@
 
 <br />
 
-[**🔗 배포된 웹 서비스로 바로가기 Click !**](https://www.ssafymate.site/) 👈
+[**🔗 배포된 웹 서비스로 바로가기 Click !**](https://ssafymate.site/) 👈
 
-[**🔗 서비스 소개 UCC 영상 바로가기 Click !**](https://youtu.be/0q4h3c69dXg) 👈
+[**🔗 서비스 소개 영상 바로가기 Click !**](https://youtu.be/0q4h3c69dXg) 👈
 
 [**🔗 프론트엔드 저장소 바로가기 Click !**](https://github.com/ssafy-mate/ssafy-mate_front-end) 👈
 
