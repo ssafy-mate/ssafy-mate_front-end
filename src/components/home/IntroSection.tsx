@@ -56,13 +56,13 @@ const Section = styled.section`
 
 const Wrapper = styled.div<WrapperProps>`
   display: flex;
+  flex-direction: ${(props) =>
+    props.reversed === true ? 'row-reverse' : 'row'};
   justify-content: space-between;
   max-width: 1200px;
   margin: 0 auto;
   padding: 250px 16px;
   box-sizing: border-box;
-  flex-direction: ${(props) =>
-    props.reversed === true ? 'row-reverse' : 'row'};
 
   @media (max-width: 991px) {
     flex-direction: column;
@@ -104,18 +104,18 @@ const Head = styled.h1`
   }
 
   @media (max-width: 575px) {
-    font-size: 18px;
     margin-bottom: 10px;
+    font-size: 18px;
   }
 
   @keyframes fadeinBottom {
     from {
-      transform: translate3d(0, 50px, 0);
       opacity: 0;
+      transform: translate3d(0, 50px, 0);
     }
     to {
-      transform: translate3d(0, 0, 0);
       opacity: 1;
+      transform: translate3d(0, 0, 0);
     }
   }
 `;
@@ -139,12 +139,12 @@ const SubHead = styled.h2`
 
   @keyframes fadeinBottom {
     from {
-      transform: translate3d(0, 50px, 0);
       opacity: 0;
+      transform: translate3d(0, 50px, 0);
     }
     to {
-      transform: translate3d(0, 0, 0);
       opacity: 1;
+      transform: translate3d(0, 0, 0);
     }
   }
 `;
@@ -166,12 +166,12 @@ const Description = styled.p`
 
   @keyframes fadeinBottom {
     from {
-      transform: translate3d(0, 50px, 0);
       opacity: 0;
+      transform: translate3d(0, 50px, 0);
     }
     to {
-      transform: translate3d(0, 0, 0);
       opacity: 1;
+      transform: translate3d(0, 0, 0);
     }
   }
 `;
