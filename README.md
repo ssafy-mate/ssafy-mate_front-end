@@ -143,6 +143,8 @@
 
 ## 🎥 데모 영상
 
+[**🔗 서비스 소개 영상 바로가기 Click !**](https://youtu.be/0q4h3c69dXg) 👈
+
 <br />
 
 <div id="7"></div>
