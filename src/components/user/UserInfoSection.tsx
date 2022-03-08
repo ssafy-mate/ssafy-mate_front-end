@@ -108,10 +108,10 @@ const UserInfoSection: React.FC = () => {
             : 'https://avatars.githubusercontent.com/u/97279195?s=200&v=4'
         }`,
         link: {
-          webUrl: `https://www.ssafymate.site${
+          webUrl: `${process.env.REACT_APP_CLIENT_URL}${
             userData !== undefined ? `/users/${userData.userId}` : ''
           }`,
-          mobileWebUrl: `https://www.ssafymate.site${
+          mobileWebUrl: `${process.env.REACT_APP_CLIENT_URL}${
             userData !== undefined ? `/users/${userData.userId}` : ''
           }`,
         },
@@ -122,10 +122,10 @@ const UserInfoSection: React.FC = () => {
             userData !== undefined ? userData.userName : ''
           } 교육생 정보 보러가기`,
           link: {
-            webUrl: `https://www.ssafymate.site${
+            webUrl: `${process.env.REACT_APP_CLIENT_URL}${
               userData !== undefined ? `/users/${userData.userId}` : ''
             }`,
-            mobileWebUrl: `https://www.ssafymate.site${
+            mobileWebUrl: `${process.env.REACT_APP_CLIENT_URL}${
               userData !== undefined ? `/users/${userData.userId}` : ''
             }`,
           },
