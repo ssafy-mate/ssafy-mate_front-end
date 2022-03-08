@@ -84,6 +84,7 @@ const ChattingForm: React.FC = () => {
 
   useEffect(() => {
     setChatSections([]);
+    setChat('');
     scrollbarRef.current?.scrollToBottom();
   }, [roomId]);
 
@@ -108,7 +109,7 @@ const ChattingForm: React.FC = () => {
     (event) => {
       event.preventDefault();
 
-      if (chat?.trim()) {
+      if (chat !== '' && chat.trim() !== '') {
         const params: MessageType = {
           userName: myUserName as string,
           roomId: roomId as string,
@@ -120,8 +121,7 @@ const ChattingForm: React.FC = () => {
 
         ChatService.sendChatData(params).then(() => {
           chatLogRefetch().then(() => {
-            setChat('');
-            if (scrollbarRef.current) {
+            if (scrollbarRef.current !== null) {
               setTimeout(() => {
                 scrollbarRef?.current?.scrollToBottom();
               }, 100);
@@ -131,6 +131,8 @@ const ChattingForm: React.FC = () => {
           roomRefetch();
         });
       }
+
+      setChat('');
     },
     [chat, myUserName, roomId, myUserId, chatLogRefetch, roomRefetch, setChat],
   );
@@ -143,16 +145,16 @@ const ChattingForm: React.FC = () => {
       ) {
         roomRefetch();
         chatLogRefetch().then(() => {
-          if (scrollbarRef.current) {
-            if (
-              scrollbarRef.current.getScrollHeight() <
+          if (
+            scrollbarRef.current !== null &&
+            scrollbarRef.current.getScrollHeight() <
               scrollbarRef.current.getClientHeight() +
                 scrollbarRef.current.getScrollTop() +
                 150
-            )
-              setTimeout(() => {
-                scrollbarRef?.current?.scrollToBottom();
-              }, 100);
+          ) {
+            setTimeout(() => {
+              scrollbarRef.current?.scrollToBottom();
+            }, 100);
           }
         });
       }
@@ -187,9 +189,11 @@ const ChattingForm: React.FC = () => {
       if (values.scrollTop === 0) {
         fetchNextPage().then(() => {
           setTimeout(() => {
-            scrollbarRef.current?.scrollTop(
-              scrollbarRef.current?.getScrollHeight() - values.scrollHeight,
-            );
+            if (scrollbarRef.current !== null) {
+              scrollbarRef.current.scrollTop(
+                scrollbarRef.current.getScrollHeight() - values.scrollHeight,
+              );
+            }
           }, 100);
         });
       }
@@ -198,9 +202,9 @@ const ChattingForm: React.FC = () => {
   );
 
   const reverseChatList = () => {
-    let list: any = [];
+    const list: any = [];
 
-    if (chatLogData) {
+    if (chatLogData !== undefined) {
       chatLogData.forEach((chat) => {
         list.push(chat.data.contentList);
       });
@@ -257,51 +261,52 @@ const ChattingForm: React.FC = () => {
             </IconButton>
           </DrawerHeader>
           <List>
-            {roomListData?.map((room: ChatRoomType) => {
-              const isOnline = onlineList.includes(room.userId);
-              return (
-                <ListItem
-                  button
-                  key={room.roomId}
-                  onClick={toggleDrawer(false)}
-                  onKeyDown={toggleDrawer(false)}
-                  sx={{ padding: '12px 16px 12px 16px' }}
-                >
-                  <Link
-                    to={`/chatting/${Number(myUserId)}?roomId=${
-                      room.roomId
-                    }&userId=${room.userId}`}
+            {roomListData !== undefined &&
+              roomListData.map((room: ChatRoomType) => {
+                const isOnline = onlineList.includes(room.userId);
+                return (
+                  <ListItem
+                    button
+                    key={room.roomId}
+                    onClick={toggleDrawer(false)}
+                    onKeyDown={toggleDrawer(false)}
+                    sx={{ padding: '12px 16px 12px 16px' }}
                   >
-                    <div css={listItemCss}>
-                      <Avatar
-                        src={
-                          room?.profileImgUrl
-                            ? room?.profileImgUrl
-                            : '/images/assets/basic-profile-img.png'
-                        }
-                        sx={{ marginRight: '8px' }}
-                      />
-                      <OnlineWrraper>
-                        <OnlineOutCircle>
-                          <OnlineInCircle isOnline={isOnline} />
-                        </OnlineOutCircle>
-                      </OnlineWrraper>
-                      <div className="user-name">
-                        <span className="user-name__name">
-                          {room?.userName}
-                        </span>
-                        <span className="user-name__email">
-                          @{room?.userEmail.split('@')[0]}
-                        </span>
+                    <Link
+                      to={`/chatting/${Number(myUserId)}?roomId=${
+                        room.roomId
+                      }&userId=${room.userId}`}
+                    >
+                      <div css={listItemCss}>
+                        <Avatar
+                          src={
+                            room.profileImgUrl
+                              ? room.profileImgUrl
+                              : '/images/assets/basic-profile-img.png'
+                          }
+                          sx={{ marginRight: '8px' }}
+                        />
+                        <OnlineWrraper>
+                          <OnlineOutCircle>
+                            <OnlineInCircle isOnline={isOnline} />
+                          </OnlineOutCircle>
+                        </OnlineWrraper>
+                        <div className="user-name">
+                          <span className="user-name__name">
+                            {room.userName}
+                          </span>
+                          <span className="user-name__email">
+                            @{room.userEmail.split('@')[0]}
+                          </span>
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                </ListItem>
-              );
-            })}
+                    </Link>
+                  </ListItem>
+                );
+              })}
           </List>
         </SwipeableDrawer>
-        {!roomId ? (
+        {roomId === null ? (
           <ChatRoomEmpty>
             <ChatRoomEmptyContentWrapper>
               <ForumOutlinedIcon className="chat-icon" />
@@ -354,7 +359,7 @@ const ChattingForm: React.FC = () => {
               </ChatRoomUserNameBar>
               <Scrollbars autoHide ref={scrollbarRef} onScrollFrame={onScroll}>
                 <ChatRoomMessageList ref={chatRoomMessageRef}>
-                  {chatSections && chatSections.length > 0
+                  {chatSections !== [] && chatSections.length > 0
                     ? chatSections.map((message, index) => {
                         return (
                           <MessageBoxWrapper key={index}>
