@@ -7,7 +7,7 @@ import styled from '@emotion/styled';
 import useToken from '../hooks/useToken';
 
 import Header from '../components/common/Header';
-import SignInContainer from '../containers/SignInContainer';
+import SignInCard from '../components/signIn/SignInCard';
 import Footer from '../components/common/Footer';
 
 const SignInPage: React.FC = () => {
@@ -25,7 +25,7 @@ const SignInPage: React.FC = () => {
     <>
       <Header />
       <Container>
-        <SignInContainer />
+        <SignInCard />
       </Container>
       <Footer />
     </>
