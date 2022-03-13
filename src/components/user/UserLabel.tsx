@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import useUserId from '../../hooks/reduxHooks/useUserId';
 
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import Button from '@mui/material/Button';

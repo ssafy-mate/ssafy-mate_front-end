@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
-
 import { Redirect } from 'react-router-dom';
+
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 import styled from '@emotion/styled';
 
@@ -13,9 +13,7 @@ import Footer from '../../components/common/Footer';
 const FindUserIdPage: React.FC = () => {
   const token = useToken();
 
-  useEffect(() => {
-    document.title = '아이디 찾기 | 싸피 메이트';
-  }, []);
+  useDocumentTitle('아이디 찾기 | 싸피 메이트');
 
   if (token !== null) {
     return <Redirect to="/" />;

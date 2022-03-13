@@ -1,10 +1,9 @@
-import { useEffect } from 'react';
-
 import { Redirect } from 'react-router-dom';
 
 import { useMediaQuery } from 'react-responsive';
 
 import useToken from '../../hooks/reduxHooks/useToken';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 import Header from '../../components/common/Header';
 import ProjectNavigation from '../../components/projects/ProjectNavigation';
@@ -17,9 +16,7 @@ const SpecializationProjectSendRequestListPage: React.FC = () => {
     query: '(max-width: 575px)',
   });
 
-  useEffect(() => {
-    document.title = '특화 프로젝트 받은 제안 | 싸피 메이트';
-  }, []);
+  useDocumentTitle('특화 프로젝트 받은 제안 | 싸피 메이트');
 
   if (token === null) {
     return <Redirect to="/users/sign_in" />;
