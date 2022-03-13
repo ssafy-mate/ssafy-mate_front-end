@@ -1,7 +1,7 @@
-import { RootState } from './../types/authTypes';
+import { RootState } from '../../types/authTypes';
 import { useSelector } from 'react-redux';
 
-import { UserData } from '../types/userTypes';
+import { UserData } from '../../types/userTypes';
 
 const useProfileInfo = () => {
   const profileInfo = useSelector<RootState, UserData | null>(

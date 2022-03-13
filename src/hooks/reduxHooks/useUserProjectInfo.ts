@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { RootState } from '../types/authTypes';
+import { RootState } from '../../types/authTypes';
 
 const useUserProjectInfo = (projectId: number) => {
   const campus: string | null = useSelector<RootState, string | null>(

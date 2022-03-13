@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import { Redirect } from 'react-router-dom';
 
@@ -8,8 +8,9 @@ import { useSelector } from 'react-redux';
 
 import { RootState } from '../../types/authTypes';
 
-import useToken from '../../hooks/useToken';
-import useTeamList from '../../hooks/useTeamList';
+import useToken from '../../hooks/reduxHooks/useToken';
+import useTeamList from '../../hooks/reactQueryHooks/useTeamList';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 import Header from '../../components/common/Header';
 import ProjectNavigation from '../../components/projects/ProjectNavigation';
@@ -59,9 +60,7 @@ const SpecializationProjectTeamListPage: React.FC = () => {
     query: '(max-width: 575px)',
   });
 
-  useEffect(() => {
-    document.title = '특화 프로젝트 팀 공고 | 싸피 메이트';
-  }, []);
+  useDocumentTitle('특화 프로젝트 팀 공고 | 싸피 메이트');
 
   if (token === null) {
     return <Redirect to="/users/sign_in" />;

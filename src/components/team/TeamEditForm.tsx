@@ -27,8 +27,8 @@ import { TeamEditInfoResponse } from '../../types/teamTypes';
 
 import { CAMPUS_LIST, PROJECT_LIST } from '../../data/ssafyData';
 
-import useToken from '../../hooks/useToken';
-import useMyTeamTechStacks from '../../hooks/useMyTeamTechStacks';
+import useToken from '../../hooks/reduxHooks/useToken';
+import useMyTeamTechStacks from '../../hooks/reduxHooks/useMyTeamTechStacks';
 import useTechStackList from '../../hooks/useTechStackList';
 
 import TeamService from '../../services/TeamService';

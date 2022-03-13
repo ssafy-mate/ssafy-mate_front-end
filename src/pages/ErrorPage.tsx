@@ -1,12 +1,10 @@
-import { useEffect } from 'react';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 
 import ErrorHeader from '../components/error/ErrorHeader';
 import ErrorGuidanceSection from '../components/error/ErrorGuidanceSection';
 
 const ErrorPage: React.FC = () => {
-  useEffect(() => {
-    document.title = 'Server Error | 싸피 메이트';
-  }, []);
+  useDocumentTitle('Server Error | 싸피 메이트');
 
   return (
     <>

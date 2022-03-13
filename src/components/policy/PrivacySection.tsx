@@ -73,11 +73,11 @@ const PrivacySection: React.FC = () => {
         <PrivacyPreDescriptionWrapper>
           <DescriptionList>
             <DescriptionItem>
-              [SSAFYMATE]('https://ssafymate.site'이하 '싸피메이트')은(는)
-              「개인정보 보호법」 제30조에 따라 이용자의 개인정보를 보호하고
-              이와 관련된 고충을 신속하고 원활하게 처리할 수 있게 하도록 아래와
-              같이 개인정보 처리 방침을 명시하며, 이용자의 권익 보호에 최선을
-              다할 것입니다.
+              [SSAFYMATE]('{process.env.REACT_APP_CLIENT_URL}'이하
+              '싸피메이트')은(는) 「개인정보 보호법」 제30조에 따라 이용자의
+              개인정보를 보호하고 이와 관련된 고충을 신속하고 원활하게 처리할 수
+              있게 하도록 아래와 같이 개인정보 처리 방침을 명시하며, 이용자의
+              권익 보호에 최선을 다할 것입니다.
             </DescriptionItem>
             <DescriptionItem>
               본 개인정보 처리 방침은 '싸피메이트'의 개인 이용약관 및 기업
@@ -85,7 +85,6 @@ const PrivacySection: React.FC = () => {
               포함합니다.
             </DescriptionItem>
           </DescriptionList>
-
           <PrivacyContentsList>
             {PRIVACY_CONTENTS.map((contentItem) => (
               <PrivacyContentsItem key={contentItem.id}>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 import styled from '@emotion/styled';
 
@@ -7,9 +7,7 @@ import Footer from '../../components/common/Footer';
 import AccountEditCard from '../../components/account/AccountEditCard';
 
 const AccountEditPage: React.FC = () => {
-  useEffect(() => {
-    document.title = '계정 관리 | 싸피 메이트';
-  }, []);
+  useDocumentTitle('계정 관리 | 싸피 메이트');
 
   return (
     <>

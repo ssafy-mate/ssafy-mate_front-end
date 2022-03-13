@@ -24,13 +24,13 @@ import { EditProfileInfoRequest, RootState } from '../../types/authTypes';
 import { JOB_LIST } from '../../data/jobListData';
 import { PROJECT_LIST } from '../../data/ssafyData';
 
-import useUserId from '../../hooks/useUserId';
-import useToken from '../../hooks/useToken';
-import useProfileInfo from '../../hooks/useProfileInfo';
+import useUserId from '../../hooks/reduxHooks/useUserId';
+import useToken from '../../hooks/reduxHooks/useToken';
+import useProfileInfo from '../../hooks/reduxHooks/useProfileInfo';
 import useTechStackList from '../../hooks/useTechStackList';
 import useProfileTechStacks, {
   convertTechStackWithImg,
-} from '../../hooks/useProfileTeckStacks';
+} from '../../hooks/reduxHooks/useProfileTeckStacks';
 
 import ProfileTechStackTagWithLevel from '../common/ProfileTechStackTagWithLevel';
 

@@ -21,7 +21,7 @@ import { TechStackWithImg } from '../../types/commonTypes';
 import { CAMPUS_LIST, PROJECT_LIST } from '../../data/ssafyData';
 
 import useTechStackList from '../../hooks/useTechStackList';
-import useUserProjectInfo from '../../hooks/useUserProjectInfo';
+import useUserProjectInfo from '../../hooks/reduxHooks/useUserProjectInfo';
 import useMyTeamId from '../../hooks/useMyTeamId';
 
 import TechStackTag from '../common/TechStackTag';

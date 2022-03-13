@@ -2,10 +2,10 @@ import { AxiosResponse, AxiosError } from 'axios';
 
 import { useQuery } from 'react-query';
 
-import { TeamListResponse } from '../types/teamTypes';
-import { ErrorResponse } from '../types/commonTypes';
+import { TeamListResponse } from '../../types/teamTypes';
+import { ErrorResponse } from '../../types/commonTypes';
 
-import TeamService from '../services/TeamService';
+import TeamService from '../../services/TeamService';
 
 const useTeamList = (token: string | null, params: object) => {
   const queryFn = () => TeamService.getTeamList(token, params);
