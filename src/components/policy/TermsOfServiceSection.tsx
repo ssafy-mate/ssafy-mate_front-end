@@ -35,7 +35,7 @@ const TERMS_OF_SERVICE_CONTENTS = [
   },
 ];
 
-const TermsOfServiceCard: React.FC = () => {
+const TermsOfServiceSection: React.FC = () => {
   return (
     <>
       <Container>
@@ -284,4 +284,4 @@ const NoticeDate = styled.p`
   }
 `;
 
-export default TermsOfServiceCard;
+export default TermsOfServiceSection;

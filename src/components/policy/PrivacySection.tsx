@@ -85,7 +85,6 @@ const PrivacySection: React.FC = () => {
               포함합니다.
             </DescriptionItem>
           </DescriptionList>
-
           <PrivacyContentsList>
             {PRIVACY_CONTENTS.map((contentItem) => (
               <PrivacyContentsItem key={contentItem.id}>
