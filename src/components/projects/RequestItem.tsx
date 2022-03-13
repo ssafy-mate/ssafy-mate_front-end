@@ -21,7 +21,7 @@ import {
   ResponseStatusType,
 } from '../../types/userTypes';
 
-import useToken from '../../hooks/useToken';
+import useToken from '../../hooks/reduxHooks/useToken';
 
 import RequestService from '../../services/RequestService';
 

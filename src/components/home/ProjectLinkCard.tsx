@@ -17,8 +17,8 @@ import Alert from '@mui/material/Alert';
 import type { ProjectTrack } from '../../types/commonTypes';
 import { ProjectLinkCardType } from '../../types/commonTypes';
 
-import useToken from '../../hooks/useToken';
-import useProjectTrack from '../../hooks/useProjectTrack';
+import useToken from '../../hooks/reduxHooks/useToken';
+import useProjectTrack from '../../hooks/reduxHooks/useProjectTrack';
 
 import ProjectTrackDialog from './ProjectTrackDialog';
 

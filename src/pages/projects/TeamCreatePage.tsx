@@ -6,7 +6,7 @@ import { useMediaQuery } from 'react-responsive';
 
 import styled from '@emotion/styled';
 
-import useToken from '../../hooks/useToken';
+import useToken from '../../hooks/reduxHooks/useToken';
 
 import Header from '../../components/common/Header';
 import ProjectNavigation from '../../components/projects/ProjectNavigation';

@@ -39,9 +39,9 @@ import {
 import { fetcherGet } from '../../utils/fetcher';
 import ChatService from '../../services/ChatService';
 import useSocket from '../../hooks/useSocket';
-import useToken from '../../hooks/useToken';
+import useToken from '../../hooks/reduxHooks/useToken';
 import useTextArea from '../../hooks/useTextArea';
-import useUserIdName from '../../hooks/useUserIdName';
+import useUserIdName from '../../hooks/reduxHooks/useUserIdName';
 import ChatRoomItem from './ChatRoomItem';
 
 const PAGE_SIZE = 20;

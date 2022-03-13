@@ -8,8 +8,8 @@ import { useSelector } from 'react-redux';
 
 import { RootState } from '../../types/authTypes';
 
-import useToken from '../../hooks/useToken';
-import useTeamList from '../../hooks/useTeamList';
+import useToken from '../../hooks/reduxHooks/useToken';
+import useTeamList from '../../hooks/reactQueryHooks/useTeamList';
 
 import Header from '../../components/common/Header';
 import ProjectNavigation from '../../components/projects/ProjectNavigation';

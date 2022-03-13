@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 
 import { useMediaQuery } from 'react-responsive';
 
-import useToken from '../../hooks/useToken';
+import useToken from '../../hooks/reduxHooks/useToken';
 
 import Header from '../../components/common/Header';
 import ProjectNavigation from '../../components/projects/ProjectNavigation';

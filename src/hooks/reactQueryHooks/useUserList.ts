@@ -2,10 +2,10 @@ import { AxiosResponse, AxiosError } from 'axios';
 
 import { useQuery } from 'react-query';
 
-import { UserListResponse } from '../types/userTypes';
-import { ErrorResponse } from '../types/commonTypes';
+import { UserListResponse } from '../../types/userTypes';
+import { ErrorResponse } from '../../types/commonTypes';
 
-import UserService from '../services/UserService';
+import UserService from '../../services/UserService';
 
 const useUserList = (token: string | null, params: object) => {
   const queryFn = () => UserService.getUserList(token, params);

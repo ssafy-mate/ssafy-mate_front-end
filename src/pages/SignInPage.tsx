@@ -4,7 +4,7 @@ import { Redirect } from 'react-router-dom';
 
 import styled from '@emotion/styled';
 
-import useToken from '../hooks/useToken';
+import useToken from '../hooks/reduxHooks/useToken';
 
 import Header from '../components/common/Header';
 import SignInContainer from '../containers/SignInContainer';

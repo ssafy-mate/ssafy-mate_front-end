@@ -1,6 +1,6 @@
 import { useSelector } from 'react-redux';
 
-import { Project, RootState } from '../types/authTypes';
+import { Project, RootState } from '../../types/authTypes';
 
 const useProjectTrack = (projectId: number): string | null => {
   const projects: Project[] | null = useSelector<RootState, Project[] | null>(

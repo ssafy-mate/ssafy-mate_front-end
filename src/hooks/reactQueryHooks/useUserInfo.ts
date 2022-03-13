@@ -2,12 +2,12 @@ import { useQuery } from 'react-query';
 
 import { AxiosResponse, AxiosError } from 'axios';
 
-import { UserInfoResponse } from '../types/userTypes';
-import { ErrorResponse } from '../types/commonTypes';
+import { UserInfoResponse } from '../../types/userTypes';
+import { ErrorResponse } from '../../types/commonTypes';
 
-import UserService from '../services/UserService';
+import UserService from '../../services/UserService';
 
-import useToken from './useToken';
+import useToken from '../reduxHooks/useToken';
 
 const useUserInfo = (userId: string) => {
   const token: string | null = useToken();

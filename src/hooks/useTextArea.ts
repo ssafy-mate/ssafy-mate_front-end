@@ -14,6 +14,7 @@ type ReturnTypes<T = any> = [
 
 const useTextArea = <T>(initialData: T): ReturnTypes<T> => {
   const [value, setValue] = useState(initialData);
+
   const handler = useCallback((e: ChangeEvent<HTMLTextAreaElement>) => {
     setValue(e.target.value as unknown as T);
   }, []);

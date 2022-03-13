@@ -5,9 +5,9 @@ import { Redirect } from 'react-router-dom';
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
 
-import useToken from '../hooks/useToken';
+import useToken from '../hooks/reduxHooks/useToken';
 import useSocket from '../hooks/useSocket';
-import useUserId from '../hooks/useUserId';
+import useUserId from '../hooks/reduxHooks/useUserId';
 
 import Header from '../components/common/Header';
 import ChattingForm from '../components/chatting/ChattingForm';

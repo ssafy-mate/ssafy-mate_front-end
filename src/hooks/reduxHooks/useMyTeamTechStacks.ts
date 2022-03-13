@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 
-import { RootState } from '../types/authTypes';
-import { TechStackWithImg } from '../types/commonTypes';
+import { RootState } from '../../types/authTypes';
+import { TechStackWithImg } from '../../types/commonTypes';
 
 const useMyTeamTechStacks = () => {
   const myTeamTechStacks = useSelector<

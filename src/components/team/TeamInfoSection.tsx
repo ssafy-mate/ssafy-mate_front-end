@@ -29,7 +29,7 @@ import { UserApplicationRequestType } from '../../types/authTypes';
 
 import { sendUserApplication as sendUserApplicationSagaStart } from '../../redux/modules/auth';
 
-import useTeamInfo from '../../hooks/useTeamInfo';
+import useTeamInfo from '../../hooks/reactQueryHooks/useTeamInfo';
 
 import UserLabel from '../user/UserLabel';
 import RecruitStatusBadge from '../projects/RecruitStatusBadge';

@@ -7,9 +7,9 @@ import IntroContainer from '../components/home/IntroContainer';
 import ToTopButton from '../components/home/ToTopButton';
 import Footer from '../components/common/Footer';
 
-import useToken from '../hooks/useToken';
+import useToken from '../hooks/reduxHooks/useToken';
 import useSocket from '../hooks/useSocket';
-import useUserId from '../hooks/useUserId';
+import useUserId from '../hooks/reduxHooks/useUserId';
 
 const HomePage: React.FC = () => {
   useEffect(() => {

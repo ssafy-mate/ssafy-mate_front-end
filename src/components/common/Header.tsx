@@ -33,8 +33,8 @@ import Swal from 'sweetalert2';
 import { getProfileInfoRequest, RootState } from '../../types/authTypes';
 import { Severity } from '../../types/signUpTypes';
 
-import useToken from '../../hooks/useToken';
-import useUserId from '../../hooks/useUserId';
+import useToken from '../../hooks/reduxHooks/useToken';
+import useUserId from '../../hooks/reduxHooks/useUserId';
 import useMyTeamId from '../../hooks/useMyTeamId';
 
 import SsafyMateAlert from './Alert';

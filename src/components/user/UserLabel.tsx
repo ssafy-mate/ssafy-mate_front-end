@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import { Link } from 'react-router-dom';
 
-import useUserId from '../../hooks/useUserId';
+import useUserId from '../../hooks/reduxHooks/useUserId';
 
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';

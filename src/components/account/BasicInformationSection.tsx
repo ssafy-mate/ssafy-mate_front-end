@@ -23,9 +23,9 @@ import {
 import { Severity, SsafyTrack } from '../../types/signUpTypes';
 import { CAMPUS_LIST } from '../../data/ssafyData';
 
-import useToken from '../../hooks/useToken';
-import useUserId from '../../hooks/useUserId';
-import useProfileInfo from '../../hooks/useProfileInfo';
+import useToken from '../../hooks/reduxHooks/useToken';
+import useUserId from '../../hooks/reduxHooks/useUserId';
+import useProfileInfo from '../../hooks/reduxHooks/useProfileInfo';
 
 const BasicInformationSection: React.FC = () => {
   const [profileImg, setProfileImg] = useState<Blob | null>(null);

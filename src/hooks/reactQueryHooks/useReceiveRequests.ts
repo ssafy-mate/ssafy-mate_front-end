@@ -2,24 +2,24 @@ import { AxiosResponse, AxiosError } from 'axios';
 
 import { useQuery } from 'react-query';
 
-import { ProjectParams } from '../types/authTypes';
-import { ErrorResponse } from '../types/commonTypes';
-import { Request } from '../types/userTypes';
+import { ProjectParams } from '../../types/authTypes';
+import { ErrorResponse } from '../../types/commonTypes';
+import { Request } from '../../types/userTypes';
 
-import UserService from '../services/UserService';
+import UserService from '../../services/UserService';
 
-interface SendRequestsResponse {
+interface ReceiveRequestsResponse {
   requests: Request[];
 }
 
-const useSendRequests = (
+const useReceiveRequests = (
   token: string | null,
   userId: number,
   params: ProjectParams,
 ) => {
-  const queryFn = () => UserService.getSendRequests(token, userId, params);
+  const queryFn = () => UserService.getReceiveRequests(token, userId, params);
   const { isLoading, data, isError, error, refetch } = useQuery<
-    AxiosResponse<SendRequestsResponse>,
+    AxiosResponse<ReceiveRequestsResponse>,
     AxiosError<ErrorResponse>
   >(['receiveRequests', userId], queryFn, {
     keepPreviousData: true,
@@ -34,4 +34,4 @@ const useSendRequests = (
   };
 };
 
-export default useSendRequests;
+export default useReceiveRequests;

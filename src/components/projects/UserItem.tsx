@@ -26,7 +26,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { TeamOfferRequestType } from '../../types/teamTypes';
 import { TechStack } from '../../types/commonTypes';
 
-import useUserId from '../../hooks/useUserId';
+import useUserId from '../../hooks/reduxHooks/useUserId';
 
 import UserLabel from '../user/UserLabel';
 

@@ -33,8 +33,8 @@ import Tooltip from '@mui/material/Tooltip';
 
 import { TeamOfferRequestType } from '../../types/teamTypes';
 
-import useUserId from '../../hooks/useUserId';
-import useUserInfo from '../../hooks/useUserInfo';
+import useUserId from '../../hooks/reduxHooks/useUserId';
+import useUserInfo from '../../hooks/reactQueryHooks/useUserInfo';
 
 import UserLabel from './UserLabel';
 import UserTechStackTag from './UserTechStackTag';

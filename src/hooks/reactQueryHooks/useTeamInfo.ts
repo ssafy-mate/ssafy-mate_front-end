@@ -2,12 +2,12 @@ import { useQuery } from 'react-query';
 
 import { AxiosResponse, AxiosError } from 'axios';
 
-import { TeamInfoResponse } from '../types/teamTypes';
-import { ErrorResponse } from '../types/commonTypes';
+import { TeamInfoResponse } from '../../types/teamTypes';
+import { ErrorResponse } from '../../types/commonTypes';
 
-import TeamService from '../services/TeamService';
+import TeamService from '../../services/TeamService';
 
-import useToken from './useToken';
+import useToken from '../reduxHooks/useToken';
 
 const useTeamInfo = (teamId: number) => {
   const token: string | null = useToken();
