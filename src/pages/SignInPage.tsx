@@ -6,7 +6,7 @@ import useToken from '../hooks/reduxHooks/useToken';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 
 import Header from '../components/common/Header';
-import SignInContainer from '../containers/SignInContainer';
+import SignInCard from '../components/signIn/SignInCard';
 import Footer from '../components/common/Footer';
 
 const SignInPage: React.FC = () => {
@@ -22,7 +22,7 @@ const SignInPage: React.FC = () => {
     <>
       <Header />
       <Container>
-        <SignInContainer />
+        <SignInCard />
       </Container>
       <Footer />
     </>
