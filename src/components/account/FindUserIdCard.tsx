@@ -195,7 +195,7 @@ const FindUserIdCard: React.FC = () => {
           <>
             <FindIdWrapper>
               <FindIdImgWrapper>
-                <FindIdImg src="/images/common/ssafy-mate_logo.png" />
+                <FindIdImg src="/images/common/ssafy-mate_logo_small.png" />
               </FindIdImgWrapper>
               <FindIdText className="user-id">{findId}</FindIdText>
             </FindIdWrapper>

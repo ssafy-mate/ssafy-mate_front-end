@@ -185,7 +185,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
           <Brand to="/">
             <LogoWrapper>
               <Logo
-                src="/images/common/ssafy-mate_logo.png"
+                src="/images/common/ssafy-mate_logo_small.png"
                 alt="SSAFY MATE 로고 이미지"
               />
             </LogoWrapper>

@@ -257,7 +257,7 @@ const TeamInfoSection: React.FC = () => {
                   src={
                     teamData.teamImgUrl !== null
                       ? teamData.teamImgUrl
-                      : '/images/assets/basic-team-logo.png'
+                      : '/images/common/default-team-logo.png'
                   }
                   alt={`${teamData.teamName} 팀의 대표 이미지`}
                 />

@@ -34,7 +34,7 @@ const TeamItem: React.FC<TeamItemProps> = ({
           src={
             teamImgUrl !== null
               ? teamImgUrl
-              : '/images/assets/basic-team-logo.png'
+              : '/images/common/default-team-logo.png'
           }
           alt={`${teamName} 팀 로고`}
         />

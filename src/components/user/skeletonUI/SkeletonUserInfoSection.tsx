@@ -376,7 +376,7 @@ const ProfileImgWrapper = styled.div`
   margin-right: 20px;
   border-radius: 4px;
   box-shadow: 4px 12px 18px 2px rgb(0 0 0 / 8%);
-  background-image: url('/images/assets/basic-profile-img.png');
+  background-image: url('/images/common/default-profile-img.png');
   background-size: contain;
 
   @media (max-width: 1199px) {
