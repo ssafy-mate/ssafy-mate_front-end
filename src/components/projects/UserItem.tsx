@@ -158,7 +158,7 @@ const UserItem: React.FC<UserItemProps> = ({
             src={
               profileImgUrl !== null
                 ? profileImgUrl
-                : '/images/assets/basic-profile-img.png'
+                : '/images/common/default-profile-img.png'
             }
             alt={`${profileImgUrl} 교육생 프로필 사진`}
           />

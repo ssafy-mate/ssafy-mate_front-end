@@ -50,7 +50,7 @@ const ChatRoomItem: React.FC<ChatRoomTypeProps> = ({
               src={
                 profileImgUrl
                   ? profileImgUrl
-                  : '/images/assets/basic-profile-img.png'
+                  : '/images/common/default-profile-img.png'
               }
             />
             <OnlineWrraper>

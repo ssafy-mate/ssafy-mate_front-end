@@ -38,10 +38,8 @@ export interface ProjectBannerCardData {
   head: string;
   subHead: string;
   description: string;
-  imgUrl: string;
+  videoUrl: string;
 }
-
-export interface ProjectBannerCardProps extends ProjectBannerCardData {}
 
 export interface ProjectBannerSlideType extends ProjectBannerCardData {
   id: number;

@@ -365,7 +365,7 @@ const ChattingForm: React.FC = () => {
                         src={
                           room?.profileImgUrl
                             ? room?.profileImgUrl
-                            : '/images/assets/basic-profile-img.png'
+                            : '/images/common/default-profile-img.png'
                         }
                         sx={{ marginRight: '8px' }}
                       />
@@ -408,7 +408,7 @@ const ChattingForm: React.FC = () => {
                     src={
                       otherUser?.profileImgUrl
                         ? otherUser?.profileImgUrl
-                        : '/images/assets/basic-profile-img.png'
+                        : '/images/common/default-profile-img.png'
                     }
                     className="profile-avatar"
                   />
@@ -467,7 +467,7 @@ const ChattingForm: React.FC = () => {
                                   src={
                                     otherUser?.profileImgUrl
                                       ? otherUser?.profileImgUrl
-                                      : '/images/assets/basic-profile-img.png'
+                                      : '/images/common/default-profile-img.png'
                                   }
                                 />
                                 <p>{message.content}</p>

@@ -212,7 +212,7 @@ const UserInfoSection: React.FC = () => {
                   src={
                     userData.profileImgUrl !== null
                       ? userData.profileImgUrl
-                      : '/images/assets/basic-profile-img.png'
+                      : '/images/common/default-profile-img.png'
                   }
                   alt={`${userData.userName}님의 프로필 이미지`}
                 />

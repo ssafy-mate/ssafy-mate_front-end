@@ -123,8 +123,8 @@ const RequestItem: React.FC<RequestItemProps> = ({
               originImgUrl !== null
                 ? originImgUrl
                 : originType === 'user'
-                ? '/images/assets/basic-profile-img.png'
-                : '/images/assets/basic-team-logo.png'
+                ? '/images/common/default-profile-img.png'
+                : '/images/common/default-team-logo.png'
             }
             alt={`${originName}${
               originType === 'user' ? '님의 프로필 이미지' : ' 팀 로고'
