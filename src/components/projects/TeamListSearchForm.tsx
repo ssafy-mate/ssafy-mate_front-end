@@ -3,7 +3,6 @@ import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
