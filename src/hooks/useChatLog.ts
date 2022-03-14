@@ -8,7 +8,7 @@ import ChatService from '../services/ChatService';
 import { ChatLogResponseType } from '../types/messageTypes';
 
 const useChatLog = (token: string | null, roomId: string | null) => {
-  const queryFn = ({ pageParam = 0 }) =>
+  const queryFn = ({ pageParam = -1 }) =>
     ChatService.getChatLog(token, roomId, pageParam);
 
   const {
@@ -25,10 +25,15 @@ const useChatLog = (token: string | null, roomId: string | null) => {
     AxiosResponse<ChatLogResponseType>,
     AxiosError<ErrorResponse>
   >(['roomId', roomId], queryFn, {
-    getNextPageParam: (lastPage) => lastPage.data.nextCursor,
+    getNextPageParam: (lastPage) => {
+      if (lastPage.data.nextCursor !== 0){
+        return lastPage.data.nextCursor
+      } else {
+        return undefined
+      }
+    },
     keepPreviousData: true,
     refetchOnWindowFocus: false,
-    staleTime: Infinity,
   });
 
   return {
