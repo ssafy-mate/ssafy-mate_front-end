@@ -1,18 +1,24 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+
+import { useDispatch } from 'react-redux';
+import { login as loginSagaStart } from '../../redux/modules/auth';
 
 import { Link } from 'react-router-dom';
 
 import styled from '@emotion/styled';
 
-import { SignInRequestTypeWithIdSave } from '../../types/authTypes';
-
 import { validEmailReg } from '../../utils/regularExpressionData';
 
-interface SigninProps {
-  login: (requestData: SignInRequestTypeWithIdSave) => void;
-}
+const SignInCard: React.FC = () => {
+  const dispatch = useDispatch();
 
-const SignInCard: React.FC<SigninProps> = ({ login }) => {
+  const login = useCallback(
+    (requestData) => {
+      dispatch(loginSagaStart(requestData));
+    },
+    [dispatch],
+  );
+
   const [inputEmail, setInputEmail] = useState<string>('');
   const [inputPassword, setInputPassword] = useState<string>('');
   const [inputEmailError, setInputEmailError] = useState<boolean>(false);

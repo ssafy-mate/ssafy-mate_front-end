@@ -9,7 +9,7 @@ import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import VolunteerActivismIcon from '@mui/icons-material/VolunteerActivism';
 import HowToVoteIcon from '@mui/icons-material/HowToVote';
 import GroupsIcon from '@mui/icons-material/Groups';
-import useUserId from '../../hooks/useUserId';
+import useUserId from '../../hooks/reduxHooks/useUserId';
 
 const ProjectNavigation: React.FC = () => {
   const location = useLocation();

@@ -32,7 +32,7 @@ const ErrorHeader: React.FC = () => {
           <Brand to="/">
             <LogoWrapper isScrollActive={isScrollActive}>
               <Logo
-                src="/images/common/ssafy-mate_logo.png"
+                src="/images/common/ssafy-mate_logo_small.png"
                 alt="SSAFY MATE 로고 이미지"
               />
             </LogoWrapper>

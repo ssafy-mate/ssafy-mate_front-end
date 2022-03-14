@@ -39,9 +39,9 @@ import {
 import { fetcherGet } from '../../utils/fetcher';
 import ChatService from '../../services/ChatService';
 import useSocket from '../../hooks/useSocket';
-import useToken from '../../hooks/useToken';
+import useToken from '../../hooks/reduxHooks/useToken';
 import useTextArea from '../../hooks/useTextArea';
-import useUserIdName from '../../hooks/useUserIdName';
+import useUserIdName from '../../hooks/reduxHooks/useUserIdName';
 import ChatRoomItem from './ChatRoomItem';
 
 const PAGE_SIZE = 20;
@@ -365,7 +365,7 @@ const ChattingForm: React.FC = () => {
                         src={
                           room?.profileImgUrl
                             ? room?.profileImgUrl
-                            : '/images/assets/basic-profile-img.png'
+                            : '/images/common/default-profile-img.png'
                         }
                         sx={{ marginRight: '8px' }}
                       />
@@ -408,7 +408,7 @@ const ChattingForm: React.FC = () => {
                     src={
                       otherUser?.profileImgUrl
                         ? otherUser?.profileImgUrl
-                        : '/images/assets/basic-profile-img.png'
+                        : '/images/common/default-profile-img.png'
                     }
                     className="profile-avatar"
                   />
@@ -467,7 +467,7 @@ const ChattingForm: React.FC = () => {
                                   src={
                                     otherUser?.profileImgUrl
                                       ? otherUser?.profileImgUrl
-                                      : '/images/assets/basic-profile-img.png'
+                                      : '/images/common/default-profile-img.png'
                                   }
                                 />
                                 <p>{message.content}</p>

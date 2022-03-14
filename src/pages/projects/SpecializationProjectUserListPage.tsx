@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 import { Redirect } from 'react-router-dom';
 
@@ -8,8 +8,9 @@ import { useSelector } from 'react-redux';
 
 import { RootState } from '../../types/authTypes';
 
-import useToken from '../../hooks/useToken';
-import useUserList from '../../hooks/useUserList';
+import useToken from '../../hooks/reduxHooks/useToken';
+import useUserList from '../../hooks/reactQueryHooks/useUserList';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 import Header from '../../components/common/Header';
 import ProjectNavigation from '../../components/projects/ProjectNavigation';
@@ -61,9 +62,7 @@ const SpecializationProjectUserListPage: React.FC = () => {
     query: '(max-width: 575px)',
   });
 
-  useEffect(() => {
-    document.title = '특화 프로젝트 교육생 공고 | 싸피 메이트';
-  }, []);
+  useDocumentTitle('특화 프로젝트 교육생 공고 | 싸피 메이트');
 
   if (token === null) {
     return <Redirect to="/users/sign_in" />;

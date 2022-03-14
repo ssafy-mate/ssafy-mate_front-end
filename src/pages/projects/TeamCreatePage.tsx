@@ -1,12 +1,11 @@
-import { useEffect } from 'react';
-
 import { Redirect } from 'react-router-dom';
 
 import { useMediaQuery } from 'react-responsive';
 
 import styled from '@emotion/styled';
 
-import useToken from '../../hooks/useToken';
+import useToken from '../../hooks/reduxHooks/useToken';
+import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 import Header from '../../components/common/Header';
 import ProjectNavigation from '../../components/projects/ProjectNavigation';
@@ -19,9 +18,7 @@ const CreateTeamPage: React.FC = () => {
     query: '(max-width: 575px)',
   });
 
-  useEffect(() => {
-    document.title = '팀 생성 | 싸피 메이트';
-  }, []);
+  useDocumentTitle('팀 생성 | 싸피 메이트');
 
   if (token === null) {
     return <Redirect to="/users/sign_in" />;

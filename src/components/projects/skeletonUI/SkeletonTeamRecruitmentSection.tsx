@@ -54,7 +54,7 @@ const FilterSelect = styled.select`
   background-position: calc(100% - 0.6rem) 49%;
   background-size: 0.625rem 0.3125rem;
   background-color: #e9ecf3;
-  background-image: url(/images/assets/toggle-black.png);
+  background-image: url(/images/common/toggle-black.png);
   background-repeat: no-repeat;
   font-size: 0.875rem;
   font-weight: 500;

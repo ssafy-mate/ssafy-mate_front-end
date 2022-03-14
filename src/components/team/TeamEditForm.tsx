@@ -27,8 +27,8 @@ import { TeamEditInfoResponse } from '../../types/teamTypes';
 
 import { CAMPUS_LIST, PROJECT_LIST } from '../../data/ssafyData';
 
-import useToken from '../../hooks/useToken';
-import useMyTeamTechStacks from '../../hooks/useMyTeamTechStacks';
+import useToken from '../../hooks/reduxHooks/useToken';
+import useMyTeamTechStacks from '../../hooks/reduxHooks/useMyTeamTechStacks';
 import useTechStackList from '../../hooks/useTechStackList';
 
 import TeamService from '../../services/TeamService';
@@ -851,7 +851,7 @@ const Select = styled.select`
   background-position: calc(100% - 0.8rem) 49%;
   background-size: 0.625rem 0.3125rem;
   background-color: #fbfbfd;
-  background-image: url(/images/assets/toggle-black.png);
+  background-image: url(/images/common/toggle-black.png);
   background-repeat: no-repeat;
   font-size: 16px;
   line-height: 24px;

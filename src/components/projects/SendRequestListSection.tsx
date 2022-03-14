@@ -9,8 +9,8 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import useToken from '../../hooks/useToken';
-import useSendRequests from '../../hooks/useSendRequests';
+import useToken from '../../hooks/reduxHooks/useToken';
+import useSendRequests from '../../hooks/reactQueryHooks/useSendRequests';
 
 import RequestItem from './RequestItem';
 import ErrorSection from '../common/ErrorSection';

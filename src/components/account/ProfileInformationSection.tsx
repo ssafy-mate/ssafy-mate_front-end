@@ -24,13 +24,13 @@ import { EditProfileInfoRequest, RootState } from '../../types/authTypes';
 import { JOB_LIST } from '../../data/jobListData';
 import { PROJECT_LIST } from '../../data/ssafyData';
 
-import useUserId from '../../hooks/useUserId';
-import useToken from '../../hooks/useToken';
-import useProfileInfo from '../../hooks/useProfileInfo';
+import useUserId from '../../hooks/reduxHooks/useUserId';
+import useToken from '../../hooks/reduxHooks/useToken';
+import useProfileInfo from '../../hooks/reduxHooks/useProfileInfo';
 import useTechStackList from '../../hooks/useTechStackList';
 import useProfileTechStacks, {
   convertTechStackWithImg,
-} from '../../hooks/useProfileTeckStacks';
+} from '../../hooks/reduxHooks/useProfileTeckStacks';
 
 import ProfileTechStackTagWithLevel from '../common/ProfileTechStackTagWithLevel';
 
@@ -973,7 +973,7 @@ const Select = styled.select`
   background-position: calc(100% - 0.8rem) 49%;
   background-size: 0.625rem 0.3125rem;
   background-color: #fbfbfd;
-  background-image: url(/images/assets/toggle-black.png);
+  background-image: url(/images/common/toggle-black.png);
   background-repeat: no-repeat;
   font-size: 16px;
   line-height: 24px;
