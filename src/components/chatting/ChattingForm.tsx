@@ -29,6 +29,7 @@ import {
   MessageType,
   ChatRoomType,
   OtherUserInfoType,
+  ChatLogResponseType,
 } from '../../types/messageTypes';
 
 import ChatService from '../../services/ChatService';
@@ -39,6 +40,8 @@ import useUserIdName from '../../hooks/useUserIdName';
 import ChatRoomListSidebar from './ChatRoomListSidebar';
 import useChatRoomList from '../../hooks/useChatRoomList';
 import useChatLog from '../../hooks/useChatLog';
+import { useMutation, useQueryClient, InfiniteData } from 'react-query';
+import { AxiosResponse } from 'axios';
 
 const DRAWER_WIDTH = 250;
 
@@ -77,10 +80,66 @@ const ChattingForm: React.FC = () => {
   const chatRoomMessageRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<Scrollbars>(null);
 
+  const queryClient = useQueryClient();
+  const queryFn = (params: MessageType) => ChatService.sendChatData(params);
+
   const { roomData: roomListData, refetch: roomRefetch } = useChatRoomList(
     myToken,
     myUserId,
   );
+
+  const {
+    data: chatLogData,
+    refetch: chatLogRefetch,
+    fetchNextPage,
+  } = useChatLog(myToken, roomId);
+
+  const mutation = useMutation(['roomId', roomId], queryFn, {
+    onMutate(mutateData) {
+      queryClient.setQueryData<
+        InfiniteData<AxiosResponse<ChatLogResponseType>>
+      >(['roomId', roomId], (data) => {
+        const newPages = data?.pages.slice() || [];
+        const newIndex = newPages[0].data.contentList[0].id;
+        newPages[0].data.contentList.unshift({
+          id: newIndex + 1,
+          userName: myUserName as string,
+          roomId: roomId as string,
+          content: mutateData.content,
+          senderId: Number(myUserId),
+          sentTime: dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS'),
+        });
+
+        return {
+          pageParams: data?.pageParams || [],
+          pages: newPages,
+        };
+      });
+
+      setChat('');
+
+      if (scrollbarRef.current !== null) {
+        setTimeout(() => {
+          scrollbarRef?.current?.scrollToBottom();
+        }, 100);
+      }
+    },
+
+    onError(error) {
+      console.error(error);
+    },
+
+    onSuccess() {
+      queryClient.refetchQueries(['roomId', roomId]);
+      queryClient.refetchQueries(['userId', myUserId]);
+    },
+  });
+
+  const userInfoGet = () => {
+    ChatService.getChatUserInfo(userId as string).then((response) => {
+      setOtherUser(response.data);
+    });
+  };
 
   useEffect(() => {
     setChatSections([]);
@@ -89,21 +148,27 @@ const ChattingForm: React.FC = () => {
   }, [roomId]);
 
   useEffect(() => {
-    if (userId) userInfoGet();
+    if (userId) {
+      userInfoGet();
+    }
   }, [userId]);
 
-  const userInfoGet = () => {
-    ChatService.getChatUserInfo(userId as string).then((response) => {
-      setOtherUser(response.data);
-    });
-  };
+  useEffect(() => {
+    reverseChatList();
+  }, [chatLogData]);
 
-  const {
-    data: chatLogData,
-    refetch: chatLogRefetch,
-    fetchNextPage,
-    hasNextPage,
-  } = useChatLog(myToken, roomId);
+  useEffect(() => {
+    socket?.on('message', onMessage);
+    return () => {
+      socket?.off('message', onMessage);
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    socket?.on('onlineList', (data: number[]) => {
+      setOnlineList(data);
+    });
+  }, [socket, onlineList]);
 
   const onSubmit = useCallback(
     (event) => {
@@ -119,22 +184,10 @@ const ChattingForm: React.FC = () => {
           id: 0,
         };
 
-        ChatService.sendChatData(params).then(() => {
-          chatLogRefetch().then(() => {
-            if (scrollbarRef.current !== null) {
-              setTimeout(() => {
-                scrollbarRef?.current?.scrollToBottom();
-              }, 100);
-            }
-          });
-
-          roomRefetch();
-        });
+        mutation.mutate(params);
       }
-
-      setChat('');
     },
-    [chat, myUserName, roomId, myUserId, chatLogRefetch, roomRefetch, setChat],
+    [chat, myUserName, roomId, myUserId, mutation],
   );
 
   const onMessage = useCallback(
@@ -161,19 +214,6 @@ const ChattingForm: React.FC = () => {
     },
     [userId, myUserId, roomRefetch, chatLogRefetch],
   );
-
-  useEffect(() => {
-    socket?.on('message', onMessage);
-    return () => {
-      socket?.off('message', onMessage);
-    };
-  }, [socket, onMessage]);
-
-  useEffect(() => {
-    socket?.on('onlineList', (data: number[]) => {
-      setOnlineList(data);
-    });
-  }, [socket, onlineList]);
 
   const handleMessageSendKeyPress = (event: React.KeyboardEvent) => {
     if (event.code === 'Enter' || event.code === 'NumpadEnter') {
@@ -211,10 +251,6 @@ const ChattingForm: React.FC = () => {
     }
     setChatSections(([] as MessageType[]).concat(...list).reverse());
   };
-
-  useEffect(() => {
-    reverseChatList();
-  }, [chatLogData]);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -323,7 +359,7 @@ const ChattingForm: React.FC = () => {
                 <ChatRoomHeaderProfile className="user-name">
                   <Avatar
                     src={
-                      otherUser?.profileImgUrl
+                      otherUser?.profileImgUrl !== null
                         ? otherUser?.profileImgUrl
                         : '/images/assets/basic-profile-img.png'
                     }
@@ -382,7 +418,7 @@ const ChattingForm: React.FC = () => {
                               <MessageBoxContent isLeft={true}>
                                 <ProfileImg
                                   src={
-                                    otherUser?.profileImgUrl
+                                    otherUser?.profileImgUrl !== null
                                       ? otherUser?.profileImgUrl
                                       : '/images/assets/basic-profile-img.png'
                                   }

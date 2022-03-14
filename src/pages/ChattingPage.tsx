@@ -22,7 +22,7 @@ const ChattingPage: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (token && socket) {
+    if (token !== null && socket) {
       socket?.emit('login', { id: userId });
     }
   }, [socket, token, userId]);

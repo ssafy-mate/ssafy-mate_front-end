@@ -30,7 +30,9 @@ const ChatRoomItem: React.FC<ChatRoomTypeProps> = ({
   );
 
   const checkActive = (match: any, location: any) => {
-    if (!location) return false;
+    if (!location) {
+      return false;
+    }
     const { search } = location;
     return search === params ? true : false;
   };
@@ -48,7 +50,7 @@ const ChatRoomItem: React.FC<ChatRoomTypeProps> = ({
           <ProfileImg>
             <Avatar
               src={
-                profileImgUrl
+                profileImgUrl !== null
                   ? profileImgUrl
                   : '/images/assets/basic-profile-img.png'
               }
@@ -63,9 +65,9 @@ const ChatRoomItem: React.FC<ChatRoomTypeProps> = ({
             <TitleWrapper>
               <TitleSenderName>{userName}</TitleSenderName>
               <TitleSubText>
-                {sentTime ? (
+                {sentTime !== null ? (
                   <span>{dayjs(sentTime).format('YY.MM.DD. a hh:mm')}</span>
-                ) : null}
+                ) : ''}
               </TitleSubText>
             </TitleWrapper>
             <DescriptionWrapper>
