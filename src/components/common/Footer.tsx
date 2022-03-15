@@ -9,7 +9,7 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 
-import ScreenReaderHead from './ScreenReaderHead';
+import VisuallyHiddenHead from './VisuallyHiddenHead';
 
 interface FooterProps {
   offMarginTop?: boolean;
@@ -20,7 +20,7 @@ interface ContainerProps extends FooterProps {}
 const Footer: React.FC<FooterProps> = ({ offMarginTop }) => {
   return (
     <Container offMarginTop={offMarginTop}>
-      <ScreenReaderHead element="h2" text="싸피 메이트 Footer" />
+      <VisuallyHiddenHead level={2} text="싸피 메이트 Footer" />
       <Wrapper>
         <MenuSection>
           <MenuGroup>

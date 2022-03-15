@@ -4,7 +4,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import { ProjectLinkCardType } from '../../types/commonTypes';
 
-import ScreenReaderHead from '../common/ScreenReaderHead';
+import VisuallyHiddenHead from '../common/VisuallyHiddenHead';
 import ProjectLinkCard from './ProjectLinkCard';
 
 const PROJECT_LINK_CARD_LIST: ProjectLinkCardType[] = [
@@ -76,7 +76,7 @@ const PROJECT_LINK_CARD_LIST: ProjectLinkCardType[] = [
 const ProjectsSection: React.FC = () => {
   return (
     <Container>
-      <ScreenReaderHead element="h2" text="팀 빌딩 페이지 링크 목록" />
+      <VisuallyHiddenHead level={2} text="팀 빌딩 페이지 링크 목록" />
       <Wrapper>
         {PROJECT_LINK_CARD_LIST.map((projectLinkCardData) => (
           <ProjectLinkCard

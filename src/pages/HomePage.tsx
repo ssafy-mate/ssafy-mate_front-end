@@ -6,7 +6,7 @@ import useToken from '../hooks/reduxHooks/useToken';
 import useUserId from '../hooks/reduxHooks/useUserId';
 
 import Header from '../components/common/Header';
-import ScreenReaderHead from '../components/common/ScreenReaderHead';
+import VisuallyHiddenHead from '../components/common/VisuallyHiddenHead';
 import HomeBannerSection from '../components/home/HomeBannerSection';
 import ProjectsSection from '../components/home/ProjectsSection';
 import IntroContainer from '../components/home/IntroContainer';
@@ -29,7 +29,7 @@ const HomePage: React.FC = () => {
   return (
     <>
       <Header />
-      <ScreenReaderHead element="h1" text="싸피 메이트" />
+      <VisuallyHiddenHead level={1} text="싸피 메이트" />
       <HomeBannerSection />
       <ProjectsSection />
       <IntroContainer />

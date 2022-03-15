@@ -5,7 +5,7 @@ import {
   MobileServiceIntroductionType,
 } from '../../types/commonTypes';
 
-import ScreenReaderHead from '../common/ScreenReaderHead';
+import VisuallyHiddenHead from '../common/VisuallyHiddenHead';
 import IntroSection from './IntroSection';
 import MobileServiceIntroSection from './MobileServiceIntroSection';
 
@@ -80,7 +80,7 @@ const MOBILE_SERVICE_INTRODUCTION_LIST: MobileServiceIntroductionType[] = [
 const IntroContainer: React.FC = () => {
   return (
     <Container id="intro-container">
-      <ScreenReaderHead element="h2" text="서비스 소개" />
+      <VisuallyHiddenHead level={2} text="서비스 소개" />
       {SERVICE_INTRODUCTION_LIST.map((introduction) => (
         <IntroSection
           key={introduction.id}
