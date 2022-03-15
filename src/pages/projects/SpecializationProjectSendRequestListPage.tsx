@@ -16,7 +16,7 @@ const SpecializationProjectSendRequestListPage: React.FC = () => {
     query: '(max-width: 575px)',
   });
 
-  useDocumentTitle('특화 프로젝트 받은 제안 | 싸피 메이트');
+  useDocumentTitle('특화 프로젝트 보낸 요청 | 싸피 메이트');
 
   if (token === null) {
     return <Redirect to="/users/sign_in" />;

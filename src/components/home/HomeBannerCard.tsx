@@ -1,12 +1,14 @@
 import styled from '@emotion/styled';
 
-import { HomeBannderCardProps } from '../../types/commonTypes';
+import { HomeBannerCardData } from '../../types/commonTypes';
+
+interface HomeBannderCardProps extends HomeBannerCardData {}
 
 const HomeBannerCard: React.FC<HomeBannderCardProps> = ({
   head,
   subHead,
   descriptions,
-  videoUrl,
+  imageUrl,
 }) => {
   return (
     <BannerCard>
@@ -17,11 +19,9 @@ const HomeBannerCard: React.FC<HomeBannderCardProps> = ({
           <Description key={index}>{description}</Description>
         ))}
       </InfoWrapper>
-      <VideoWrapper>
-        <Video autoPlay loop muted>
-          <source src={videoUrl} type="video/mp4" />
-        </Video>
-      </VideoWrapper>
+      <ImgWrapper>
+        <Img src={imageUrl} alt={subHead} />
+      </ImgWrapper>
     </BannerCard>
   );
 };
@@ -58,7 +58,7 @@ const InfoWrapper = styled.div`
   }
 `;
 
-const Head = styled.h1`
+const Head = styled.p`
   margin-bottom: 8px;
   font-size: 15px;
   line-height: 1.5;
@@ -74,7 +74,7 @@ const Head = styled.h1`
   }
 `;
 
-const SubHead = styled.h2`
+const SubHead = styled.h3`
   margin-bottom: 32px;
   font-size: 30px;
   font-weight: 500;
@@ -105,7 +105,7 @@ const Description = styled.p`
   }
 `;
 
-const VideoWrapper = styled.div`
+const ImgWrapper = styled.div`
   height: 280px;
 
   @media (max-width: 767px) {
@@ -113,7 +113,7 @@ const VideoWrapper = styled.div`
   }
 `;
 
-const Video = styled.video`
+const Img = styled.img`
   width: 280px;
   height: 280px;
 

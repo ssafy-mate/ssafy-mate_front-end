@@ -151,7 +151,7 @@ const ItemBody = styled.div`
   box-sizing: border-box;
 `;
 
-const Notice = styled.h2`
+const Notice = styled.h3`
   width: 100%;
   margin-bottom: 6px;
   font-size: 18px;
@@ -177,7 +177,7 @@ const SubInfoList = styled.div`
   margin-bottom: 6px;
 `;
 
-const InfoName = styled.h3`
+const InfoName = styled.h4`
   display: flex;
   font-size: 14px;
   color: #98a8b9;

@@ -14,6 +14,7 @@ import 'swiper/css/pagination';
 
 import { ProjectBannerSlideType } from '../../types/commonTypes';
 
+import VisuallyHiddenHead from '../common/VisuallyHiddenHead';
 import ProjectBannerCard from './ProjectBannerCard';
 
 const PROJECTS_BANNER_SLIDE_LIST: ProjectBannerSlideType[] = [
@@ -23,8 +24,8 @@ const PROJECTS_BANNER_SLIDE_LIST: ProjectBannerSlideType[] = [
     subHead: 'Track 1. 인공지능 (영상)',
     description:
       '이미지 입력이 들어 갔을 때, 해당 이미지를 묘사하는 텍스트를 생성하는 이미지 캡셔닝 모델 구현 프로젝트',
-    videoUrl: '/videos/projects/ai-video_animation.mp4',
-    hexColorCode: '#282d38',
+    imageUrl: '/images/projects/ai-video_animation.webp',
+    hexColorCode: '#232930',
   },
   {
     id: 2,
@@ -32,8 +33,8 @@ const PROJECTS_BANNER_SLIDE_LIST: ProjectBannerSlideType[] = [
     subHead: 'Track 2. 인공지능 (음성)',
     description:
       '딥러닝 알고리즘의 동작 과정 이해 및 구현, 각 팀 별로 개성있는 인공지능 서비스 구축 프로젝트',
-    videoUrl: '/videos/projects/ai-voice_animation.mp4',
-    hexColorCode: '#ffc200',
+    imageUrl: '/images/projects/ai-voice_animation.webp',
+    hexColorCode: '#ffbf06',
   },
   {
     id: 3,
@@ -41,8 +42,8 @@ const PROJECTS_BANNER_SLIDE_LIST: ProjectBannerSlideType[] = [
     subHead: 'Track 3. 빅데이터 (추천)',
     description:
       '사용자에 대한 이해, 추천되는 요소에 대한 이해를 통한 정보 필터링 서비스 제공, 기존의 서비스 이용 기록을 통한 인사이트 도출 및 적용 프로젝트',
-    videoUrl: '/videos/projects/bigdata-recommendation_animation.mp4',
-    hexColorCode: '#54c0bf',
+    imageUrl: '/images/projects/bigdata-recommendation_animation.webp',
+    hexColorCode: '#56c5b6',
   },
   {
     id: 4,
@@ -50,8 +51,8 @@ const PROJECTS_BANNER_SLIDE_LIST: ProjectBannerSlideType[] = [
     subHead: 'Track 4. 빅데이터 (분산)',
     description:
       '분산 파일 시스템을 활용한 데이터 처리 과정에 대해 이해하고 효율적인 병렬 연산을 위한 알고리즘 구현 및 서비스 적용 프로젝트',
-    videoUrl: '/videos/projects/bigdata-dispersion_animation.mp4',
-    hexColorCode: '#2f3d53',
+    imageUrl: '/images/projects/bigdata-dispersion_animation.webp',
+    hexColorCode: '#2b3749',
   },
   {
     id: 5,
@@ -59,7 +60,7 @@ const PROJECTS_BANNER_SLIDE_LIST: ProjectBannerSlideType[] = [
     subHead: 'Track 5. 블록체인 (P2P 거래)',
     description:
       '블록체인 오픈소스로 네트워크 인프라를 구축하여 이를 활용하는 프로젝트',
-    videoUrl: '/videos/projects/blockchain-p2p_animation.mp4',
+    imageUrl: '/images/projects/blockchain-p2p_animation.webp',
     hexColorCode: '#000',
   },
   {
@@ -68,8 +69,8 @@ const PROJECTS_BANNER_SLIDE_LIST: ProjectBannerSlideType[] = [
     subHead: 'Track 6. 블록체인 (디지털화폐)',
     description:
       'NFT(대체 불가한 토큰) 스마트 컨트랙트 구현하여 NFT를 거래할 수 있도록 하는 프로젝트',
-    videoUrl: '/videos/projects/blockchain-digital-money_animation.mp4',
-    hexColorCode: '#040623',
+    imageUrl: '/images/projects/blockchain-digital-money_animation.webp',
+    hexColorCode: '#08091c',
   },
   {
     id: 7,
@@ -77,8 +78,8 @@ const PROJECTS_BANNER_SLIDE_LIST: ProjectBannerSlideType[] = [
     subHead: 'Track 7. IoT 제어',
     description:
       '가전기기나 센서들을 무선 통신으로 연결하여, 네트워킹, S/W, AI 기술을 기반으로 외부망과 가정을 연결하여 융합 콘텐츠 서비스를 제공하는 프로젝트',
-    videoUrl: '/videos/projects/iot_animation.mp4',
-    hexColorCode: '#305a95',
+    imageUrl: '/images/projects/iot_animation.webp',
+    hexColorCode: '#2d5086',
   },
 ];
 
@@ -86,6 +87,7 @@ const ProjectBannerSection: React.FC = () => {
   return (
     <Container>
       <Wrapper>
+        <VisuallyHiddenHead level={2} text="특화 프로젝트 트랙 목록" />
         <BannerSwiper
           cssMode={true}
           navigation={true}
@@ -100,13 +102,13 @@ const ProjectBannerSection: React.FC = () => {
           className="mySwiper"
         >
           {PROJECTS_BANNER_SLIDE_LIST.map(
-            ({ id, hexColorCode, head, subHead, description, videoUrl }) => (
+            ({ id, hexColorCode, head, subHead, description, imageUrl }) => (
               <SwiperSlide key={id} style={{ backgroundColor: hexColorCode }}>
                 <ProjectBannerCard
                   head={head}
                   subHead={subHead}
                   description={description}
-                  videoUrl={videoUrl}
+                  imageUrl={imageUrl}
                 />
               </SwiperSlide>
             ),
