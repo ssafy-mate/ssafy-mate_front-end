@@ -26,7 +26,7 @@ const HOME_BANNER_SLIDE_LIST: HomeBannerSlideType[] = [
       '비전공자/전공자가 한 팀으로 웹/모바일 기반 서비스 구현',
       '웹 파트(웹기술, 웹 디자인, 웹IoT 중 택 1) / 모바일 파트',
     ],
-    imageUrl: '/images/home/common-project_animation.webp',
+    imageUrl: '/images/home/common-project_animation.png',
     hexColorCode: '#172337',
   },
   {
@@ -37,7 +37,7 @@ const HOME_BANNER_SLIDE_LIST: HomeBannerSlideType[] = [
       '4차 산업혁명 분야 신기술 도메인 구현 프로젝트 수행',
       '인공지능, 빅데이터, 블록체인, IoT 제어 중 택 1',
     ],
-    imageUrl: '/images/home/specialization-project_animation.webp',
+    imageUrl: '/images/home/specialization-project_animation.png',
     hexColorCode: '#16212a',
   },
   {
@@ -48,7 +48,7 @@ const HOME_BANNER_SLIDE_LIST: HomeBannerSlideType[] = [
       '공통, 특화 프로젝트 경험바탕으로, 자유 주제로 서비스를 개발하여 나만의 포트폴리오 완성',
       '기업연계, 오픈소스, 자유주제 중 택 1',
     ],
-    imageUrl: '/images/home/autonomy-project_animation.webp',
+    imageUrl: '/images/home/autonomy-project_animation.png',
     hexColorCode: '#383547',
   },
 ];

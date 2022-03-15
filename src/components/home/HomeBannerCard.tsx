@@ -20,7 +20,7 @@ const HomeBannerCard: React.FC<HomeBannderCardProps> = ({
         ))}
       </InfoWrapper>
       <ImgWrapper>
-        <Img src={imageUrl} alt={`${subHead} 애니메이션`} />
+        <Img src={imageUrl} alt={subHead} />
       </ImgWrapper>
     </BannerCard>
   );

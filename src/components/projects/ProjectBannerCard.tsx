@@ -18,7 +18,7 @@ const ProjectBannerCard: React.FC<ProjectBannerCardProps> = ({
         <Description>{description}</Description>
       </InfoWrapper>
       <ImgWrapper>
-        <Img src={imageUrl} alt={`${subHead} 이미지`} />
+        <Img src={imageUrl} alt={`${subHead} 애니메이션`} />
       </ImgWrapper>
     </BannerCard>
   );
