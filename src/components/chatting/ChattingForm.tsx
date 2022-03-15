@@ -1,5 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
+import { useDispatch } from 'react-redux';
+import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
+
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router';
 
@@ -29,19 +32,19 @@ import {
   ChatLogResponseType,
 } from '../../types/messageTypes';
 
-import ChatRoomListSidebar from './ChatRoomListSidebar';
-import ChatMessageSection from './ChatMessageSection';
-import ChatProfilebar from './ChatProfilebar';
-
 import ChatService from '../../services/ChatService';
 import useSocket from '../../hooks/useSocket';
 import useToken from '../../hooks/reduxHooks/useToken';
 import useTextArea from '../../hooks/useTextArea';
 import useUserIdName from '../../hooks/reduxHooks/useUserIdName';
-import useChatRoomList from '../../hooks/useChatRoomList';
-import useChatLog from '../../hooks/useChatLog';
+import useChatRoomList from '../../hooks/reactQueryHooks/useChatRoomList';
+import useChatLog from '../../hooks/reactQueryHooks/useChatLog';
 import { useMutation, useQueryClient, InfiniteData } from 'react-query';
 import { AxiosResponse } from 'axios';
+
+import ChatRoomListSidebar from './ChatRoomListSidebar';
+import ChatMessageSection from './ChatMessageSection';
+import ChatProfilebar from './ChatProfilebar';
 
 const DRAWER_WIDTH = 250;
 
@@ -52,22 +55,29 @@ interface OnlineProps {
 const ChattingForm: React.FC = () => {
   const location = useLocation();
   const myToken = useToken();
-  const myData = useUserIdName();
+  const dispatch = useDispatch();
+  const [myUserId, myUserName] = useUserIdName();
   const smallMedia = useMediaQuery({
     query: '(max-width: 575px)',
   });
-
-  const myUserId: number | null = myData[0] as number;
-  const myUserName: string | null = myData[1] as string;
 
   const param = new URLSearchParams(location.search);
   const roomId: string | null = param.get('roomId');
   const userId: string | null = param.get('userId');
 
+  const showAlert = (alertShow: boolean, alertText: string) => {
+    dispatch(
+      showSsafyMateAlertSagaStart({
+        show: alertShow,
+        text: alertText,
+      }),
+    );
+  };
+
   const [chatSections, setChatSections] = useState<MessageType[]>([]);
   const [otherUser, setOtherUser] = useState<OtherUserInfoType>();
   const [onlineList, setOnlineList] = useState<number[]>([]);
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   const [socket] = useSocket(myUserId as number);
   const [chat, onChangeChat, setChat] = useTextArea('');
@@ -86,7 +96,7 @@ const ChattingForm: React.FC = () => {
 
   const { roomData: roomListData, refetch: roomRefetch } = useChatRoomList(
     myToken,
-    myUserId,
+    Number(myUserId),
   );
 
   const {
@@ -127,7 +137,7 @@ const ChattingForm: React.FC = () => {
     },
 
     onError(error) {
-      console.error(error);
+      showAlert(true, '채팅 보내기에 실패했습니다. 다시 시도해주세요.');
     },
 
     onSuccess() {
@@ -143,7 +153,7 @@ const ChattingForm: React.FC = () => {
   }, [roomId]);
 
   useEffect(() => {
-    if (userId) {
+    if (userId !== null) {
       userInfoGet();
     }
   }, [userId]);
@@ -356,7 +366,7 @@ const ChattingForm: React.FC = () => {
             <Scrollbars autoHide ref={scrollbarRef} onScrollFrame={onScroll}>
               <ChatMessageSection
                 chatSections={chatSections}
-                myUserId={myUserId}
+                myUserId={Number(myUserId)}
                 otherUser={otherUser !== null ? otherUser : undefined}
                 smallMedia={smallMedia}
               ></ChatMessageSection>

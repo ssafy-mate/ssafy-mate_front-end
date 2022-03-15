@@ -2,10 +2,10 @@ import { AxiosResponse, AxiosError } from 'axios';
 
 import { useQuery } from 'react-query';
 
-import { ErrorResponse } from '../types/commonTypes';
-import { ChatRoomType } from '../types/messageTypes';
+import { ErrorResponse } from '../../types/commonTypes';
+import { ChatRoomType } from '../../types/messageTypes';
 
-import ChatService from '../services/ChatService';
+import ChatService from '../../services/ChatService';
 
 const useChatRoomList = (token: string | null, myUserId: number) => {
   const queryFn = () => ChatService.getChatRoomList(token, myUserId);

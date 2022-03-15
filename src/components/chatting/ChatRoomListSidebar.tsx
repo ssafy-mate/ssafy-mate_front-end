@@ -1,25 +1,23 @@
 import { useEffect, useState } from 'react';
 
-import ChatRoomItem from './ChatRoomItem';
-
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
 
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 
 import { ChatRoomType } from '../../types/messageTypes';
-import useUserIdName from '../../hooks/reduxHooks/useUserIdName';
+import useUserId from '../../hooks/reduxHooks/useUserId';
 import useSocket from '../../hooks/useSocket';
 
+import ChatRoomItem from './ChatRoomItem';
 interface RoomDataProps {
   roomData: ChatRoomType[];
 }
 
 const ChatRoomListSidebar: React.FC<RoomDataProps> = ({ roomData }) => {
-  const myData = useUserIdName();
-  const myUserId = myData[0];
+  const myUserId = useUserId();
 
-  const [socket] = useSocket(myUserId as number);
+  const [socket] = useSocket(Number(myUserId));
   const [onlineList, setOnlineList] = useState<number[]>([]);
 
   useEffect(() => {
