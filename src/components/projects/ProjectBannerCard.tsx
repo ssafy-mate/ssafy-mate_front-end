@@ -8,7 +8,7 @@ const ProjectBannerCard: React.FC<ProjectBannerCardProps> = ({
   head,
   subHead,
   description,
-  videoUrl,
+  imageUrl,
 }) => {
   return (
     <BannerCard>
@@ -17,14 +17,9 @@ const ProjectBannerCard: React.FC<ProjectBannerCardProps> = ({
         <SubHead>{subHead}</SubHead>
         <Description>{description}</Description>
       </InfoWrapper>
-      <VideoWrapper>
-        <Video autoPlay loop muted>
-          <source src={videoUrl} type="video/mp4" />
-        </Video>
-      </VideoWrapper>
-      {/* <ImgWrapper>
-        <Img src={imgUrl} alt={`${subHead} 이미지`} />
-      </ImgWrapper> */}
+      <ImgWrapper>
+        <Img src={imageUrl} alt={`${subHead} 이미지`} />
+      </ImgWrapper>
     </BannerCard>
   );
 };
@@ -116,7 +111,7 @@ const Description = styled.div`
   }
 `;
 
-const VideoWrapper = styled.div`
+const ImgWrapper = styled.div`
   margin-top: 16px;
   height: 280px;
 
@@ -129,7 +124,7 @@ const VideoWrapper = styled.div`
   }
 `;
 
-const Video = styled.video`
+const Img = styled.img`
   width: 260px;
   height: 260px;
 
