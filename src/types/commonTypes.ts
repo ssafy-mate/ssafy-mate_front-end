@@ -24,10 +24,8 @@ export interface HomeBannerCardData {
   head: string;
   subHead: string;
   descriptions: string[];
-  videoUrl: string;
+  imageUrl: string;
 }
-
-export interface HomeBannderCardProps extends HomeBannerCardData {}
 
 export interface HomeBannerSlideType extends HomeBannerCardData {
   id: number;
@@ -38,7 +36,7 @@ export interface ProjectBannerCardData {
   head: string;
   subHead: string;
   description: string;
-  videoUrl: string;
+  imageUrl: string;
 }
 
 export interface ProjectBannerSlideType extends ProjectBannerCardData {
