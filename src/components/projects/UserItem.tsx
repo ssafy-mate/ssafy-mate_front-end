@@ -365,7 +365,7 @@ const MainInfoList = styled.div`
   }
 `;
 
-const UserName = styled.h2`
+const UserName = styled.h3`
   & .user-label {
     font-size: 16px;
     font-weight: 500;

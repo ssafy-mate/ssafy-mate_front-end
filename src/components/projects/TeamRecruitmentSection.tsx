@@ -8,9 +8,10 @@ import Switch from '@mui/material/Switch';
 
 import { TeamListResponse } from '../../types/teamTypes';
 
+import SkeletonTeamRecruitmentSection from './skeletonUI/SkeletonTeamRecruitmentSection';
+import VisuallyHiddenHead from '../common/VisuallyHiddenHead';
 import TeamItem from './TeamItem';
 import EmptyBox from './EmptyBox';
-import SkeletonTeamRecruitmentSection from './skeletonUI/SkeletonTeamRecruitmentSection';
 import ErrorSection from '../common/ErrorSection';
 
 interface TeamRecruitmentSectionProps {
@@ -60,6 +61,7 @@ const TeamRecruitmentSection: React.FC<TeamRecruitmentSectionProps> = ({
         <SkeletonTeamRecruitmentSection />
       ) : (
         <Container>
+          <VisuallyHiddenHead level={2} text="팀 목록" />
           <RecruitmentHeader>
             <HeaderLeft>
               <TotalCount>검색된 팀 총 {data.totalElement}팀</TotalCount>
@@ -127,7 +129,7 @@ const HeaderLeft = styled.div``;
 
 const HeaderRight = styled.div``;
 
-const TotalCount = styled.h1`
+const TotalCount = styled.p`
   margin: auto 0;
   font-size: 14px;
   font-weight: 600;

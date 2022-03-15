@@ -14,6 +14,7 @@ import 'swiper/css/pagination';
 
 import { ProjectBannerSlideType } from '../../types/commonTypes';
 
+import VisuallyHiddenHead from '../common/VisuallyHiddenHead';
 import ProjectBannerCard from './ProjectBannerCard';
 
 const PROJECTS_BANNER_SLIDE_LIST: ProjectBannerSlideType[] = [
@@ -86,6 +87,7 @@ const ProjectBannerSection: React.FC = () => {
   return (
     <Container>
       <Wrapper>
+        <VisuallyHiddenHead level={2} text="특화 프로젝트 트랙 목록" />
         <BannerSwiper
           cssMode={true}
           navigation={true}
