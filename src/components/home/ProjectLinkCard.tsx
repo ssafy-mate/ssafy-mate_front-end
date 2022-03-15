@@ -203,7 +203,7 @@ const CardImg = styled.img`
   }
 `;
 
-const CardTitle = styled.p`
+const CardTitle = styled.h3`
   padding-left: 12px;
   font-size: 24px;
   font-weight: 500;

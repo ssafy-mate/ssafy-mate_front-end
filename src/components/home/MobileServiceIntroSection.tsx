@@ -115,7 +115,7 @@ const Contents = styled.div`
   }
 `;
 
-const Head = styled.h1`
+const Head = styled.h3`
   opacity: 0;
   margin-bottom: 28px;
   font-size: 28px;
@@ -143,7 +143,7 @@ const Head = styled.h1`
   }
 `;
 
-const SubHead = styled.h2`
+const SubHead = styled.h4`
   opacity: 0;
   margin-bottom: 30px;
   font-size: 48px;

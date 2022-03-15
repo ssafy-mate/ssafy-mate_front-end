@@ -9,6 +9,8 @@ import YouTubeIcon from '@mui/icons-material/YouTube';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
 
+import ScreenReaderHead from './ScreenReaderHead';
+
 interface FooterProps {
   offMarginTop?: boolean;
 }
@@ -18,46 +20,53 @@ interface ContainerProps extends FooterProps {}
 const Footer: React.FC<FooterProps> = ({ offMarginTop }) => {
   return (
     <Container offMarginTop={offMarginTop}>
+      <ScreenReaderHead element="h2" text="싸피 메이트 Footer" />
       <Wrapper>
-        <MenuGroup>
-          <MenuList>
-            <MenuItem>서비스</MenuItem>
-            <MenuItem>
-              <PageLink to="#">교육 프로용 싸피 메이트</PageLink>
-            </MenuItem>
-            <MenuItem>
-              <PageLink to="#">운영 관리자용 싸피 메이트</PageLink>
-            </MenuItem>
-          </MenuList>
-          <MenuList>
-            <MenuItem>문의</MenuItem>
-            <MenuItem>
-              <PageOuterLink
-                href="https://github.com/ssafy-mate/ssafy-mate_service"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                FAQ
-              </PageOuterLink>
-            </MenuItem>
-            <MenuItem>
-              <PageOuterLink
-                href="https://github.com/ssafy-mate/ssafy-mate_service"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                1대1 문의
-              </PageOuterLink>
-            </MenuItem>
-          </MenuList>
-          <MenuList>
-            <MenuItem>고객센터</MenuItem>
-            <MenuItem>대표 문의: ssafymate.service@gmail.com</MenuItem>
-            <MenuItem>
-              운영 시간: 오전 9시 ~ 오후 6시 (주말 및 공휴일 휴무)
-            </MenuItem>
-          </MenuList>
-        </MenuGroup>
+        <MenuSection>
+          <MenuGroup>
+            <MenuListHead>서비스</MenuListHead>
+            <MenuList>
+              <MenuItem>
+                <PageLink to="#">교육 프로용 싸피 메이트</PageLink>
+              </MenuItem>
+              <MenuItem>
+                <PageLink to="#">운영 관리자용 싸피 메이트</PageLink>
+              </MenuItem>
+            </MenuList>
+          </MenuGroup>
+          <MenuGroup>
+            <MenuListHead>문의</MenuListHead>
+            <MenuList>
+              <MenuItem>
+                <PageOuterLink
+                  href="https://github.com/ssafy-mate/ssafy-mate_service"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  FAQ
+                </PageOuterLink>
+              </MenuItem>
+              <MenuItem>
+                <PageOuterLink
+                  href="https://github.com/ssafy-mate/ssafy-mate_service"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  1대1 문의
+                </PageOuterLink>
+              </MenuItem>
+            </MenuList>
+          </MenuGroup>
+          <MenuGroup>
+            <MenuListHead>고객센터</MenuListHead>
+            <MenuList>
+              <MenuItem>대표 문의: ssafymate.service@gmail.com</MenuItem>
+              <MenuItem>
+                운영 시간: 오전 9시 ~ 오후 6시 (주말 및 공휴일 휴무)
+              </MenuItem>
+            </MenuList>
+          </MenuGroup>
+        </MenuSection>
         <FooterAddress>
           <p>SSAFY MATE / 싸피 메이트</p>
           <p>
@@ -136,7 +145,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const MenuGroup = styled.div`
+const MenuSection = styled.section`
   display: flex;
   margin-bottom: 48px;
 
@@ -144,6 +153,11 @@ const MenuGroup = styled.div`
     flex-direction: column;
     margin-bottom: 36px;
   }
+`;
+
+const MenuGroup = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 const FooterAddress = styled.address`
@@ -178,23 +192,23 @@ const MenuList = styled.ul`
   }
 `;
 
+const MenuListHead = styled.h3`
+  margin-bottom: 16px;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.8;
+  color: #44576c;
+
+  @media (max-width: 767px) {
+    margin-bottom: 8px;
+  }
+`;
+
 const MenuItem = styled.li`
   font-size: 14px;
   font-weight: 400;
   line-height: 1.8;
   color: #98a8b9;
-
-  &:nth-of-type(1) {
-    margin-bottom: 16px;
-    font-weight: 600;
-    color: #44576c;
-  }
-
-  @media (max-width: 767px) {
-    &:nth-of-type(1) {
-      margin-bottom: 8px;
-    }
-  }
 `;
 
 const SubMenuList = styled.ul`
