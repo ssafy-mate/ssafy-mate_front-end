@@ -14,6 +14,7 @@ import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 import Header from '../../components/common/Header';
 import ProjectNavigation from '../../components/projects/ProjectNavigation';
+import VisuallyHiddenHead from '../../components/common/VisuallyHiddenHead';
 import ProjectBannerSection from '../../components/projects/ProjectBannerSection';
 import TeamListSearchForm from '../../components/projects/TeamListSearchForm';
 import TeamRecruitmentSection from '../../components/projects/TeamRecruitmentSection';
@@ -70,6 +71,7 @@ const SpecializationProjectTeamListPage: React.FC = () => {
     <>
       <Header />
       <ProjectNavigation />
+      <VisuallyHiddenHead level={1} text="특화 프로젝트 팀 공고" />
       <ProjectBannerSection />
       <TeamListSearchForm
         campus={campus}

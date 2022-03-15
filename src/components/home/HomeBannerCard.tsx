@@ -58,7 +58,7 @@ const InfoWrapper = styled.div`
   }
 `;
 
-const Head = styled.h1`
+const Head = styled.p`
   margin-bottom: 8px;
   font-size: 15px;
   line-height: 1.5;
@@ -74,7 +74,7 @@ const Head = styled.h1`
   }
 `;
 
-const SubHead = styled.h2`
+const SubHead = styled.h3`
   margin-bottom: 32px;
   font-size: 30px;
   font-weight: 500;

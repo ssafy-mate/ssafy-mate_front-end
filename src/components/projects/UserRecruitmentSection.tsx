@@ -6,10 +6,11 @@ import Switch from '@mui/material/Switch';
 
 import { UserListResponse } from '../../types/userTypes';
 
+import SkeletonUserRecruitmentSection from './skeletonUI/SkeletonUserRecruitmentSection';
+import VisuallyHiddenHead from '../common/VisuallyHiddenHead';
 import UserItem from '../projects/UserItem';
 import EmptyBox from './EmptyBox';
 import ErrorSection from '../common/ErrorSection';
-import SkeletonUserRecruitmentSection from './skeletonUI/SkeletonUserRecruitmentSection';
 
 interface UserRecruitmentSectionProps {
   isLoading: boolean;
@@ -52,6 +53,7 @@ const UserRecruitmentSection: React.FC<UserRecruitmentSectionProps> = ({
         <SkeletonUserRecruitmentSection />
       ) : (
         <Container>
+          <VisuallyHiddenHead level={2} text="교육생 목록" />
           <RecruitmentHeader>
             <HeaderLeft>
               <TotalCount>검색된 교육생 총 {data.totalElement}명</TotalCount>
@@ -114,7 +116,7 @@ const HeaderLeft = styled.div``;
 
 const HeaderRight = styled.div``;
 
-const TotalCount = styled.h1`
+const TotalCount = styled.p`
   margin: auto 0;
   font-size: 14px;
   font-weight: 600;

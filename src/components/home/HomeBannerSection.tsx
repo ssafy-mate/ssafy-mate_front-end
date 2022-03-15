@@ -13,6 +13,7 @@ import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
 import { HomeBannerSlideType } from '../../types/commonTypes';
+import VisuallyHiddenHead from '../common/VisuallyHiddenHead';
 
 import HomeBannerCard from './HomeBannerCard';
 
@@ -56,6 +57,7 @@ const HomeBannerSection: React.FC = () => {
   return (
     <>
       <Container>
+        <VisuallyHiddenHead level={2} text="SSAFY 2학기 프로젝트" />
         <BannerSwiper
           cssMode={true}
           navigation={true}

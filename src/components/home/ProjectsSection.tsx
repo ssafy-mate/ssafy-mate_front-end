@@ -4,6 +4,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 import { ProjectLinkCardType } from '../../types/commonTypes';
 
+import VisuallyHiddenHead from '../common/VisuallyHiddenHead';
 import ProjectLinkCard from './ProjectLinkCard';
 
 const PROJECT_LINK_CARD_LIST: ProjectLinkCardType[] = [
@@ -75,6 +76,7 @@ const PROJECT_LINK_CARD_LIST: ProjectLinkCardType[] = [
 const ProjectsSection: React.FC = () => {
   return (
     <Container>
+      <VisuallyHiddenHead level={2} text="팀 빌딩 페이지 링크 목록" />
       <Wrapper>
         {PROJECT_LINK_CARD_LIST.map((projectLinkCardData) => (
           <ProjectLinkCard
