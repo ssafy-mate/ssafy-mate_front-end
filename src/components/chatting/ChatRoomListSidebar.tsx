@@ -8,7 +8,7 @@ import styled from '@emotion/styled';
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 
 import { ChatRoomType } from '../../types/messageTypes';
-import useUserIdName from '../../hooks/useUserIdName';
+import useUserIdName from '../../hooks/reduxHooks/useUserIdName';
 import useSocket from '../../hooks/useSocket';
 
 interface RoomDataProps {
