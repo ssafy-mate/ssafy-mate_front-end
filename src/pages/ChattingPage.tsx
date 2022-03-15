@@ -5,9 +5,10 @@ import { Redirect } from 'react-router-dom';
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
 
-import useToken from '../hooks/useToken';
+import useToken from '../hooks/reduxHooks/useToken';
+import useUserId from '../hooks/reduxHooks/useUserId';
 import useSocket from '../hooks/useSocket';
-import useUserId from '../hooks/useUserId';
+import useDocumentTitle from '../hooks/useDocumentTitle';
 
 import Header from '../components/common/Header';
 import ChattingForm from '../components/chatting/ChattingForm';
@@ -17,9 +18,7 @@ const ChattingPage: React.FC = () => {
   const userId = useUserId();
   const [socket] = useSocket(userId as number);
 
-  useEffect(() => {
-    document.title = '채팅 | 싸피 메이트';
-  }, []);
+  useDocumentTitle('채팅 | 싸피 메이트');
 
   useEffect(() => {
     if (token !== null && socket) {

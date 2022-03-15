@@ -23,9 +23,9 @@ import {
 import { Severity, SsafyTrack } from '../../types/signUpTypes';
 import { CAMPUS_LIST } from '../../data/ssafyData';
 
-import useToken from '../../hooks/useToken';
-import useUserId from '../../hooks/useUserId';
-import useProfileInfo from '../../hooks/useProfileInfo';
+import useToken from '../../hooks/reduxHooks/useToken';
+import useUserId from '../../hooks/reduxHooks/useUserId';
+import useProfileInfo from '../../hooks/reduxHooks/useProfileInfo';
 
 const BasicInformationSection: React.FC = () => {
   const [profileImg, setProfileImg] = useState<Blob | null>(null);
@@ -398,7 +398,7 @@ const Select = styled.select`
   background-position: calc(100% - 0.8rem) 49%;
   background-size: 0.625rem 0.3125rem;
   background-color: #fbfbfd;
-  background-image: url(/images/assets/toggle-black.png);
+  background-image: url(/images/common/toggle-black.png);
   background-repeat: no-repeat;
   font-size: 16px;
   line-height: 24px;

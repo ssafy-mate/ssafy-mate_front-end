@@ -33,8 +33,8 @@ import Tooltip from '@mui/material/Tooltip';
 
 import { TeamOfferRequestType } from '../../types/teamTypes';
 
-import useUserId from '../../hooks/useUserId';
-import useUserInfo from '../../hooks/useUserInfo';
+import useUserId from '../../hooks/reduxHooks/useUserId';
+import useUserInfo from '../../hooks/reactQueryHooks/useUserInfo';
 
 import UserLabel from './UserLabel';
 import UserTechStackTag from './UserTechStackTag';
@@ -108,10 +108,10 @@ const UserInfoSection: React.FC = () => {
             : 'https://avatars.githubusercontent.com/u/97279195?s=200&v=4'
         }`,
         link: {
-          webUrl: `https://www.ssafymate.site${
+          webUrl: `${process.env.REACT_APP_CLIENT_URL}${
             userData !== undefined ? `/users/${userData.userId}` : ''
           }`,
-          mobileWebUrl: `https://www.ssafymate.site${
+          mobileWebUrl: `${process.env.REACT_APP_CLIENT_URL}${
             userData !== undefined ? `/users/${userData.userId}` : ''
           }`,
         },
@@ -122,10 +122,10 @@ const UserInfoSection: React.FC = () => {
             userData !== undefined ? userData.userName : ''
           } 교육생 정보 보러가기`,
           link: {
-            webUrl: `https://www.ssafymate.site${
+            webUrl: `${process.env.REACT_APP_CLIENT_URL}${
               userData !== undefined ? `/users/${userData.userId}` : ''
             }`,
-            mobileWebUrl: `https://www.ssafymate.site${
+            mobileWebUrl: `${process.env.REACT_APP_CLIENT_URL}${
               userData !== undefined ? `/users/${userData.userId}` : ''
             }`,
           },
@@ -212,18 +212,20 @@ const UserInfoSection: React.FC = () => {
                   src={
                     userData.profileImgUrl !== null
                       ? userData.profileImgUrl
-                      : '/images/assets/basic-profile-img.png'
+                      : '/images/common/default-profile-img.png'
                   }
                   alt={`${userData.userName}님의 프로필 이미지`}
                 />
               </ProfileImgWrapper>
               <NameWrapper>
                 <Row>
-                  <UserLabel
-                    userId={userData.userId}
-                    userName={userData.userName}
-                    offProfileMenu={true}
-                  />
+                  <UserName>
+                    <UserLabel
+                      userId={userData.userId}
+                      userName={userData.userName}
+                      offProfileMenu={true}
+                    />
+                  </UserName>
                   <Tooltip title="카카오톡 공유하기" arrow>
                     <SharingButton onClick={sendKakaoSharingMessage}>
                       <ShareIcon />
@@ -806,6 +808,8 @@ const SubHead = styled.h3`
     font-size: 15px;
   }
 `;
+
+const UserName = styled.h1``;
 
 const InfoList = styled.ul`
   width: 100%;

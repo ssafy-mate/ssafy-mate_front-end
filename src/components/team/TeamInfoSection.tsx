@@ -29,7 +29,7 @@ import { UserApplicationRequestType } from '../../types/authTypes';
 
 import { sendUserApplication as sendUserApplicationSagaStart } from '../../redux/modules/auth';
 
-import useTeamInfo from '../../hooks/useTeamInfo';
+import useTeamInfo from '../../hooks/reactQueryHooks/useTeamInfo';
 
 import UserLabel from '../user/UserLabel';
 import RecruitStatusBadge from '../projects/RecruitStatusBadge';
@@ -134,10 +134,10 @@ const TeamInfoSection: React.FC = () => {
             : 'https://avatars.githubusercontent.com/u/97279195?s=200&v=4'
         }`,
         link: {
-          webUrl: `https://www.ssafymate.site${
+          webUrl: `${process.env.REACT_APP_CLIENT_URL}${
             teamData !== undefined ? `/teams/${teamData.teamId}` : ''
           }`,
-          mobileWebUrl: `https://www.ssafymate.site${
+          mobileWebUrl: `${process.env.REACT_APP_CLIENT_URL}${
             teamData !== undefined ? `/teams/${teamData.teamId}` : ''
           }`,
         },
@@ -148,10 +148,10 @@ const TeamInfoSection: React.FC = () => {
             teamData !== undefined ? teamData.teamName : ''
           } 팀 정보 보러가기`,
           link: {
-            webUrl: `https://www.ssafymate.site${
+            webUrl: `${process.env.REACT_APP_CLIENT_URL}${
               teamData !== undefined ? `/teams/${teamData.teamId}` : ''
             }`,
-            mobileWebUrl: `https://www.ssafymate.site${
+            mobileWebUrl: `${process.env.REACT_APP_CLIENT_URL}${
               teamData !== undefined ? `/teams/${teamData.teamId}` : ''
             }`,
           },
@@ -257,7 +257,7 @@ const TeamInfoSection: React.FC = () => {
                   src={
                     teamData.teamImgUrl !== null
                       ? teamData.teamImgUrl
-                      : '/images/assets/basic-team-logo.png'
+                      : '/images/common/default-team-logo.png'
                   }
                   alt={`${teamData.teamName} 팀의 대표 이미지`}
                 />

@@ -6,8 +6,8 @@ import { ProjectParams } from '../types/authTypes';
 
 import UserService from '../services/UserService';
 
-import useToken from './useToken';
-import useUserId from './useUserId';
+import useToken from './reduxHooks/useToken';
+import useUserId from './reduxHooks/useUserId';
 
 const useMyTeamId = (project: string) => {
   const [myTeamId, setMyTeamId] = useState<number | null>(null);

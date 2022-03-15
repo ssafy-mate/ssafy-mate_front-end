@@ -21,7 +21,7 @@ import {
   ResponseStatusType,
 } from '../../types/userTypes';
 
-import useToken from '../../hooks/useToken';
+import useToken from '../../hooks/reduxHooks/useToken';
 
 import RequestService from '../../services/RequestService';
 
@@ -123,8 +123,8 @@ const RequestItem: React.FC<RequestItemProps> = ({
               originImgUrl !== null
                 ? originImgUrl
                 : originType === 'user'
-                ? '/images/assets/basic-profile-img.png'
-                : '/images/assets/basic-team-logo.png'
+                ? '/images/common/default-profile-img.png'
+                : '/images/common/default-team-logo.png'
             }
             alt={`${originName}${
               originType === 'user' ? '님의 프로필 이미지' : ' 팀 로고'
@@ -137,7 +137,7 @@ const RequestItem: React.FC<RequestItemProps> = ({
             <NameLink
               to={`/${originType === 'user' ? 'users' : 'teams'}/${originId}`}
             >
-              {originName}
+              <InfoName>{originName}</InfoName>
             </NameLink>
             <InfoItem>{originInfo}</InfoItem>
           </InfoList>
@@ -302,7 +302,7 @@ const Message = styled.h2`
   }
 `;
 
-const InfoList = styled.h3`
+const InfoList = styled.div`
   display: flex;
   margin-bottom: 10px;
 `;
@@ -347,6 +347,8 @@ const NameLink = styled(Link)`
     font-size: 13px;
   }
 `;
+
+const InfoName = styled.h3``;
 
 const InfoItem = styled.span`
   display: flex;

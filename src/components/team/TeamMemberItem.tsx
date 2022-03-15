@@ -25,7 +25,7 @@ const TeamMemberItem: React.FC<TeamMemberItemProps> = ({
           src={
             profileImgUrl !== null
               ? profileImgUrl
-              : '/images/assets/basic-profile-img.png'
+              : '/images/common/default-profile-img.png'
           }
           alt={`${userName}님의 프로필 이미지`}
         />
@@ -105,7 +105,7 @@ const MemberInfo = styled.div`
   margin: auto 0;
 `;
 
-const MemberName = styled.h5`
+const MemberName = styled.h4`
   display: flex;
   align-items: center;
 

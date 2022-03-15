@@ -1,12 +1,14 @@
 import styled from '@emotion/styled';
 
-import { ProjectBannerCardProps } from '../../types/commonTypes';
+import { ProjectBannerCardData } from '../../types/commonTypes';
+
+interface ProjectBannerCardProps extends ProjectBannerCardData {}
 
 const ProjectBannerCard: React.FC<ProjectBannerCardProps> = ({
   head,
   subHead,
   description,
-  imgUrl,
+  videoUrl,
 }) => {
   return (
     <BannerCard>
@@ -15,9 +17,14 @@ const ProjectBannerCard: React.FC<ProjectBannerCardProps> = ({
         <SubHead>{subHead}</SubHead>
         <Description>{description}</Description>
       </InfoWrapper>
-      <ImgWrapper>
+      <VideoWrapper>
+        <Video autoPlay loop muted>
+          <source src={videoUrl} type="video/mp4" />
+        </Video>
+      </VideoWrapper>
+      {/* <ImgWrapper>
         <Img src={imgUrl} alt={`${subHead} 이미지`} />
-      </ImgWrapper>
+      </ImgWrapper> */}
     </BannerCard>
   );
 };
@@ -109,7 +116,7 @@ const Description = styled.div`
   }
 `;
 
-const ImgWrapper = styled.div`
+const VideoWrapper = styled.div`
   margin-top: 16px;
   height: 280px;
 
@@ -122,16 +129,20 @@ const ImgWrapper = styled.div`
   }
 `;
 
-const Img = styled.img`
+const Video = styled.video`
+  width: 260px;
   height: 260px;
 
   @media (max-width: 991px) {
+    width: 240px;
     height: 240px;
   }
   @media (max-width: 767px) {
+    width: 220px;
     height: 220px;
   }
   @media (max-width: 575px) {
+    width: 200px;
     height: 200px;
   }
 `;

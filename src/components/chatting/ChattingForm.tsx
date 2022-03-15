@@ -35,9 +35,9 @@ import ChatProfilebar from './ChatProfilebar';
 
 import ChatService from '../../services/ChatService';
 import useSocket from '../../hooks/useSocket';
-import useToken from '../../hooks/useToken';
+import useToken from '../../hooks/reduxHooks/useToken';
 import useTextArea from '../../hooks/useTextArea';
-import useUserIdName from '../../hooks/useUserIdName';
+import useUserIdName from '../../hooks/reduxHooks/useUserIdName';
 import useChatRoomList from '../../hooks/useChatRoomList';
 import useChatLog from '../../hooks/useChatLog';
 import { useMutation, useQueryClient, InfiniteData } from 'react-query';

@@ -7,7 +7,7 @@ export const teamDataListData = [
         userId: 1,
         userName: '조원빈',
       },
-      teamImgUrl: '/images/common/ssafy-mate_logo.png',
+      teamImgUrl: '/images/common/ssafy-mate_logo_medium.png',
       campus: '서울',
       project: '공통 프로젝트',
       projectTrack: '웹 기술',
@@ -268,7 +268,7 @@ export const teamDataListData = [
         {
           userId: 9,
           userName: '김주호',
-          profileImgUrl: '/images/assets/basic-profile-img.png',
+          profileImgUrl: '/images/common/default-profile-img.png',
           ssafyTrack: 'Python Track',
           job1: '백엔드(Back-end)',
         },
@@ -523,7 +523,7 @@ export const teamListData = [
 export const teamEditData = {
   teamId: 1,
   teamName: '디벨로파시토',
-  teamImgUrl: '/images/common/ssafy-mate_logo.png',
+  teamImgUrl: '/images/common/ssafy-mate_logo_medium.png',
   campus: '서울',
   project: '공통 프로젝트',
   projectTrack: '웹 기술',
