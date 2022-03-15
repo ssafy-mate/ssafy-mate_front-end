@@ -14,16 +14,13 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 
 import SendIcon from '@mui/icons-material/Send';
-import CommentIcon from '@mui/icons-material/Comment';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import { Avatar } from '@mui/material';
+import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import SwipeableDrawer from '@mui/material/SwipeableDrawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import Tooltip from '@mui/material/Tooltip';
 
 import {
   MessageType,
@@ -32,12 +29,15 @@ import {
   ChatLogResponseType,
 } from '../../types/messageTypes';
 
+import ChatRoomListSidebar from './ChatRoomListSidebar';
+import ChatMessageSection from './ChatMessageSection';
+import ChatProfilebar from './ChatProfilebar';
+
 import ChatService from '../../services/ChatService';
 import useSocket from '../../hooks/useSocket';
 import useToken from '../../hooks/useToken';
 import useTextArea from '../../hooks/useTextArea';
 import useUserIdName from '../../hooks/useUserIdName';
-import ChatRoomListSidebar from './ChatRoomListSidebar';
 import useChatRoomList from '../../hooks/useChatRoomList';
 import useChatLog from '../../hooks/useChatLog';
 import { useMutation, useQueryClient, InfiniteData } from 'react-query';
@@ -47,10 +47,6 @@ const DRAWER_WIDTH = 250;
 
 interface OnlineProps {
   isOnline: boolean;
-}
-
-interface MessageBoxProps {
-  isLeft: boolean;
 }
 
 const ChattingForm: React.FC = () => {
@@ -77,11 +73,16 @@ const ChattingForm: React.FC = () => {
   const [chat, onChangeChat, setChat] = useTextArea('');
 
   const messageInputRef = useRef<HTMLTextAreaElement>(null);
-  const chatRoomMessageRef = useRef<HTMLDivElement>(null);
   const scrollbarRef = useRef<Scrollbars>(null);
 
   const queryClient = useQueryClient();
   const queryFn = (params: MessageType) => ChatService.sendChatData(params);
+
+  const userInfoGet = () => {
+    ChatService.getChatUserInfo(userId as string).then((response) => {
+      setOtherUser(response.data);
+    });
+  };
 
   const { roomData: roomListData, refetch: roomRefetch } = useChatRoomList(
     myToken,
@@ -134,12 +135,6 @@ const ChattingForm: React.FC = () => {
       queryClient.refetchQueries(['userId', myUserId]);
     },
   });
-
-  const userInfoGet = () => {
-    ChatService.getChatUserInfo(userId as string).then((response) => {
-      setOtherUser(response.data);
-    });
-  };
 
   useEffect(() => {
     setChatSections([]);
@@ -354,96 +349,18 @@ const ChattingForm: React.FC = () => {
           </ChatRoomEmpty>
         ) : (
           <ChatRoomWrapper>
-            <ChatRoomMessageWrapper>
-              <ChatRoomUserNameBar>
-                <ChatRoomHeaderProfile className="user-name">
-                  <Avatar
-                    src={
-                      otherUser?.profileImgUrl !== null
-                        ? otherUser?.profileImgUrl
-                        : '/images/assets/basic-profile-img.png'
-                    }
-                    className="profile-avatar"
-                  />
-                  <ProfileLink to={`/users/${otherUser?.userId}`}>
-                    <div className="user-name">
-                      <span className="user-name__name">
-                        {otherUser?.userName}
-                      </span>
-                      <span className="user-name__email">
-                        @{otherUser?.userEmail.split('@')[0]}
-                      </span>
-                    </div>
-                  </ProfileLink>
-                </ChatRoomHeaderProfile>
-                <ButtonBox>
-                  <Tooltip title={`${otherUser?.userName}님의 프로필`} arrow>
-                    <ProfileIconLink to={`/users/${otherUser?.userId}`}>
-                      <AccountBoxIcon />
-                    </ProfileIconLink>
-                  </Tooltip>
-                  <Tooltip title="채팅 목록" arrow>
-                    <ChatRoomListButton
-                      aria-label="open drawer"
-                      onClick={handleDrawerOpen}
-                      edge="start"
-                    >
-                      <CommentIcon />
-                    </ChatRoomListButton>
-                  </Tooltip>
-                </ButtonBox>
-              </ChatRoomUserNameBar>
-              <Scrollbars autoHide ref={scrollbarRef} onScrollFrame={onScroll}>
-                <ChatRoomMessageList ref={chatRoomMessageRef}>
-                  {chatSections !== [] && chatSections.length > 0
-                    ? chatSections.map((message, index) => {
-                        return (
-                          <MessageBoxWrapper key={index}>
-                            {message.senderId === Number(myUserId) ? (
-                              <MessageBoxContent isLeft={false}>
-                                <MessageTimeBox>
-                                  <div className="message_date">
-                                    {smallMedia
-                                      ? dayjs(message.sentTime).format(
-                                          'a hh:mm',
-                                        )
-                                      : dayjs(message.sentTime).format(
-                                          'YY.MM.DD. a hh:mm',
-                                        )}
-                                  </div>
-                                </MessageTimeBox>
-                                <p>{message.content}</p>
-                              </MessageBoxContent>
-                            ) : (
-                              <MessageBoxContent isLeft={true}>
-                                <ProfileImg
-                                  src={
-                                    otherUser?.profileImgUrl !== null
-                                      ? otherUser?.profileImgUrl
-                                      : '/images/assets/basic-profile-img.png'
-                                  }
-                                />
-                                <p>{message.content}</p>
-                                <MessageTimeBox>
-                                  <div className="message_date">
-                                    {smallMedia
-                                      ? dayjs(message.sentTime).format(
-                                          'a hh:mm',
-                                        )
-                                      : dayjs(message.sentTime).format(
-                                          'YY.MM.DD. a hh:mm',
-                                        )}
-                                  </div>
-                                </MessageTimeBox>
-                              </MessageBoxContent>
-                            )}
-                          </MessageBoxWrapper>
-                        );
-                      })
-                    : null}
-                </ChatRoomMessageList>
-              </Scrollbars>
-            </ChatRoomMessageWrapper>
+            <ChatProfilebar
+              otherUser={otherUser}
+              handleDrawerOpen={handleDrawerOpen}
+            ></ChatProfilebar>
+            <Scrollbars autoHide ref={scrollbarRef} onScrollFrame={onScroll}>
+              <ChatMessageSection
+                chatSections={chatSections}
+                myUserId={myUserId}
+                otherUser={otherUser !== null ? otherUser : undefined}
+                smallMedia={smallMedia}
+              ></ChatMessageSection>
+            </Scrollbars>
             <ChatTypingWrapper>
               <TextArea
                 ref={messageInputRef}
@@ -593,191 +510,6 @@ const ChatRoomWrapper = styled.div`
   height: 100%;
 `;
 
-const ChatRoomMessageWrapper = styled.div`
-  overflow: hidden;
-  display: flex;
-  flex: 1 1 0px;
-  flex-direction: column;
-  position: relative;
-`;
-
-const ChatRoomUserNameBar = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  height: 64px;
-  min-height: 64px;
-  padding: 0 20px;
-  border-bottom: 1px solid #dfdfdf;
-  box-sizing: border-box;
-
-  @media (max-width: 767px) {
-    height: 62px;
-    min-height: 62px;
-    padding: 0 16px;
-  }
-`;
-
-const ProfileLink = styled(Link)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  cursor: pointer;
-
-  &:hover {
-    & .user-name__name {
-      color: #3396f4;
-      text-decoration: underline;
-    }
-  }
-
-  & .user-name {
-    & span {
-      font-size: 16px;
-      font-weight: 500;
-      transition: color 0.08s ease-in-out;
-    }
-  }
-
-  & .user-name {
-    &.user-name__name {
-      color: #263747;
-    }
-
-    & .user-name__email {
-      color: #868b94;
-    }
-  }
-
-  & .user-icon {
-    color: #868b94;
-  }
-
-  @media (max-width: 767px) {
-    & .user-name {
-      & span {
-        font-size: 15px;
-        font-weight: 500;
-        color: #263747;
-      }
-    }
-  }
-`;
-
-const ProfileIconLink = styled(Link)`
-  & svg {
-    font-size: 28px;
-    color: #263747;
-    transition: color 0.08s ease-in-out;
-  }
-
-  &:hover {
-    & svg {
-      color: #3396f4;
-    }
-  }
-`;
-
-const ChatRoomHeaderProfile = styled.div`
-  display: flex;
-  align-items: center;
-
-  & .profile-avatar {
-    margin-right: 10px;
-  }
-
-  @media (max-width: 767px) {
-    & .profile-avatar {
-      width: 36px;
-      height: 36px;
-    }
-  }
-`;
-
-const ButtonBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const ChatRoomListButton = styled(IconButton)`
-  display: none;
-  padding: 0;
-  margin-left: 8px;
-
-  & svg {
-    font-size: 28px;
-    color: #263747;
-    transition: color 0.08s ease-in-out;
-
-    &:hover {
-      color: #3396f4;
-    }
-  }
-
-  @media (max-width: 767px) {
-    display: flex;
-  }
-`;
-
-const ChatRoomMessageList = styled.div`
-  overflow: hidden auto;
-  padding: 0px 20px;
-
-  @media (max-width: 767px) {
-    padding: 0 16px;
-  }
-`;
-
-const MessageBoxWrapper = styled.div`
-  margin-top: 15px;
-`;
-
-const MessageBoxContent = styled.div<MessageBoxProps>`
-  display: flex;
-  justify-content: ${(props) => (props.isLeft ? 'start' : 'flex-end')};
-  padding: 4px;
-  contain: content;
-
-  & p {
-    display: inline-flex;
-    max-width: 364px;
-    margin: 0px;
-    padding: 10px 14px;
-    border-radius: ${(props) =>
-      props.isLeft ? '2px 20px 20px' : '20px 2px 20px 20px'};
-    background-color: ${(props) => (props.isLeft ? '#e9ebef' : '#3396f4')};
-    font-size: 14px;
-    line-height: 1.5;
-    color: ${(props) => (props.isLeft ? '#263747' : '#fff')};
-    white-space: pre-wrap;
-    word-break: break-all;
-  }
-
-  @media (max-width: 767px) {
-    & p {
-      font-size: 13px;
-      line-height: 1.4;
-    }
-  }
-`;
-
-const MessageTimeBox = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding: 0px 4px;
-  align-items: flex-end;
-
-  .message_date {
-    min-width: 58px;
-    font-size: 12px;
-    line-height: 150%;
-    color: #868b94;
-    letter-spacing: -0.02em;
-  }
-`;
-
 const ChatTypingWrapper = styled.div`
   display: flex;
   flex-direction: row;
@@ -796,15 +528,6 @@ const ChatTypingWrapper = styled.div`
 
   @media (max-width: 767px) {
     margin: 12px 16px 8px 16px;
-  }
-`;
-
-const ProfileImg = styled(Avatar)`
-  margin-right: 8px;
-
-  @media (max-width: 767px) {
-    width: 34px;
-    height: 34px;
   }
 `;
 
