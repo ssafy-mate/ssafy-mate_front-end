@@ -47,7 +47,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
   const [seconds, setSeconds] = useState<number>(0);
   const [showCodeBox, setShowCodeBox] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
-  const [loadingColor, setLoadingColor] = useState<string>('##fff');
+  const [loadingColor, setLoadingColor] = useState<string>('#fff');
   const [timeStop, setTimeStop] = useState<number>(0);
 
   const dispatch = useDispatch();
