@@ -46,7 +46,7 @@ const SpecializationProjectReceiveRequestListPage = lazy(
 const SpecializationProjectSendRequestListPage = lazy(
   () => import('./pages/projects/SpecializationProjectSendRequestListPage'),
 );
-const ChattingPage = lazy(() => import('./pages/ChattingPage'));
+const ChatPage = lazy(() => import('./pages/ChatPage'));
 const PrivacyPage = lazy(() => import('./pages/policy/PrivacyPage'));
 const TermsOfServicePage = lazy(
   () => import('./pages/policy/TermsOfServicePage'),
@@ -126,7 +126,7 @@ const App: React.FC = () => {
               path="/projects/specialization/:userId/send_requests"
               component={SpecializationProjectSendRequestListPage}
             />
-            <Route exact path="/chatting/:myId" component={ChattingPage} />
+            <Route exact path="/chatting/:myId" component={ChatPage} />
             <Route exact path="/privacy" component={PrivacyPage} />
             <Route
               exact

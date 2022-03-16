@@ -4,11 +4,11 @@ import { NavLink } from 'react-router-dom';
 
 import dayjs from 'dayjs';
 
-import { ChatRoomTypeProps } from '../../types/messageTypes';
-
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
 import { Avatar } from '@mui/material';
+
+import { ChatRoomTypeProps } from '../../types/messageTypes';
 
 interface OnlineProps {
   isOnline: boolean;

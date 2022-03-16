@@ -17,9 +17,6 @@ import App from './App';
 dayjs.extend(relativeTime);
 dayjs.locale('ko');
 
-//const { worker } = require('./mocks/browser');
-// worker.strat();
-
 const queryClient = new QueryClient();
 const store = createReduxStore();
 const persistor = persistStore(store);

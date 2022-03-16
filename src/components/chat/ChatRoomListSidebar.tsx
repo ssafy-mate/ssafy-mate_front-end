@@ -11,6 +11,7 @@ import useUserId from '../../hooks/reduxHooks/useUserId';
 import useSocket from '../../hooks/useSocket';
 
 import ChatRoomItem from './ChatRoomItem';
+
 interface RoomDataProps {
   roomData: ChatRoomType[];
 }
