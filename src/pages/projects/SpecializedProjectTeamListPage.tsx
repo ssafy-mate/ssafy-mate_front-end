@@ -23,7 +23,7 @@ import Footer from '../../components/common/Footer';
 
 const CURRENT_PROJECT_CODE: number = 2;
 
-const SpecializationProjectTeamListPage: React.FC = () => {
+const SpecializedProjectTeamListPage: React.FC = () => {
   const myCampus = useSelector<RootState, string | null>(
     (state) => state.auth.campus,
   );
@@ -33,7 +33,7 @@ const SpecializationProjectTeamListPage: React.FC = () => {
   const [campus, setCampus] = useState<string>(
     myCampus !== null ? myCampus : 'all',
   );
-  const [project, setProject] = useState<string>('특화 프로젝트');
+  const [project] = useState<string>('특화 프로젝트');
   const [projectTrack, setProjectTrack] = useState<string>(
     myProjectTrack !== null ? myProjectTrack : 'all',
   );
@@ -100,4 +100,4 @@ const SpecializationProjectTeamListPage: React.FC = () => {
   );
 };
 
-export default SpecializationProjectTeamListPage;
+export default SpecializedProjectTeamListPage;
