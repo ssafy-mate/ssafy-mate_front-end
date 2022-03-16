@@ -7,16 +7,16 @@ import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 import Header from '../../components/common/Header';
 import ProjectNavigation from '../../components/projects/ProjectNavigation';
-import SendRequestListSection from '../../components/projects/SendRequestListSection';
+import ReceiveRequestListSection from '../../components/projects/ReceiveRequestListSection';
 import Footer from '../../components/common/Footer';
 
-const SpecializationProjectSendRequestListPage: React.FC = () => {
+const SpecializedProjectReceiveRequestListPage: React.FC = () => {
   const token = useToken();
   const smallMedia = useMediaQuery({
     query: '(max-width: 575px)',
   });
 
-  useDocumentTitle('특화 프로젝트 보낸 요청 | 싸피 메이트');
+  useDocumentTitle('특화 프로젝트 받은 제안 | 싸피 메이트');
 
   if (token === null) {
     return <Redirect to="/users/sign_in" />;
@@ -26,10 +26,10 @@ const SpecializationProjectSendRequestListPage: React.FC = () => {
     <>
       <Header />
       <ProjectNavigation />
-      <SendRequestListSection />
+      <ReceiveRequestListSection />
       {!smallMedia && <Footer />}
     </>
   );
 };
 
-export default SpecializationProjectSendRequestListPage;
+export default SpecializedProjectReceiveRequestListPage;

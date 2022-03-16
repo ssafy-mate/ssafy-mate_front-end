@@ -33,7 +33,7 @@ const SpecializationProjectUserListPage: React.FC = () => {
   const [campus, setCampus] = useState<string>(
     myCampus !== null ? myCampus : 'all',
   );
-  const [project, setProject] = useState<string>('특화 프로젝트');
+  const [project] = useState<string>('특화 프로젝트');
   const [projectTrack, setProjectTrack] = useState<string>(
     myProjectTrack !== null ? myProjectTrack : 'all',
   );

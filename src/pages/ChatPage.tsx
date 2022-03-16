@@ -11,7 +11,7 @@ import useSocket from '../hooks/useSocket';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 
 import Header from '../components/common/Header';
-import ChatSection from '../components/chatting/ChatSection';
+import ChatSection from '../components/chat/ChatSection';
 
 const ChatPage: React.FC = () => {
   const token = useToken();
