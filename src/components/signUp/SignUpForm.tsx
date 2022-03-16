@@ -33,22 +33,23 @@ const SignUpForm: React.FC<SignUpProps> = ({
 }) => {
   const [emailCodeRequestButton, setEmailCodeRequestButton] =
     useState<boolean>(true);
-  const [codeConfirmButton, setCodeConfirmButton] = useState<boolean>(true);
-  const [codeInputDisabled, setCodeInputDisabled] = useState<boolean>(true);
+  const [emailCodeConfirmButton, setEmailCodeConfirmButton] =
+    useState<boolean>(true);
+  const [emailCodeInputDisabled, setEmailCodeInputDisabled] =
+    useState<boolean>(true);
   const [emailInputDisabled, setEmailInputDisabled] = useState<boolean>(false);
-  const [verificationCodeButtonText, setVerificationCodeButtonText] =
+  const [emailCodeButtonText, setEmailCodeButtonText] =
     useState<string>('이메일 인증');
-  const [codeVerificationErrorText, setCodeVerificationErrorText] =
+  const [emailCodeErrorText, setEmailCodeErrorText] =
     useState<string>('이메일 인증을 완료해주세요.');
   const [emailInputError, setEmailInputError] = useState<string>('');
-  const [codeVerificationError, setCodeVerificationError] =
-    useState<boolean>(false);
+  const [emailCodeError, setEmailCodeError] = useState<boolean>(false);
   const [minutes, setMinutes] = useState<number>(3);
   const [seconds, setSeconds] = useState<number>(0);
   const [showCodeBox, setShowCodeBox] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
   const [loadingColor, setLoadingColor] = useState<string>('#fff');
-  const [timeStop, setTimeStop] = useState<number>(0);
+  const [timerIntervalTime, setTimerIntervalTime] = useState<number>(0);
 
   const dispatch = useDispatch();
 
@@ -78,7 +79,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
   useEffect(() => {
     const timer = setInterval(() => {
       if (seconds > 0) {
-        setSeconds(seconds - timeStop);
+        setSeconds(seconds - timerIntervalTime);
       }
 
       if (seconds === 0) {
@@ -86,18 +87,18 @@ const SignUpForm: React.FC<SignUpProps> = ({
           clearInterval(timer);
           showAndSetError(true, '인증코드가 만료되었습니다.');
 
-          if (timeStop === 1) {
+          if (timerIntervalTime === 1) {
             offCodeInputAndConfirm();
           }
         } else {
-          setMinutes(minutes - timeStop);
+          setMinutes(minutes - timerIntervalTime);
           setSeconds(59);
         }
       }
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [minutes, seconds, timeStop]);
+  }, [minutes, seconds, timerIntervalTime]);
 
   useEffect(() => {
     emailCodeRequestButton
@@ -124,13 +125,13 @@ const SignUpForm: React.FC<SignUpProps> = ({
   };
 
   const showAndSetError = (isError: boolean, errorMessage: string) => {
-    setCodeVerificationError(isError);
-    setCodeVerificationErrorText(errorMessage);
+    setEmailCodeError(isError);
+    setEmailCodeErrorText(errorMessage);
   };
 
   const offCodeInputAndConfirm = () => {
-    setCodeInputDisabled(true);
-    setCodeConfirmButton(true);
+    setEmailCodeInputDisabled(true);
+    setEmailCodeConfirmButton(true);
   };
 
   useEffect(() => {
@@ -151,28 +152,28 @@ const SignUpForm: React.FC<SignUpProps> = ({
   }, [emailCodeRequestButton]);
 
   useEffect(() => {
-    setCodeVerificationError(false);
+    setEmailCodeError(false);
 
     if (errors.verificationCode || verificationCodeOnChange === '') {
-      setCodeConfirmButton(true);
+      setEmailCodeConfirmButton(true);
     } else if (
       verificationCodeOnChange !== undefined &&
       verificationCodeOnChange.length === 8
     ) {
-      setCodeConfirmButton(false);
+      setEmailCodeConfirmButton(false);
     }
   }, [errors.verificationCode, verificationCodeOnChange]);
 
-  const offEmailCodeInput = () => {
+  const emailCodeInputAndButtonDisabled = () => {
     setEmailCodeRequestButton(true);
-    setCodeInputDisabled(false);
+    setEmailCodeInputDisabled(false);
   };
 
   const resetCodeVerificationError = () => {
-    setCodeVerificationError(false);
+    setEmailCodeError(false);
     setValue('verificationCode', '');
     reset({ verificationCode: undefined });
-    setCodeVerificationErrorText('올바른 인증 코드가 아닙니다.');
+    setEmailCodeErrorText('올바른 인증 코드가 아닙니다.');
   };
 
   const verificationCodeRequest = () => {
@@ -192,11 +193,11 @@ const SignUpForm: React.FC<SignUpProps> = ({
           setLoading(false);
           resetCodeVerificationError();
           showAlert(true, message, 'success');
-          offEmailCodeInput();
+          emailCodeInputAndButtonDisabled();
           setShowCodeBox(true);
-          setTimeStop(1);
+          setTimerIntervalTime(1);
           resetTimer();
-          setVerificationCodeButtonText('이메일 인증');
+          setEmailCodeButtonText('이메일 인증');
         }
       })
       .catch((error) => {
@@ -210,7 +211,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
             setLoading(false);
             showAlert(true, message, 'error');
             setEmailCodeRequestButton(false);
-            setVerificationCodeButtonText('이메일 재전송');
+            setEmailCodeButtonText('이메일 재전송');
           }
         }
       });
@@ -228,7 +229,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
         setEmailInputDisabled(true);
         setEmailInputError('');
         setShowCodeBox(false);
-        setTimeStop(0);
+        setTimerIntervalTime(0);
       })
       .catch((error) => {
         if (error.response) {
@@ -236,7 +237,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
           if (status === 401) {
             showAndSetError(true, message);
-            setCodeConfirmButton(true);
+            setEmailCodeConfirmButton(true);
           } else if (status === 403) {
             showAndSetError(true, message);
             offCodeInputAndConfirm();
@@ -289,7 +290,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
             {loading ? (
               <Loading selectColor={loadingColor} />
             ) : (
-              verificationCodeButtonText
+              emailCodeButtonText
             )}
           </AuthButton>
         </EmailInputWrapper>
@@ -313,8 +314,8 @@ const SignUpForm: React.FC<SignUpProps> = ({
             <VerificationCodeConfirmWrapper
               className={
                 errors.verificationCode ||
-                codeVerificationError ||
-                codeInputDisabled
+                emailCodeError ||
+                emailCodeInputDisabled
                   ? 'have-error'
                   : ''
               }
@@ -331,9 +332,9 @@ const SignUpForm: React.FC<SignUpProps> = ({
                   })}
                   maxLength={8}
                   placeholder="인증코드 8자리 입력"
-                  disabled={codeInputDisabled}
+                  disabled={emailCodeInputDisabled}
                 />
-                {!codeInputDisabled && (
+                {!emailCodeInputDisabled && (
                   <TimeLimit>
                     {minutes.toString().padStart(2, '0')}:
                     {seconds.toString().padStart(2, '0')}
@@ -342,7 +343,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
                 <CodeConfimtButton
                   type="button"
                   onClick={EmailVerificationCodeConfirm}
-                  disabled={codeConfirmButton}
+                  disabled={emailCodeConfirmButton}
                   {...register('signUpConfiromButton', {
                     required: true,
                   })}
@@ -351,23 +352,23 @@ const SignUpForm: React.FC<SignUpProps> = ({
                 </CodeConfimtButton>
               </VerificationCodeInputWrapper>
               {(() => {
-                if (codeVerificationError) {
+                if (emailCodeError) {
                   return (
                     <ErrorMessageWrapper>
-                      <ErrorMessage>{codeVerificationErrorText}</ErrorMessage>
+                      <ErrorMessage>{emailCodeErrorText}</ErrorMessage>
                     </ErrorMessageWrapper>
                   );
                 } else if (errors.verificationCode) {
                   return (
                     <ErrorMessageWrapper>
-                      <ErrorMessage>{codeVerificationErrorText}</ErrorMessage>
+                      <ErrorMessage>{emailCodeErrorText}</ErrorMessage>
                     </ErrorMessageWrapper>
                   );
                 }
               })()}
             </VerificationCodeConfirmWrapper>
           </VerificationCodeWrapper>
-          {timeStop === 1 ? (
+          {timerIntervalTime === 1 ? (
             <ResendEmailWrapper>
               <ResendEmailMessage>
                 <ResendEmailIcon />
