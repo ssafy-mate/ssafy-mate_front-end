@@ -34,17 +34,17 @@ const UserInfoPage = lazy(() => import('./pages/users/UserInfoPage'));
 const TeamInfoPage = lazy(() => import('./pages/teams/TeamInfoPage'));
 const TeamEditPage = lazy(() => import('./pages/teams/TeamEditPage'));
 const TeamCreatePage = lazy(() => import('./pages/projects/TeamCreatePage'));
-const SpecializationProjectTeamListPage = lazy(
-  () => import('./pages/projects/SpecializationProjectTeamListPage'),
+const SpecializedProjectTeamListPage = lazy(
+  () => import('./pages/projects/SpecializedProjectTeamListPage'),
 );
-const SpecializationProjectUserListPage = lazy(
-  () => import('./pages/projects/SpecializationProjectUserListPage'),
+const SpecializedProjectUserListPage = lazy(
+  () => import('./pages/projects/SpecializedProjectUserListPage'),
 );
-const SpecializationProjectReceiveRequestListPage = lazy(
-  () => import('./pages/projects/SpecializationProjectReceiveRequestListPage'),
+const SpecializedProjectReceiveRequestListPage = lazy(
+  () => import('./pages/projects/SpecializedProjectReceiveRequestListPage'),
 );
-const SpecializationProjectSendRequestListPage = lazy(
-  () => import('./pages/projects/SpecializationProjectSendRequestListPage'),
+const SpecializedProjectSendRequestListPage = lazy(
+  () => import('./pages/projects/SpecializedProjectSendRequestListPage'),
 );
 const ChatPage = lazy(() => import('./pages/ChatPage'));
 const PrivacyPage = lazy(() => import('./pages/policy/PrivacyPage'));
@@ -109,22 +109,22 @@ const App: React.FC = () => {
             <Route
               exact
               path="/projects/specialization/teams"
-              component={SpecializationProjectTeamListPage}
+              component={SpecializedProjectTeamListPage}
             />
             <Route
               exact
               path="/projects/specialization/users"
-              component={SpecializationProjectUserListPage}
+              component={SpecializedProjectUserListPage}
             />
             <Route
               exact
               path="/projects/specialization/:userId/receive_requests"
-              component={SpecializationProjectReceiveRequestListPage}
+              component={SpecializedProjectReceiveRequestListPage}
             />
             <Route
               exact
               path="/projects/specialization/:userId/send_requests"
-              component={SpecializationProjectSendRequestListPage}
+              component={SpecializedProjectSendRequestListPage}
             />
             <Route exact path="/chatting/:myId" component={ChatPage} />
             <Route exact path="/privacy" component={PrivacyPage} />
