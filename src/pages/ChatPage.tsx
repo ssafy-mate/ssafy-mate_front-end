@@ -11,9 +11,9 @@ import useSocket from '../hooks/useSocket';
 import useDocumentTitle from '../hooks/useDocumentTitle';
 
 import Header from '../components/common/Header';
-import ChattingForm from '../components/chatting/ChattingForm';
+import ChatSection from '../components/chatting/ChatSection';
 
-const ChattingPage: React.FC = () => {
+const ChatPage: React.FC = () => {
   const token = useToken();
   const userId = useUserId();
   const [socket] = useSocket(userId as number);
@@ -21,7 +21,7 @@ const ChattingPage: React.FC = () => {
   useDocumentTitle('채팅 | 싸피 메이트');
 
   useEffect(() => {
-    if (token && socket) {
+    if (token !== null && socket) {
       socket?.emit('login', { id: userId });
     }
   }, [socket, token, userId]);
@@ -34,7 +34,7 @@ const ChattingPage: React.FC = () => {
     <>
       <Header offFixed={true} />
       <Container>
-        <ChattingForm />
+        <ChatSection />
       </Container>
     </>
   );
@@ -44,4 +44,4 @@ const Container = styled.main`
   width: 100%;
 `;
 
-export default ChattingPage;
+export default ChatPage;
