@@ -199,6 +199,16 @@
 | :---------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------: |
 | <img src="./readme_assets/before-web-optimization.png" alt="웹 성능 최적화 전 분석 이미지" width="500px" /> | <img src="./readme_assets/after-web-optimization.png" alt="웹 성능 최적화 후 분석 이미지" width="500px" /> |
 
+|           항목           | 웹 성능 최적화 전 | 웹 성능 최적화 후 |
+| :----------------------: | :---------------: | :---------------: |
+|    Performance Score     |        62         |        88         |
+|  First Contentful Paint  |       0.6s        |       0.5s        |
+|   Time to Interactive    |       2.8s        |       1.4s        |
+|       Speed Index        |       3.5s        |       1.5s        |
+|   Total Blocking Time    |       100ms       |        0ms        |
+| Largest Contentful Paint |       6.2s        |       2.1s        |
+| Cumulative Layout Shift  |       0.128       |       0.001       |
+
 - '지연 로딩(Lazy Loading)' 적용
 - 이미지 파일 최적화
   - 이미지 Meta Data 제거 및 최적화
