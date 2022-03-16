@@ -36,7 +36,7 @@ import SpecializationProjectTeamListPage from './pages/projects/SpecializationPr
 import SpecializationProjectUserListPage from './pages/projects/SpecializationProjectUserListPage';
 import SpecializationProjectReceiveRequestListPage from './pages/projects/SpecializationProjectReceiveRequestListPage';
 import SpecializationProjectSendRequestListPage from './pages/projects/SpecializationProjectSendRequestListPage';
-import ChattingPage from './pages/ChattingPage';
+import ChatPage from './pages/ChatPage';
 import PrivacyPage from './pages/policy/PrivacyPage';
 import TermsOfServicePage from './pages/policy/TermsOfServicePage';
 import NotFoundPage from './pages/NotFoundPage';
@@ -129,7 +129,7 @@ const App: React.FC = () => {
             path="/projects/specialization/:userId/send_requests"
             component={SpecializationProjectSendRequestListPage}
           />
-          <Route exact path="/chatting/:myId" component={ChattingPage} />
+          <Route exact path="/chatting/:myId" component={ChatPage} />
           <Route exact path="/privacy" component={PrivacyPage} />
           <Route
             exact

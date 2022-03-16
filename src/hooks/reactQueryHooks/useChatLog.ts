@@ -34,6 +34,7 @@ const useChatLog = (token: string | null, roomId: string | null) => {
     },
     keepPreviousData: true,
     refetchOnWindowFocus: false,
+    retry: 1,
   });
 
   return {

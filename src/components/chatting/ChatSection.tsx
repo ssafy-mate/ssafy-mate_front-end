@@ -52,7 +52,7 @@ interface OnlineProps {
   isOnline: boolean;
 }
 
-const ChattingForm: React.FC = () => {
+const ChatSection: React.FC = () => {
   const [chatSections, setChatSections] = useState<MessageType[]>([]);
   const [otherUser, setOtherUser] = useState<OtherUserInfoType>();
   const [onlineList, setOnlineList] = useState<number[]>([]);
@@ -89,7 +89,7 @@ const ChattingForm: React.FC = () => {
     fetchNextPage,
   } = useChatLog(myToken, roomId);
 
-  const mutation = useSendChat(roomId, Number(myUserId), setChat);
+  const mutation = useSendChat(roomId, Number(myUserId), setChat, scrollbarRef);
 
   useEffect(() => {
     setChatSections([]);
@@ -568,4 +568,4 @@ const TextArea = styled.textarea`
   }
 `;
 
-export default ChattingForm;
+export default ChatSection;

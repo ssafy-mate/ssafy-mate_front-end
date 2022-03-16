@@ -3,6 +3,8 @@ import { AxiosResponse } from 'axios';
 import { useDispatch } from 'react-redux';
 import { InfiniteData, useMutation, useQueryClient } from 'react-query';
 
+import Scrollbars from 'react-custom-scrollbars-2';
+
 import { ChatLogResponseType, MessageType } from '../../types/messageTypes';
 import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
 
@@ -12,7 +14,7 @@ const useSendChat = (
   roomId: string | null,
   userId: number,
   setChat: React.Dispatch<React.SetStateAction<string>>,
-  handleScroll: void,
+  scrollbarRef: React.RefObject<Scrollbars>,
 ) => {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
@@ -24,6 +26,14 @@ const useSendChat = (
         text: alertText,
       }),
     );
+  };
+
+  const handleScrollToBottom = () => {
+    if (scrollbarRef.current !== null) {
+      setTimeout(() => {
+        scrollbarRef.current?.scrollToBottom();
+      }, 100);
+    }
   };
 
   const queryFn = (params: MessageType) => ChatService.sendChatData(params);
@@ -46,7 +56,7 @@ const useSendChat = (
         });
 
         setChat('');
-        // handleScroll();
+        handleScrollToBottom();
 
         return {
           pageParams: data?.pageParams || [],
@@ -54,6 +64,7 @@ const useSendChat = (
         };
       });
     },
+
     onError() {
       showAlert(true, '채팅 보내기에 실패했습니다. 다시 시도해주세요.');
     },
