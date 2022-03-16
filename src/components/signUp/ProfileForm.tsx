@@ -505,6 +505,7 @@ const ProfileForm: React.FC<ProfileProps> = ({
             onChange={handleUrlInput}
             pattern="https://.*"
             maxLength={250}
+            defaultValue="https://github.com/"
           />
         </InputWrapper>
       </Row>
