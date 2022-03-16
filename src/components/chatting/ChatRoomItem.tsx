@@ -25,9 +25,7 @@ const ChatRoomItem: React.FC<ChatRoomTypeProps> = ({
   sentTime,
   isOnline,
 }) => {
-  const [params, setParams] = useState<string>(
-    `?roomId=${roomId}&userId=${userId}`,
-  );
+  const [params] = useState<string>(`?roomId=${roomId}&userId=${userId}`);
 
   const checkActive = (match: any, location: any) => {
     if (!location) {
@@ -67,7 +65,9 @@ const ChatRoomItem: React.FC<ChatRoomTypeProps> = ({
               <TitleSubText>
                 {sentTime !== null ? (
                   <span>{dayjs(sentTime).format('YY.MM.DD. a hh:mm')}</span>
-                ) : ''}
+                ) : (
+                  ''
+                )}
               </TitleSubText>
             </TitleWrapper>
             <DescriptionWrapper>

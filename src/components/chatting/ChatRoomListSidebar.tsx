@@ -6,6 +6,7 @@ import styled from '@emotion/styled';
 import ForumOutlinedIcon from '@mui/icons-material/ForumOutlined';
 
 import { ChatRoomType } from '../../types/messageTypes';
+
 import useUserId from '../../hooks/reduxHooks/useUserId';
 import useSocket from '../../hooks/useSocket';
 
@@ -15,10 +16,10 @@ interface RoomDataProps {
 }
 
 const ChatRoomListSidebar: React.FC<RoomDataProps> = ({ roomData }) => {
-  const myUserId = useUserId();
-
-  const [socket] = useSocket(Number(myUserId));
   const [onlineList, setOnlineList] = useState<number[]>([]);
+
+  const myUserId = useUserId();
+  const [socket] = useSocket(Number(myUserId));
 
   useEffect(() => {
     socket?.on('onlineList', (data: number[]) => {

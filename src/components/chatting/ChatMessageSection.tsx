@@ -1,8 +1,8 @@
 import dayjs from 'dayjs';
 
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+
 import Avatar from '@mui/material/Avatar';
 
 import { MessageType, OtherUserInfoType } from '../../types/messageTypes';
@@ -47,7 +47,7 @@ const ChatMessageSection: React.FC<ChatMessageProps> = ({
                       src={
                         otherUser?.profileImgUrl !== null
                           ? otherUser?.profileImgUrl
-                          : '/images/assets/basic-profile-img.png'
+                          : '/images/common/default-profile-img.png'
                       }
                     />
                     <p>{message.content}</p>
@@ -123,8 +123,8 @@ const MessageTimeBox = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 0px 4px;
   align-items: flex-end;
+  padding: 0px 4px;
 
   .message_date {
     min-width: 58px;

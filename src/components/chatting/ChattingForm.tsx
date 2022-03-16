@@ -1,10 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useDispatch } from 'react-redux';
-import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
-
 import { Link } from 'react-router-dom';
 import { useLocation } from 'react-router';
+
+import { useDispatch } from 'react-redux';
 
 import { useMediaQuery } from 'react-responsive';
 
@@ -29,22 +28,23 @@ import {
   MessageType,
   ChatRoomType,
   OtherUserInfoType,
-  ChatLogResponseType,
 } from '../../types/messageTypes';
 
+import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
+
 import ChatService from '../../services/ChatService';
+
 import useSocket from '../../hooks/useSocket';
-import useToken from '../../hooks/reduxHooks/useToken';
 import useTextArea from '../../hooks/useTextArea';
+import useToken from '../../hooks/reduxHooks/useToken';
 import useUserIdName from '../../hooks/reduxHooks/useUserIdName';
 import useChatRoomList from '../../hooks/reactQueryHooks/useChatRoomList';
 import useChatLog from '../../hooks/reactQueryHooks/useChatLog';
-import { useMutation, useQueryClient, InfiniteData } from 'react-query';
-import { AxiosResponse } from 'axios';
+import useSendChat from '../../hooks/reactQueryHooks/useSendChat';
 
 import ChatRoomListSidebar from './ChatRoomListSidebar';
 import ChatMessageSection from './ChatMessageSection';
-import ChatProfilebar from './ChatProfilebar';
+import ChatProfileHeaderbar from './ChatProfileHeaderbar';
 
 const DRAWER_WIDTH = 250;
 
@@ -53,46 +53,30 @@ interface OnlineProps {
 }
 
 const ChattingForm: React.FC = () => {
-  const location = useLocation();
-  const myToken = useToken();
-  const dispatch = useDispatch();
-  const [myUserId, myUserName] = useUserIdName();
-  const smallMedia = useMediaQuery({
-    query: '(max-width: 575px)',
-  });
-
-  const param = new URLSearchParams(location.search);
-  const roomId: string | null = param.get('roomId');
-  const userId: string | null = param.get('userId');
-
-  const showAlert = (alertShow: boolean, alertText: string) => {
-    dispatch(
-      showSsafyMateAlertSagaStart({
-        show: alertShow,
-        text: alertText,
-      }),
-    );
-  };
-
   const [chatSections, setChatSections] = useState<MessageType[]>([]);
   const [otherUser, setOtherUser] = useState<OtherUserInfoType>();
   const [onlineList, setOnlineList] = useState<number[]>([]);
   const [open, setOpen] = useState<boolean>(false);
 
-  const [socket] = useSocket(myUserId as number);
-  const [chat, onChangeChat, setChat] = useTextArea('');
-
   const messageInputRef = useRef<HTMLTextAreaElement>(null);
   const scrollbarRef = useRef<Scrollbars>(null);
 
-  const queryClient = useQueryClient();
-  const queryFn = (params: MessageType) => ChatService.sendChatData(params);
+  const dispatch = useDispatch();
 
-  const userInfoGet = () => {
-    ChatService.getChatUserInfo(userId as string).then((response) => {
-      setOtherUser(response.data);
-    });
-  };
+  const location = useLocation();
+  const myToken = useToken();
+
+  const [myUserId, myUserName] = useUserIdName();
+  const smallMedia = useMediaQuery({
+    query: '(max-width: 575px)',
+  });
+
+  const [socket] = useSocket(myUserId as number);
+  const [chat, onChangeChat, setChat] = useTextArea('');
+
+  const param = new URLSearchParams(location.search);
+  const roomId: string | null = param.get('roomId');
+  const userId: string | null = param.get('userId');
 
   const { roomData: roomListData, refetch: roomRefetch } = useChatRoomList(
     myToken,
@@ -105,56 +89,17 @@ const ChattingForm: React.FC = () => {
     fetchNextPage,
   } = useChatLog(myToken, roomId);
 
-  const mutation = useMutation(['roomId', roomId], queryFn, {
-    onMutate(mutateData) {
-      queryClient.setQueryData<
-        InfiniteData<AxiosResponse<ChatLogResponseType>>
-      >(['roomId', roomId], (data) => {
-        const newPages = data?.pages.slice() || [];
-        const newIndex = newPages[0].data.contentList[0].id;
-        newPages[0].data.contentList.unshift({
-          id: newIndex + 1,
-          userName: myUserName as string,
-          roomId: roomId as string,
-          content: mutateData.content,
-          senderId: Number(myUserId),
-          sentTime: dayjs().format('YYYY-MM-DDTHH:mm:ss.SSS'),
-        });
-
-        return {
-          pageParams: data?.pageParams || [],
-          pages: newPages,
-        };
-      });
-
-      setChat('');
-
-      if (scrollbarRef.current !== null) {
-        setTimeout(() => {
-          scrollbarRef?.current?.scrollToBottom();
-        }, 100);
-      }
-    },
-
-    onError(error) {
-      showAlert(true, '채팅 보내기에 실패했습니다. 다시 시도해주세요.');
-    },
-
-    onSuccess() {
-      queryClient.refetchQueries(['roomId', roomId]);
-      queryClient.refetchQueries(['userId', myUserId]);
-    },
-  });
+  const mutation = useSendChat(roomId, Number(myUserId), setChat);
 
   useEffect(() => {
     setChatSections([]);
     setChat('');
-    scrollbarRef.current?.scrollToBottom();
+    handleScrollToBottom();
   }, [roomId]);
 
   useEffect(() => {
     if (userId !== null) {
-      userInfoGet();
+      getChatUserInfo();
     }
   }, [userId]);
 
@@ -174,6 +119,25 @@ const ChattingForm: React.FC = () => {
       setOnlineList(data);
     });
   }, [socket, onlineList]);
+
+  const showAlert = (alertShow: boolean, alertText: string) => {
+    dispatch(
+      showSsafyMateAlertSagaStart({
+        show: alertShow,
+        text: alertText,
+      }),
+    );
+  };
+
+  const getChatUserInfo = () => {
+    ChatService.getChatUserInfo(userId as string)
+      .then((response) => {
+        setOtherUser(response.data);
+      })
+      .catch(() => {
+        showAlert(true, '상대방 정보를 불러오지 못했습니다.');
+      });
+  };
 
   const onSubmit = useCallback(
     (event) => {
@@ -277,6 +241,14 @@ const ChattingForm: React.FC = () => {
     setOpen(open);
   };
 
+  const handleScrollToBottom = () => {
+    if (scrollbarRef.current !== null) {
+      setTimeout(() => {
+        scrollbarRef.current?.scrollToBottom();
+      }, 100);
+    }
+  };
+
   return (
     <Contianer>
       <ChatRoomListSidebar roomData={roomListData as ChatRoomType[]} />
@@ -321,9 +293,9 @@ const ChattingForm: React.FC = () => {
                       <div css={listItemCss}>
                         <Avatar
                           src={
-                            room.profileImgUrl
+                            room.profileImgUrl !== null
                               ? room.profileImgUrl
-                              : '/images/assets/basic-profile-img.png'
+                              : '/images/common/default-profile-img.png'
                           }
                           sx={{ marginRight: '8px' }}
                         />
@@ -359,17 +331,17 @@ const ChattingForm: React.FC = () => {
           </ChatRoomEmpty>
         ) : (
           <ChatRoomWrapper>
-            <ChatProfilebar
+            <ChatProfileHeaderbar
               otherUser={otherUser}
               handleDrawerOpen={handleDrawerOpen}
-            ></ChatProfilebar>
+            />
             <Scrollbars autoHide ref={scrollbarRef} onScrollFrame={onScroll}>
               <ChatMessageSection
                 chatSections={chatSections}
                 myUserId={Number(myUserId)}
                 otherUser={otherUser !== null ? otherUser : undefined}
                 smallMedia={smallMedia}
-              ></ChatMessageSection>
+              />
             </Scrollbars>
             <ChatTypingWrapper>
               <TextArea
@@ -572,6 +544,7 @@ const SendMessageButton = styled.button`
 const TextArea = styled.textarea`
   overflow: auto;
   overflow-wrap: break-word;
+  outline: none;
   width: 100%;
   padding: 10px;
   resize: none;
@@ -581,7 +554,6 @@ const TextArea = styled.textarea`
   font-size: 14px;
   line-height: 1.5;
   color: #263747;
-  outline: none;
 
   ::-webkit-scrollbar {
     opacity: 0;

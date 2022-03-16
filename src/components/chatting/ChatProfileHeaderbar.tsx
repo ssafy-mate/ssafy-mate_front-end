@@ -1,9 +1,10 @@
 import { MouseEventHandler } from 'react';
+
 import { Link } from 'react-router-dom';
 
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
 import styled from '@emotion/styled';
+
 import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
@@ -17,18 +18,18 @@ interface ChatProfileProps {
   handleDrawerOpen: MouseEventHandler<HTMLButtonElement>;
 }
 
-const ChatProfilebar: React.FC<ChatProfileProps> = ({
+const ChatProfileHeaderbar: React.FC<ChatProfileProps> = ({
   otherUser,
   handleDrawerOpen,
 }) => {
   return (
-    <ChatRoomUserNameBar>
-      <ChatRoomHeaderProfile className="user-name">
+    <Header>
+      <Profile className="user-name">
         <Avatar
           src={
             otherUser?.profileImgUrl !== null
               ? otherUser?.profileImgUrl
-              : '/images/assets/basic-profile-img.png'
+              : '/images/common/default-profile-img.png'
           }
           className="profile-avatar"
         />
@@ -40,7 +41,7 @@ const ChatProfilebar: React.FC<ChatProfileProps> = ({
             </span>
           </div>
         </ProfileLink>
-      </ChatRoomHeaderProfile>
+      </Profile>
       <ButtonBox>
         <Tooltip title={`${otherUser?.userName}님의 프로필`} arrow>
           <ProfileIconLink to={`/users/${otherUser?.userId}`}>
@@ -57,11 +58,11 @@ const ChatProfilebar: React.FC<ChatProfileProps> = ({
           </ChatRoomListButton>
         </Tooltip>
       </ButtonBox>
-    </ChatRoomUserNameBar>
+    </Header>
   );
 };
 
-const ChatRoomUserNameBar = styled.div`
+const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -75,6 +76,22 @@ const ChatRoomUserNameBar = styled.div`
     height: 62px;
     min-height: 62px;
     padding: 0 16px;
+  }
+`;
+
+const Profile = styled.div`
+  display: flex;
+  align-items: center;
+
+  & .profile-avatar {
+    margin-right: 10px;
+  }
+
+  @media (max-width: 767px) {
+    & .profile-avatar {
+      width: 36px;
+      height: 36px;
+    }
   }
 `;
 
@@ -139,22 +156,6 @@ const ProfileIconLink = styled(Link)`
   }
 `;
 
-const ChatRoomHeaderProfile = styled.div`
-  display: flex;
-  align-items: center;
-
-  & .profile-avatar {
-    margin-right: 10px;
-  }
-
-  @media (max-width: 767px) {
-    & .profile-avatar {
-      width: 36px;
-      height: 36px;
-    }
-  }
-`;
-
 const ButtonBox = styled.div`
   display: flex;
   justify-content: space-between;
@@ -180,4 +181,4 @@ const ChatRoomListButton = styled(IconButton)`
   }
 `;
 
-export default ChatProfilebar;
+export default ChatProfileHeaderbar;
