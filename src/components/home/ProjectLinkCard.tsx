@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense, lazy } from 'react';
 
 import { push } from 'connected-react-router';
 
@@ -19,10 +19,11 @@ import { ProjectLinkCardType } from '../../types/commonTypes';
 
 import useToken from '../../hooks/reduxHooks/useToken';
 import useProjectTrack from '../../hooks/reduxHooks/useProjectTrack';
-
-import ProjectTrackDialog from './ProjectTrackDialog';
+// import ProjectTrackDialog from './ProjectTrackDialog';
 
 interface ProjectLinkCardProps extends ProjectLinkCardType {}
+
+const ProjectTrackDialog = lazy(() => import('./ProjectTrackDialog'));
 
 const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
   projectId,
@@ -71,6 +72,10 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
     token !== null ? setOpenBlockDialog(true) : setOpenWarningAlert(true);
   };
 
+  const handleMouseEnterBlockDialog = () => {
+    import('./ProjectTrackDialog');
+  };
+
   const onCloseBlockDialog = () => {
     setOpenBlockDialog(false);
   };
@@ -87,6 +92,7 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
             ? handleClickCardItem
             : handleClickOpenBlockDialog
         }
+        onMouseEnter={handleMouseEnterBlockDialog}
         css={{ backgroundColor: hexColorCode }}
       >
         <CardImg
@@ -107,19 +113,21 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
           <br />팀 빌딩 바로가기
         </CardTitle>
       </Card>
-      {trackOptions !== undefined && (
-        <ProjectTrackDialog
-          id="ringtone-menu"
-          keepMounted
-          open={openProjectTrackDialog}
-          project={project}
-          selectedProjectTrack={selectedProjectTrack}
-          pageUrl={pageUrl}
-          hexColorCode={hexColorCode}
-          trackOptions={trackOptions}
-          onClose={handleClose}
-        />
-      )}
+      <Suspense fallback={null}>
+        {trackOptions !== undefined && openProjectTrackDialog && (
+          <ProjectTrackDialog
+            id="ringtone-menu"
+            keepMounted
+            open={openProjectTrackDialog}
+            project={project}
+            selectedProjectTrack={selectedProjectTrack}
+            pageUrl={pageUrl}
+            hexColorCode={hexColorCode}
+            trackOptions={trackOptions}
+            onClose={handleClose}
+          />
+        )}
+      </Suspense>
       <Dialog
         open={openBlockDialog}
         onClose={onCloseBlockDialog}
