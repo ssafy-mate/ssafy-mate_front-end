@@ -1,4 +1,11 @@
-import { useState, useEffect, useMemo, useCallback } from 'react';
+import {
+  useState,
+  useEffect,
+  useMemo,
+  useCallback,
+  Suspense,
+  lazy,
+} from 'react';
 
 import { useParams, Link } from 'react-router-dom';
 
@@ -15,12 +22,6 @@ import ComputerIcon from '@mui/icons-material/Computer';
 import StyleIcon from '@mui/icons-material/Style';
 import LogoutIcon from '@mui/icons-material/Logout';
 import EditIcon from '@mui/icons-material/Edit';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 
 import Swal from 'sweetalert2';
 
@@ -52,6 +53,13 @@ interface MessageTextFieldProps {
 interface OptionButtonProps {
   role: RoleType;
 }
+
+const Dialog = lazy(() => import('@mui/material/Dialog'));
+const DialogActions = lazy(() => import('@mui/material/DialogActions'));
+const DialogContent = lazy(() => import('@mui/material/DialogContent'));
+const DialogTitle = lazy(() => import('@mui/material/DialogTitle'));
+const Button = lazy(() => import('@mui/material/Button'));
+const TextField = lazy(() => import('@mui/material/TextField'));
 
 const TeamInfoSection: React.FC = () => {
   const [applicationMessage, setApplicationMessage] = useState<string>('');
@@ -170,6 +178,15 @@ const TeamInfoSection: React.FC = () => {
     setApplicationMessage('');
   };
 
+  const handleMouseEnterOfferDialog = () => {
+    import('@mui/material/Dialog');
+    import('@mui/material/DialogActions');
+    import('@mui/material/DialogContent');
+    import('@mui/material/DialogTitle');
+    import('@mui/material/Button');
+    import('@mui/material/TextField');
+  };
+
   const handleChangeApplicationMessage = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -232,7 +249,11 @@ const TeamInfoSection: React.FC = () => {
         );
       default:
         return (
-          <OptionButton onClick={handleOpenApplicationDialog} role={role}>
+          <OptionButton
+            onClick={handleOpenApplicationDialog}
+            onMouseEnter={handleMouseEnterOfferDialog}
+            role={role}
+          >
             <BorderColorIcon />
             <span>지원하기</span>
           </OptionButton>
@@ -383,35 +404,37 @@ const TeamInfoSection: React.FC = () => {
               </ChartsBox>
             </Aside>
           </BodyContainer>
-          <Dialog
-            open={openApplicationDialog}
-            onClose={handleCloseApplicationDialog}
-            fullWidth={true}
-            maxWidth={'sm'}
-          >
-            <RequestDialogTitle>팀 합류 지원하기</RequestDialogTitle>
-            <DialogContent>
-              <MessageTextField
-                autoFocus
-                margin="dense"
-                id="application-message"
-                label="합류 지원 메시지를 입력해주세요."
-                type="text"
-                variant="standard"
-                onChange={handleChangeApplicationMessage}
-                warning={onMessageWarning.toString()}
-                fullWidth
-              />
-            </DialogContent>
-            <DialogActions>
-              <DialogButton onClick={handleCloseApplicationDialog}>
-                취소
-              </DialogButton>
-              <DialogButton onClick={handleSendUserApplication}>
-                보내기
-              </DialogButton>
-            </DialogActions>
-          </Dialog>
+          <Suspense fallback={null}>
+            <Dialog
+              open={openApplicationDialog}
+              onClose={handleCloseApplicationDialog}
+              fullWidth={true}
+              maxWidth={'sm'}
+            >
+              <RequestDialogTitle>팀 합류 지원하기</RequestDialogTitle>
+              <DialogContent>
+                <MessageTextField
+                  autoFocus
+                  margin="dense"
+                  id="application-message"
+                  label="합류 지원 메시지를 입력해주세요."
+                  type="text"
+                  variant="standard"
+                  onChange={handleChangeApplicationMessage}
+                  warning={onMessageWarning.toString()}
+                  fullWidth
+                />
+              </DialogContent>
+              <DialogActions>
+                <DialogButton onClick={handleCloseApplicationDialog}>
+                  취소
+                </DialogButton>
+                <DialogButton onClick={handleSendUserApplication}>
+                  보내기
+                </DialogButton>
+              </DialogActions>
+            </Dialog>
+          </Suspense>
         </Container>
       )}
     </>
