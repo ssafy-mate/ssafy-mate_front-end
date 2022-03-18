@@ -2,9 +2,9 @@ import { useRef } from 'react';
 
 import styled from '@emotion/styled';
 
-import { Img } from '../../types/commonTypes';
+import { Img } from '../../../types/commonTypes';
 
-import useOnScreen from '../../hooks/useOnScreen';
+import useOnScreen from '../../../hooks/useOnScreen';
 
 interface MobileServiceIntroSectionProps {
   headText: string;

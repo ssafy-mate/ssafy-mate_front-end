@@ -3,9 +3,9 @@ import styled from '@emotion/styled';
 import {
   ServiceIntroductionType,
   MobileServiceIntroductionType,
-} from '../../types/commonTypes';
+} from '../../../types/commonTypes';
 
-import VisuallyHiddenHead from '../common/VisuallyHiddenHead';
+import VisuallyHiddenHead from '../../common/VisuallyHiddenHead';
 import IntroSection from './IntroSection';
 import MobileServiceIntroSection from './MobileServiceIntroSection';
 
@@ -77,7 +77,7 @@ const MOBILE_SERVICE_INTRODUCTION_LIST: MobileServiceIntroductionType[] = [
   },
 ];
 
-const IntroContainer: React.FC = () => {
+const ServiceIntroContainer: React.FC = () => {
   return (
     <Container id="intro-container">
       <VisuallyHiddenHead level={2} text="서비스 소개" />
@@ -106,6 +106,6 @@ const IntroContainer: React.FC = () => {
   );
 };
 
-const Container = styled.div``;
+const Container = styled.main``;
 
-export default IntroContainer;
+export default ServiceIntroContainer;

@@ -14,12 +14,11 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Snackbar from '@mui/material/Snackbar';
 import Alert from '@mui/material/Alert';
 
-import type { ProjectTrack } from '../../types/commonTypes';
-import { ProjectLinkCardType } from '../../types/commonTypes';
+import type { ProjectTrack } from '../../../types/commonTypes';
+import { ProjectLinkCardType } from '../../../types/commonTypes';
 
-import useToken from '../../hooks/reduxHooks/useToken';
-import useProjectTrack from '../../hooks/reduxHooks/useProjectTrack';
-// import ProjectTrackDialog from './ProjectTrackDialog';
+import useToken from '../../../hooks/reduxHooks/useToken';
+import useProjectTrack from '../../../hooks/reduxHooks/useProjectTrack';
 
 interface ProjectLinkCardProps extends ProjectLinkCardType {}
 
