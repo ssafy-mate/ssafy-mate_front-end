@@ -12,7 +12,6 @@ import WorkIcon from '@mui/icons-material/Work';
 import WorkOutlineIcon from '@mui/icons-material/WorkOutline';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import GitHubIcon from '@mui/icons-material/GitHub';
-
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import { TeamOfferRequestType } from '../../types/teamTypes';
