@@ -6,13 +6,13 @@ import { styled as MuiStyled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
-import { TeamListResponse } from '../../types/teamTypes';
+import { TeamListResponse } from '../../../types/teamTypes';
 
-import SkeletonTeamRecruitmentSection from './skeletonUI/SkeletonTeamRecruitmentSection';
-import VisuallyHiddenHead from '../common/VisuallyHiddenHead';
+import SkeletonTeamRecruitmentSection from '../skeletonUI/SkeletonTeamRecruitmentSection';
+import VisuallyHiddenHead from '../../common/VisuallyHiddenHead';
 import TeamItem from './TeamItem';
 import EmptyBox from './EmptyBox';
-import ErrorSection from '../common/ErrorSection';
+import ErrorSection from '../../common/ErrorSection';
 
 interface TeamRecruitmentSectionProps {
   isLoading: boolean;

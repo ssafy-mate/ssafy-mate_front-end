@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
-import { showSsafyMateAlert } from '../../redux/modules/alert';
+import { showSsafyMateAlert } from '../../../redux/modules/alert';
 
 import dayjs from 'dayjs';
 
@@ -19,11 +19,11 @@ import {
   RequestType,
   ResponseOfTheRequestType,
   ResponseStatusType,
-} from '../../types/userTypes';
+} from '../../../types/userTypes';
 
-import useToken from '../../hooks/reduxHooks/useToken';
+import useToken from '../../../hooks/reduxHooks/useToken';
 
-import RequestService from '../../services/RequestService';
+import RequestService from '../../../services/RequestService';
 
 interface RequestItemProps extends Request {
   requestType: RequestType;

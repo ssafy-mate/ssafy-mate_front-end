@@ -3,7 +3,6 @@ import { useState, useEffect, useCallback, Suspense, lazy } from 'react';
 import { Link } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
-import { sendTeamOffer as sendTeamOfferSagaStart } from '../../redux/modules/auth';
 
 import styled from '@emotion/styled';
 
@@ -14,12 +13,14 @@ import ConstructionIcon from '@mui/icons-material/Construction';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
-import { TeamOfferRequestType } from '../../types/teamTypes';
-import { TechStack } from '../../types/commonTypes';
+import { TeamOfferRequestType } from '../../../types/teamTypes';
+import { TechStack } from '../../../types/commonTypes';
 
-import useUserId from '../../hooks/reduxHooks/useUserId';
+import { sendTeamOffer as sendTeamOfferSagaStart } from '../../../redux/modules/auth';
 
-import UserLabel from '../user/UserLabel';
+import useUserId from '../../../hooks/reduxHooks/useUserId';
+
+import UserLabel from '../../user/UserLabel';
 
 const Dialog = lazy(() => import('@mui/material/Dialog'));
 const DialogActions = lazy(() => import('@mui/material/DialogActions'));

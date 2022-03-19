@@ -12,12 +12,12 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 
-import { ProjectBannerSlideType } from '../../types/commonTypes';
+import { ProjectTrackBannerType } from '../../../types/commonTypes';
 
-import VisuallyHiddenHead from '../common/VisuallyHiddenHead';
-import ProjectBannerCard from './ProjectBannerCard';
+import VisuallyHiddenHead from '../../common/VisuallyHiddenHead';
+import ProjectTrackCard from './ProjectTrackCard';
 
-const PROJECTS_BANNER_SLIDE_LIST: ProjectBannerSlideType[] = [
+const PROJECT_TRACK_BANNER_LIST: ProjectTrackBannerType[] = [
   {
     id: 1,
     head: '특화 프로젝트',
@@ -83,7 +83,7 @@ const PROJECTS_BANNER_SLIDE_LIST: ProjectBannerSlideType[] = [
   },
 ];
 
-const ProjectBannerSection: React.FC = () => {
+const ProjectTrackBannerSection: React.FC = () => {
   return (
     <Container>
       <Wrapper>
@@ -101,10 +101,10 @@ const ProjectBannerSection: React.FC = () => {
           }}
           className="mySwiper"
         >
-          {PROJECTS_BANNER_SLIDE_LIST.map(
+          {PROJECT_TRACK_BANNER_LIST.map(
             ({ id, hexColorCode, head, subHead, description, imageUrl }) => (
               <SwiperSlide key={id} style={{ backgroundColor: hexColorCode }}>
-                <ProjectBannerCard
+                <ProjectTrackCard
                   head={head}
                   subHead={subHead}
                   description={description}
@@ -122,10 +122,7 @@ const ProjectBannerSection: React.FC = () => {
 SwiperCore.use([Navigation, Pagination, Mousewheel, Keyboard, Autoplay]);
 
 const Container = styled.section`
-  max-width: 1200px;
-  margin: 0 auto 24px;
-  padding: 0 16px;
-  box-sizing: border-box;
+  margin-bottom: 24px;
 
   @media (max-width: 575px) {
     margin-top: 70px;
@@ -134,6 +131,9 @@ const Container = styled.section`
 
 const Wrapper = styled.div`
   overflow: hidden;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
   border-radius: 12px;
   box-sizing: border-box;
 `;
@@ -197,4 +197,4 @@ const BannerSwiper = styled(Swiper)`
   }
 `;
 
-export default ProjectBannerSection;
+export default ProjectTrackBannerSection;

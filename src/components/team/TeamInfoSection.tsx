@@ -33,7 +33,7 @@ import { sendUserApplication as sendUserApplicationSagaStart } from '../../redux
 import useTeamInfo from '../../hooks/reactQueryHooks/useTeamInfo';
 
 import UserLabel from '../user/UserLabel';
-import RecruitStatusBadge from '../projects/RecruitStatusBadge';
+import RecruitStatusBadge from '../projects/recruitment/RecruitStatusBadge';
 import TeamTechStackTag from './TeamTechStackTag';
 import TeamMemberItem from './TeamMemberItem';
 import TeamMembersStatusBox from './TeamMembersStatus';

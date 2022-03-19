@@ -8,7 +8,7 @@ import useToken from '../../hooks/reduxHooks/useToken';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 import Header from '../../components/common/Header';
-import ProjectNavigation from '../../components/projects/ProjectNavigation';
+import ProjectPageNavigation from '../../components/projects/navigation/ProjectPageNavigation';
 import TeamCreateForm from '../../components/team/TeamCreateForm';
 import Footer from '../../components/common/Footer';
 
@@ -27,7 +27,7 @@ const CreateTeamPage: React.FC = () => {
   return (
     <>
       <Header />
-      <ProjectNavigation />
+      <ProjectPageNavigation />
       <Container>
         <TeamCreateForm />
       </Container>

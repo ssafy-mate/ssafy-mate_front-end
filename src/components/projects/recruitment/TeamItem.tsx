@@ -6,7 +6,7 @@ import WebIcon from '@mui/icons-material/Web';
 import StorageIcon from '@mui/icons-material/Storage';
 import GroupsIcon from '@mui/icons-material/Groups';
 
-import { TeamItemType } from '../../types/teamTypes';
+import { TeamItemType } from '../../../types/teamTypes';
 
 interface TeamItemProps extends TeamItemType {}
 
