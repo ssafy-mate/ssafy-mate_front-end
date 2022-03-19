@@ -13,12 +13,12 @@ import useUserList from '../../hooks/reactQueryHooks/useUserList';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 import Header from '../../components/common/Header';
-import ProjectNavigation from '../../components/projects/ProjectNavigation';
+import ProjectPageNavigation from '../../components/projects/navigation/ProjectPageNavigation';
 import VisuallyHiddenHead from '../../components/common/VisuallyHiddenHead';
-import ProjectBannerSection from '../../components/projects/ProjectBannerSection';
-import UserListSearchForm from '../../components/projects/UserListSearchForm';
-import UserRecruitmentSection from '../../components/projects/UserRecruitmentSection';
-import Pagenation from '../../components/projects/Pagenation';
+import ProjectBannerSection from '../../components/projects/projectTrackBanner/ProjectTrackBannerSection';
+import SearchFormWithUsers from '../../components/projects/searchForm/SearchFormWithUsers';
+import UserRecruitmentSection from '../../components/projects/recruitment/UserRecruitmentSection';
+import Pagenation from '../../components/projects/recruitment/Pagenation';
 import Footer from '../../components/common/Footer';
 
 const CURRENT_PROJECT_CODE: number = 2;
@@ -72,10 +72,10 @@ const SpecializationProjectUserListPage: React.FC = () => {
   return (
     <>
       <Header />
-      <ProjectNavigation />
+      <ProjectPageNavigation />
       <VisuallyHiddenHead level={1} text="특화 프로젝트 교육생 공고" />
       <ProjectBannerSection />
-      <UserListSearchForm
+      <SearchFormWithUsers
         campus={campus}
         projectTrack={projectTrack}
         setCampus={setCampus}

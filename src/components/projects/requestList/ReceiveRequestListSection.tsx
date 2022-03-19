@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 
 import { useDispatch } from 'react-redux';
-import { showSsafyMateAlert } from '../../redux/modules/alert';
+import { showSsafyMateAlert } from '../../../redux/modules/alert';
 
 import styled from '@emotion/styled';
 
@@ -9,11 +9,11 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import Backdrop from '@mui/material/Backdrop';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import useToken from '../../hooks/reduxHooks/useToken';
-import useSendRequests from '../../hooks/reactQueryHooks/useSendRequests';
+import useToken from '../../../hooks/reduxHooks/useToken';
+import useReceiveRequests from '../../../hooks/reactQueryHooks/useReceiveRequests';
 
 import RequestItem from './RequestItem';
-import ErrorSection from '../common/ErrorSection';
+import ErrorSection from '../../common/ErrorSection';
 import EmptyRequestBox from './EmptyRequestBox';
 
 type Params = {
@@ -22,13 +22,13 @@ type Params = {
 
 const CURRENT_PROJECT = '특화 프로젝트';
 
-const SendRequestListSection: React.FC = () => {
+const ReceiveRequestListSection: React.FC = () => {
   const token: string | null = useToken();
   const { userId } = useParams<Params>();
   const dispatch = useDispatch();
 
   const { isLoading, requests, isError, errorMessage, refetch } =
-    useSendRequests(token, parseInt(userId), { project: CURRENT_PROJECT });
+    useReceiveRequests(token, parseInt(userId), { project: CURRENT_PROJECT });
 
   const handleRefreshRequestData = () => {
     dispatch(
@@ -55,23 +55,23 @@ const SendRequestListSection: React.FC = () => {
           <CircularProgress color="inherit" />
         </Backdrop>
       ) : (
-        <Container onClick={() => refetch()}>
+        <Container>
           <Wrapper>
             <SectionHeader>
-              <Head>특화 프로젝트 | 보낸 요청</Head>
+              <Head>특화 프로젝트 | 받은 제안</Head>
               <RefreshButton onClick={handleRefreshRequestData}>
                 <RefreshIcon />
               </RefreshButton>
             </SectionHeader>
             <RequestList>
               {requests.length === 0 ? (
-                <EmptyRequestBox message="아직 보낸 요청이 없습니다." />
+                <EmptyRequestBox message="아직 받은 제안이 없습니다." />
               ) : (
                 requests.map((request) => (
                   <RequestItem
                     key={request.requestId}
                     requestId={request.requestId}
-                    requestType="send"
+                    requestType="receive"
                     requestStatus={request.requestStatus}
                     originType={request.originType}
                     originId={request.originId}
@@ -115,7 +115,7 @@ const SectionHeader = styled.div`
   align-items: center;
   padding: 10px 20px;
   border-radius: 4px 4px 0 0;
-  background-color: #ffc00a;
+  background-color: #3396f4;
 `;
 
 const Head = styled.h1`
@@ -153,4 +153,4 @@ const RequestList = styled.ul`
   }
 `;
 
-export default SendRequestListSection;
+export default ReceiveRequestListSection;

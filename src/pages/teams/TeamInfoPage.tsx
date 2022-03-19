@@ -5,7 +5,7 @@ import { useMediaQuery } from 'react-responsive';
 import useToken from '../../hooks/reduxHooks/useToken';
 
 import Header from '../../components/common/Header';
-import ProjectNavigation from '../../components/projects/ProjectNavigation';
+import ProjectPageNavigation from '../../components/projects/navigation/ProjectPageNavigation';
 import TeamInfoSection from '../../components/team/TeamInfoSection';
 import Footer from '../../components/common/Footer';
 
@@ -22,7 +22,7 @@ const TeamInfoPage: React.FC = () => {
   return (
     <>
       <Header />
-      <ProjectNavigation />
+      <ProjectPageNavigation />
       <TeamInfoSection />
       {!smallMedia && <Footer />}
     </>

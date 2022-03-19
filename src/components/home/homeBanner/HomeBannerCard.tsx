@@ -1,6 +1,6 @@
 import styled from '@emotion/styled';
 
-import { HomeBannerCardData } from '../../types/commonTypes';
+import { HomeBannerCardData } from '../../../types/commonTypes';
 
 interface HomeBannderCardProps extends HomeBannerCardData {}
 

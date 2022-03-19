@@ -1,17 +1,17 @@
 import styled from '@emotion/styled';
 
-import { ProjectBannerCardData } from '../../types/commonTypes';
+import { ProjectTrackCardType } from '../../../types/commonTypes';
 
-interface ProjectBannerCardProps extends ProjectBannerCardData {}
+interface ProjectTrackCardProps extends ProjectTrackCardType {}
 
-const ProjectBannerCard: React.FC<ProjectBannerCardProps> = ({
+const ProjectTrackCard: React.FC<ProjectTrackCardProps> = ({
   head,
   subHead,
   description,
   imageUrl,
 }) => {
   return (
-    <BannerCard>
+    <Card>
       <InfoWrapper>
         <Head>{head}</Head>
         <SubHead>{subHead}</SubHead>
@@ -20,11 +20,11 @@ const ProjectBannerCard: React.FC<ProjectBannerCardProps> = ({
       <ImgWrapper>
         <Img src={imageUrl} alt={`${subHead} 애니메이션`} />
       </ImgWrapper>
-    </BannerCard>
+    </Card>
   );
 };
 
-const BannerCard = styled.div`
+const Card = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
@@ -142,4 +142,4 @@ const Img = styled.img`
   }
 `;
 
-export default ProjectBannerCard;
+export default ProjectTrackCard;

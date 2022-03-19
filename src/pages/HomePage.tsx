@@ -7,10 +7,10 @@ import useUserId from '../hooks/reduxHooks/useUserId';
 
 import Header from '../components/common/Header';
 import VisuallyHiddenHead from '../components/common/VisuallyHiddenHead';
-import HomeBannerSection from '../components/home/HomeBannerSection';
-import ProjectsSection from '../components/home/ProjectsSection';
-import IntroContainer from '../components/home/IntroContainer';
-import ToTopButton from '../components/home/ToTopButton';
+import HomeBannerContainer from '../components/home/homeBanner/HomeBannerContainer';
+import ProjectLinksContainer from '../components/home/projectLinks/ProjectLinksContainer';
+import ServiceIntroContainer from '../components/home/serviceIntro/ServiceIntroContainer';
+import ToTopButton from '../components/home/common/ToTopButton';
 import Footer from '../components/common/Footer';
 
 const HomePage: React.FC = () => {
@@ -30,9 +30,9 @@ const HomePage: React.FC = () => {
     <>
       <Header />
       <VisuallyHiddenHead level={1} text="싸피 메이트" />
-      <HomeBannerSection />
-      <ProjectsSection />
-      <IntroContainer />
+      <HomeBannerContainer />
+      <ProjectLinksContainer />
+      <ServiceIntroContainer />
       <ToTopButton />
       <Footer />
     </>

@@ -32,14 +32,14 @@ export interface HomeBannerSlideType extends HomeBannerCardData {
   hexColorCode: string;
 }
 
-export interface ProjectBannerCardData {
+export interface ProjectTrackCardType {
   head: string;
   subHead: string;
   description: string;
   imageUrl: string;
 }
 
-export interface ProjectBannerSlideType extends ProjectBannerCardData {
+export interface ProjectTrackBannerType extends ProjectTrackCardType {
   id: number;
   hexColorCode: string;
 }

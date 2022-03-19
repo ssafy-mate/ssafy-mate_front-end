@@ -2,9 +2,9 @@ import styled from '@emotion/styled';
 
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
-import { ProjectLinkCardType } from '../../types/commonTypes';
+import { ProjectLinkCardType } from '../../../types/commonTypes';
 
-import VisuallyHiddenHead from '../common/VisuallyHiddenHead';
+import VisuallyHiddenHead from '../../common/VisuallyHiddenHead';
 import ProjectLinkCard from './ProjectLinkCard';
 
 const PROJECT_LINK_CARD_LIST: ProjectLinkCardType[] = [
@@ -73,7 +73,7 @@ const PROJECT_LINK_CARD_LIST: ProjectLinkCardType[] = [
   },
 ];
 
-const ProjectsSection: React.FC = () => {
+const ProjectLinksContainer: React.FC = () => {
   return (
     <Container>
       <VisuallyHiddenHead level={2} text="팀 빌딩 페이지 링크 목록" />
@@ -104,12 +104,12 @@ const ProjectsSection: React.FC = () => {
   );
 };
 
-const Container = styled.main`
+const Container = styled.div`
   padding: 0 16px;
   background-color: #fff;
 `;
 
-const Wrapper = styled.main`
+const Wrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
@@ -172,4 +172,4 @@ const ArrowIcon = styled(KeyboardArrowDownIcon)`
   }
 `;
 
-export default ProjectsSection;
+export default ProjectLinksContainer;

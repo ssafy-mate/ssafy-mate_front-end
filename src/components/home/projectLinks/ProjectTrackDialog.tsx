@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
 import { useDispatch } from 'react-redux';
-import { showSsafyMateAlert } from '../../redux/modules/alert';
 
 import styled from '@emotion/styled';
 
@@ -14,9 +13,10 @@ import RadioGroup from '@mui/material/RadioGroup';
 import Radio from '@mui/material/Radio';
 import FormControlLabel from '@mui/material/FormControlLabel';
 
-import type { ProjectTrack } from '../../types/commonTypes';
+import type { ProjectTrack } from '../../../types/commonTypes';
 
-import { selectProjectTrack as selectProjectTrackSagaStart } from '../../redux/modules/auth';
+import { showSsafyMateAlert } from '../../../redux/modules/alert';
+import { selectProjectTrack as selectProjectTrackSagaStart } from '../../../redux/modules/auth';
 
 interface ConfirmationDialogRawProps {
   id: string;

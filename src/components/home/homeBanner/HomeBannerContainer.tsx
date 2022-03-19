@@ -12,8 +12,9 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Swiper, SwiperSlide } from 'swiper/react';
 
-import { HomeBannerSlideType } from '../../types/commonTypes';
-import VisuallyHiddenHead from '../common/VisuallyHiddenHead';
+import { HomeBannerSlideType } from '../../../types/commonTypes';
+
+import VisuallyHiddenHead from '../../common/VisuallyHiddenHead';
 
 import HomeBannerCard from './HomeBannerCard';
 
@@ -53,7 +54,7 @@ const HOME_BANNER_SLIDE_LIST: HomeBannerSlideType[] = [
   },
 ];
 
-const HomeBannerSection: React.FC = () => {
+const HomeBannerContainer: React.FC = () => {
   return (
     <>
       <Container>
@@ -148,4 +149,4 @@ const BannerSwiper = styled(Swiper)`
   }
 `;
 
-export default HomeBannerSection;
+export default HomeBannerContainer;
