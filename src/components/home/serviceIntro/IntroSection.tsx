@@ -2,7 +2,7 @@ import { useRef } from 'react';
 
 import styled from '@emotion/styled';
 
-import useOnScreen from '../../hooks/useOnScreen';
+import useOnScreen from '../../../hooks/useOnScreen';
 
 import PcBox from './PcBox';
 

@@ -4,13 +4,13 @@ import { styled as MuiStyled } from '@mui/material/styles';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 
-import { UserListResponse } from '../../types/userTypes';
+import { UserListResponse } from '../../../types/userTypes';
 
-import SkeletonUserRecruitmentSection from './skeletonUI/SkeletonUserRecruitmentSection';
-import VisuallyHiddenHead from '../common/VisuallyHiddenHead';
-import UserItem from '../projects/UserItem';
+import SkeletonUserRecruitmentSection from '../skeletonUI/SkeletonUserRecruitmentSection';
+import VisuallyHiddenHead from '../../common/VisuallyHiddenHead';
+import UserItem from './UserItem';
 import EmptyBox from './EmptyBox';
-import ErrorSection from '../common/ErrorSection';
+import ErrorSection from '../../common/ErrorSection';
 
 interface UserRecruitmentSectionProps {
   isLoading: boolean;

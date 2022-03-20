@@ -6,8 +6,8 @@ import useToken from '../../hooks/reduxHooks/useToken';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 import Header from '../../components/common/Header';
-import ProjectNavigation from '../../components/projects/ProjectNavigation';
-import ReceiveRequestListSection from '../../components/projects/ReceiveRequestListSection';
+import ProjectPageNavigation from '../../components/projects/navigation/ProjectPageNavigation';
+import ReceiveRequestListSection from '../../components/projects/requestList/ReceiveRequestListSection';
 import Footer from '../../components/common/Footer';
 
 const SpecializedProjectReceiveRequestListPage: React.FC = () => {
@@ -25,7 +25,7 @@ const SpecializedProjectReceiveRequestListPage: React.FC = () => {
   return (
     <>
       <Header />
-      <ProjectNavigation />
+      <ProjectPageNavigation />
       <ReceiveRequestListSection />
       {!smallMedia && <Footer />}
     </>

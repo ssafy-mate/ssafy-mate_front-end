@@ -11,11 +11,11 @@ import { ReactQueryDevtools } from 'react-query/devtools';
 
 import { Global } from '@emotion/react';
 
+import 'swiper/css/bundle';
+
 import resetStyles from './styles/resetStyles';
 import commonStyles from './styles/commonStyles';
 import sweetAlertStyles from './styles/sweetAlertStyles';
-
-import 'swiper/css/bundle';
 
 import history from './history';
 

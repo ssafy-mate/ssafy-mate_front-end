@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense, lazy } from 'react';
 
 import { Link, Redirect, useParams } from 'react-router-dom';
 
@@ -19,15 +19,6 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import EmailIcon from '@mui/icons-material/Email';
 import StorefrontIcon from '@mui/icons-material/Storefront';
 import SendIcon from '@mui/icons-material/Send';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Tooltip from '@mui/material/Tooltip';
 
@@ -52,6 +43,16 @@ interface MessageTextFieldProps {
 interface OfferProjectLabelProps {
   warning: string;
 }
+
+const Dialog = lazy(() => import('@mui/material/Dialog'));
+const DialogActions = lazy(() => import('@mui/material/DialogActions'));
+const DialogContent = lazy(() => import('@mui/material/DialogContent'));
+const DialogTitle = lazy(() => import('@mui/material/DialogTitle'));
+const Button = lazy(() => import('@mui/material/Button'));
+const TextField = lazy(() => import('@mui/material/TextField'));
+const InputLabel = lazy(() => import('@mui/material/InputLabel'));
+const MenuItem = lazy(() => import('@mui/material/MenuItem'));
+const FormControl = lazy(() => import('@mui/material/FormControl'));
 
 const UserInfoSection: React.FC = () => {
   const [offerMessage, setOfferMessage] = useState<string>('');
@@ -144,6 +145,18 @@ const UserInfoSection: React.FC = () => {
     setOpenOfferDialog(false);
     setOfferMessage('');
     setOfferProject('');
+  };
+
+  const handleMouseEnterOfferDialog = () => {
+    import('@mui/material/Dialog');
+    import('@mui/material/DialogActions');
+    import('@mui/material/DialogContent');
+    import('@mui/material/DialogTitle');
+    import('@mui/material/Button');
+    import('@mui/material/TextField');
+    import('@mui/material/InputLabel');
+    import('@mui/material/MenuItem');
+    import('@mui/material/FormControl');
   };
 
   const handleChangeOfferProject = (event: SelectChangeEvent) => {
@@ -242,7 +255,10 @@ const UserInfoSection: React.FC = () => {
             </TitleBox>
             <ButtonBox>
               {parseInt(userId) !== myUserId && (
-                <RequestButton onClick={handleOpenOfferDialog}>
+                <RequestButton
+                  onClick={handleOpenOfferDialog}
+                  onMouseEnter={handleMouseEnterOfferDialog}
+                >
                   <VolunteerActivismIcon />
                   <span>팀 합류 요청하기</span>
                 </RequestButton>
@@ -453,56 +469,62 @@ const UserInfoSection: React.FC = () => {
               </TechStackList>
             </Section>
           </BodyContainer>
-          <Dialog
-            open={openOfferDialog}
-            onClose={handleCloseOfferDialog}
-            fullWidth={true}
-            maxWidth={'sm'}
-          >
-            <RequestDialogTitle>팀 합류 요청하기</RequestDialogTitle>
-            <OfferPorjectInputWrapper fullWidth>
-              <OfferProjectLabel
-                id="offer-project-select-label"
-                warning={onProjectWarning.toString()}
-              >
-                프로젝트 선택
-              </OfferProjectLabel>
-              <Select
-                labelId="offer-project-select-label"
-                id="offer-project-select"
-                label="offer-project"
-                value={offerProject}
-                onChange={handleChangeOfferProject}
-              >
-                <OfferProjectItem value="공통 프로젝트">
-                  공통 프로젝트
-                </OfferProjectItem>
-                <OfferProjectItem value="특화 프로젝트">
-                  특화 프로젝트
-                </OfferProjectItem>
-                <OfferProjectItem value="자율 프로젝트">
-                  자율 프로젝트
-                </OfferProjectItem>
-              </Select>
-            </OfferPorjectInputWrapper>
-            <DialogContent>
-              <MessageTextField
-                autoFocus
-                margin="dense"
-                id="offer-message"
-                label="합류 요청 메시지를 입력해주세요."
-                type="text"
-                variant="standard"
-                onChange={handleChangeOfferMessage}
-                warning={onMessageWarning.toString()}
-                fullWidth
-              />
-            </DialogContent>
-            <DialogActions>
-              <DialogButton onClick={handleCloseOfferDialog}>취소</DialogButton>
-              <DialogButton onClick={handleSendTeamOffer}>보내기</DialogButton>
-            </DialogActions>
-          </Dialog>
+          <Suspense fallback={null}>
+            <Dialog
+              open={openOfferDialog}
+              onClose={handleCloseOfferDialog}
+              fullWidth={true}
+              maxWidth={'sm'}
+            >
+              <RequestDialogTitle>팀 합류 요청하기</RequestDialogTitle>
+              <OfferPorjectInputWrapper fullWidth>
+                <OfferProjectLabel
+                  id="offer-project-select-label"
+                  warning={onProjectWarning.toString()}
+                >
+                  프로젝트 선택
+                </OfferProjectLabel>
+                <Select
+                  labelId="offer-project-select-label"
+                  id="offer-project-select"
+                  label="offer-project"
+                  value={offerProject}
+                  onChange={handleChangeOfferProject}
+                >
+                  <OfferProjectItem value="공통 프로젝트">
+                    공통 프로젝트
+                  </OfferProjectItem>
+                  <OfferProjectItem value="특화 프로젝트">
+                    특화 프로젝트
+                  </OfferProjectItem>
+                  <OfferProjectItem value="자율 프로젝트">
+                    자율 프로젝트
+                  </OfferProjectItem>
+                </Select>
+              </OfferPorjectInputWrapper>
+              <DialogContent>
+                <MessageTextField
+                  autoFocus
+                  margin="dense"
+                  id="offer-message"
+                  label="합류 요청 메시지를 입력해주세요."
+                  type="text"
+                  variant="standard"
+                  onChange={handleChangeOfferMessage}
+                  warning={onMessageWarning.toString()}
+                  fullWidth
+                />
+              </DialogContent>
+              <DialogActions>
+                <DialogButton onClick={handleCloseOfferDialog}>
+                  취소
+                </DialogButton>
+                <DialogButton onClick={handleSendTeamOffer}>
+                  보내기
+                </DialogButton>
+              </DialogActions>
+            </Dialog>
+          </Suspense>
         </Container>
       )}
     </>

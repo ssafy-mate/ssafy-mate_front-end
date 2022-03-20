@@ -1,45 +1,42 @@
 import { useEffect } from 'react';
 
+import { Link } from 'react-router-dom';
+
 /** @jsxImportSource @emotion/react */
 import styled from '@emotion/styled';
 
 import { useAutocomplete } from '@mui/base/AutocompleteUnstyled';
+import GroupsIcon from '@mui/icons-material/Groups';
 import CheckIcon from '@mui/icons-material/Check';
 
-import useTechStackList from '../../hooks/useTechStackList';
+import { TechStackWithImg } from '../../../types/commonTypes';
 
-import { TechStackWithImg } from '../../types/commonTypes';
+import { CAMPUS_LIST, PROJECT_LIST } from '../../../data/ssafyData';
+import { JOB_LIST } from '../../../data/jobListData';
 
-import {
-  SSAFY_TRACK_LIST,
-  CAMPUS_LIST,
-  PROJECT_LIST,
-} from '../../data/ssafyData';
-import { JOB_LIST } from '../../data/jobListData';
+import useTechStackList from '../../../hooks/useTechStackList';
 
-const CURRENT_PROJECT_CODE: number = 2;
-
-interface UserListSearchFormProps {
+interface SearchFormWithTeamsProps {
   campus: string;
   projectTrack: string;
   setCampus: (campus: string) => void;
   setProjectTrack: (projectTrack: string) => void;
   setJob1: (job1: string) => void;
   setTechStackId: (techStackId: number | null) => void;
-  setUserName: (userName: string) => void;
-  setSsafyTrack: (ssafyTrack: string) => void;
+  setTeamName: (teamName: string) => void;
   setPage: (page: number) => void;
 }
 
-const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
+const CURRENT_PROJECT_CODE: number = 2;
+
+const SearchFormWithTeams: React.FC<SearchFormWithTeamsProps> = ({
   campus,
   projectTrack,
   setCampus,
   setProjectTrack,
   setJob1,
   setTechStackId,
-  setUserName,
-  setSsafyTrack,
+  setTeamName,
   setPage,
 }) => {
   const techStackList: TechStackWithImg[] = useTechStackList();
@@ -82,14 +79,8 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
     setJob1(event.target.value);
   };
 
-  const handleChangeUserName = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setUserName(event.target.value);
-  };
-
-  const handleChangeSsafyTrack = (
-    event: React.ChangeEvent<HTMLSelectElement>,
-  ): void => {
-    setSsafyTrack(event.target.value);
+  const handleChangeTeamName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTeamName(event.target.value);
   };
 
   return (
@@ -135,7 +126,7 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
         <FilterList css={{ position: 'relative' }}>
           <FilterInput
             type="text"
-            name="user-tech-stack-search"
+            name="team-tech-stack-search"
             placeholder="기술 스택 검색"
             {...getInputProps()}
           />
@@ -157,19 +148,15 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
           ) : null}
           <FilterInput
             type="text"
-            name="user-name-search"
-            onChange={handleChangeUserName}
-            placeholder="교육생 이름 검색"
+            name="team-name-search"
+            onChange={handleChangeTeamName}
+            placeholder="팀 이름 검색"
             css={{ margin: '0 12px' }}
           />
-          <FilterSelect name="ssafy-track" onChange={handleChangeSsafyTrack}>
-            <option value="all">전체 교육 트랙</option>
-            {SSAFY_TRACK_LIST.map((ssafyTrack) => (
-              <option key={ssafyTrack.id} value={ssafyTrack.name}>
-                {ssafyTrack.name}
-              </option>
-            ))}
-          </FilterSelect>
+          <CreateTeamLink to="/projects/teams/new">
+            <GroupsIcon />
+            <span>팀 생성</span>
+          </CreateTeamLink>
         </FilterList>
       </Wrapper>
     </Container>
@@ -177,13 +164,15 @@ const UserListSearchForm: React.FC<UserListSearchFormProps> = ({
 };
 
 const Container = styled.section`
+  margin-bottom: 24px;
+`;
+
+const Wrapper = styled.div`
   max-width: 1200px;
-  margin: 0 auto 24px;
+  margin: 0 auto;
   padding: 0 16px;
   box-sizing: border-box;
 `;
-
-const Wrapper = styled.div``;
 
 const FilterList = styled.div`
   display: flex;
@@ -273,6 +262,43 @@ const FilterInput = styled.input`
   }
 `;
 
+const CreateTeamLink = styled(Link)`
+  display: flex;
+  width: 100%;
+  max-width: 378px;
+  height: 42px;
+  padding: 0 14px;
+  border: none;
+  border-radius: 4px;
+  box-sizing: border-box;
+  background-color: #3396f4;
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: #fff;
+  transition: color 0.08s ease-in-out, background-color 0.08s ease-in-out,
+    border-color 0.08s ease-in-out, box-shadow 0.08s ease-in-out;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #2878c3;
+  }
+
+  svg {
+    margin: auto 8px auto 0;
+    font-size: 24px;
+  }
+  span {
+    margin: auto 0;
+  }
+
+  @media (max-width: 767px) {
+    max-width: 100%;
+    height: 38px;
+    font-size: 14px;
+  }
+`;
+
 const SearchList = styled.ul`
   overflow-y: scroll;
   position: absolute;
@@ -348,4 +374,4 @@ const TechStackImg = styled.img`
   }
 `;
 
-export default UserListSearchForm;
+export default SearchFormWithTeams;

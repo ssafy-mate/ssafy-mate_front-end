@@ -4,7 +4,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import WebIcon from '@mui/icons-material/Web';
 import StorageIcon from '@mui/icons-material/Storage';
 
-import RecruitStatusTag from '../projects/RecruitStatusTag';
+import RecruitStatusTag from '../projects/recruitment/RecruitStatusTag';
 
 interface TeamMembersStatusBoxProps {
   totalRecruitment: number;

@@ -13,12 +13,12 @@ import useTeamList from '../../hooks/reactQueryHooks/useTeamList';
 import useDocumentTitle from '../../hooks/useDocumentTitle';
 
 import Header from '../../components/common/Header';
-import ProjectNavigation from '../../components/projects/ProjectNavigation';
+import ProjectPageNavigation from '../../components/projects/navigation/ProjectPageNavigation';
 import VisuallyHiddenHead from '../../components/common/VisuallyHiddenHead';
-import ProjectBannerSection from '../../components/projects/ProjectBannerSection';
-import TeamListSearchForm from '../../components/projects/TeamListSearchForm';
-import TeamRecruitmentSection from '../../components/projects/TeamRecruitmentSection';
-import Pagenation from '../../components/projects/Pagenation';
+import ProjectBannerSection from '../../components/projects/projectTrackBanner/ProjectTrackBannerSection';
+import SearchFormWithTeams from '../../components/projects/searchForm/SearchFormWithTeams';
+import TeamRecruitmentSection from '../../components/projects/recruitment/TeamRecruitmentSection';
+import Pagenation from '../../components/projects/recruitment/Pagenation';
 import Footer from '../../components/common/Footer';
 
 const CURRENT_PROJECT_CODE: number = 2;
@@ -70,10 +70,10 @@ const SpecializedProjectTeamListPage: React.FC = () => {
   return (
     <>
       <Header />
-      <ProjectNavigation />
+      <ProjectPageNavigation />
       <VisuallyHiddenHead level={1} text="특화 프로젝트 팀 공고" />
       <ProjectBannerSection />
-      <TeamListSearchForm
+      <SearchFormWithTeams
         campus={campus}
         projectTrack={projectTrack}
         setCampus={setCampus}
