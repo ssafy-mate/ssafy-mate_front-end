@@ -20,13 +20,13 @@ export interface SsafyAuthProps {
 }
 
 // 회원가입 2단계 이메일 인증 코드 요청
-export interface EmailVerificationCodeRequest {
+export interface EmailCodeRequest {
   userEmail: string;
 }
 
 // 회원가입 2단계 이메일 인증 코드 확인 요청
-export interface EmailVerificationCodeConfirmRequest {
-  code: string;
+export interface EmailCodeConfirmRequest {
+  emailCode: string;
   userEmail: string;
 }
 
@@ -68,7 +68,7 @@ export interface SignUpProps {
 
 export interface SignUp {
   signUpEmail: string;
-  verificationCode: string;
+  emailCode: string;
   signUpPassword: string;
   signUpCheckPassword: string;
   signUpConfiromButton: string | undefined;

@@ -13,7 +13,7 @@ import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
 import {
   passwordReg,
   validEmailReg,
-  verificationCodeReg,
+  emailCodeReg,
 } from '../../utils/regularExpressionData';
 
 import { Severity } from '../../types/signUpTypes';
@@ -140,7 +140,7 @@ const NewPasswordCard: React.FC = () => {
   const verificationCodeRequst = (emailInput: string) => {
     setLoading(true);
     setVerificationCodeInput('');
-    UserService.getVerificationCodeForNewPassword({
+    UserService.getEmailCodeForNewPassword({
       userEmail: emailInput,
     })
       .then(({ message }) => {
@@ -180,7 +180,7 @@ const NewPasswordCard: React.FC = () => {
         setInputError('필수 입력 항목입니다.');
         verificationCodeButtonsOff();
       } else if (
-        !verificationCodeReg.test(codeOnChange) ||
+        !emailCodeReg.test(codeOnChange) ||
         codeOnChange.length !== 8
       ) {
         setInputError('올바른 인증 코드가 아닙니다.');
@@ -208,7 +208,7 @@ const NewPasswordCard: React.FC = () => {
 
     if (verificationCodeInput === '') {
       setInputError('필수 입력 항목입니다.');
-    } else if (verificationCodeReg.test(verificationCodeInput)) {
+    } else if (emailCodeReg.test(verificationCodeInput)) {
       setInputError('');
       setCodeConfirmButtonDisabled(true);
       verificationCodeConfirmRequest(verificationCodeInput);
@@ -218,7 +218,7 @@ const NewPasswordCard: React.FC = () => {
   };
 
   const verificationCodeConfirmRequest = (verificationCodeInput: string) => {
-    UserService.confirmVerificationCodeForNewPassword({
+    UserService.confirmEmailCodeForNewPassword({
       code: verificationCodeInput,
       userEmail: emailInput,
     })

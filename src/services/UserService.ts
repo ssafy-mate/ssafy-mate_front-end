@@ -24,8 +24,8 @@ import {
 import {
   SsafyAuth,
   SignUpResponse,
-  EmailVerificationCodeRequest,
-  EmailVerificationCodeConfirmRequest,
+  EmailCodeRequest,
+  EmailCodeConfirmRequest,
 } from '../types/signUpTypes';
 
 class UserService {
@@ -128,8 +128,8 @@ class UserService {
     return response.data;
   }
 
-  public static async getEmailVerificationCode(
-    data: EmailVerificationCodeRequest,
+  public static async getEmailCode(
+    data: EmailCodeRequest,
   ): Promise<SignUpResponse> {
     const response = await axiosInstance.get<SignUpResponse>(
       '/api/users/sign-up/verification/emails',
@@ -141,8 +141,8 @@ class UserService {
     return response.data;
   }
 
-  public static async getEmailVerificationCodeConfirm(
-    data: EmailVerificationCodeConfirmRequest,
+  public static async getEmailCodeConfirm(
+    data: EmailCodeConfirmRequest,
   ): Promise<{ success: boolean }> {
     const response = await axiosInstance.put<{ success: boolean }>(
       '/api/users/sign-up/verification/emails',
@@ -173,7 +173,7 @@ class UserService {
 
     return response.data;
   }
-  public static async getVerificationCodeForNewPassword(
+  public static async getEmailCodeForNewPassword(
     data: EmailForNewPassword,
   ): Promise<NewPasswordResponse> {
     const response = await axiosInstance.get<NewPasswordResponse>(
@@ -186,7 +186,7 @@ class UserService {
     return response.data;
   }
 
-  public static async confirmVerificationCodeForNewPassword(
+  public static async confirmEmailCodeForNewPassword(
     data: CodeConfirmForNewPassword,
   ): Promise<NewPasswordResponse> {
     const response = await axiosInstance.post<NewPasswordResponse>(
