@@ -1,11 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 
 const useDocumentTitle = (title: string): void => {
-  const [documentTitle, setDocumentTitle] = useState<string>(title);
-
   useEffect(() => {
-    document.title = documentTitle;
-  }, [documentTitle, setDocumentTitle]);
+    document.title = title;
+  }, [title]);
 };
 
 export default useDocumentTitle;
