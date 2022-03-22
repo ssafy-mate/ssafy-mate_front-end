@@ -5,7 +5,7 @@ import {
   editProfileInfo as editProfileInfoSagaStart,
   updateProfileInfo as updateProfileInfoSagaStart,
 } from '../../redux/modules/profile';
-import { showSsafyMateAlert } from '../../redux/modules/alert';
+import { showSsafyMateAlert as showSsafyMateAlertSagaStart } from '../../redux/modules/alert';
 
 import { Link } from 'react-router-dom';
 import { push } from 'connected-react-router';
@@ -57,7 +57,7 @@ const BasicInformationSection: React.FC = () => {
     alertType: Severity,
   ) => {
     dispatch(
-      showSsafyMateAlert({
+      showSsafyMateAlertSagaStart({
         show: alertShow,
         text: alertText,
         type: alertType,
