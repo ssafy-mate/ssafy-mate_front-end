@@ -8,7 +8,12 @@ import ProfileInformationSection from './ProfileInformationSection';
 
 const AccountEditCard: React.FC = () => {
   const [selectedTap, setSelectedTap] = useState<string>('basicInformation');
+  const token_date_expired = localStorage.getItem('token_date');
 
+  if (token_date_expired === null) {
+    localStorage.removeItem('persist:root');
+    window.location.replace('/');
+  }
   return (
     <Container>
       <Wrapper>

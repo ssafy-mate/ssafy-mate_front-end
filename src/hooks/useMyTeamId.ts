@@ -25,6 +25,13 @@ const useMyTeamId = (project: string) => {
 
         setMyTeamId(teamId);
       } catch (error: any) {
+        const token_date_expired = localStorage.getItem('token_date');
+
+        if (token_date_expired === null) {
+          localStorage.removeItem('persist:root');
+          window.location.replace('/');
+        }
+
         Swal.fire({
           title: '내 팀 아이디 조회 오류',
           text: error.response.data.message,
