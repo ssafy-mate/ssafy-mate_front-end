@@ -8,9 +8,9 @@ import { UserListResponse } from '../../../types/userTypes';
 
 import SkeletonUserRecruitmentSection from '../skeletonUI/SkeletonUserRecruitmentSection';
 import VisuallyHiddenHead from '../../common/VisuallyHiddenHead';
+import ErrorSection from '../../common/ErrorSection';
 import UserItem from './UserItem';
 import EmptyBox from './EmptyBox';
-import ErrorSection from '../../common/ErrorSection';
 
 interface UserRecruitmentSectionProps {
   isLoading: boolean;
@@ -31,7 +31,7 @@ const UserRecruitmentSection: React.FC<UserRecruitmentSectionProps> = ({
   setSort,
   setPage,
 }) => {
-  const handleChangeExclusion = (
+  const handleExclusionToggleChange = (
     event: React.SyntheticEvent<Element, Event>,
     value: boolean,
   ) => {
@@ -39,7 +39,7 @@ const UserRecruitmentSection: React.FC<UserRecruitmentSectionProps> = ({
     setPage(1);
   };
 
-  const handleChangeSort = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSort(event.target.value);
   };
 
@@ -59,12 +59,12 @@ const UserRecruitmentSection: React.FC<UserRecruitmentSectionProps> = ({
               <TotalCount>검색된 교육생 총 {data.totalElement}명</TotalCount>
               <MuiFormControlLabel
                 control={<Android12Switch />}
-                onChange={handleChangeExclusion}
+                onChange={handleExclusionToggleChange}
                 label="팀에 합류된 교육생 제외"
               />
             </HeaderLeft>
             <HeaderRight>
-              <SortSelect onChange={handleChangeSort}>
+              <SortSelect onChange={handleSortChange}>
                 <option value="recent">최신순</option>
                 <option value="name">이름순</option>
               </SortSelect>

@@ -94,11 +94,11 @@ const UserItem: React.FC<UserItemProps> = ({
     [dispatch],
   );
 
-  const handleOpenOfferDialog = () => {
+  const handleRequestButtonClick = () => {
     setOpenOfferDialog(true);
   };
 
-  const handleCloseOfferDialog = () => {
+  const handleDialogCancelButtonClick = () => {
     setOnProjectWarning(false);
     setOnMessageWarning(false);
     setOpenOfferDialog(false);
@@ -106,17 +106,17 @@ const UserItem: React.FC<UserItemProps> = ({
     setOfferProject('');
   };
 
-  const handleChangeOfferProject = (event: SelectChangeEvent) => {
+  const handleOfferProjectSelectChange = (event: SelectChangeEvent) => {
     setOfferProject(event.target.value as string);
   };
 
-  const handleChangeOfferMessage = (
+  const handleOfferMessageChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setOfferMessage(event.target.value);
   };
 
-  const handleSendTeamOffer = () => {
+  const handleDialogSendButtonClick = () => {
     if (offerProject === '' && offerMessage === '') {
       alert('프로젝트 선택과 합류 요청 메시지를 입력해주세요');
       setOnProjectWarning(true);
@@ -229,7 +229,7 @@ const UserItem: React.FC<UserItemProps> = ({
       </ItemBody>
       <ItemFooter className={belongToTeam ? 'belong' : ''}>
         {!belongToTeam && userId !== myUserId && (
-          <RequestButton onClick={handleOpenOfferDialog}>
+          <RequestButton onClick={handleRequestButtonClick}>
             팀 합류 요청
           </RequestButton>
         )}
@@ -237,7 +237,7 @@ const UserItem: React.FC<UserItemProps> = ({
       </ItemFooter>
       <Dialog
         open={openOfferDialog}
-        onClose={handleCloseOfferDialog}
+        onClose={handleDialogCancelButtonClick}
         fullWidth={true}
         maxWidth={'sm'}
       >
@@ -254,7 +254,7 @@ const UserItem: React.FC<UserItemProps> = ({
             id="offer-project-select"
             label="offer-project"
             value={offerProject}
-            onChange={handleChangeOfferProject}
+            onChange={handleOfferProjectSelectChange}
           >
             <OfferProjectItem value="공통 프로젝트">
               공통 프로젝트
@@ -275,14 +275,18 @@ const UserItem: React.FC<UserItemProps> = ({
             label="합류 요청 메시지를 입력해주세요."
             type="text"
             variant="standard"
-            onChange={handleChangeOfferMessage}
+            onChange={handleOfferMessageChange}
             warning={onMessageWarning.toString()}
             fullWidth
           />
         </DialogContent>
         <DialogActions>
-          <DialogButton onClick={handleCloseOfferDialog}>취소</DialogButton>
-          <DialogButton onClick={handleSendTeamOffer}>보내기</DialogButton>
+          <DialogButton onClick={handleDialogCancelButtonClick}>
+            취소
+          </DialogButton>
+          <DialogButton onClick={handleDialogSendButtonClick}>
+            보내기
+          </DialogButton>
         </DialogActions>
       </Dialog>
     </Item>
