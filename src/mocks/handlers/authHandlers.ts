@@ -6,7 +6,7 @@ import {
 } from './../database/auth';
 
 import {
-  EmailVerificationCodeConfirmRequest,
+  EmailCodeConfirmRequest,
   SignUpProfile,
 } from '../../types/signUpTypes';
 
@@ -130,15 +130,15 @@ export const authHandlers = [
   rest.put(
     `${process.env.REACT_APP_SERVER_URL}/api/users/sign-up/verification/emails`,
     async (request: any, response, context) => {
-      const data: EmailVerificationCodeConfirmRequest = request.body;
-      const { code, userEmail } = data;
+      const data: EmailCodeConfirmRequest = request.body;
+      const { emailCode, userEmail } = data;
       const CodeIndex = EmailVerificationCodes.findIndex(
         (verificationCode) =>
-          verificationCode.code === code &&
+          verificationCode.code === emailCode &&
           verificationCode.userEmail === userEmail,
       );
 
-      if (CodeIndex === -1 && code !== '55555555') {
+      if (CodeIndex === -1 && emailCode !== '55555555') {
         return response(
           context.status(401),
           context.json({
@@ -152,7 +152,7 @@ export const authHandlers = [
       if (
         CodeIndex >= 0 &&
         EmailVerificationCodes[CodeIndex].timeout &&
-        code !== '55555555'
+        emailCode !== '55555555'
       ) {
         return response(
           context.status(403),
@@ -164,7 +164,7 @@ export const authHandlers = [
         );
       }
 
-      if (code === '55555555') {
+      if (emailCode === '55555555') {
         return response(
           context.status(500),
           context.json({

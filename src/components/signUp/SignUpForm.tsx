@@ -9,8 +9,8 @@ import styled from '@emotion/styled';
 import ForwardToInboxIcon from '@mui/icons-material/ForwardToInbox';
 
 import {
-  EmailVerificationCodeConfirmRequest,
-  EmailVerificationCodeRequest,
+  EmailCodeConfirmRequest,
+  EmailCodeRequest,
   SignUpProps,
   SignUp,
   Severity,
@@ -19,7 +19,7 @@ import {
 import {
   passwordReg,
   validEmailReg,
-  verificationCodeReg,
+  emailCodeReg,
 } from '../../utils/regularExpressionData';
 
 import UserService from '../../services/UserService';
@@ -107,7 +107,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
   }, [emailCodeRequestButton]);
 
   const signUpEmailOnChange: string = watch('signUpEmail');
-  const verificationCodeOnChange: string = watch('verificationCode');
+  const emailCodeOnChange: string = watch('emailCode');
   const signUpPasswordOnChange: string = watch('signUpPassword');
   const signUpCheckPasswordOnChange: string = watch('signUpCheckPassword');
 
@@ -154,31 +154,31 @@ const SignUpForm: React.FC<SignUpProps> = ({
   useEffect(() => {
     setEmailCodeError(false);
 
-    if (errors.verificationCode || verificationCodeOnChange === '') {
+    if (errors.emailCode || emailCodeOnChange === '') {
       setEmailCodeConfirmButton(true);
     } else if (
-      verificationCodeOnChange !== undefined &&
-      verificationCodeOnChange.length === 8
+      emailCodeOnChange !== undefined &&
+      emailCodeOnChange.length === 8
     ) {
       setEmailCodeConfirmButton(false);
     }
-  }, [errors.verificationCode, verificationCodeOnChange]);
+  }, [errors.emailCode, emailCodeOnChange]);
 
   const emailCodeInputAndButtonDisabled = () => {
     setEmailCodeRequestButton(true);
     setEmailCodeInputDisabled(false);
   };
 
-  const resetCodeVerificationError = () => {
+  const resetEmailCodeError = () => {
     setEmailCodeError(false);
-    setValue('verificationCode', '');
-    reset({ verificationCode: undefined });
+    setValue('emailCode', '');
+    reset({ emailCode: undefined });
     setEmailCodeErrorText('올바른 인증 코드가 아닙니다.');
   };
 
-  const verificationCodeRequest = () => {
+  const emailCodeRequest = () => {
     setLoading(true);
-    const data: EmailVerificationCodeRequest = { userEmail: '' };
+    const data: EmailCodeRequest = { userEmail: '' };
 
     data.userEmail = signUpEmailOnChange;
 
@@ -187,11 +187,11 @@ const SignUpForm: React.FC<SignUpProps> = ({
       setLoading(false);
     }
 
-    UserService.getEmailVerificationCode(data)
+    UserService.getEmailCode(data)
       .then(({ success, message }) => {
         if (success) {
           setLoading(false);
-          resetCodeVerificationError();
+          resetEmailCodeError();
           showAlert(true, message, 'success');
           emailCodeInputAndButtonDisabled();
           setShowCodeBox(true);
@@ -217,13 +217,13 @@ const SignUpForm: React.FC<SignUpProps> = ({
       });
   };
 
-  const EmailVerificationCodeConfirm = () => {
-    const data: EmailVerificationCodeConfirmRequest = {
-      code: verificationCodeOnChange,
+  const EmailCodeConfirm = () => {
+    const data: EmailCodeConfirmRequest = {
+      emailCode: emailCodeOnChange,
       userEmail: signUpEmailOnChange,
     };
 
-    UserService.getEmailVerificationCodeConfirm(data)
+    UserService.getEmailCodeConfirm(data)
       .then((response) => {
         offCodeInputAndConfirm();
         setEmailInputDisabled(true);
@@ -284,7 +284,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
           <AuthButton
             type="button"
             disabled={emailCodeRequestButton}
-            onClick={verificationCodeRequest}
+            onClick={emailCodeRequest}
             className={loading ? 'cursor-wait' : ''}
           >
             {loading ? (
@@ -307,15 +307,13 @@ const SignUpForm: React.FC<SignUpProps> = ({
       </InputWrapper>
       {showCodeBox ? (
         <InputWrapper>
-          <RequirementLabel htmlFor="verification-code">
+          <RequirementLabel htmlFor="email-code">
             인증코드 입력
           </RequirementLabel>
           <VerificationCodeWrapper>
             <VerificationCodeConfirmWrapper
               className={
-                errors.verificationCode ||
-                emailCodeError ||
-                emailCodeInputDisabled
+                errors.emailCode || emailCodeError || emailCodeInputDisabled
                   ? 'have-error'
                   : ''
               }
@@ -323,10 +321,10 @@ const SignUpForm: React.FC<SignUpProps> = ({
               <VerificationCodeInputWrapper>
                 <VerificationCodeInput
                   type="text"
-                  id="verification-code"
-                  {...register('verificationCode', {
+                  id="email-code"
+                  {...register('emailCode', {
                     required: true,
-                    pattern: verificationCodeReg,
+                    pattern: emailCodeReg,
                     minLength: 8,
                     maxLength: 8,
                   })}
@@ -342,7 +340,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
                 )}
                 <CodeConfimtButton
                   type="button"
-                  onClick={EmailVerificationCodeConfirm}
+                  onClick={EmailCodeConfirm}
                   disabled={emailCodeConfirmButton}
                   {...register('signUpConfiromButton', {
                     required: true,
@@ -358,7 +356,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
                       <ErrorMessage>{emailCodeErrorText}</ErrorMessage>
                     </ErrorMessageWrapper>
                   );
-                } else if (errors.verificationCode) {
+                } else if (errors.emailCode) {
                   return (
                     <ErrorMessageWrapper>
                       <ErrorMessage>{emailCodeErrorText}</ErrorMessage>
@@ -373,7 +371,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
               <ResendEmailMessage>
                 <ResendEmailIcon />
                 이메일을 받지 못하셨나요?
-                <ResendLink onClick={verificationCodeRequest}>
+                <ResendLink onClick={emailCodeRequest}>
                   이메일 재전송하기
                 </ResendLink>
               </ResendEmailMessage>

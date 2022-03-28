@@ -168,17 +168,17 @@ const TeamInfoSection: React.FC = () => {
     });
   };
 
-  const handleOpenApplicationDialog = () => {
+  const handleApplyButtonClick = () => {
     setOpenApplicationDialog(true);
   };
 
-  const handleCloseApplicationDialog = () => {
+  const handleCloseButtonClick = () => {
     setOnMessageWarning(false);
     setOpenApplicationDialog(false);
     setApplicationMessage('');
   };
 
-  const handleMouseEnterOfferDialog = () => {
+  const handleOfferDialogMouseEnter = () => {
     import('@mui/material/Dialog');
     import('@mui/material/DialogActions');
     import('@mui/material/DialogContent');
@@ -187,13 +187,13 @@ const TeamInfoSection: React.FC = () => {
     import('@mui/material/TextField');
   };
 
-  const handleChangeApplicationMessage = (
+  const handleApplicationMessageChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setApplicationMessage(event.target.value);
   };
 
-  const handleSendUserApplication = () => {
+  const handleSendButtonClick = () => {
     if (applicationMessage === '') {
       alert('합류 지원 메시지를 입력해주세요.');
       setOnMessageWarning(true);
@@ -214,7 +214,7 @@ const TeamInfoSection: React.FC = () => {
     setOpenApplicationDialog(false);
   };
 
-  const handleClickLeaveButton = () => {
+  const handleLeaveButtonClick = () => {
     Swal.fire({
       title: '정말 팀을 탈퇴하시겠습니까?',
       text: '탈퇴 처리 후 취소는 불가능합니다.',
@@ -242,7 +242,7 @@ const TeamInfoSection: React.FC = () => {
         );
       case 'member':
         return (
-          <OptionButton onClick={handleClickLeaveButton} role={role}>
+          <OptionButton onClick={handleLeaveButtonClick} role={role}>
             <LogoutIcon />
             <span>팀 탈퇴하기</span>
           </OptionButton>
@@ -250,8 +250,8 @@ const TeamInfoSection: React.FC = () => {
       default:
         return (
           <OptionButton
-            onClick={handleOpenApplicationDialog}
-            onMouseEnter={handleMouseEnterOfferDialog}
+            onClick={handleApplyButtonClick}
+            onMouseEnter={handleOfferDialogMouseEnter}
             role={role}
           >
             <BorderColorIcon />
@@ -407,7 +407,7 @@ const TeamInfoSection: React.FC = () => {
           <Suspense fallback={null}>
             <Dialog
               open={openApplicationDialog}
-              onClose={handleCloseApplicationDialog}
+              onClose={handleCloseButtonClick}
               fullWidth={true}
               maxWidth={'sm'}
             >
@@ -420,16 +420,16 @@ const TeamInfoSection: React.FC = () => {
                   label="합류 지원 메시지를 입력해주세요."
                   type="text"
                   variant="standard"
-                  onChange={handleChangeApplicationMessage}
+                  onChange={handleApplicationMessageChange}
                   warning={onMessageWarning.toString()}
                   fullWidth
                 />
               </DialogContent>
               <DialogActions>
-                <DialogButton onClick={handleCloseApplicationDialog}>
+                <DialogButton onClick={handleCloseButtonClick}>
                   취소
                 </DialogButton>
-                <DialogButton onClick={handleSendUserApplication}>
+                <DialogButton onClick={handleSendButtonClick}>
                   보내기
                 </DialogButton>
               </DialogActions>

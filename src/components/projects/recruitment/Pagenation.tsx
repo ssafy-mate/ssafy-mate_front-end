@@ -25,7 +25,7 @@ const Pagenation: React.FC<PagenationProps> = ({
     query: '(max-width: 575px)',
   });
 
-  const handleChangePage = (
+  const handlePageChange = (
     event: React.ChangeEvent<unknown>,
     page: number,
   ): void => {
@@ -41,7 +41,7 @@ const Pagenation: React.FC<PagenationProps> = ({
             shape="rounded"
             count={totalPage}
             page={page}
-            onChange={handleChangePage}
+            onChange={handlePageChange}
             size={extraLargeMedia ? (smallMedia ? 'small' : 'medium') : 'large'}
             css={pagination}
           />
