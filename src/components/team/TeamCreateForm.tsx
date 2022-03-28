@@ -33,8 +33,6 @@ const CURRENT_PROJECT: string = '특화 프로젝트';
 const TeamCreateForm: React.FC = () => {
   const [teamImg, setTeamImg] = useState(null);
   const [previewTeamImg, setPreviewTeamImg] = useState(null);
-  const [campus, project, projectTrack] =
-    useUserProjectInfo(CURRENT_PROJECT_ID);
   const [teamName, setTeamName] = useState<string>('');
   const [notice, setNotice] = useState<string>('');
   const [introduction, setIntroduction] = useState<string>('');
@@ -46,6 +44,8 @@ const TeamCreateForm: React.FC = () => {
     useState<boolean>(false);
 
   const dispatch = useDispatch();
+  const [campus, project, projectTrack] =
+    useUserProjectInfo(CURRENT_PROJECT_ID);
   const myTeamId = useMyTeamId(CURRENT_PROJECT);
   const techStackList: TechStackWithImg[] = useTechStackList();
   const {
@@ -93,7 +93,7 @@ const TeamCreateForm: React.FC = () => {
     [dispatch],
   );
 
-  const handleChangeTeamImg = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTeamImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { files },
     }: any = event;
@@ -112,20 +112,20 @@ const TeamCreateForm: React.FC = () => {
     setTeamImg(theImgFile);
   };
 
-  const handleClearTeamImg = () => {
+  const handleTeamImgClearButtonClick = () => {
     setPreviewTeamImg(null);
     setTeamImg(null);
   };
 
-  const handleChangeTeamName = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTeamNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTeamName(event.target.value);
   };
 
-  const handleChangeNotice = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNoticeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNotice(event.target.value);
   };
 
-  const handleChangeIntroduction = (
+  const handleIntroductionChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setIntroduction(event.target.value);
@@ -139,7 +139,7 @@ const TeamCreateForm: React.FC = () => {
     }
   };
 
-  const handleChangeTotalRecruitment = (
+  const handleTotalRecruitmentChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const recruitment = parseInt(event.target.value);
@@ -152,14 +152,14 @@ const TeamCreateForm: React.FC = () => {
     setTotalRecruitment(recruitment);
   };
 
-  const handleChangeFrontendRecruitment = (
+  const handleFrontendRecruitmentChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     setBackendRecruitment(0);
     setFrontendRecruitment(parseInt(event.target.value));
   };
 
-  const handleChangeBackendRecruitment = (
+  const handleBackendRecruitmentChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     setBackendRecruitment(parseInt(event.target.value));
@@ -201,7 +201,7 @@ const TeamCreateForm: React.FC = () => {
     return teamFormData;
   };
 
-  const handleSubmitFormData = () => {
+  const handleSubmitButtonClick = () => {
     if (
       campus !== null &&
       project !== null &&
@@ -266,7 +266,7 @@ const TeamCreateForm: React.FC = () => {
             <>
               <FilePreviewImgWrapper>
                 <FilePreviewImg src={previewTeamImg} alt="팀 대표 이미지" />
-                <ClearButton onClick={handleClearTeamImg}>
+                <ClearButton onClick={handleTeamImgClearButtonClick}>
                   <ClearIcon fontSize="large" />
                 </ClearButton>
               </FilePreviewImgWrapper>
@@ -280,7 +280,7 @@ const TeamCreateForm: React.FC = () => {
                 type="file"
                 id="team-img"
                 accept="image/*"
-                onChange={handleChangeTeamImg}
+                onChange={handleTeamImgChange}
               />
             </>
           )}
@@ -356,7 +356,7 @@ const TeamCreateForm: React.FC = () => {
             className={
               isDisplayedWarningText && teamName === '' ? 'active-warning' : ''
             }
-            onChange={handleChangeTeamName}
+            onChange={handleTeamNameChange}
             required
             maxLength={20}
           />
@@ -377,7 +377,7 @@ const TeamCreateForm: React.FC = () => {
             className={
               isDisplayedWarningText && notice === '' ? 'active-warning' : ''
             }
-            onChange={handleChangeNotice}
+            onChange={handleNoticeChange}
             required
             maxLength={50}
             placeholder="ex) 최우수상에 도전할 팀원을 모집합니다."
@@ -394,7 +394,7 @@ const TeamCreateForm: React.FC = () => {
             id="introduction"
             name="introduction"
             onKeyPress={handleTextAreaEnterKeyPressed}
-            onChange={handleChangeIntroduction}
+            onChange={handleIntroductionChange}
             maxLength={1000}
             placeholder="ex) 팀의 목표, 개발 방향성, 어떤 팀원들을 원하는지 등을 자유롭게 작성해 주세요."
           />
@@ -478,7 +478,7 @@ const TeamCreateForm: React.FC = () => {
                 : ''
             }
             value={totalRecruitment}
-            onChange={handleChangeTotalRecruitment}
+            onChange={handleTotalRecruitmentChange}
             required
           >
             {renderingRecruitmentOptions(4, 6)}
@@ -502,7 +502,7 @@ const TeamCreateForm: React.FC = () => {
                 : ''
             }
             value={frontendRecruitment}
-            onChange={handleChangeFrontendRecruitment}
+            onChange={handleFrontendRecruitmentChange}
             disabled={totalRecruitment === 0}
             required
           >
@@ -525,7 +525,7 @@ const TeamCreateForm: React.FC = () => {
                 : ''
             }
             value={backendRecruitment}
-            onChange={handleChangeBackendRecruitment}
+            onChange={handleBackendRecruitmentChange}
             disabled={totalRecruitment === 0 || frontendRecruitment === 0}
             required
           >
@@ -540,7 +540,7 @@ const TeamCreateForm: React.FC = () => {
         </InputWrapper>
       </Row>
       <Row>
-        <SubmitButton onClick={handleSubmitFormData}>팀 생성</SubmitButton>
+        <SubmitButton onClick={handleSubmitButtonClick}>팀 생성</SubmitButton>
       </Row>
     </Container>
   );
@@ -653,7 +653,7 @@ const InfoInput = styled.input`
 
   &:hover {
     border: 1px solid #3396f4;
-    box-shadow: inset 0 0 0 1px#3396f4;
+    box-shadow: inset 0 0 0 1px #3396f4;
   }
   &:focus {
     border: 1px solid #3396f4;
@@ -695,7 +695,7 @@ const Textarea = styled.textarea`
 
   &:hover {
     border: 1px solid #3396f4;
-    box-shadow: inset 0 0 0 1px#3396f4;
+    box-shadow: inset 0 0 0 1px #3396f4;
   }
   &:focus {
     border: 1px solid #3396f4;

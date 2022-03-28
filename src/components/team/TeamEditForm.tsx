@@ -58,7 +58,7 @@ const TeamEditForm: React.FC = () => {
   const [frontendRecruitment, setFrontendRecruitment] = useState<number>(0);
   const [frontendHeadcount, setFrontendHeadcount] = useState<number>(0);
   const [backendRecruitment, setBackendRecruitment] = useState<number>(0);
-  const [backendHeadcount, setBackendHeadcount] = useState<number>(0);
+  const [, setBackendHeadcount] = useState<number>(0);
   const [isDisplayedWarningText, setIsDisplayedWarningText] =
     useState<boolean>(false);
 
@@ -151,7 +151,7 @@ const TeamEditForm: React.FC = () => {
     setBackendHeadcount(teamEditInfo.backendHeadcount);
   };
 
-  const handleOpenDeleteTeamDialog = () => {
+  const handleTeamDeleteButtonClick = () => {
     Swal.fire({
       title: '정말 팀을 삭제하시겠습니까?',
       text: '삭제 후 취소는 불가능합니다.',
@@ -168,7 +168,7 @@ const TeamEditForm: React.FC = () => {
     });
   };
 
-  const handleChangeTeamImg = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTeamImgChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { files },
     }: any = event;
@@ -187,20 +187,20 @@ const TeamEditForm: React.FC = () => {
     setTeamImg(theImgFile);
   };
 
-  const handleClearTeamImg = () => {
+  const handleTeamImgClearButtonClick = () => {
     setPreviewTeamImg(null);
     setTeamImg(null);
   };
 
-  const handleChangeTeamName = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTeamNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTeamName(event.target.value);
   };
 
-  const handleChangeNotice = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleNoticeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNotice(event.target.value);
   };
 
-  const handleChangeIntroduction = (
+  const handleIntroductionChange = (
     event: React.ChangeEvent<HTMLTextAreaElement>,
   ) => {
     setIntroduction(event.target.value);
@@ -214,7 +214,7 @@ const TeamEditForm: React.FC = () => {
     }
   };
 
-  const handleChangeTotalRecruitment = (
+  const handleTotalRecruitmentChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     const recruitment = parseInt(event.target.value);
@@ -227,14 +227,14 @@ const TeamEditForm: React.FC = () => {
     setTotalRecruitment(recruitment);
   };
 
-  const handleChangeFrontendRecruitment = (
+  const handleFrontendRecruitmentChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     setBackendRecruitment(0);
     setFrontendRecruitment(parseInt(event.target.value));
   };
 
-  const handleChangeBackendRecruitment = (
+  const handleBackendRecruitmentChange = (
     event: React.ChangeEvent<HTMLSelectElement>,
   ) => {
     setBackendRecruitment(parseInt(event.target.value));
@@ -281,7 +281,7 @@ const TeamEditForm: React.FC = () => {
     return teamFormData;
   };
 
-  const handleSubmitFormData = () => {
+  const handleSubmitButtonClick = () => {
     const deduplicatedTechStacks = Array.from(
       new Set(techStacks.map((techStack) => techStack.techStackId)),
     );
@@ -344,7 +344,7 @@ const TeamEditForm: React.FC = () => {
     <Container>
       <Head>팀 정보 수정</Head>
       <DeleteButtonWrapper>
-        <DeleteButton onClick={handleOpenDeleteTeamDialog}>
+        <DeleteButton onClick={handleTeamDeleteButtonClick}>
           <DeleteIcon />팀 삭제하기
         </DeleteButton>
       </DeleteButtonWrapper>
@@ -355,7 +355,7 @@ const TeamEditForm: React.FC = () => {
             <>
               <FilePreviewImgWrapper>
                 <FilePreviewImg src={previewTeamImg} alt="팀 대표 이미지" />
-                <ClearButton onClick={handleClearTeamImg}>
+                <ClearButton onClick={handleTeamImgClearButtonClick}>
                   <ClearIcon fontSize="large" />
                 </ClearButton>
               </FilePreviewImgWrapper>
@@ -369,7 +369,7 @@ const TeamEditForm: React.FC = () => {
                 type="file"
                 id="team-img"
                 accept="image/*"
-                onChange={handleChangeTeamImg}
+                onChange={handleTeamImgChange}
               />
             </>
           )}
@@ -440,7 +440,7 @@ const TeamEditForm: React.FC = () => {
               isDisplayedWarningText && teamName === '' ? 'active-warning' : ''
             }
             value={teamName}
-            onChange={handleChangeTeamName}
+            onChange={handleTeamNameChange}
             required
             maxLength={20}
           />
@@ -462,7 +462,7 @@ const TeamEditForm: React.FC = () => {
               isDisplayedWarningText && notice === '' ? 'active-warning' : ''
             }
             value={notice}
-            onChange={handleChangeNotice}
+            onChange={handleNoticeChange}
             required
             maxLength={50}
             placeholder="ex) 최우수상에 도전할 팀원을 모집합니다."
@@ -480,7 +480,7 @@ const TeamEditForm: React.FC = () => {
             name="introduction"
             value={introduction !== null ? introduction : ''}
             onKeyPress={handleTextAreaEnterKeyPressed}
-            onChange={handleChangeIntroduction}
+            onChange={handleIntroductionChange}
             maxLength={1000}
             placeholder="ex) 팀의 목표, 개발 방향성, 어떤 팀원들을 원하는지 등을 자유롭게 작성해 주세요."
           />
@@ -564,7 +564,7 @@ const TeamEditForm: React.FC = () => {
                 : ''
             }
             value={totalRecruitment}
-            onChange={handleChangeTotalRecruitment}
+            onChange={handleTotalRecruitmentChange}
             required
           >
             {renderingRecruitmentOptions(totalHeadcount <= 5 ? 5 : 6, 6)}
@@ -588,7 +588,7 @@ const TeamEditForm: React.FC = () => {
                 : ''
             }
             value={frontendRecruitment}
-            onChange={handleChangeFrontendRecruitment}
+            onChange={handleFrontendRecruitmentChange}
             disabled={totalRecruitment === 0}
             required
           >
@@ -614,7 +614,7 @@ const TeamEditForm: React.FC = () => {
                 : ''
             }
             value={backendRecruitment}
-            onChange={handleChangeBackendRecruitment}
+            onChange={handleBackendRecruitmentChange}
             disabled={totalRecruitment === 0 || frontendRecruitment === 0}
             required
           >
@@ -632,7 +632,7 @@ const TeamEditForm: React.FC = () => {
         <CancelButton to="/projects/specialization/teams">
           취소하기
         </CancelButton>
-        <EditButton onClick={handleSubmitFormData}>수정하기</EditButton>
+        <EditButton onClick={handleSubmitButtonClick}>수정하기</EditButton>
       </Row>
     </Container>
   );
@@ -783,7 +783,7 @@ const InfoInput = styled.input`
 
   &:hover {
     border: 1px solid #3396f4;
-    box-shadow: inset 0 0 0 1px#3396f4;
+    box-shadow: inset 0 0 0 1px #3396f4;
   }
   &:focus {
     border: 1px solid #3396f4;
@@ -825,7 +825,7 @@ const Textarea = styled.textarea`
 
   &:hover {
     border: 1px solid #3396f4;
-    box-shadow: inset 0 0 0 1px#3396f4;
+    box-shadow: inset 0 0 0 1px #3396f4;
   }
   &:focus {
     border: 1px solid #3396f4;
