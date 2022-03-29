@@ -219,7 +219,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
   const EmailCodeConfirm = () => {
     const data: EmailCodeConfirmRequest = {
-      emailCode: emailCodeOnChange,
+      code: emailCodeOnChange,
       userEmail: signUpEmailOnChange,
     };
 
