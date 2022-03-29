@@ -219,7 +219,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
   const EmailCodeConfirm = () => {
     const data: EmailCodeConfirmRequest = {
-      emailCode: emailCodeOnChange,
+      code: emailCodeOnChange,
       userEmail: signUpEmailOnChange,
     };
 
@@ -342,7 +342,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
                   type="button"
                   onClick={EmailCodeConfirm}
                   disabled={emailCodeConfirmButton}
-                  {...register('signUpConfiromButton', {
+                  {...register('signUpConfirmButton', {
                     required: true,
                   })}
                 >
