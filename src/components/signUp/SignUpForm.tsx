@@ -31,9 +31,9 @@ const SignUpForm: React.FC<SignUpProps> = ({
   setSignUpEmail,
   setSignUpPassword,
 }) => {
-  const [emailCodeRequestButton, setEmailCodeRequestButton] =
+  const [emailCodeRequestButtonDisabled, setEmailCodeRequestButtonDisabled] =
     useState<boolean>(true);
-  const [emailCodeConfirmButton, setEmailCodeConfirmButton] =
+  const [emailCodeConfirmButtonDisabled, setEmailCodeConfirmButtonDisabled] =
     useState<boolean>(true);
   const [emailCodeInputDisabled, setEmailCodeInputDisabled] =
     useState<boolean>(true);
@@ -101,15 +101,15 @@ const SignUpForm: React.FC<SignUpProps> = ({
   }, [minutes, seconds, timerIntervalTime]);
 
   useEffect(() => {
-    emailCodeRequestButton
+    emailCodeRequestButtonDisabled
       ? setLoadingColor('#3396f4')
       : setLoadingColor('#fff');
-  }, [emailCodeRequestButton]);
+  }, [emailCodeRequestButtonDisabled]);
 
-  const signUpEmailOnChange: string = watch('signUpEmail');
-  const emailCodeOnChange: string = watch('emailCode');
-  const signUpPasswordOnChange: string = watch('signUpPassword');
-  const signUpCheckPasswordOnChange: string = watch('signUpCheckPassword');
+  const signUpEmailInput: string = watch('signUpEmail');
+  const emailCodeInput: string = watch('emailCode');
+  const signUpPasswordInput: string = watch('signUpPassword');
+  const signUpCheckPasswordInput: string = watch('signUpCheckPassword');
 
   const updateSignUpProps = (data: SignUp) => {
     const { signUpEmail, signUpPassword } = data;
@@ -131,41 +131,38 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
   const offCodeInputAndConfirm = () => {
     setEmailCodeInputDisabled(true);
-    setEmailCodeConfirmButton(true);
+    setEmailCodeConfirmButtonDisabled(true);
   };
 
   useEffect(() => {
     if (errors.signUpEmail) {
-      setEmailCodeRequestButton(true);
+      setEmailCodeRequestButtonDisabled(true);
     } else if (
-      signUpEmailOnChange !== undefined &&
-      validEmailReg.test(signUpEmailOnChange)
+      signUpEmailInput !== undefined &&
+      validEmailReg.test(signUpEmailInput)
     ) {
-      setEmailCodeRequestButton(false);
+      setEmailCodeRequestButtonDisabled(false);
     }
-  }, [errors.signUpEmail, signUpEmailOnChange]);
+  }, [errors.signUpEmail, signUpEmailInput]);
 
   useEffect(() => {
-    if (emailCodeRequestButton === false) {
+    if (emailCodeRequestButtonDisabled === false) {
       setShowCodeBox(false);
     }
-  }, [emailCodeRequestButton]);
+  }, [emailCodeRequestButtonDisabled]);
 
   useEffect(() => {
     setEmailCodeError(false);
 
-    if (errors.emailCode || emailCodeOnChange === '') {
-      setEmailCodeConfirmButton(true);
-    } else if (
-      emailCodeOnChange !== undefined &&
-      emailCodeOnChange.length === 8
-    ) {
-      setEmailCodeConfirmButton(false);
+    if (errors.emailCode || emailCodeInput === '') {
+      setEmailCodeConfirmButtonDisabled(true);
+    } else if (emailCodeInput !== undefined && emailCodeInput.length === 8) {
+      setEmailCodeConfirmButtonDisabled(false);
     }
-  }, [errors.emailCode, emailCodeOnChange]);
+  }, [errors.emailCode, emailCodeInput]);
 
   const emailCodeInputAndButtonDisabled = () => {
-    setEmailCodeRequestButton(true);
+    setEmailCodeRequestButtonDisabled(true);
     setEmailCodeInputDisabled(false);
   };
 
@@ -176,14 +173,14 @@ const SignUpForm: React.FC<SignUpProps> = ({
     setEmailCodeErrorText('올바른 인증 코드가 아닙니다.');
   };
 
-  const emailCodeRequest = () => {
+  const handleEmailCodeRequestButtonClick = (event: React.MouseEvent) => {
     setLoading(true);
     const data: EmailCodeRequest = { userEmail: '' };
 
-    data.userEmail = signUpEmailOnChange;
+    data.userEmail = signUpEmailInput;
 
     if (data.userEmail === '' || data.userEmail === undefined) {
-      setEmailCodeRequestButton(true);
+      setEmailCodeRequestButtonDisabled(true);
       setLoading(false);
     }
 
@@ -210,17 +207,17 @@ const SignUpForm: React.FC<SignUpProps> = ({
           } else if (status === 500) {
             setLoading(false);
             showAlert(true, message, 'error');
-            setEmailCodeRequestButton(false);
+            setEmailCodeRequestButtonDisabled(false);
             setEmailCodeButtonText('이메일 재전송');
           }
         }
       });
   };
 
-  const EmailCodeConfirm = () => {
+  const handleEmailCodeConfirmButtonClick = (event: React.MouseEvent) => {
     const data: EmailCodeConfirmRequest = {
-      emailCode: emailCodeOnChange,
-      userEmail: signUpEmailOnChange,
+      code: emailCodeInput,
+      userEmail: signUpEmailInput,
     };
 
     UserService.getEmailCodeConfirm(data)
@@ -237,7 +234,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
 
           if (status === 401) {
             showAndSetError(true, message);
-            setEmailCodeConfirmButton(true);
+            setEmailCodeConfirmButtonDisabled(true);
           } else if (status === 403) {
             showAndSetError(true, message);
             offCodeInputAndConfirm();
@@ -281,10 +278,10 @@ const SignUpForm: React.FC<SignUpProps> = ({
             placeholder="이메일"
             readOnly={emailInputDisabled}
           />
-          <AuthButton
+          <EmailCodeRequestButton
             type="button"
-            disabled={emailCodeRequestButton}
-            onClick={emailCodeRequest}
+            disabled={emailCodeRequestButtonDisabled}
+            onClick={handleEmailCodeRequestButtonClick}
             className={loading ? 'cursor-wait' : ''}
           >
             {loading ? (
@@ -292,7 +289,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
             ) : (
               emailCodeButtonText
             )}
-          </AuthButton>
+          </EmailCodeRequestButton>
         </EmailInputWrapper>
         {errors.signUpEmail !== undefined && (
           <ErrorMessageWrapper>
@@ -338,16 +335,16 @@ const SignUpForm: React.FC<SignUpProps> = ({
                     {seconds.toString().padStart(2, '0')}
                   </TimeLimit>
                 )}
-                <CodeConfimtButton
+                <EmailCodeConfirmButton
                   type="button"
-                  onClick={EmailCodeConfirm}
-                  disabled={emailCodeConfirmButton}
-                  {...register('signUpConfiromButton', {
+                  onClick={handleEmailCodeConfirmButtonClick}
+                  disabled={emailCodeConfirmButtonDisabled}
+                  {...register('signUpConfirmButton', {
                     required: true,
                   })}
                 >
                   확인
-                </CodeConfimtButton>
+                </EmailCodeConfirmButton>
               </VerificationCodeInputWrapper>
               {(() => {
                 if (emailCodeError) {
@@ -371,7 +368,7 @@ const SignUpForm: React.FC<SignUpProps> = ({
               <ResendEmailMessage>
                 <ResendEmailIcon />
                 이메일을 받지 못하셨나요?
-                <ResendLink onClick={emailCodeRequest}>
+                <ResendLink onClick={handleEmailCodeRequestButtonClick}>
                   이메일 재전송하기
                 </ResendLink>
               </ResendEmailMessage>
@@ -422,13 +419,13 @@ const SignUpForm: React.FC<SignUpProps> = ({
           {...register('signUpCheckPassword', {
             required: true,
             validate: (confirmPasswordInput) =>
-              confirmPasswordInput === signUpPasswordOnChange,
+              confirmPasswordInput === signUpPasswordInput,
           })}
           placeholder="비밀번호 확인"
           className={
             errors.signUpCheckPassword ||
-            (signUpCheckPasswordOnChange !== '' &&
-              signUpCheckPasswordOnChange !== signUpPasswordOnChange)
+            (signUpCheckPasswordInput !== '' &&
+              signUpCheckPasswordInput !== signUpPasswordInput)
               ? 'have-error'
               : ''
           }
@@ -442,8 +439,8 @@ const SignUpForm: React.FC<SignUpProps> = ({
         )}
         {(errors.signUpCheckPassword?.type !== 'required' &&
           errors.signUpCheckPassword?.type === 'validate') ||
-        (signUpCheckPasswordOnChange !== '' &&
-          signUpCheckPasswordOnChange !== signUpPasswordOnChange) ? (
+        (signUpCheckPasswordInput !== '' &&
+          signUpCheckPasswordInput !== signUpPasswordInput) ? (
           <ErrorMessageWrapper>
             <ErrorMessage>비밀번호가 일치하지 않습니다.</ErrorMessage>
           </ErrorMessageWrapper>
@@ -468,7 +465,7 @@ const EmailInputWrapper = styled.div`
   display: flex;
 `;
 
-const AuthButton = styled.button`
+const EmailCodeRequestButton = styled.button`
   width: 120px;
   height: 40px;
   margin-left: 8px;
@@ -584,7 +581,7 @@ const VerificationCodeInput = styled.input`
   }
 `;
 
-const CodeConfimtButton = styled.button`
+const EmailCodeConfirmButton = styled.button`
   height: 30px;
   margin-left: 8px;
   padding: 7px 10px;

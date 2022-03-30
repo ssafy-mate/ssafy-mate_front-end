@@ -26,7 +26,7 @@ export interface EmailCodeRequest {
 
 // 회원가입 2단계 이메일 인증 코드 확인 요청
 export interface EmailCodeConfirmRequest {
-  emailCode: string;
+  code: string;
   userEmail: string;
 }
 
@@ -71,7 +71,7 @@ export interface SignUp {
   emailCode: string;
   signUpPassword: string;
   signUpCheckPassword: string;
-  signUpConfiromButton: string | undefined;
+  signUpConfirmButton: string | undefined;
 }
 
 export interface ProfileProps {
