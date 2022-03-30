@@ -13,7 +13,7 @@ interface ErrorSectionProps {
 const ErrorSection: React.FC<ErrorSectionProps> = ({ errorMessage }) => {
   const history = useHistory();
 
-  const moveToPreviousPath = () => {
+  const handleReturnButtonClick = () => {
     history.goBack();
   };
 
@@ -32,7 +32,7 @@ const ErrorSection: React.FC<ErrorSectionProps> = ({ errorMessage }) => {
             <HomeIcon />
             홈으로
           </HomeLink>
-          <ReturnButton onClick={moveToPreviousPath}>
+          <ReturnButton onClick={handleReturnButtonClick}>
             <AssignmentReturnIcon />
             이전 페이지로
           </ReturnButton>
