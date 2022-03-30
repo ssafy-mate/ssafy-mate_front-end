@@ -30,11 +30,13 @@ const UserLabel: React.FC<UserLabelProps> = ({
   const open = Boolean(anchorEl);
   const myUserId = useUserId() as number;
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>): void => {
+  const handleLabelClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+  ): void => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = (): void => {
+  const handleMenuClose = (): void => {
     setAnchorEl(null);
   };
 
@@ -46,7 +48,7 @@ const UserLabel: React.FC<UserLabelProps> = ({
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
+        onClick={handleLabelClick}
       >
         {userName}
       </Label>
@@ -54,7 +56,7 @@ const UserLabel: React.FC<UserLabelProps> = ({
         id="basic-menu"
         anchorEl={anchorEl}
         open={open}
-        onClose={handleClose}
+        onClose={handleMenuClose}
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}
