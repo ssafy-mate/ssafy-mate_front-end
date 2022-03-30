@@ -122,20 +122,20 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
     );
   };
 
-  const handleClickLogoutButton = () => {
+  const handleLogoutButtonClick = () => {
     socket?.emit('logout', { id: userId });
     dispatch(logoutSagaStart());
   };
 
-  const handleExpandMenu = () => {
+  const handleMenuClick = () => {
     setIsExpanded(!isExpanded);
   };
 
-  const handleAccountBoxToggle = () => {
+  const handleAccountBoxToggleClick = () => {
     setAccountBoxOpen((prevAccoutBoxOpen) => !prevAccoutBoxOpen);
   };
 
-  const handleAccountBoxClose = (event: Event | React.SyntheticEvent) => {
+  const handleAccountBoxClick = (event: Event | React.SyntheticEvent) => {
     if (
       accountBoxAnchorRef.current &&
       accountBoxAnchorRef.current.contains(event.target as HTMLElement)
@@ -155,7 +155,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
     }
   };
 
-  const handleUserAccountEdit = (evevt: React.MouseEvent) => {
+  const handleAccountEditLinkClick = (evevt: React.MouseEvent) => {
     if (token === null) {
       showAlert(true, '로그인 후 이용해주세요.', 'warning');
     }
@@ -164,7 +164,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
     }
   };
 
-  const handleClickMyTeamLink = () => {
+  const handleMyTeamLinkClick = () => {
     if (myTeamId === null) {
       Swal.fire({
         title: '아직 합류된 팀이 없습니다.',
@@ -175,7 +175,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
       });
     }
 
-    handleExpandMenu();
+    handleMenuClick();
   };
 
   return (
@@ -192,7 +192,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
             <LogoName>SSAFY MATE</LogoName>
           </Brand>
           {isMobile ? (
-            <MenuBar isExpanded={isExpanded} onExpandMenu={handleExpandMenu} />
+            <MenuBar isExpanded={isExpanded} onExpandMenu={handleMenuClick} />
           ) : null}
         </BrandWrapper>
         <AccountMenuList isExpanded={isExpanded}>
@@ -219,7 +219,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
                   </IconLink>
                 </Tooltip>
               </AccountMenuItem>
-              <AccountMenuItem onClick={handleClickMyTeamLink}>
+              <AccountMenuItem onClick={handleMyTeamLinkClick}>
                 <Tooltip title="내 팀 정보" arrow>
                   <IconLink to={myTeamId !== null ? `/teams/${myTeamId}` : '#'}>
                     <GroupsIcon css={icon} />
@@ -242,7 +242,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
                   }
                   aria-expanded={accountBoxOpen ? 'true' : undefined}
                   aria-haspopup="true"
-                  onClick={handleAccountBoxToggle}
+                  onClick={handleAccountBoxToggleClick}
                 >
                   <AccountBoxIcon css={icon} />
                 </IconButton>
@@ -263,7 +263,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
                     }}
                   >
                     <Paper>
-                      <ClickAwayListener onClickAway={handleAccountBoxClose}>
+                      <ClickAwayListener onClickAway={handleAccountBoxClick}>
                         <AccountBoxList
                           autoFocusItem={accountBoxOpen}
                           id="composition-menu"
@@ -272,27 +272,27 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
                         >
                           <Link
                             to={`/users/account/edit`}
-                            onClick={handleUserAccountEdit}
+                            onClick={handleAccountEditLinkClick}
                           >
                             <AccountBoxItem>계정 관리</AccountBoxItem>
                           </Link>
                           <Link
                             to={`/projects/specialization/${userId}/receive_requests`}
                           >
-                            <AccountBoxItem onClick={handleAccountBoxClose}>
+                            <AccountBoxItem onClick={handleAccountBoxClick}>
                               받은 제안
                             </AccountBoxItem>
                           </Link>
                           <Link
                             to={`/projects/specialization/${userId}/send_requests`}
                           >
-                            <AccountBoxItem onClick={handleAccountBoxClose}>
+                            <AccountBoxItem onClick={handleAccountBoxClick}>
                               보낸 요청
                             </AccountBoxItem>
                           </Link>
                           <Divider />
                           <AccountBoxItem
-                            onClick={handleClickLogoutButton}
+                            onClick={handleLogoutButtonClick}
                             className="logout-button"
                           >
                             로그아웃
@@ -309,33 +309,33 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
             </>
           ) : (
             <>
-              <AccountMenuItem onClick={handleExpandMenu}>
+              <AccountMenuItem onClick={handleMenuClick}>
                 <PageLink to={`/users/${userId}`}>내 프로필</PageLink>
               </AccountMenuItem>
-              <AccountMenuItem onClick={handleClickMyTeamLink}>
+              <AccountMenuItem onClick={handleMyTeamLinkClick}>
                 <PageLink to={myTeamId !== null ? `/teams/${myTeamId}` : '#'}>
                   내 팀 정보
                 </PageLink>
               </AccountMenuItem>
-              <AccountMenuItem onClick={handleExpandMenu}>
+              <AccountMenuItem onClick={handleMenuClick}>
                 <PageLink to={`/chatting/${userId}`}>채팅 목록</PageLink>
               </AccountMenuItem>
-              <AccountMenuItem onClick={handleExpandMenu}>
+              <AccountMenuItem onClick={handleMenuClick}>
                 <PageLink
                   to={`/users/account/edit`}
-                  onClick={handleUserAccountEdit}
+                  onClick={handleAccountEditLinkClick}
                 >
                   계정 관리
                 </PageLink>
               </AccountMenuItem>
-              <AccountMenuItem onClick={handleExpandMenu}>
+              <AccountMenuItem onClick={handleMenuClick}>
                 <PageLink
                   to={`/projects/specialization/${userId}/receive_requests`}
                 >
                   받은 제안
                 </PageLink>
               </AccountMenuItem>
-              <AccountMenuItem onClick={handleExpandMenu}>
+              <AccountMenuItem onClick={handleMenuClick}>
                 <PageLink
                   to={`/projects/specialization/${userId}/send_requests`}
                 >
@@ -344,7 +344,7 @@ const Header: React.FC<HeaderProps> = ({ offFixed }) => {
               </AccountMenuItem>
               <AccountMenuItem css={line} />
               <AccountMenuItem>
-                <LogoutButton onClick={handleClickLogoutButton}>
+                <LogoutButton onClick={handleLogoutButtonClick}>
                   로그아웃
                 </LogoutButton>
               </AccountMenuItem>

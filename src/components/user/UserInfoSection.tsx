@@ -94,7 +94,7 @@ const UserInfoSection: React.FC = () => {
     [dispatch],
   );
 
-  const sendKakaoSharingMessage = () => {
+  const handleSharingButtonClick = () => {
     window.Kakao.Link.sendDefault({
       objectType: 'feed',
       content: {
@@ -134,11 +134,11 @@ const UserInfoSection: React.FC = () => {
     });
   };
 
-  const handleOpenOfferDialog = () => {
+  const handleRequestButtonClick = () => {
     setOpenOfferDialog(true);
   };
 
-  const handleCloseOfferDialog = () => {
+  const handleCancelButtonClick = () => {
     setOnProjectWarning(false);
     setOnMessageWarning(false);
     setOpenOfferDialog(false);
@@ -146,17 +146,17 @@ const UserInfoSection: React.FC = () => {
     setOfferProject('');
   };
 
-  const handleChangeOfferProject = (event: SelectChangeEvent) => {
+  const handleOfferProjectChange = (event: SelectChangeEvent) => {
     setOfferProject(event.target.value as string);
   };
 
-  const handleChangeOfferMessage = (
+  const handleOfferMessageChange = (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setOfferMessage(event.target.value);
   };
 
-  const handleSendTeamOffer = () => {
+  const handleSendButtonClick = () => {
     if (offerProject === '' && offerMessage === '') {
       alert('프로젝트 선택과 합류 요청 메시지를 입력해주세요');
       setOnProjectWarning(true);
@@ -227,7 +227,7 @@ const UserInfoSection: React.FC = () => {
                     />
                   </UserName>
                   <Tooltip title="카카오톡 공유하기" arrow>
-                    <SharingButton onClick={sendKakaoSharingMessage}>
+                    <SharingButton onClick={handleSharingButtonClick}>
                       <ShareIcon />
                     </SharingButton>
                   </Tooltip>
@@ -242,7 +242,7 @@ const UserInfoSection: React.FC = () => {
             </TitleBox>
             <ButtonBox>
               {parseInt(userId) !== myUserId && (
-                <RequestButton onClick={handleOpenOfferDialog}>
+                <RequestButton onClick={handleRequestButtonClick}>
                   <VolunteerActivismIcon />
                   <span>팀 합류 요청하기</span>
                 </RequestButton>
@@ -455,7 +455,7 @@ const UserInfoSection: React.FC = () => {
           </BodyContainer>
           <Dialog
             open={openOfferDialog}
-            onClose={handleCloseOfferDialog}
+            onClose={handleCancelButtonClick}
             fullWidth={true}
             maxWidth={'sm'}
           >
@@ -472,7 +472,7 @@ const UserInfoSection: React.FC = () => {
                 id="offer-project-select"
                 label="offer-project"
                 value={offerProject}
-                onChange={handleChangeOfferProject}
+                onChange={handleOfferProjectChange}
               >
                 <OfferProjectItem value="공통 프로젝트">
                   공통 프로젝트
@@ -493,14 +493,18 @@ const UserInfoSection: React.FC = () => {
                 label="합류 요청 메시지를 입력해주세요."
                 type="text"
                 variant="standard"
-                onChange={handleChangeOfferMessage}
+                onChange={handleOfferMessageChange}
                 warning={onMessageWarning.toString()}
                 fullWidth
               />
             </DialogContent>
             <DialogActions>
-              <DialogButton onClick={handleCloseOfferDialog}>취소</DialogButton>
-              <DialogButton onClick={handleSendTeamOffer}>보내기</DialogButton>
+              <DialogButton onClick={handleCancelButtonClick}>
+                취소
+              </DialogButton>
+              <DialogButton onClick={handleSendButtonClick}>
+                보내기
+              </DialogButton>
             </DialogActions>
           </Dialog>
         </Container>
