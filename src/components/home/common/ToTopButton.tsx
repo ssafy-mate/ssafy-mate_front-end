@@ -14,14 +14,10 @@ const ToTopButton: React.FC = () => {
   const toggleVisible = () => {
     const scrolled = document.documentElement.scrollTop;
 
-    if (scrolled > 300) {
-      setIsVisible(true);
-    } else if (scrolled <= 300) {
-      setIsVisible(false);
-    }
+    scrolled > 300 ? setIsVisible(true) : setIsVisible(false);
   };
 
-  const scrollToTop = () => {
+  const handleArrowButtonClick = () => {
     window.scrollTo({
       top: 0,
       behavior: 'smooth',
@@ -31,7 +27,7 @@ const ToTopButton: React.FC = () => {
   window.addEventListener('scroll', toggleVisible);
 
   return (
-    <Button onClick={scrollToTop} isVisible={isVisible}>
+    <Button onClick={handleArrowButtonClick} isVisible={isVisible}>
       <ArrowIcon />
     </Button>
   );
