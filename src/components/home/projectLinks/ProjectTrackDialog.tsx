@@ -57,15 +57,13 @@ const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
   onClose,
   ...other
 }) => {
-  const [selectedProjectTrack, setSelectedProjectTrack] = useState(
-    selectedProjectTrackProp,
-  );
+  const [projectTrack, setProjectTrack] = useState(selectedProjectTrackProp);
   const radioGroupRef = useRef<HTMLElement>(null);
   const dispatch = useDispatch();
 
   useEffect(() => {
     if (!open) {
-      setSelectedProjectTrack(selectedProjectTrackProp);
+      setProjectTrack(selectedProjectTrackProp);
     }
   }, [selectedProjectTrackProp, open]);
 
@@ -82,8 +80,8 @@ const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
     }
   };
 
-  const handleSubmitSelectedProjectTrack = () => {
-    if (selectedProjectTrack === null && selectedProjectTrack === '') {
+  const handleDialogButtonClick = () => {
+    if (projectTrack === null && projectTrack === '') {
       dispatch(
         showSsafyMateAlert({
           show: true,
@@ -97,14 +95,16 @@ const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
 
     selectProjectTrack({
       project,
-      projectTrack: selectedProjectTrack,
+      projectTrack,
     });
 
-    onClose(selectedProjectTrack);
+    onClose(projectTrack);
   };
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSelectedProjectTrack((event.target as HTMLInputElement).value);
+  const handleProjectTrackRadioGroupChange = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    setProjectTrack((event.target as HTMLInputElement).value);
   };
 
   return (
@@ -121,10 +121,10 @@ const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
       <DialogContent dividers>
         <RadioGroup
           ref={radioGroupRef}
-          aria-label="ringtone"
-          name="ringtone"
-          value={selectedProjectTrack}
-          onChange={handleChange}
+          aria-label="project-track"
+          name="project-track"
+          value={projectTrack}
+          onChange={handleProjectTrackRadioGroupChange}
         >
           {trackOptions?.map((trackOption) => (
             <OptionLabel
@@ -139,13 +139,9 @@ const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
       </DialogContent>
       <DialogActions>
         <DialogButton
-          onClick={handleSubmitSelectedProjectTrack}
+          onClick={handleDialogButtonClick}
           fontcolor={hexColorCode}
-          disabled={
-            selectedProjectTrack === null || selectedProjectTrack === ''
-              ? true
-              : false
-          }
+          disabled={projectTrack === null || projectTrack === '' ? true : false}
         >
           확인
         </DialogButton>
@@ -155,10 +151,10 @@ const ProjectTrackDialog: React.FC<ConfirmationDialogRawProps> = ({
 };
 
 const ProjectTrackTitle = styled(DialogTitle)<ProjectTrackTitleProps>`
+  background-color: ${(props) => props.hexcolorcode};
   font-family: 'Spoqa Han Sans Neo', 'sans-serif';
   font-size: 18px;
   color: #fff;
-  background-color: ${(props) => props.hexcolorcode};
 
   @media (max-width: 575px) {
     font-size: 16px;
