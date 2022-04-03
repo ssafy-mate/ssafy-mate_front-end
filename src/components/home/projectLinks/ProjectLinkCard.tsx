@@ -51,7 +51,7 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
     }
   }, [token, projectTrack]);
 
-  const handleClickCardItem = () => {
+  const handleCardClick = () => {
     if (token !== null) {
       projectTrack ? dispatch(push(pageUrl)) : setOpenProjectTrackDialog(true);
     } else {
@@ -59,7 +59,9 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
     }
   };
 
-  const handleClose = (newSelectedProjectTrack?: ProjectTrack) => {
+  const handleProjectTrackDialogClose = (
+    newSelectedProjectTrack?: ProjectTrack,
+  ) => {
     setOpenProjectTrackDialog(false);
 
     if (newSelectedProjectTrack !== undefined) {
@@ -67,11 +69,11 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
     }
   };
 
-  const handleClickOpenBlockDialog = () => {
+  const handleCardWithBlockDialogClick = () => {
     token !== null ? setOpenBlockDialog(true) : setOpenWarningAlert(true);
   };
 
-  const handleMouseEnterBlockDialog = () => {
+  const handleCardMouseEnter = () => {
     import('./ProjectTrackDialog');
   };
 
@@ -88,10 +90,10 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
       <Card
         onClick={
           trackOptions !== undefined
-            ? handleClickCardItem
-            : handleClickOpenBlockDialog
+            ? handleCardClick
+            : handleCardWithBlockDialogClick
         }
-        onMouseEnter={handleMouseEnterBlockDialog}
+        onMouseEnter={handleCardMouseEnter}
         css={{ backgroundColor: hexColorCode }}
       >
         <CardImg
@@ -123,7 +125,7 @@ const ProjectLinkCard: React.FC<ProjectLinkCardProps> = ({
             pageUrl={pageUrl}
             hexColorCode={hexColorCode}
             trackOptions={trackOptions}
-            onClose={handleClose}
+            onClose={handleProjectTrackDialogClose}
           />
         )}
       </Suspense>
