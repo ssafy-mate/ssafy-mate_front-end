@@ -317,7 +317,7 @@ const TeamEditForm: React.FC = () => {
     }
   };
 
-  const renderingRecruitmentOptions = (
+  const renderRecruitmentOptions = (
     startHeadCount: number,
     endHeadCount: number,
   ) => {
@@ -567,7 +567,7 @@ const TeamEditForm: React.FC = () => {
             onChange={handleTotalRecruitmentChange}
             required
           >
-            {renderingRecruitmentOptions(totalHeadcount <= 5 ? 5 : 6, 6)}
+            {renderRecruitmentOptions(totalHeadcount <= 5 ? 5 : 6, 6)}
           </Select>
           {isDisplayedWarningText && totalRecruitment === 0 && (
             <WarningMessage text="필수 선택 항목입니다." />
@@ -592,7 +592,7 @@ const TeamEditForm: React.FC = () => {
             disabled={totalRecruitment === 0}
             required
           >
-            {renderingRecruitmentOptions(
+            {renderRecruitmentOptions(
               frontendHeadcount >= 1 ? frontendHeadcount : 1,
               totalRecruitment - 1,
             )}
@@ -618,7 +618,7 @@ const TeamEditForm: React.FC = () => {
             disabled={totalRecruitment === 0 || frontendRecruitment === 0}
             required
           >
-            {renderingRecruitmentOptions(
+            {renderRecruitmentOptions(
               totalRecruitment - frontendRecruitment,
               totalRecruitment - frontendRecruitment,
             )}
