@@ -263,7 +263,7 @@ const SignInInput = styled.input`
 
   &:hover {
     border: 1px solid #3396f4;
-    box-shadow: inset 0 0 0 1px#3396f4;
+    box-shadow: inset 0 0 0 1px #3396f4;
   }
   &:focus {
     border: 1px solid #3396f4;
